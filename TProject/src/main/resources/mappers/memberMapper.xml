@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.controller.memberMapper">
+	<insert id="regmember" parameterType="memberVO">
+		INSERT INTO member (
+			midx,
+			mid,
+			password,
+			addr,
+			phone,
+			regdate
+		) values (
+			midx_seq.nextval,
+			#{mid},
+			#{password},
+			#{addr},
+			#{phone},
+			sysdate
+		)
+	</insert>
+</mapper>
