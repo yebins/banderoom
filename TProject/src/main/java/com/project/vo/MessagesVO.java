@@ -2,7 +2,7 @@ package com.project.vo;
 
 import java.util.Date;
 
-public class Messages {
+public class MessagesVO {
 	
 	private int msgIdx;
 	private int sender;

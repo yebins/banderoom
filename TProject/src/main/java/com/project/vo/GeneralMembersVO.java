@@ -2,7 +2,7 @@ package com.project.vo;
 
 import java.util.Date;
 
-public class GeneralMembers {
+public class GeneralMembersVO {
 	
 	private int mIdx;
 	private String email;

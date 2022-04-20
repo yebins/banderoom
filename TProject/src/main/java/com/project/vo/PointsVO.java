@@ -1,6 +1,6 @@
 package com.project.vo;
 
-public class Points {
+public class PointsVO {
 
 	private int pointIdx;
 	private int mIdx;
