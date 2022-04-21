@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <style>
 header {
 	display: flex;
@@ -65,6 +66,10 @@ header {
 #sm-profile {
 	border: 1px solid gray;
 	height: 150px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 #sm-buttons {
@@ -114,7 +119,13 @@ header {
 		<div id="sm-close-button" onclick="closeSm()">닫기
 		</div>
 		<div id="sm-profile">
-			프로필 영역
+			<c:if test="${login == null}">
+				<button onclick="location.href='glogin.do'">일반회원 로그인</button>
+				<button onclick="location.href='hlogin.do'">사업자 로그인 </button>
+			</c:if>
+			<c:if test="${login != null}">
+				${login.getNickname()} 로그인함
+			</c:if>
 		</div>
 		<div id="sm-buttons">
 			<div class="sm-button-wrap">
