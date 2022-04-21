@@ -77,4 +77,10 @@ public class HomeController {
 		System.out.println(yes);
 		return "NewFile3";
 	}
+	
+
+	@RequestMapping(value = "/frame.do")
+	public String frame() {
+		return "frame";
+	}
 }
