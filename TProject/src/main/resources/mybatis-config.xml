@@ -3,6 +3,6 @@
 
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.project.vo.MemberVO" alias="memberVO"/>
+		<typeAlias type="com.project.vo.GeneralMembersVO" alias="gMemberVO"/>
 	</typeAliases>
 </configuration>

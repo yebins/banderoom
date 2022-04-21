@@ -11,4 +11,47 @@ public class SpaceQnaQVO {
 	private String content;
 	private String publicYN;
 	private Date regDate;
+	
+	public int getQnaIdx() {
+		return qnaIdx;
+	}
+	public void setQnaIdx(int qnaIdx) {
+		this.qnaIdx = qnaIdx;
+	}
+	public int getSpaceIdx() {
+		return spaceIdx;
+	}
+	public void setSpaceIdx(int spaceIdx) {
+		this.spaceIdx = spaceIdx;
+	}
+	public int getmIdx() {
+		return mIdx;
+	}
+	public void setmIdx(int mIdx) {
+		this.mIdx = mIdx;
+	}
+	public String getmNickname() {
+		return mNickname;
+	}
+	public void setmNickname(String mNickname) {
+		this.mNickname = mNickname;
+	}
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getPublicYN() {
+		return publicYN;
+	}
+	public void setPublicYN(String publicYN) {
+		this.publicYN = publicYN;
+	}
+	public Date getRegDate() {
+		return regDate;
+	}
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
+	}
 }
