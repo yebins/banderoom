@@ -6,14 +6,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>팀원구하기</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 </head>
 <body>
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			제목
+			팀원 모집
 		</div>
 		<div id="page-content">
 			내용
