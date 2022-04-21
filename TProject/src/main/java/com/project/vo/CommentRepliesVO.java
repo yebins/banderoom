@@ -2,40 +2,26 @@ package com.project.vo;
 
 import java.util.Date;
 
-public class SpaceReviewVO {
-	
-	private int reviewIdx;
-	private int spaceIdx;
-	private String pictureSrc;
-	private double score;
+public class CommentRepliesVO {
+	private int rIdx;
+	private int cIdx;
 	private int mIdx;
 	private String mNickname;
 	private String content;
+	private String picSrc;
 	private Date regDate;
 	
-	public int getReviewIdx() {
-		return reviewIdx;
+	public int getrIdx() {
+		return rIdx;
 	}
-	public void setReviewIdx(int reviewIdx) {
-		this.reviewIdx = reviewIdx;
+	public void setrIdx(int rIdx) {
+		this.rIdx = rIdx;
 	}
-	public int getSpaceIdx() {
-		return spaceIdx;
+	public int getcIdx() {
+		return cIdx;
 	}
-	public void setSpaceIdx(int spaceIdx) {
-		this.spaceIdx = spaceIdx;
-	}
-	public String getPictureSrc() {
-		return pictureSrc;
-	}
-	public void setPictureSrc(String pictureSrc) {
-		this.pictureSrc = pictureSrc;
-	}
-	public double getScore() {
-		return score;
-	}
-	public void setScore(double score) {
-		this.score = score;
+	public void setcIdx(int cIdx) {
+		this.cIdx = cIdx;
 	}
 	public int getmIdx() {
 		return mIdx;
@@ -54,6 +40,12 @@ public class SpaceReviewVO {
 	}
 	public void setContent(String content) {
 		this.content = content;
+	}
+	public String getPicSrc() {
+		return picSrc;
+	}
+	public void setPicSrc(String picSrc) {
+		this.picSrc = picSrc;
 	}
 	public Date getRegDate() {
 		return regDate;

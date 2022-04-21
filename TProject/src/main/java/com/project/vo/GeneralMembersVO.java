@@ -2,10 +2,9 @@ package com.project.vo;
 
 import java.util.Date;
 
-public class HostMembersVO {
-
+public class GeneralMembersVO {
+	
 	private int mIdx;
-	private int brn;
 	private String email;
 	private String password;
 	private String name;
@@ -16,7 +15,9 @@ public class HostMembersVO {
 	private String tel;
 	private String profileSrc;
 	private String gender;
+	private int point;
 	private int auth;
+	private String isKakao;
 	private Date joinDate;
 	
 	public int getmIdx() {
@@ -24,12 +25,6 @@ public class HostMembersVO {
 	}
 	public void setmIdx(int mIdx) {
 		this.mIdx = mIdx;
-	}
-	public int getBrn() {
-		return brn;
-	}
-	public void setBrn(int brn) {
-		this.brn = brn;
 	}
 	public String getEmail() {
 		return email;
@@ -91,11 +86,23 @@ public class HostMembersVO {
 	public void setGender(String gender) {
 		this.gender = gender;
 	}
+	public int getPoint() {
+		return point;
+	}
+	public void setPoint(int point) {
+		this.point = point;
+	}
 	public int getAuth() {
 		return auth;
 	}
 	public void setAuth(int auth) {
 		this.auth = auth;
+	}
+	public String getIsKakao() {
+		return isKakao;
+	}
+	public void setIsKakao(String isKakao) {
+		this.isKakao = isKakao;
 	}
 	public Date getJoinDate() {
 		return joinDate;

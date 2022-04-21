@@ -6,6 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </head>
 <body>
 <ul>
@@ -21,7 +22,6 @@
 	</li>
 </ul>
 <!-- 카카오 스크립트 -->
-<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 <script>
 Kakao.init('a8d83e76596a6e93d144575566c3d5ae'); //발급받은 키 중 javascript키를 사용해준다.
 console.log(Kakao.isInitialized()); // sdk초기화여부판단
@@ -33,6 +33,8 @@ function kakaoLogin() {
           url: '/v2/user/me',
           success: function (response) {
         	  console.log(response)
+        	  console.log(response.kakao_account.email)
+						document.getElementById("profile-picture").innerHTML = "<img src='" + response.kakao_account.profile.profile_image_url + "'>"
           },
           fail: function (error) {
             console.log(error)
@@ -72,5 +74,6 @@ function kakaoUnlink() {
     }
   }  
 </script>
+<div id="profile-picture"></div>
 </body>
 </html>
