@@ -5,18 +5,73 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <title>팀원구하기</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<style>
+
+</style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
 			팀원 모집
 		</div>
 		<div id="page-content">
-			내용
+			<div>
+				<select>
+					<option>지역</option>
+					<option>서울특별시</option>
+					<option>전라북도</option>
+				</select>
+				<select>
+					<option>세부지역</option>
+					<option>전주시 덕진구</option>
+					<option>전주시 완산구</option>
+					<option>군산시</option>
+				</select>
+				<select>
+					<option>팀 레벨</option>
+					<option>초급</option>
+					<option>중급</option>
+					<option>고급</option>
+				</select>
+				<select>
+					<option>분야</option>
+					<option>밴드</option>
+					<option>댄스</option>
+				</select>
+				<select><!-- 밴드 -->
+					<option>장르</option>
+					<option>락</option>
+					<option>팝</option>
+					<option>재즈</option>
+					<option>그 외 장르</option>
+				</select>
+				<select><!-- 댄스 -->
+					<option>장르</option>
+					<option>힙합</option>
+					<option>팝핑</option>
+					<option>락킹</option>
+					<option>K-Pop 댄스</option>
+					<option>그 외 장르</option>
+				</select>
+				<select><!-- 밴드-락 -->
+					<option>파트</option>
+					<option>힙합</option>
+					<option>팝핑</option>
+					<option>락킹</option>
+					<option>K-Pop 댄스</option>
+					<option>그 외 장르</option>
+				</select>
+			</div>
+			
+			
+			
+			
 		</div>
 		
 		<!-- 여기까지 틀이고 밑에는 요소 공통사항 -->
