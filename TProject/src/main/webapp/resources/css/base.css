@@ -109,7 +109,7 @@ div#page-content {
 	min-height: 50vh;
 }
 
-button {
+button, input[type=button], input[type=reset] {
 	width: 100px;
 	height: 36px;
 	border: none;
@@ -118,17 +118,17 @@ button {
 	box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 }
 
-button.accent-button {
+button.accent-button, input[type=submit] {
 	background-color: #FB6544;
 	color: white;
 	box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
 }
 
-button:active {
+button:active, input[type=button]:active, input[type=reset]:active {
 	background-color: lightgray;
 }
 
-button.accent-button:active {
+button.accent-button:active, input[type=submit]:active {
 	background-color: #e2330c;
 }
 
