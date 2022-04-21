@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.controller.memberMapper">
-	<insert id="regmember" parameterType="memberVO">
+	<insert id="regmember" parameterType="gMemberVO">
 		INSERT INTO member (
 			midx,
 			mid,
