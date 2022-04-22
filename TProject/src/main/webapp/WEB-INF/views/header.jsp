@@ -7,7 +7,7 @@ header {
 	justify-content: space-between;
 	align-items: center;
 	width: 100%;
-	height: 80px;
+	height: 60px;
 	background: white;
 	border-bottom: 1px solid darkgray;
 	box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
@@ -16,18 +16,25 @@ header {
 
 #header-logo {
 	width: 240px;
-	height: 80px;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+#header-logo:hover {
+	cursor: pointer;
+}
+
+#header-button {
+	width: 80px;
+	height: 60px;
 	display: flex;
 	justify-content: center;
 	align-items: center;
 }
 
-#header-button {
-	width: 80px;
-	height: 80px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+#header-button:hover {
+	cursor: pointer;
 }
 
 #sidemenu {
@@ -41,17 +48,9 @@ header {
 	flex-direction: column;
 }
 
-.sm-open-button {
+.sm-open-button, .sm-close-button {
 	width: 25px;
 	height: 25px;
-	border-collapse: collapse;
-}
-
-.sm-open-button-el {
-	border-top: 3px solid black;
-}
-.sm-open-button-el:last-child {
-	border-bottom: 3px solid black;
 }
 
 #sm-close-button {
@@ -59,8 +58,14 @@ header {
 	top: 0px;
 	right: 0px;
 	width: 80px;
-	height: 80px;
-	border: 1px solid gray;
+	height: 60px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#sm-close-button:hover {
+	cursor: pointer;
 }
 
 #sm-profile {
@@ -102,26 +107,20 @@ header {
 
 
 <header>
-	<div id="header-logo">
+	<div id="header-logo" onclick="location.href='<%=request.getContextPath()%>'">
 		<img src="<%=request.getContextPath() %>/images/logo.png" width="200px">
 	</div>
 	<div id="header-button" onclick="openSm()">
-			<table class="sm-open-button">
-				<tr>
-					<td class="sm-open-button-el"></td>
-				</tr>
-				<tr>
-					<td class="sm-open-button-el"></td>
-				</tr>
-			</table>
+			<img src="<%=request.getContextPath() %>/images/sidemenu-open-button.png" class="sm-open-button">
 	</div>
 	<div id="sidemenu">
-		<div id="sm-close-button" onclick="closeSm()">닫기
+		<div id="sm-close-button" onclick="closeSm()">
+			<img src="<%=request.getContextPath() %>/images/sidemenu-close-button.png" class="sm-close-button">
 		</div>
 		<div id="sm-profile">
 			<c:if test="${login == null}">
-				<button onclick="location.href='glogin.do'">일반회원 로그인</button>
-				<button onclick="location.href='hlogin.do'">사업자 로그인 </button>
+				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
+				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
 			</c:if>
 			<c:if test="${login != null}">
 				${login.getNickname()} 로그인함

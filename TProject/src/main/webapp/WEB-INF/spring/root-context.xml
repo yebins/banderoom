@@ -7,9 +7,9 @@
 		
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-	<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
-	<property name="username" value="c##spring2" /> 
-	<property name="password" value="1234" />
+	<property name="url" value="jdbc:oracle:thin:@banderoomdb.cld6xir6e6m8.us-west-2.rds.amazonaws.com:1521:database" />
+	<property name="username" value="admin" /> 
+	<property name="password" value="admin1234!" />
 </bean>
 
 <!-- mybatis 연동 -->
