@@ -21,7 +21,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/infomation.do")
-	public String infomatino() {
+	public String infomation() {
 		
 		return "board/infomation";
 	}
