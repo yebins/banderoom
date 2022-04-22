@@ -40,9 +40,9 @@ public class MemberController {
 	
 	@RequestMapping(value = "/sendEmail.do", method = RequestMethod.POST)
 	@ResponseBody
-	public int sendEmail(String email) {
+	public int sendEmail(String email, String memberType) {
 		
-		return memberService.sendEmail(email);
+		return memberService.sendEmail(email, memberType);
 	}
 	
 	@RequestMapping(value = "/checkEmail.do", method = RequestMethod.POST)
@@ -112,5 +112,11 @@ public class MemberController {
 		File thumbFile = new File(thumbName);
 		
 		ImageIO.write(destImg, fileExt.toUpperCase(), thumbFile);
+	}
+	
+	@RequestMapping(value = "checkNickname.do")
+	@ResponseBody
+	public int checkNickname(String nickname, String memberType) {
+		return memberService.checkNickname(nickname, memberType);
 	}
 }

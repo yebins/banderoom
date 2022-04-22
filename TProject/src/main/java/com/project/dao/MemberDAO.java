@@ -1,5 +1,7 @@
 package com.project.dao;
 
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -32,6 +34,26 @@ public class MemberDAO {
 	
 	public EmailRegVO selectEmailReg(EmailRegVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.selectEmailReg", vo);
+	}
+	
+	public boolean isEmailExist(Map<String, Object> params) {
+		int count = sqlSession.selectOne("com.project.mapper.memberMapper.isEmailExist", params);
+
+		if (count == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public boolean isNicknameExist(Map<String, Object> params) {
+		int count = sqlSession.selectOne("com.project.mapper.memberMapper.isNicknameExist", params);
+		
+		if (count == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 }

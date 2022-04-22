@@ -7,6 +7,7 @@
 <head>
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
@@ -129,6 +130,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
+		
 	}
 	
 	div.nickname-wrap {
@@ -142,15 +144,18 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin: 0px;
 	}
 	
 	input.nickname {
 		width: 400px;
 	}
+	.nickname-button {
+		width: 120px;
+	}
 </style>
 <script>
 	var emailChecked = false;
+	var nickChecked = false;
 
 	function profileUpload() {
 		
@@ -195,12 +200,17 @@
 		$.ajax({
 			type: "post",
 			url: "sendEmail.do",
-			data: "email=" + email,
+			data: "email=" + email + "&memberType=general", // 중복 체크를 일반과 호스트회원 각각 해야하므로 변수로 넣어줌
 			success: function(data) {
-				$(button).attr("disabled", false);
-				$(button).text("이메일 인증");
-				$(button).removeClass("accent-button");
-				$(".email-field2").css("display", "flex");
+				
+				if(data == 2) {
+					alert('이미 존재하는 이메일입니다.');
+				} else if (data == 0) {
+					$(button).attr("disabled", false);
+					$(button).text("이메일 인증");
+					$(button).removeClass("accent-button");
+					$(".email-field2").css("display", "flex");
+				}
 			}
 		})
 	}
@@ -231,6 +241,35 @@
 			}
 		})
 	}
+
+	function checkNickAlert(obj) {
+		nickChecked = false;
+		$(obj).next().addClass("accent-button");
+	}
+	
+	function checkNickname(obj) {
+		var nickname = $("input[name=nickname]");
+		
+		if (nickname == null || nickname == '') {
+			return;
+		}
+		
+		$.ajax({
+			type: "post",
+			url: "checkNickname.do",
+			data: "nickname=" + nickname + "&memberType=general",
+			success: function(data) {
+				if (data == 1) {
+					alert('이미 존재하는 닉네임입니다.');
+				} else if (data == 0) {
+					alert('사용 가능한 닉네임입니다.')
+					$(obj).removeClass("accent-button");
+					nickChecked = true;
+				}
+			}
+		})
+	}
+	
 </script>
 </head>
 <body>
@@ -272,7 +311,7 @@
 				
 				<p></p>
 				
-				<form class="joinform joinform-rest"></form>
+				<form class="joinform joinform-rest">
 				<div class="inner-box">
 					<div class="inner-box-content">
 						<div class="profile-nickname-wrap">
@@ -300,12 +339,39 @@
 							</div>
 							<div class="join-row join-row-content nickname-field">
 								<input type="hidden" name="profileSrc" value="<%=request.getContextPath()%>/images/profile_default.png">
-								<input class="nickname" type="text" name="nickname" onchange="">
-								<button type="button" class="email-button" onclick="sendEmail(this)">중복 확인</button>
+								<input class="nickname" type="text" name="nickname" onchange="checkNickAlert(this)" placeholder="닉네임">
+								<button type="button" class="nickname-button" onclick="checkNickname(this)">중복 확인</button>
 							</div>
 						</div>
+						
+						<div class="join-row join-row-title">
+							이름
+						</div>
+						<div class="join-row join-row-content">
+							<input type="text" name="name">
+						</div>
+						<div class="join-row join-row-title">
+							주소
+						</div>
+						<script>
+							function searchAddr() {
+						    new daum.Postcode({
+						        oncomplete: function(data) {
+											$('input[name=address]').val(data.address + " (" + data.bname + ")");
+											$('input[name=addressDetail]').val(data.buildingName);
+						        }
+						    }).open();
+							}
+						</script>
+						<div class="join-row join-row-content">
+							<input type="text" name="address" readonly onclick="searchAddr()" placeholder="주소 검색">
+							<input type="text" name="addressDetail" placeholder="상세 주소">
+						</div>
+						
+						
 					</div>
 				</div>
+				</form>
 			
 		</div>
 		

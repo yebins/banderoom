@@ -1,5 +1,7 @@
 package com.project.service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.*;
@@ -18,7 +20,18 @@ public class MemberServiceImpl implements MemberService {
 	private MemberDAO dao;
 
 	@Override
-	public int sendEmail(String email) {
+	public int sendEmail(String email, String memberType) {
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("memberType", memberType);
+		params.put("email", email);
+		
+		if (dao.isEmailExist(params)) {
+			
+			return 2; // 이미 존재하는 이메일
+		}
+		
 		
 		String tempKey = "";
 		char pwCollection[] = new char[] {
@@ -98,6 +111,20 @@ public class MemberServiceImpl implements MemberService {
 			return 0; // 인증키 일치
 		} else {
 			return 2; // 인증키 불일치
+		}
+	}
+
+	@Override
+	public int checkNickname(String nickname, String memberType) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("nickname", nickname);
+		params.put("memberType", memberType);
+		
+		if (dao.isNicknameExist(params)) {
+			return 1; // 이미 존재하는 닉네임
+		} else {
+			return 0; // 닉네임 없음
 		}
 	}
 }

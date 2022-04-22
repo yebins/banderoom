@@ -49,4 +49,26 @@
 		from emailreg
 		where email = #{email}
 	</select>
+	
+	<select id="isEmailExist" resultType="int" parameterType="Map">
+		select count(email) from 
+		<if test="memberType == 'general'">
+			general_members 
+		</if>
+		<if test="memberType == 'host'">
+			host_members 
+		</if>
+		where email = #{email}
+	</select>
+	
+	<select id="isNicknameExist" resultType="int" parameterType="Map">
+		select count(nickname) from
+		<if test="memberType == 'general'">
+			general_members 
+		</if>
+		<if test="memberType == 'host'">
+			host_members 
+		</if>
+		where nickname = #{nickname}
+	</select>
 </mapper>
