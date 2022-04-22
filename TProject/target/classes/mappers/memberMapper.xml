@@ -19,4 +19,34 @@
 			sysdate
 		)
 	</insert>
+	
+	<select id="isEmailKeyExist" resultType="int" parameterType="emailRegVO">
+		select count(*) from emailreg
+		where email = #{email}
+	</select>
+	
+	<insert id="setEmailKey" parameterType="emailRegVO">
+		insert into emailreg (
+			email,
+			key,
+			deadline
+		) values (
+			#{email},
+			#{key},
+			(sysdate + 30/(24*60))
+		)
+	</insert>
+	
+	<update id="updateEmailKey" parameterType="emailRegVO">
+		update emailreg set
+			email = #{email},
+			key = #{key},
+			deadline = (sysdate + 30/(24*60))
+	</update>
+	
+	<select id="selectEmailReg" parameterType="emailRegVO" resultType="emailRegVO">
+		select email, key, deadline
+		from emailreg
+		where email = #{email}
+	</select>
 </mapper>

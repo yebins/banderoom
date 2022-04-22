@@ -16,13 +16,13 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			일반회원 가입
+			제목
 		</div>
 		<div id="page-content">
 			내용
 		</div>
 		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
+		<!-- 여기까지 틀이고 밑에는 요소 공통사항 -->
 		<div>
 			위까지는 틀이고 밑에는 요소 공통사항
 			<br><br><br>
