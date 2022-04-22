@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.vo.PayResultVO;
 
 /**
  * Handles requests for the application home page.
@@ -56,9 +55,9 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/payProcess.do", method = RequestMethod.POST)
-	public void payProcess(PayResultVO vo) {
-		System.out.println(vo.getImp_uid());
-		System.out.println(vo.getMerchant_uid());
+	public void payProcess(String imp_uid, String merchant_uid) {
+		System.out.println(imp_uid + merchant_uid);
+		
 	}
 	
 	@RequestMapping(value = "/newfile2.do")
