@@ -10,19 +10,53 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<style>
+	div#page-content {
+		width: 70%;
+	}
+	
+	div.inner-box {
+		padding: 50px;
+		justify-content: flex-start;
+	}
+	
+	
+	input.login-input {
+		width: 100%;
+		margin: 10px 0px;
+		height: 50px;
+		border: 1px solid lightgray;
+		border-radius: 25px;
+		padding: 0px 20px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+	}
+</style>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			일반회원 가입
+			일반 회원가입
 		</div>
 		<div id="page-content">
-			내용
+			<form action="gjoin.do" method="post">
+				<div class="inner-box">
+					<div class="inner-box-content">
+					<div class="join-row join-row-title">
+						이메일
+					</div>
+					<div class="join-row join-row-content">
+						<input type="email" name="email">
+					</div>
+					
+				</div>
+				</div>
+			</form>
+			
 		</div>
 		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
+		<!-- 여기까지 틀이고 밑에는 요소 공통사항
 		<div>
 			위까지는 틀이고 밑에는 요소 공통사항
 			<br><br><br>
