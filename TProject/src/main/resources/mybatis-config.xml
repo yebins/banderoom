@@ -3,6 +3,29 @@
 
 <configuration>
 	<typeAliases>
-		<typeAlias type="com.project.vo.GeneralMembersVO" alias="gMemberVO"/>
+		<typeAlias type="com.project.vo.ApplicationsVO" alias="applicationsVO"/>
+		<typeAlias type="com.project.vo.ArticlesVO" alias="articlesVO"/>
+		<typeAlias type="com.project.vo.BoardsVO" alias="boardsVO"/>
+		<typeAlias type="com.project.vo.CommentRepliesVO" alias="commentRepliesVO"/>
+		<typeAlias type="com.project.vo.CommentsVO" alias="commentsVO"/>
+		<typeAlias type="com.project.vo.EmailRegVO" alias="emailRegVO"/>
+		<typeAlias type="com.project.vo.GeneralMembersVO" alias="generalMembersVO"/>
+		<typeAlias type="com.project.vo.HostMembersVO" alias="hostMembersVO"/>
+		<typeAlias type="com.project.vo.LikedArticlesVO" alias="likedArticlesVO"/>
+		<typeAlias type="com.project.vo.LikedSpacesVO" alias="likedSpacesVO"/>
+		<typeAlias type="com.project.vo.LocationsVO" alias="locationsVO"/>
+		<typeAlias type="com.project.vo.MessagesVO" alias="messagesVO"/>
+		<typeAlias type="com.project.vo.PartsVO" alias="partsVO"/>
+		<typeAlias type="com.project.vo.PointsVO" alias="pointsVO"/>
+		<typeAlias type="com.project.vo.ReportsVO" alias="reportsVO"/>
+		<typeAlias type="com.project.vo.ReservationsVO" alias="reservationsVO"/>
+		<typeAlias type="com.project.vo.ServiceInfoVO" alias="serviceInfoVO"/>
+		<typeAlias type="com.project.vo.SpacePicturesVO" alias="spacePicturesVO"/>
+		<typeAlias type="com.project.vo.SpaceQnaAVO" alias="spaceQnaAVO"/>
+		<typeAlias type="com.project.vo.SpaceQnaQVO" alias="spaceQnaQVO"/>
+		<typeAlias type="com.project.vo.SpaceReviewVO" alias="spaceReviewVO"/>
+		<typeAlias type="com.project.vo.SpacesVO" alias="spacesVO"/>
+		<typeAlias type="com.project.vo.TeamsVO" alias="TeamsVO"/>
+		
 	</typeAliases>
 </configuration>
