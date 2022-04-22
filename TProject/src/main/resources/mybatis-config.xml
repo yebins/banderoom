@@ -9,7 +9,6 @@
 		<typeAlias type="com.project.vo.CommentRepliesVO" alias="commentRepliesVO"/>
 		<typeAlias type="com.project.vo.CommentsVO" alias="commentsVO"/>
 		<typeAlias type="com.project.vo.EmailRegVO" alias="emailRegVO"/>
-		<typeAlias type="com.project.vo.EmailRegVO" alias="emailRegVO"/>
 		<typeAlias type="com.project.vo.GeneralMembersVO" alias="generalMembersVO"/>
 		<typeAlias type="com.project.vo.HostMembersVO" alias="hostMembersVO"/>
 		<typeAlias type="com.project.vo.LikedArticlesVO" alias="likedArticlesVO"/>
