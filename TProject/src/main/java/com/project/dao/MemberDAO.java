@@ -88,4 +88,8 @@ public class MemberDAO {
 	public GeneralMembersVO kakaoLogin(GeneralMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.kakaoLogin", vo);
 	}
+	
+	public GeneralMembersVO gLogin(GeneralMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.gLogin", vo);
+	}
 }

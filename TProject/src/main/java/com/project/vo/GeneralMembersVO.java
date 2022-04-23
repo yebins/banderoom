@@ -17,7 +17,7 @@ public class GeneralMembersVO {
 	private String profileSrc;
 	private String gender;
 	private int point;
-	private int auth;
+	private int auth; // 0: 일반회원, 1: 차단됨, 2: 탈퇴, 3: 관리자
 	private String isKakao;
 	private Date joinDate;
 	

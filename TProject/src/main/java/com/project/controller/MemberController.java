@@ -181,4 +181,17 @@ public class MemberController {
 		
 		return "redirect:/";
 	}
+	
+	@RequestMapping(value = "glogin.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int glogin(GeneralMembersVO vo, HttpServletRequest request) {
+		
+		if ((vo = memberService.gLogin(vo)) != null) {
+			request.getSession().setAttribute("login", vo);
+			
+			return 1;
+		}
+		
+		return 0; // 회원정보 없음
+	}
 }

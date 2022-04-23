@@ -43,7 +43,7 @@
 		padding: 0px 80px;
 	}
 	
-	input.login-input {
+	.login-input {
 		width: 100%;
 		margin: 10px 0px;
 		height: 50px;
@@ -53,7 +53,7 @@
 		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 	}
 	
-	input.login-submit {
+	.login-submit {
 		width: 100%;
 		margin: 10px 0px;
 		height: 50px;
@@ -133,6 +133,32 @@ function kakaoLogin() {
       },
     })
   }
+  
+ function gLogin() {
+
+	 var email = $("input[name=email]").val();
+	 var password = $("input[name=password]").val();
+	 
+	 if (email == '' || email == null || email == undefined ||
+			 password == '' || password == null || password == undefined) {
+		 return;
+	 }
+	 
+	 $.ajax({
+		 type: "post",
+		 url: "glogin.do",
+		 data: $("form#login-form").serialize(),
+		 success: function(data) {
+			 
+			 if (data == 0) {
+				 alert('일치하는 회원 정보가 없습니다.\n이메일과 비밀번호를 확인해 주세요.')
+			 } else if (data == 1) {
+				 location.href='/';
+			 }
+			 
+		 }
+	 })
+ }
 
 </script>
 
@@ -142,11 +168,11 @@ function kakaoLogin() {
 	<div id="wrapper">
 		<div id="login-wrap">
 			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo">
-				<form id="login-form" action="glogin.do" method="post">
+				<form id="login-form">
 					<div id="login-form-elements">
-						<input class="login-input" type="text" placeholder="이메일">
-						<input class="login-input" type="text" placeholder="비밀번호">
-						<input type="submit" class="login-submit" value="로그인">
+						<input class="login-input" type="text" name="email" placeholder="이메일" required>
+						<input class="login-input" type="password" name="password" placeholder="비밀번호" required>
+						<button class="accent-button login-submit" type="button" onclick="gLogin()">로그인</button>
 						<button type="button" class="login-button login-button-kakao" onclick="kakaoLogin()">
 							<img class="kakao-login-symbol" src="<%=request.getContextPath()%>/images/kakao_login_large_symbol.png" height="100%">
 							<div class="kakao-login-button-text">카카오 로그인</div>

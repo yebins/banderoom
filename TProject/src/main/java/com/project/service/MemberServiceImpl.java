@@ -192,4 +192,9 @@ public class MemberServiceImpl implements MemberService {
 	public GeneralMembersVO kakaoLogin(GeneralMembersVO vo) {
 		return dao.kakaoLogin(vo);
 	}
+
+	@Override
+	public GeneralMembersVO gLogin(GeneralMembersVO vo) {
+		return dao.gLogin(vo);
+	}
 }

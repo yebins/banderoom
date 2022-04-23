@@ -179,11 +179,11 @@ header {
   })();
   ChannelIO('boot', {
     "pluginKey": "7076be12-5620-4a8e-b360-e2c6dfd55265", //please fill with your plugin key
-    "memberId": null, //fill with user id
+    "memberId": "${login.getEmail()}", //fill with user id
     "profile": {
-      "name": null, //fill with user name
-      "mobileNumber": null, //fill with user phone number
-      "email": null, //any other custom meta data
+      "name": "${login.getNickname()}", //fill with user name
+      "mobileNumber": "${login.getTel()}", //fill with user phone number
+      "email": "${login.getEmail()}", //any other custom meta data
       "CUSTOM_VALUE_2": "VALUE_2"
     }
   });
