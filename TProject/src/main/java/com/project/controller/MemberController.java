@@ -2,6 +2,8 @@ package com.project.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.MemberService;
 import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
 import com.project.vo.TelRegVO;
 
 @RequestMapping(value = "/member")
@@ -35,7 +38,12 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value = "/gjoin.do", method = RequestMethod.GET)
-	public String gjoin() {
+	public String gjoin(String isKakao, HttpServletRequest request) {
+		
+		if (isKakao.equals("N")) {
+			request.getSession().invalidate();
+		}
+		
 		return "member/gjoin";
 	}
 	
@@ -135,5 +143,26 @@ public class MemberController {
 		vo.setTel(vo.getTel().replaceAll("-", ""));
 		
 		return memberService.checkTel(vo);
+	}
+	
+	@RequestMapping(value = "gjoin.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int gjoin(GeneralMembersVO vo) {
+		
+		return memberService.gjoin(vo); // 1: 성공, 0: 실패
+	}
+	
+	@RequestMapping(value = "kakaoLogin.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int kakaoLogin(String email, String profileSrc, String nickname, HttpServletRequest request) {
+
+		Map<String, String> kakao = new HashMap<String, String>();
+		kakao.put("email", email);
+		kakao.put("profileSrc", profileSrc);
+		kakao.put("nickname", nickname);
+		
+		request.getSession().setAttribute("kakao", kakao);
+		
+		return 0;
 	}
 }

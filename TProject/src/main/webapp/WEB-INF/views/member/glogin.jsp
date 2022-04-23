@@ -92,6 +92,48 @@
 		justify-content: space-between;
 	}
 </style>
+
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+
+Kakao.init('a8d83e76596a6e93d144575566c3d5ae'); //발급받은 키 중 javascript키를 사용해준다.
+console.log(Kakao.isInitialized()); // sdk초기화여부판단
+//카카오로그인
+function kakaoLogin() {
+    Kakao.Auth.login({
+      success: function (response) {
+        Kakao.API.request({
+          url: '/v2/user/me',
+          success: function (response) {
+        	  
+        	  $.ajax({
+        		  type: "post",
+        		  url: "kakaoLogin.do",
+        		  data: {
+        			  email: response.kakao_account.email,
+        			  profileSrc: response.kakao_account.profile.thumbnail_image_url,
+        			  nickname: response.kakao_account.profile.nickname
+        		  },
+        		  success: function(data) {
+        			  if (data == 0) {
+        				  location.href='gjoin.do?isKakao=Y'
+        			  }
+        		  }
+        	  })
+          },
+          fail: function (error) {
+            console.log(error)
+          },
+        })
+      },
+      fail: function (error) {
+        console.log(error)
+      },
+    })
+  }
+
+</script>
+
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -103,7 +145,7 @@
 						<input class="login-input" type="text" placeholder="이메일">
 						<input class="login-input" type="text" placeholder="비밀번호">
 						<input type="submit" class="login-submit" value="로그인">
-						<button type="button" class="login-button login-button-kakao">
+						<button type="button" class="login-button login-button-kakao" onclick="kakaoLogin()">
 							<img class="kakao-login-symbol" src="<%=request.getContextPath()%>/images/kakao_login_large_symbol.png" height="100%">
 							<div class="kakao-login-button-text">카카오 로그인</div>
 						</button>
@@ -112,7 +154,7 @@
 				<div id="login-link">
 					<div id="findpw-link">비밀번호를 잊으셨나요?</div>
 					<div id="separator">|</div>
-					<div id="join-link"><a href="gjoin.do">회원가입</a></div>
+					<div id="join-link"><a href="gjoin.do?isKakao=N">회원가입</a></div>
 				</div>
 		</div>
 		

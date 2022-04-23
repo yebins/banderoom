@@ -107,7 +107,7 @@ header {
 
 
 <header>
-	<div id="header-logo" onclick="location.href='<%=request.getContextPath()%>'">
+	<div id="header-logo" onclick="location.href='<%=request.getContextPath()%>/'">
 		<img src="<%=request.getContextPath() %>/images/logo.png" width="200px">
 	</div>
 	<div id="header-button" onclick="openSm()">

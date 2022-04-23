@@ -1,6 +1,7 @@
 package com.project.service;
 
 import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
 import com.project.vo.TelRegVO;
 
 public interface MemberService {
@@ -10,4 +11,5 @@ public interface MemberService {
 	int checkNickname(String nickname, String memberType);
 	int sendTelKey(TelRegVO vo);
 	int checkTel(TelRegVO vo);
+	int gjoin(GeneralMembersVO vo);
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
 import com.project.vo.TelRegVO;
 
 @Repository
@@ -80,4 +81,7 @@ public class MemberDAO {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.selectTelReg", vo);
 	}
 	
+	public int gjoin(GeneralMembersVO vo) {
+		return sqlSession.insert("com.project.mapper.memberMapper.gjoin", vo);
+	}
 }

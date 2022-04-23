@@ -1,5 +1,6 @@
 package com.project.service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.project.dao.MemberDAO;
 import com.project.util.Sms;
 import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
 import com.project.vo.TelRegVO;
 
 @Service
@@ -110,6 +112,14 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		if (check.getKey().equals(vo.getKey())) {
+			
+			System.out.println(new Date());
+			System.out.println(check.getDeadLine());
+			
+			if (new Date().after(check.getDeadLine())) {
+				return 3; // 인증시간 만료
+			}
+			
 			return 0; // 인증키 일치
 		} else {
 			return 2; // 인증키 불일치
@@ -164,9 +174,17 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		if (check.getKey().equals(vo.getKey())) {
+			if (new Date().after(check.getDeadLine())) {
+				return 3; // 인증시간 만료
+			}
 			return 0; // 인증키 일치
 		} else {
 			return 2; // 인증키 불일치
 		}
+	}
+
+	@Override
+	public int gjoin(GeneralMembersVO vo) {
+		return dao.gjoin(vo);
 	}
 }

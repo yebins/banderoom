@@ -2,24 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.mapper.memberMapper">
-	<insert id="regmember" parameterType="generalMembersVO">
-		INSERT INTO member (
-			midx,
-			mid,
-			password,
-			addr,
-			phone,
-			regdate
-		) values (
-			midx_seq.nextval,
-			#{mid},
-			#{password},
-			#{addr},
-			#{phone},
-			sysdate
-		)
-	</insert>
-	
 	<select id="isEmailKeyExist" resultType="int" parameterType="emailRegVO">
 		select count(*) from emailreg
 		where email = #{email}
@@ -102,4 +84,40 @@
 		from telreg
 		where tel = #{tel}
 	</select>
+	
+	<insert id="gjoin" parameterType="generalMembersVO">
+		insert into general_members (
+			midx,
+			email,
+			password,
+			name,
+			nickname,
+			address,
+			<if test="addressDetail != null">
+				addressdetail,
+			</if>
+			addr1,
+			addr2,
+			tel,
+			profilesrc,
+			gender,
+			iskakao
+		) values (
+			general_members_midx_seq.nextval,
+			#{email},
+			#{password},
+			#{name},
+			#{nickname},
+			#{address},
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			#{addr1},
+			#{addr2},
+			#{tel},
+			#{profileSrc},
+			#{gender},
+			#{isKakao}
+		)
+	</insert>
 </mapper>
