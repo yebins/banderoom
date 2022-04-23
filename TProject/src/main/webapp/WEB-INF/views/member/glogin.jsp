@@ -117,6 +117,8 @@ function kakaoLogin() {
         		  success: function(data) {
         			  if (data == 0) {
         				  location.href='gjoin.do?isKakao=Y'
+        			  } else if (data == 1) {
+        				  location.href='/';
         			  }
         		  }
         	  })

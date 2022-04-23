@@ -187,4 +187,9 @@ public class MemberServiceImpl implements MemberService {
 	public int gjoin(GeneralMembersVO vo) {
 		return dao.gjoin(vo);
 	}
+
+	@Override
+	public GeneralMembersVO kakaoLogin(GeneralMembersVO vo) {
+		return dao.kakaoLogin(vo);
+	}
 }

@@ -120,4 +120,26 @@
 			#{isKakao}
 		)
 	</insert>
+	
+	<select id="kakaoLogin" parameterType="generalMembersVO" resultType="generalMembersVO">
+		select midx,
+					 email,
+					 password,
+					 name,
+					 nickname,
+					 address,
+					 addressDetail,
+					 addr1,
+					 addr2,
+					 tel,
+					 profileSrc,
+					 gender,
+					 point,
+					 auth,
+					 isKakao,
+					 joinDate
+		from general_members
+		where email = #{email}
+		and isKakao = 'Y'
+	</select>
 </mapper>

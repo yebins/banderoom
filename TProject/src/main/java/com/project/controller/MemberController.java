@@ -155,6 +155,15 @@ public class MemberController {
 	@RequestMapping(value = "kakaoLogin.do", method = RequestMethod.POST)
 	@ResponseBody
 	public int kakaoLogin(String email, String profileSrc, String nickname, HttpServletRequest request) {
+		
+		GeneralMembersVO vo = new GeneralMembersVO();
+		vo.setEmail(email);
+		
+		if ((vo = memberService.kakaoLogin(vo)) != null) {
+			request.getSession().setAttribute("login", vo);
+			
+			return 1;
+		}
 
 		Map<String, String> kakao = new HashMap<String, String>();
 		kakao.put("email", email);
@@ -164,5 +173,12 @@ public class MemberController {
 		request.getSession().setAttribute("kakao", kakao);
 		
 		return 0;
+	}
+	
+	@RequestMapping(value = "logout.do")
+	public String logout(HttpServletRequest request) {
+		request.getSession().invalidate();
+		
+		return "redirect:/";
 	}
 }

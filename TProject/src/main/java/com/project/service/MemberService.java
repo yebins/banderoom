@@ -12,4 +12,5 @@ public interface MemberService {
 	int sendTelKey(TelRegVO vo);
 	int checkTel(TelRegVO vo);
 	int gjoin(GeneralMembersVO vo);
+	GeneralMembersVO kakaoLogin(GeneralMembersVO vo);
 }

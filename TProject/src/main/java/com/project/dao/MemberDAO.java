@@ -84,4 +84,8 @@ public class MemberDAO {
 	public int gjoin(GeneralMembersVO vo) {
 		return sqlSession.insert("com.project.mapper.memberMapper.gjoin", vo);
 	}
+	
+	public GeneralMembersVO kakaoLogin(GeneralMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.kakaoLogin", vo);
+	}
 }

@@ -123,7 +123,8 @@ header {
 				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
 			</c:if>
 			<c:if test="${login != null}">
-				${login.getNickname()} 로그인함
+				${login.getNickname()} 로그인함 <br>
+				${login.getEmail()}				
 			</c:if>
 		</div>
 		<div id="sm-buttons">
