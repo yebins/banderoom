@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.vo.EmailRegVO;
+import com.project.vo.TelRegVO;
 
 @Repository
 public class MemberDAO {
@@ -54,6 +55,29 @@ public class MemberDAO {
 		} else {
 			return true;
 		}
+	}
+	
+
+	public boolean isTelKeyExist(TelRegVO vo) {
+		int count = sqlSession.selectOne("com.project.mapper.memberMapper.isTelKeyExist", vo);
+		
+		if (count == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public void setTelKey(TelRegVO vo) {
+		sqlSession.insert("com.project.mapper.memberMapper.setTelKey", vo);
+	}
+	
+	public void updateTelKey(TelRegVO vo) {
+		sqlSession.update("com.project.mapper.memberMapper.updateTelKey", vo);
+	}
+	
+	public TelRegVO selectTelReg(TelRegVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.selectTelReg", vo);
 	}
 	
 }

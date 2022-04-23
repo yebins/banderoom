@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.dao.MemberDAO;
+import com.project.util.Sms;
 import com.project.vo.EmailRegVO;
+import com.project.vo.TelRegVO;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -125,6 +127,46 @@ public class MemberServiceImpl implements MemberService {
 			return 1; // 이미 존재하는 닉네임
 		} else {
 			return 0; // 닉네임 없음
+		}
+	}
+
+	@Override
+	public int sendTelKey(TelRegVO vo) {
+
+		String tempKey = "";
+		char pwCollection[] = new char[] {
+        '1','2','3','4','5','6','7','8','9','0'};
+		
+		for (int i = 0; i < 6; i++) {
+			tempKey += pwCollection[(int) (Math.random() * pwCollection.length)];
+		}
+		
+		vo.setKey(tempKey);
+		String smsContent = "banderoom 인증번호입니다.\n" + tempKey;
+		
+		Sms.sendSms(vo.getTel(), smsContent);
+
+		if (dao.isTelKeyExist(vo)) {
+			dao.updateTelKey(vo);
+		} else {
+			dao.setTelKey(vo);
+		}
+		return 0;
+	}
+
+	@Override
+	public int checkTel(TelRegVO vo) {
+
+		TelRegVO check = dao.selectTelReg(vo);
+		
+		if (check == null) {
+			return 1; // 해당 번호 없음
+		}
+		
+		if (check.getKey().equals(vo.getKey())) {
+			return 0; // 인증키 일치
+		} else {
+			return 2; // 인증키 불일치
 		}
 	}
 }

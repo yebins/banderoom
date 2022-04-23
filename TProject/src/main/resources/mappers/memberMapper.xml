@@ -71,4 +71,35 @@
 		</if>
 		where nickname = #{nickname}
 	</select>
+	
+	
+	<select id="isTelKeyExist" resultType="int" parameterType="telRegVO">
+		select count(*) from telreg
+		where tel = #{tel}
+	</select>
+	
+	<insert id="setTelKey" parameterType="telRegVO">
+		insert into telreg (
+			tel,
+			key,
+			deadline
+		) values (
+			#{tel},
+			#{key},
+			(sysdate + 5/(24*60))
+		)
+	</insert>
+	
+	<update id="updateTelKey" parameterType="telRegVO">
+		update telreg set
+			tel = #{tel},
+			key = #{key},
+			deadline = (sysdate + 5/(24*60))
+	</update>
+	
+	<select id="selectTelReg" parameterType="telRegVO" resultType="telRegVO">
+		select tel, key, deadline
+		from telreg
+		where tel = #{tel}
+	</select>
 </mapper>

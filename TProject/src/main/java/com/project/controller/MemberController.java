@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.MemberService;
 import com.project.vo.EmailRegVO;
+import com.project.vo.TelRegVO;
 
 @RequestMapping(value = "/member")
 @Controller
@@ -118,5 +119,21 @@ public class MemberController {
 	@ResponseBody
 	public int checkNickname(String nickname, String memberType) {
 		return memberService.checkNickname(nickname, memberType);
+	}
+	
+	@RequestMapping(value = "sendSms.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int sendSms(TelRegVO vo) {
+		vo.setTel(vo.getTel().replaceAll("-", ""));
+		
+		return memberService.sendTelKey(vo);
+	}
+
+	@RequestMapping(value = "checkTel.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int checkTel(TelRegVO vo) {
+		vo.setTel(vo.getTel().replaceAll("-", ""));
+		
+		return memberService.checkTel(vo);
 	}
 }
