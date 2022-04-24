@@ -100,7 +100,7 @@ Kakao.init('a8d83e76596a6e93d144575566c3d5ae'); //발급받은 키 중 javascrip
 console.log(Kakao.isInitialized()); // sdk초기화여부판단
 //카카오로그인
 function kakaoLogin() {
-    Kakao.Auth.login({
+    Kakao.Auth.loginForm({
       success: function (response) {
         Kakao.API.request({
           url: '/v2/user/me',
