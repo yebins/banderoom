@@ -16,7 +16,7 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			타이틀 들어갑니다.${serviceInfoVO.title}
+			이용약관${serviceInfoVO.title}
 		</div>
 		<div id="page-content">
 			<div class="inner-box">

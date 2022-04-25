@@ -14,10 +14,10 @@ public class BoardController {
 		return "board/notice";
 	}
 	
-	@RequestMapping(value="/freeBoard.do")
+	@RequestMapping(value="/list.do")
 	public String freeBoard() {
 		
-		return "board/freeBoard";
+		return "board/list";
 	}
 	
 	@RequestMapping(value="/infomation.do")
