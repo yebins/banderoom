@@ -5,6 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
@@ -14,22 +16,27 @@
 		align:center;
 	}
 	.freeBoard-list-table{
+		margin-top: 20px;
 		width:100%;
 	}
-	td{
+	td,th{
 		text-align:center;
 	}
 </style>
 </head>
 <body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
 			자유게시판
 		</div>
-		<div id="page-content" style="align:center;">
-			<input type="text">
-			<button class="accent-button" style="margin-left: 15px;">검색</button>
+		<div>
+			<form class="d-flex notice-page">
+       	 		<input class="form-control me-3" type="search" placeholder="Search" aria-label="Search">
+        			<button class="accent-button">검색</button>
+     		 </form>
+		</div>
 		<div class="freeBoard-list">
 			<table class="freeBoard-list-table">
 				<tr>
@@ -40,42 +47,25 @@
 					<th width="10%">조회수</th>
 					<th width="10%">추천수</th>
 				</tr>
-				<tr>
-					<td>1</td>
-					<td>2</td>
-					<td>3</td>
-					<td>4</td>
-					<td>5</td>
-					<td>6</td>
-				</tr>
+				<c:if test="${freeBoardList.size() > 0 }">
+					<c:forEach var="item" items="${freeBoardList}">
+						<tr>
+							<td>${item.aIdx }</td>
+							<td><a href="view.do?aIdx=${item.aIdx}">${item.title }</a></td>
+							<td>${item.mNickname }</td>
+							<td>${item.regDate }</td>
+							<td>${item.readCount }</td>
+							<td>1</td><!-- 추천수 어떻게 가져옴니까... -->
+						</tr>
+					</c:forEach>
+				</c:if>
+				<c:if test="${list.size() == 0 }">
+					<tr>
+						<td colspan="6">등록된 게시글이 없습니다.</td>
+					</tr>
+				</c:if>
 			</table>
 		</div>
-		</div>
-		
-		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 -->
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button>버튼</button> 
-			일반 버튼 (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="accent-button">버튼</button> 강조 버튼 (button class="accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button>일반버튼</button>
-					<button class="accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
-			</div>
-			<br><br>
-		</div>
-		<!-- 여기까지 -->
 		
 	</div>
 	

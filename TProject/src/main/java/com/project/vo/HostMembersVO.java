@@ -11,6 +11,7 @@ public class HostMembersVO {
 	private String name;
 	private String nickname;
 	private String address;
+	private String addressDetail;
 	private String addr1;
 	private String addr2;
 	private String tel;
@@ -60,6 +61,12 @@ public class HostMembersVO {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getAddressDetail() {
+		return addressDetail;
+	}
+	public void setAddressDetail(String addressDetail) {
+		this.addressDetail = addressDetail;
 	}
 	public String getAddr1() {
 		return addr1;

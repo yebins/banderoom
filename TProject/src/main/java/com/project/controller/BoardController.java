@@ -12,6 +12,7 @@ import com.project.vo.ArticlesVO;
 @RequestMapping(value="/board")
 @Controller
 public class BoardController {
+<<<<<<< HEAD
    
    @RequestMapping(value="/notice.do")
    public String Notice(Model model) {
@@ -47,3 +48,24 @@ public class BoardController {
       return "board/infomation";
    }
 }
+=======
+	
+	@RequestMapping(value="/notice.do")
+	public String Notice(Model model) {
+		
+		return "board/notice";
+	}
+	
+	@RequestMapping(value="/freeBoard.do")
+	public String freeBoard() {
+		
+		return "board/freeBoard";
+	}
+	
+	@RequestMapping(value="/infomation.do")
+	public String infomation() {
+		
+		return "board/infomation";
+	}
+}
+>>>>>>> branch 'main' of https://github.com/yebins/banderoom.git
