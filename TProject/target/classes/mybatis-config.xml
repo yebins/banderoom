@@ -25,7 +25,8 @@
 		<typeAlias type="com.project.vo.SpaceQnaQVO" alias="spaceQnaQVO"/>
 		<typeAlias type="com.project.vo.SpaceReviewVO" alias="spaceReviewVO"/>
 		<typeAlias type="com.project.vo.SpacesVO" alias="spacesVO"/>
-		<typeAlias type="com.project.vo.TeamsVO" alias="TeamsVO"/>
+		<typeAlias type="com.project.vo.TeamsVO" alias="teamsVO"/>
+		<typeAlias type="com.project.vo.TelRegVO" alias="telRegVO"/>
 		
 	</typeAliases>
 </configuration>

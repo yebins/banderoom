@@ -1,0 +1,177 @@
+@charset "UTF-8";
+
+	div#page-content {
+		width: 70%;
+	}
+	
+	div.inner-box {
+		padding: 80px;
+		justify-content: flex-start;
+		height: auto;
+	}
+	
+	.join-row-title {
+		margin-bottom: 10px;
+		font-size: 14px;
+		font-weight: bold;
+	}
+	
+	.join-row-content {
+		margin-bottom: 30px;
+	}
+	
+	input[type=text], input[type=email], input[type=password], input[type=number]
+		{
+		width: 100%;
+		margin: 10px 0px;
+		height: 50px;
+		border: 1px solid lightgray;
+		border-radius: 25px;
+		padding: 0px 20px;
+		box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+	}
+	
+	input.narrow {
+		width: 400px;
+	}
+	
+	div.with-button {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	div.email-field {
+		margin: 0px;
+	}
+	
+	div.email-field2, div.tel-field {
+		display: none;
+	}
+	
+	.join-button {
+		width: 120px;
+	}
+	
+	.password-title {
+		display: flex;
+		justify-content: space-between;
+	}
+	.pwCheck-message {
+		color: #fb6544;
+		font-weight: normal;
+	}
+	
+	.filebox label {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 100px;
+		height: 36px;
+		border: none;
+		border-radius: 18px;
+		background-color: white;
+		box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+	}
+	
+	.join-row-profile {
+		display: flex;
+		margin: 10px 0px;
+	}
+	
+	.profile-picture {
+		width: 160px;
+		height: 160px;
+		border-radius: 80px;
+		overflow: hidden;
+		box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+	}
+	
+	div.file-upload {
+		margin-left: 40px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.filebox label:hover {
+		cursor: pointer;
+	}
+	
+	.filebox label:active {
+		background-color: lightgray;
+	}
+	
+	.filebox input[type="file"] {
+		position: absolute;
+		width: 0;
+		height: 0;
+		padding: 0;
+		overflow: hidden;
+		border: 0;
+	}
+	
+	.filebox {
+		height: 120px;
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+	}
+	
+	form#profile {
+		width: 100%;
+	}
+	
+	#profile-buttons {
+		height: 80%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	div.profile-nickname-wrap {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	
+	div.nickname-wrap {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	div.nickname-field {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button
+		{
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	.form-check-input:checked {
+	    background-color: #fb6544;
+	    border-color: #fb6544;
+	}
+	
+	.gender-radioes {
+		display: flex;
+	}
+	
+	.outter-buttons {
+		width: 100%;
+		margin: 50px 0px;
+		display: flex;
+		justify-content: flex-end;	
+	}
+	
+	#kakao-account {
+		font-weight: bold;
+		font-size: 20px;
+	}

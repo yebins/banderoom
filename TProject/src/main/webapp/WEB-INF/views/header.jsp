@@ -107,7 +107,8 @@ header {
 
 
 <header>
-	<div id="header-logo" onclick="location.href='<%=request.getContextPath()%>'">
+
+	<div id="header-logo" onclick="location.href='<%=request.getContextPath()%>/'">
 		<img src="<%=request.getContextPath() %>/images/logo.png" width="200px">
 	</div>
 	<div id="header-button" onclick="openSm()">
@@ -123,7 +124,8 @@ header {
 				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
 			</c:if>
 			<c:if test="${login != null}">
-				${login.getNickname()} 로그인함
+				${login.getNickname()} 로그인함 <br>
+				${login.getEmail()}				
 			</c:if>
 		</div>
 		<div id="sm-buttons">
@@ -178,11 +180,11 @@ header {
   })();
   ChannelIO('boot', {
     "pluginKey": "7076be12-5620-4a8e-b360-e2c6dfd55265", //please fill with your plugin key
-    "memberId": null, //fill with user id
+    "memberId": "${login.getEmail()}", //fill with user id
     "profile": {
-      "name": null, //fill with user name
-      "mobileNumber": null, //fill with user phone number
-      "email": null, //any other custom meta data
+      "name": "${login.getNickname()}", //fill with user name
+      "mobileNumber": "${login.getTel()}", //fill with user phone number
+      "email": "${login.getEmail()}", //any other custom meta data
       "CUSTOM_VALUE_2": "VALUE_2"
     }
   });

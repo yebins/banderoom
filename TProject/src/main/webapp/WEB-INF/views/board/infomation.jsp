@@ -16,13 +16,17 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			제목
+			타이틀 들어갑니다.${serviceInfoVO.title}
 		</div>
 		<div id="page-content">
-			내용
+			<div class="inner-box">
+				<div class="inner-box-content">
+				내용입니다.${serviceInfoVO.content}
+				</div>
+			</div>
 		</div>
 		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 -->
+		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
 		<div>
 			위까지는 틀이고 밑에는 요소 공통사항
 			<br><br><br>
