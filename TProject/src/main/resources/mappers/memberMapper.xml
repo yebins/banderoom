@@ -21,9 +21,10 @@
 	
 	<update id="updateEmailKey" parameterType="emailRegVO">
 		update emailreg set
-			email = #{email},
 			key = #{key},
 			deadline = (sysdate + 30/(24*60))
+			
+		where email = #{email}
 	</update>
 	
 	<select id="selectEmailReg" parameterType="emailRegVO" resultType="emailRegVO">
@@ -74,9 +75,10 @@
 	
 	<update id="updateTelKey" parameterType="telRegVO">
 		update telreg set
-			tel = #{tel},
 			key = #{key},
 			deadline = (sysdate + 5/(24*60))
+			
+		where tel = #{tel}
 	</update>
 	
 	<select id="selectTelReg" parameterType="telRegVO" resultType="telRegVO">
