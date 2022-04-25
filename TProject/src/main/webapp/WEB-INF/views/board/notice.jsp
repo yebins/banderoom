@@ -52,7 +52,7 @@
 				  <div class="accordion-item">
 				    <h2 class="accordion-header">
 				      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
-				      		data-bs-target="#${data}"
+				      		data-bs-target="#d"
 						 aria-expanded="false">
 				      	<div class="accordion-button-category">공지사항/이벤트</div>
 				      	<div class="accordion-button-title">이번 주 그라가스 버프입니다.</div>
@@ -60,7 +60,7 @@
 				      <span></span>
 				    </h2>
 				    <div>${param.data}</div>
-				    <div id="${data}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+				    <div id="d" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
 				      <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.</div>
 				    </div>
 				  </div>
