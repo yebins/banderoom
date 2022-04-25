@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.project.vo.ArticlesVO;
 
 @RequestMapping(value="/board")
-@controller
+@Controller
 public class BoardController {
 	
 	@RequestMapping(value="/notice.do")
