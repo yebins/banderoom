@@ -22,6 +22,10 @@
 	td,th{
 		text-align:center;
 	}
+	#register{
+		position:relative;
+		left:300px;
+	}
 </style>
 </head>
 <body>
@@ -66,7 +70,9 @@
 				</c:if>
 			</table>
 		</div>
-		
+		<form action="register.do" method="get">
+			<button class="accent-button" id="register" style="margin-left: 15px;">글쓰기</button>
+		</form>
 	</div>
 	
 </body>
