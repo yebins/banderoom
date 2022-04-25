@@ -43,7 +43,7 @@
 		padding: 0px 80px;
 	}
 	
-	input.login-input {
+	.login-input {
 		width: 100%;
 		margin: 10px 0px;
 		height: 50px;
@@ -53,7 +53,7 @@
 		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 	}
 	
-	input.login-submit {
+	.login-submit {
 		width: 100%;
 		margin: 10px 0px;
 		height: 50px;
@@ -92,18 +92,88 @@
 		justify-content: space-between;
 	}
 </style>
+
+<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+<script>
+
+Kakao.init('a8d83e76596a6e93d144575566c3d5ae'); //발급받은 키 중 javascript키를 사용해준다.
+console.log(Kakao.isInitialized()); // sdk초기화여부판단
+//카카오로그인
+function kakaoLogin() {
+    Kakao.Auth.loginForm({
+      success: function (response) {
+        Kakao.API.request({
+          url: '/v2/user/me',
+          success: function (response) {
+        	  
+        	  $.ajax({
+        		  type: "post",
+        		  url: "kakaoLogin.do",
+        		  data: {
+        			  email: response.kakao_account.email,
+        			  profileSrc: response.kakao_account.profile.thumbnail_image_url,
+        			  nickname: response.kakao_account.profile.nickname
+        		  },
+        		  success: function(data) {
+        			  if (data == 0) {
+        				  location.href='gjoin.do?isKakao=Y'
+        			  } else if (data == 1) {
+        				  location.href='/';
+        			  }
+        		  }
+        	  })
+          },
+          fail: function (error) {
+            console.log(error)
+          },
+        })
+      },
+      fail: function (error) {
+        console.log(error)
+      },
+    })
+  }
+  
+ function gLogin() {
+
+	 var email = $("input[name=email]").val();
+	 var password = $("input[name=password]").val();
+	 
+	 if (email == '' || email == null || email == undefined ||
+			 password == '' || password == null || password == undefined) {
+		 return;
+	 }
+	 
+	 $.ajax({
+		 type: "post",
+		 url: "glogin.do",
+		 data: $("form#login-form").serialize(),
+		 success: function(data) {
+			 
+			 if (data == 0) {
+				 alert('일치하는 회원 정보가 없습니다.\n이메일과 비밀번호를 확인해 주세요.')
+			 } else if (data == 1) {
+				 location.href='/';
+			 }
+			 
+		 }
+	 })
+ }
+
+</script>
+
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<div id="wrapper">
 		<div id="login-wrap">
 			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo">
-				<form id="login-form" action="glogin.do" method="post">
+				<form id="login-form">
 					<div id="login-form-elements">
-						<input class="login-input" type="text" placeholder="이메일">
-						<input class="login-input" type="text" placeholder="비밀번호">
-						<input type="submit" class="login-submit" value="로그인">
-						<button type="button" class="login-button login-button-kakao">
+						<input class="login-input" type="text" name="email" placeholder="이메일" required>
+						<input class="login-input" type="password" name="password" placeholder="비밀번호" required>
+						<button class="accent-button login-submit" type="button" onclick="gLogin()">로그인</button>
+						<button type="button" class="login-button login-button-kakao" onclick="kakaoLogin()">
 							<img class="kakao-login-symbol" src="<%=request.getContextPath()%>/images/kakao_login_large_symbol.png" height="100%">
 							<div class="kakao-login-button-text">카카오 로그인</div>
 						</button>
@@ -112,7 +182,7 @@
 				<div id="login-link">
 					<div id="findpw-link">비밀번호를 잊으셨나요?</div>
 					<div id="separator">|</div>
-					<div id="join-link"><a href="gjoin.do">회원가입</a></div>
+					<div id="join-link"><a href="gjoin.do?isKakao=N">회원가입</a></div>
 				</div>
 		</div>
 		

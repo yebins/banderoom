@@ -10,13 +10,14 @@ public class GeneralMembersVO {
 	private String name;
 	private String nickname;
 	private String address;
+	private String addressDetail;
 	private String addr1;
 	private String addr2;
 	private String tel;
 	private String profileSrc;
 	private String gender;
 	private int point;
-	private int auth;
+	private int auth; // 0: 일반회원, 1: 차단됨, 2: 탈퇴, 3: 관리자
 	private String isKakao;
 	private Date joinDate;
 	
@@ -55,6 +56,12 @@ public class GeneralMembersVO {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getAddressDetail() {
+		return addressDetail;
+	}
+	public void setAddressDetail(String addressDetail) {
+		this.addressDetail = addressDetail;
 	}
 	public String getAddr1() {
 		return addr1;
