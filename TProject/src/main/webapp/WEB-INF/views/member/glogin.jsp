@@ -159,6 +159,12 @@ function kakaoLogin() {
 		 }
 	 })
  }
+ 
+	function enterkey() {
+		if (window.event.keyCode == 13) {
+			gLogin();
+	  }
+	}
 
 </script>
 
@@ -171,7 +177,7 @@ function kakaoLogin() {
 				<form id="login-form">
 					<div id="login-form-elements">
 						<input class="login-input" type="text" name="email" placeholder="이메일" required>
-						<input class="login-input" type="password" name="password" placeholder="비밀번호" required>
+						<input class="login-input" type="password" name="password" placeholder="비밀번호" onkeyup="enterkey()" required>
 						<button class="accent-button login-submit" type="button" onclick="gLogin()">로그인</button>
 						<button type="button" class="login-button login-button-kakao" onclick="kakaoLogin()">
 							<img class="kakao-login-symbol" src="<%=request.getContextPath()%>/images/kakao_login_large_symbol.png" height="100%">
