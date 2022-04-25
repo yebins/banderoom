@@ -82,4 +82,16 @@ public class HomeController {
 	public String frame() {
 		return "frame";
 	}
+	
+	@RequestMapping(value="/serinfo.do")
+	public String infomation() {
+		
+		return "/serinfo";
+	}
+	
+	@RequestMapping(value="/serinfoupdate.do", method=RequestMethod.GET)
+	public String serinfoupdate() {
+		
+		return "/serinfoupdate";
+	}
 }
