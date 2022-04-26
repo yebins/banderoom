@@ -13,6 +13,7 @@ header {
 	border-bottom: 1px solid darkgray;
 	box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 	position: fixed;
+	z-index: 9999;
 }
 
 #header-logo {
@@ -48,6 +49,7 @@ header {
 	top: 0px;
 	flex-direction: column;
 	box-shadow: -5px 0px 10px rgba(0,0,0,0.2);
+	z-index: 9999;
 }
 
 .sm-open-button, .sm-close-button {
@@ -155,8 +157,8 @@ header {
 		</div>
 		<div id="sm-profile">
 			<c:if test="${login == null && hlogin == null}">
-				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
-				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
+				<button class="normal-button" style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
+				<button class="normal-button" style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
 			</c:if>
 			<c:if test="${login != null}">
 				<div id="sm-profile-info">
@@ -193,9 +195,9 @@ header {
 					</div>
 				</div>
 				<div id="sm-profile-buttons">
-					<button onclick = "">내정보</button>
-					<button onclick = "">쪽지함</button>
-					<button onclick = "location.href='/member/logout.do'">로그아웃</button>
+					<button class="normal-button" onclick = "">내정보</button>
+					<button class="normal-button" onclick = "">쪽지함</button>
+					<button class="normal-button" onclick = "location.href='/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>
 		</div>

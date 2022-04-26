@@ -89,7 +89,6 @@
 						<button class="normal-button accent-button" style="margin-left: 15px;">저장</button>
 						<button class="normal-button">취소하기</button>
 					</div>
-				</div>
 			</div>
 		</form>
 	</div>
