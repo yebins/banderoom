@@ -169,4 +169,68 @@
 		and isKakao = 'N'
 		and auth != 2
 	</select>
+	
+	<select id="isBrnExist" resultType="int" parameterType="String">
+		select count(brn) from host_members where brn = #{brn}
+	</select>
+	
+	
+	<insert id="hjoin" parameterType="hostMembersVO">
+		insert into host_members (
+			midx,
+			brn,
+			email,
+			password,
+			name,
+			nickname,
+			address,
+			<if test="addressDetail != null">
+				addressdetail,
+			</if>
+			addr1,
+			addr2,
+			tel,
+			profilesrc,
+			gender
+		) values (
+			general_members_midx_seq.nextval,
+			#{brn},
+			#{email},
+			#{password},
+			#{name},
+			#{nickname},
+			#{address},
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			#{addr1},
+			#{addr2},
+			#{tel},
+			#{profileSrc},
+			#{gender}
+		)
+	</insert>
+	
+	<select id="hLogin" parameterType="hostMembersVO" resultType="hostMembersVO">
+		select midx,
+					 brn,
+					 email,
+					 password,
+					 name,
+					 nickname,
+					 address,
+					 addressDetail,
+					 addr1,
+					 addr2,
+					 tel,
+					 profileSrc,
+					 gender,
+					 auth,
+					 joinDate
+		from host_members
+		where brn = #{brn}
+		and password = #{password}
+		and auth != 2
+	</select>
+	
 </mapper>

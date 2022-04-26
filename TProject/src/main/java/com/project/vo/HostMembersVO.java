@@ -5,7 +5,7 @@ import java.util.Date;
 public class HostMembersVO {
 
 	private int mIdx;
-	private int brn;
+	private String brn;
 	private String email;
 	private String password;
 	private String name;
@@ -26,10 +26,10 @@ public class HostMembersVO {
 	public void setmIdx(int mIdx) {
 		this.mIdx = mIdx;
 	}
-	public int getBrn() {
+	public String getBrn() {
 		return brn;
 	}
-	public void setBrn(int brn) {
+	public void setBrn(String brn) {
 		this.brn = brn;
 	}
 	public String getEmail() {
