@@ -181,8 +181,8 @@ function kakaoLogin() {
 					<div id="login-form-elements">
 						<input class="login-input" type="text" name="email" placeholder="이메일" required>
 						<input class="login-input" type="password" name="password" placeholder="비밀번호" onkeyup="enterkey()" required>
-						<button class="accent-button login-submit" type="button" onclick="gLogin()">로그인</button>
-						<button type="button" class="login-button login-button-kakao" onclick="kakaoLogin()">
+						<button class="normal-button accent-button login-submit" type="button" onclick="gLogin()">로그인</button>
+						<button type="button" class="normal-button login-button login-button-kakao" onclick="kakaoLogin()">
 							<img class="kakao-login-symbol" src="<%=request.getContextPath()%>/images/kakao_login_large_symbol.png" height="100%">
 							<div class="kakao-login-button-text">카카오 로그인</div>
 						</button>
