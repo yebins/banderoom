@@ -19,6 +19,16 @@
 		width:100%;
 	}
 </style>
+
+<script src="<%=request.getContextPath() %>/js/summernote-lite.js"></script>
+<script src="<%=request.getContextPath() %>/resources/summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/summernote-lite.css">
+<script>
+	$(function(){
+		$('#summernote').summernote();
+		
+	});
+</script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -27,20 +37,24 @@
 		<div id="page-title">
 			글쓰기
 		</div>
-		<div id="page-content">
-		<div class="inner-box" style="height:500px;">
-			<div>
-				<input type="text" class="list-title" placeholder="제목을 입력하세요">
-			</div>
-				<div class="inner-box-content">
-					<textarea name="editorTxt" id="editorTxt" cols="10" placeholder="내용을 입력해주세요" style="width: 100%;"></textarea>
+		<form action="register.do" method="post">
+			<div id="page-content">
+			<div class="inner-box" style="height:500px;">
+				<div>
+					<input type="text" name="title" class="list-title" placeholder="제목을 입력하세요">
 				</div>
-				<div class="inner-box-button-wrap">
-					<button class="accent-button" style="margin-left: 15px;">저장</button>
-					<button>취소하기</button>
+					<div class="inner-box-content">
+						<form method="post">
+							<textarea name="content" id="summernote" style="width: 100%;"></textarea>
+						</form>
+					</div>
+					<div class="inner-box-button-wrap">
+						<button class="accent-button" style="margin-left: 15px;">저장</button>
+						<button>취소하기</button>
+					</div>
 				</div>
 			</div>
-		</div>
+		</form>
 	</div>
 </body>
 </html>

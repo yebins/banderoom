@@ -32,5 +32,11 @@ public class BoardController {
 		return "board/register";
 	}
 	
+	@RequestMapping(value="/register.do", method=RequestMethod.POST)
+	public String register(ArticlesVO vo) {
+		
+		return "redirect:/board/list.do";
+	}
+	
 }
 
