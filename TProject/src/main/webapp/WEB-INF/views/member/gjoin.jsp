@@ -41,7 +41,7 @@
 						<div class="join-row join-row-content with-button email-field email-field2">
 							<input class="narrow" id="email-key" type="text" placeholder="30분 안에 입력해주세요.">
 							<button type="button"
-								class="join-button email-button accent-button"
+								class="normal-button join-button email-button accent-button"
 								onclick="checkEmailKey()">인증키 입력</button>
 						</div>
 						<div>

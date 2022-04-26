@@ -47,8 +47,8 @@
 					<textarea name="editorTxt" id="editorTxt" cols="10" placeholder="내용을 입력해주세요" style="width: 100%;"></textarea>
 				</div>
 				<div class="inner-box-button-wrap">
-					<button class="accent-button" style="margin-left: 15px;">저장</button>
-					<button>취소하기</button>
+					<button class="normal-button accent-button" style="margin-left: 15px;">저장</button>
+					<button class="normal-button">취소하기</button>
 				</div>
 			</div>
 		</div>
