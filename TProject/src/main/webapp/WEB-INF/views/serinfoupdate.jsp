@@ -10,6 +10,9 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="/css/base.css">
+<script src="/js/summernote/summernote-lite.js"></script>
+<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
 
 <style>
 	.list-content{
@@ -27,6 +30,9 @@
 	}
 	.note-statusbar{
 		display:none;
+	}
+	.submitbtn{
+		background-color:#FB6544;
 	}
 </style>
 </head>
@@ -55,7 +61,7 @@
 					</div>
 					<div class="inner-box-button-wrap">
 						<button class="accent-button" style="margin-left: 15px;">저장</button>
-						<button>취소하기</button>
+						<button class="normal-button">취소하기</button>
 					</div>
 				</div>
 			</form>	
