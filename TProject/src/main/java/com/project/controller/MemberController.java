@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.MemberService;
-import com.project.vo.EmailRegVO;
-import com.project.vo.GeneralMembersVO;
-import com.project.vo.TelRegVO;
+import com.project.vo.*;
 
 @RequestMapping(value = "/member")
 @Controller
@@ -32,10 +30,6 @@ public class MemberController {
 		return "member/glogin";
 	}
 	
-	@RequestMapping(value = "/hlogin.do", method = RequestMethod.GET)
-	public String hlogin() {
-		return "member/hlogin";
-	}
 	
 	@RequestMapping(value = "/gjoin.do", method = RequestMethod.GET)
 	public String gjoin(String isKakao, HttpServletRequest request) {
@@ -188,6 +182,45 @@ public class MemberController {
 		
 		if ((vo = memberService.gLogin(vo)) != null) {
 			request.getSession().setAttribute("login", vo);
+			
+			return 1;
+		}
+		
+		return 0; // 회원정보 없음
+	}
+	
+	
+	
+
+	@RequestMapping(value = "/hlogin.do", method = RequestMethod.GET)
+	public String hlogin() {
+		return "member/hlogin";
+	}
+	
+	@RequestMapping(value = "/hjoin.do", method = RequestMethod.GET)
+	public String hjoin() {
+		return "member/hjoin";
+	}
+	
+	@RequestMapping(value = "/checkBrn.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int checkBrn(String brn) {
+		return memberService.checkBrn(brn);
+	}
+	
+	@RequestMapping(value = "hjoin.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int hjoin(HostMembersVO vo) {
+		
+		return memberService.hjoin(vo); // 1: 성공, 0: 실패
+	}
+	
+	@RequestMapping(value = "hlogin.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int hlogin(HostMembersVO vo, HttpServletRequest request) {
+		
+		if ((vo = memberService.hLogin(vo)) != null) {
+			request.getSession().setAttribute("hlogin", vo);
 			
 			return 1;
 		}

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <style>
 header {
 	display: flex;
@@ -40,12 +41,13 @@ header {
 #sidemenu {
 	display: none;
 	position: fixed;
-	background: yellow;
+	background: #FBE6B2;
 	width: 300px;
 	height: 100vh;
 	right: 0px;
 	top: 0px;
 	flex-direction: column;
+	box-shadow: -5px 0px 10px rgba(0,0,0,0.2);
 }
 
 .sm-open-button, .sm-close-button {
@@ -64,17 +66,30 @@ header {
 	align-items: center;
 }
 
-#sm-close-button:hover {
+.sm-close-button:hover {
 	cursor: pointer;
 }
 
 #sm-profile {
-	border: 1px solid gray;
 	height: 150px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	background: white;
+	padding: 0px 40px;
+}
+
+#sm-profile-buttons {
+	display: flex;
+	justify-content: space-between;
 	align-items: center;
+}
+
+#sm-profile-buttons button {
+	width: 66px;
+	height: 30px;
+	border-radius: 15px;
+	font-size: 12px;
 }
 
 #sm-buttons {
@@ -89,6 +104,27 @@ header {
 	justify-content: center;
 	border: 1px solid gray;
 	align-items: center;
+}
+
+#sm-profile-info {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+#sm-profile-picture-wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+	overflow: hidden;
+	margin-right: 20px;
+}
+
+#sm-profile-point-value {
+	font-size: 14px;
 }
 
 </style>
@@ -115,17 +151,53 @@ header {
 			<img src="<%=request.getContextPath() %>/images/sidemenu-open-button.png" class="sm-open-button">
 	</div>
 	<div id="sidemenu">
-		<div id="sm-close-button" onclick="closeSm()">
-			<img src="<%=request.getContextPath() %>/images/sidemenu-close-button.png" class="sm-close-button">
+		<div id="sm-close-button">
+			<img src="<%=request.getContextPath() %>/images/sidemenu-close-button.png" class="sm-close-button" onclick="closeSm()">
 		</div>
 		<div id="sm-profile">
-			<c:if test="${login == null}">
+			<c:if test="${login == null && hlogin == null}">
 				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
 				<button style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
 			</c:if>
 			<c:if test="${login != null}">
-				${login.getNickname()} 로그인함 <br>
-				${login.getEmail()}				
+				<div id="sm-profile-info">
+					<div id="sm-profile-picture-wrap">
+						<img src="${login.getProfileSrc()}" width="100%">
+					</div>
+					<div id="sm-profile-nickname-wrap">
+						<div id="sm-profile-nickname">
+							${login.getNickname()}
+						</div>
+						<div id="sm-profile-point">
+							<span id="sm-profile-point-value">℗ <fmt:formatNumber value="${login.getPoint()}" type="number" pattern="#,###" /></span>
+						</div>
+					</div>
+				</div>
+				<div id="sm-profile-buttons">
+					<button onclick = "">내정보</button>
+					<button onclick = "">쪽지함</button>
+					<button onclick = "location.href='/member/logout.do'">로그아웃</button>
+				</div>
+			</c:if>
+			<c:if test="${hlogin != null}">
+				<div id="sm-profile-info">
+					<div id="sm-profile-picture-wrap">
+						<img src="${hlogin.getProfileSrc()}" width="100%">
+					</div>
+					<div id="sm-profile-nickname-wrap">
+						<div id="sm-profile-nickname">
+							${hlogin.getNickname()}
+						</div>
+						<div id="sm-profile-point">
+							<span id="sm-profile-point-value">호스트 로그인 중</span>
+						</div>
+					</div>
+				</div>
+				<div id="sm-profile-buttons">
+					<button onclick = "">내정보</button>
+					<button onclick = "">쪽지함</button>
+					<button onclick = "location.href='/member/logout.do'">로그아웃</button>
+				</div>
 			</c:if>
 		</div>
 		<div id="sm-buttons">

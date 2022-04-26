@@ -1,8 +1,14 @@
 package com.project.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.project.vo.ArticlesVO;
 
 @RequestMapping(value="/board")
 @Controller
@@ -14,15 +20,17 @@ public class BoardController {
 		return "board/notice";
 	}
 	
-	@RequestMapping(value="/freeBoard.do")
-	public String freeBoard() {
+	@RequestMapping(value="/list.do")
+	public String list() {
 		
-		return "board/freeBoard";
+		return "board/list";
 	}
 	
-	@RequestMapping(value="/infomation.do")
-	public String infomation() {
+	@RequestMapping(value="/register.do", method=RequestMethod.GET)
+	public String register() {
 		
-		return "board/infomation";
+		return "board/register";
 	}
+	
 }
+
