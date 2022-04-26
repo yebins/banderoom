@@ -227,4 +227,9 @@ public class MemberController {
 		
 		return 0; // 회원정보 없음
 	}
+	
+	@RequestMapping(value = "test.do")
+	public String test() {
+		return "member/test";
+	}
 }
