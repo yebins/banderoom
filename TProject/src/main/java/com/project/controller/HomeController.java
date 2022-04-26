@@ -1,14 +1,22 @@
 package com.project.controller;
 
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.project.service.BoardService;
+import com.project.vo.ArticlesVO;
+import com.project.vo.BoardsVO;
 
 
 /**
@@ -16,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 public class HomeController {
+	
+	@Autowired
+	private BoardService boardService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -84,14 +95,26 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/serinfo.do")
-	public String infomation() {
+	public String serinfo() {
 		
-		return "/serinfo";
+		return "serinfo";
+	}
+	
+	@RequestMapping(value="/serlist.do",method=RequestMethod.GET)
+	public String serlist(Model model,Integer bidx,String searchtitle) {
+		System.out.println(bidx);//bidx값 확인
+		System.out.println(searchtitle);//검색어 확인
+		List<ArticlesVO> list=boardService.list(bidx,searchtitle);
+		
+		System.out.println(list.size());
+		model.addAttribute("list",list);
+		
+		return "serlist";
 	}
 	
 	@RequestMapping(value="/serinfoupdate.do", method=RequestMethod.GET)
 	public String serinfoupdate() {
 		
-		return "/serinfoupdate";
+		return "serinfoupdate";
 	}
 }
