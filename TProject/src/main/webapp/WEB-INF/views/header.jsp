@@ -79,7 +79,16 @@ header {
 	padding: 0px 40px;
 }
 
+.notlogin {
+	width: 160px;
+	height: 30px;
+	border-radius: 15px;
+	font-size: 14px;
+	margin: 10px;
+}
+
 #sm-profile-buttons {
+	width: 100%;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -231,8 +240,13 @@ header {
 		</div>
 		<div id="sm-profile">
 			<c:if test="${login == null && hlogin == null}">
-				<button class="normal-button" style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
-				<button class="normal-button" style="width: 200px;" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
+				<style>
+					#sm-profile {
+						align-items: center;
+					}
+				</style>
+				<button class="normal-button accent-button notlogin" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
+				<button class="normal-button accent-button notlogin" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
 			</c:if>
 			<c:if test="${login != null}">
 				<div id="sm-profile-info">
