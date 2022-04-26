@@ -6,9 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.project.vo.EmailRegVO;
-import com.project.vo.GeneralMembersVO;
-import com.project.vo.TelRegVO;
+import com.project.vo.*;
 
 @Repository
 public class MemberDAO {
@@ -91,5 +89,17 @@ public class MemberDAO {
 	
 	public GeneralMembersVO gLogin(GeneralMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.gLogin", vo);
+	}
+	
+	public int isBrnExist(String brn) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.isBrnExist", brn);
+	}
+	
+	public int hjoin(HostMembersVO vo) {
+		return sqlSession.insert("com.project.mapper.memberMapper.hjoin", vo);
+	}
+	
+	public HostMembersVO hLogin(HostMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.hLogin", vo);
 	}
 }

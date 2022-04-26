@@ -1,8 +1,6 @@
 package com.project.service;
 
-import com.project.vo.EmailRegVO;
-import com.project.vo.GeneralMembersVO;
-import com.project.vo.TelRegVO;
+import com.project.vo.*;
 
 public interface MemberService {
 
@@ -14,4 +12,7 @@ public interface MemberService {
 	int gjoin(GeneralMembersVO vo);
 	GeneralMembersVO kakaoLogin(GeneralMembersVO vo);
 	GeneralMembersVO gLogin(GeneralMembersVO vo);
+	int checkBrn(String brn);
+	int hjoin(HostMembersVO vo);
+	HostMembersVO hLogin(HostMembersVO vo);
 }
