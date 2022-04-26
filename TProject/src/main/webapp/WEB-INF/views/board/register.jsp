@@ -6,10 +6,21 @@
 <html>
 <head>
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/smarteditor/js/HuskyEZCreator.js" charset="utf-8"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<script type="text/javascript">
+	
+	var oEditors = [];
+	nhn.husky.EZCreator.createInIFrame({
+		oAppRef: oEditors,
+		elplaceHolder:"editorTxt",
+		sSkinURI:"/smarteditor/SmartEditor2Skin.html"
+		fCreator:"createSEditor2"
+	})
+</script>
 <style>
 	.list-content{
 		width:100%;
@@ -30,10 +41,10 @@
 		<div id="page-content">
 		<div class="inner-box" style="height:500px;">
 			<div>
-				<input type="textarea" class="list-title" placeholder="제목을 입력하세요">
+				<input type="text" class="list-title" placeholder="제목을 입력하세요">
 			</div>
 				<div class="inner-box-content">
-					<input type="textarea" class="list-content" placeholder="스마트에디터자리입니다.">
+					<textarea name="editorTxt" id="editorTxt" cols="10" placeholder="내용을 입력해주세요" style="width: 100%;"></textarea>
 				</div>
 				<div class="inner-box-button-wrap">
 					<button class="accent-button" style="margin-left: 15px;">저장</button>
@@ -41,10 +52,6 @@
 				</div>
 			</div>
 		</div>
-		
-		
-		
 	</div>
-	
 </body>
 </html>

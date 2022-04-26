@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.dao.MemberDAO;
 import com.project.util.Sms;
-import com.project.vo.EmailRegVO;
-import com.project.vo.GeneralMembersVO;
-import com.project.vo.TelRegVO;
+import com.project.vo.*;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -41,8 +39,7 @@ public class MemberServiceImpl implements MemberService {
 		char pwCollection[] = new char[] {
         '1','2','3','4','5','6','7','8','9','0',
         'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
-        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
-        '!','@','#','$','^','&','*','(',')'};
+        'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 		
 		for (int i = 0; i < 8; i++) {
 			tempKey += pwCollection[(int) (Math.random() * pwCollection.length)];
@@ -107,9 +104,13 @@ public class MemberServiceImpl implements MemberService {
 	public int checkEmail(EmailRegVO vo) {
 		EmailRegVO check = dao.selectEmailReg(vo);
 		
+		System.out.println(vo.getKey());
+		
 		if (check == null) {
 			return 1; // 해당 이메일 없음
 		}
+
+		System.out.println(check.getKey());
 		
 		if (check.getKey().equals(vo.getKey())) {
 			
@@ -196,5 +197,20 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public GeneralMembersVO gLogin(GeneralMembersVO vo) {
 		return dao.gLogin(vo);
+	}
+
+	@Override
+	public int checkBrn(String brn) {
+		return dao.isBrnExist(brn);
+	}
+
+	@Override
+	public int hjoin(HostMembersVO vo) {
+		return dao.hjoin(vo);
+	}
+
+	@Override
+	public HostMembersVO hLogin(HostMembersVO vo) {
+		return dao.hLogin(vo);
 	}
 }

@@ -31,6 +31,9 @@
 		width: 60%;
 		margin-bottom: 50px;
 	}
+	.login-logo:hover {
+		cursor: pointer;
+	}
 	
 	form#login-form {
 		width: 100%;
@@ -173,7 +176,7 @@ function kakaoLogin() {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<div id="wrapper">
 		<div id="login-wrap">
-			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo">
+			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo" onclick='location.href="/"'>
 				<form id="login-form">
 					<div id="login-form-elements">
 						<input class="login-input" type="text" name="email" placeholder="이메일" required>
