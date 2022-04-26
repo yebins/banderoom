@@ -30,6 +30,9 @@
 	.login-logo {
 		width: 50%;
 	}
+	.login-logo:hover {
+		cursor: pointer;
+	}
 	
 	div#login-host-title {
 		font-weight: bold;
@@ -57,7 +60,7 @@
 		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 	}
 	
-	input.login-submit {
+	.login-submit {
 		width: 100%;
 		margin: 10px 0px;
 		height: 50px;
@@ -96,24 +99,60 @@
 		justify-content: space-between;
 	}
 </style>
+
+<script>
+
+function hLogin() {
+
+	 var brn = $("input[name=brn]").val();
+	 var password = $("input[name=password]").val();
+	 
+	 if (brn == '' || brn == null || brn == undefined ||
+			 password == '' || password == null || password == undefined) {
+		 return;
+	 }
+	 
+	 $.ajax({
+		 type: "post",
+		 url: "hlogin.do",
+		 data: $("form#login-form").serialize(),
+		 success: function(data) {
+			 
+			 if (data == 0) {
+				 alert('일치하는 회원 정보가 없습니다.\n이메일과 비밀번호를 확인해 주세요.')
+			 } else if (data == 1) {
+				 location.href='/';
+			 }
+			 
+		 }
+	 })
+}
+
+	function enterkey() {
+		if (window.event.keyCode == 13) {
+			hLogin();
+	  }
+	}
+
+</script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<div id="wrapper">
 		<div id="login-wrap">
-			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo">
+			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo" onclick='location.href="/"'>
 			<div id="login-host-title">호스트 로그인</div>
-				<form id="login-form" action="hlogin.do" method="post">
+				<form id="login-form">
 					<div id="login-form-elements">
-						<input class="login-input" type="text" placeholder="사업자등록번호">
-						<input class="login-input" type="text" placeholder="비밀번호">
-						<input type="submit" class="login-submit" value="로그인">
+						<input class="login-input" type="text" name="brn" placeholder="사업자등록번호">
+						<input class="login-input" type="password" name="password" placeholder="비밀번호" onkeyup="enterkey()">
+						<button class="normal-button accent-button login-submit" type="button" onclick="hLogin()">로그인</button>
 					</div>
 				</form>
 				<div id="login-link">
 					<div id="findpw-link">비밀번호를 잊으셨나요?</div>
 					<div id="separator">|</div>
-					<div id="join-link">회원가입</div>
+					<div id="join-link"><a href='hjoin.do'>회원가입</a></div>
 				</div>
 		</div>
 		

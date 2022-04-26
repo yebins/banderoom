@@ -10,41 +10,49 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<style>
+	.list-content{
+		width:100%;
+		height:370px;
+	}
+	.list-title{
+		width:770px;
+	}
+	select{
+		width:20%;
+	}
+</style>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			제목
+			관리자용 글쓰기
 		</div>
 		<div id="page-content">
-			내용
-		</div>
-		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button>버튼</button> 
-			일반 버튼 (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="accent-button">버튼</button> 강조 버튼 (button class="accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
+		<div class="inner-box" style="height:500px;">
+			<div>
+				<select>
+					<option>공지사항</option>
+					<option>이벤트</option>
+					<option>이용약관</option>
+					<option>운영정책</option>
+					<option>개인정보처리방침</option>
+				</select>
+				<input type="textarea" class="list-title" placeholder="제목을 입력하세요">
+			</div>
 				<div class="inner-box-content">
-				박스에 들어갈 내용
+					<input type="textarea" class="list-content" placeholder="스마트에디터자리입니다.">
 				</div>
 				<div class="inner-box-button-wrap">
-					<button>일반버튼</button>
-					<button class="accent-button" style="margin-left: 15px;">강조버튼</button>
+					<button class="accent-button" style="margin-left: 15px;">저장</button>
+					<button>취소하기</button>
 				</div>
 			</div>
-			<br><br>
 		</div>
-		<!-- 여기까지 -->
+		
+		
 		
 	</div>
 	

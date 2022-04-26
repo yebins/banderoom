@@ -35,13 +35,13 @@
 						<div class="join-row join-row-content with-button email-field">
 							<input class="narrow" type="email" name="email"
 								onchange="chkEmail(this)" required>
-							<button type="button" class="join-button email-button"
+							<button type="button" class="normal-button join-button email-button"
 								onclick="sendEmail(this)">이메일 인증</button>
 						</div>
 						<div class="join-row join-row-content with-button email-field email-field2">
 							<input class="narrow" id="email-key" type="text" placeholder="30분 안에 입력해주세요.">
 							<button type="button"
-								class="join-button email-button accent-button"
+								class="normal-button join-button email-button accent-button"
 								onclick="checkEmailKey()">인증키 입력</button>
 						</div>
 						<div>
@@ -102,7 +102,7 @@
 											onchange="profileUpload()">
 										<div id="profile-buttons">
 											<label for="file">파일 선택</label>
-											<button type="button" onclick="profileReset()">초기화</button>
+											<button type="button" class="normal-button" onclick="profileReset()">초기화</button>
 										</div>
 									</div>
 								</form>
@@ -118,7 +118,7 @@
 								value="<%=request.getContextPath()%>/images/profile_default.png">
 							<input class="narrow" type="text" name="nickname"
 								onchange="checkNickAlert(this)" placeholder="닉네임" required>
-							<button type="button" class="join-button nickname-button"
+							<button type="button" class="normal-button join-button nickname-button"
 								onclick="checkNickname(this)">중복 확인</button>
 						</div>
 						
@@ -151,13 +151,13 @@
 								onfocus="chkPhoneType('focus', this)"
 								onblur="chkPhoneType('blur', this)" min="0" placeholder="숫자만 입력"
 								required>
-							<button type="button" class="join-button tel-button"
+							<button type="button" class="normal-button join-button tel-button"
 								onclick="checkPhone(this)">휴대폰 인증</button>
 						</div>
 						<div class="join-row join-row-content with-button tel-field">
 							<input class="narrow" id="tel-key" type="text" placeholder="5분 안에 입력해주세요.">
 							<button type="button"
-								class="join-button tel-button accent-button"
+								class="normal-button join-button tel-button accent-button"
 								onclick="checkTelKey()">인증키 입력</button>
 						</div>
 
@@ -183,8 +183,8 @@
 			
 		<div class="outter-buttons">
 		
-				<button onclick="resetAllForms()">초기화</button>
-				<button class="accent-button" style="margin-left: 20px;" onclick="submitAllForms(this)">회원가입</button>
+				<button class="normal-button" onclick="resetAllForms()">초기화</button>
+				<button class="normal-button accent-button" style="margin-left: 20px;" onclick="submitAllForms(this)">회원가입</button>
 		</div>
 				
 		</div>

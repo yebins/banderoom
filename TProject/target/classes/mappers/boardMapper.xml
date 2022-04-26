@@ -2,5 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.mapper.boardMapper">
-
+	
+	<select id="list" parameterType="map" resultType="articlesVO">
+		select * from articles
+		where bidx=#{bidx}
+		<if test="searchtitle != ''">
+		and title like '%'||#{searchtitle}||'%'
+		</if>
+		order by regdate desc
+	</select>
 </mapper>
