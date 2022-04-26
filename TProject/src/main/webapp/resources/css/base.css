@@ -109,7 +109,7 @@ div#page-content {
 	min-height: 50vh;
 }
 
-button, input[type=button], input[type=reset] {
+button.normal-button, input[type=button], input[type=reset] {
 	width: 100px;
 	height: 36px;
 	border: none;
