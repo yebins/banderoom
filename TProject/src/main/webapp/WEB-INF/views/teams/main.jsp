@@ -8,7 +8,7 @@
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>팀원 모집 main</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
 .form-select{
@@ -49,22 +49,38 @@
 }
 .teams{
 	margin-top:100px;
+	position:relative;
 }
 .team-list{
 	width:280px;
 	border-radius:25px;
 	overflow:hidden;
 	box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
+	border:2px solid #FBE6B2;
+	position:absolute;
+}
+.team-list:hover{
+	border:2px solid #FB6544;
 }
 .team-title{
+	padding: 14px;
 	width:280px;
 	height:50px;
 	background:#FB6544;
+	color:white;
 }
 .team-content{
 	width:280px;
 	height:200px;
 	background:#FBE6B2;
+	padding: 14px;
+	color:#303030;
+}
+table:{
+	height:100%;
+	width:100%;
+}
+td{
 }
 </style>
 </head>
@@ -140,6 +156,43 @@
 			<div class="teams">
 				<div class="team-list">
 					<div class="team-title">
+					전주락밴드 팀원 모집합니다.
+					</div>
+					<div class="team-content">
+						<table>
+							<tr>
+								<td style="width: 75px;">지역</td>
+								<td>전라북도 전주시 덕진구</td>
+							</tr>
+							<tr>
+								<td>수준</td>
+								<td>초급</td>
+							</tr>
+							<tr>
+								<td>장르</td>
+								<td>락</td>
+							</tr>
+							<tr>
+								<td>파트</td>
+								<td>보컬 1명, 드럼 1명, 베이스 1명</td>
+							</tr>
+							<tr>
+								<td>모집기간</td>
+								<td>2022년 04월 25일까지</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<div class="team-list" style="right:360px;">
+					<div class="team-title">
+					제목
+					</div>
+					<div class="team-content">
+					내용
+					</div>
+				</div>
+				<div class="team-list" style="right:0px;">
+					<div class="team-title">
 					제목
 					</div>
 					<div class="team-content">
@@ -150,7 +203,7 @@
 		</div>
 		
 		<!-- 여기까지 틀이고 밑에는 요소 공통사항 -->
-		<div>
+		<div style="margin-top:500px;">
 			위까지는 틀이고 밑에는 요소 공통사항
 			<br><br><br>
 			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
