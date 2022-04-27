@@ -25,4 +25,10 @@ public class BoardServiceImpl implements BoardService {
 		
 		return dao.list(map);
 	}
+
+	@Override
+	public int insertArticlesVO(ArticlesVO vo) {
+		
+		return dao.insertArticlesVO(vo);
+	}
 }

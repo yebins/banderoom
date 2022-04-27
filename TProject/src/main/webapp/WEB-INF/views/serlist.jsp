@@ -31,14 +31,24 @@
 		height:50px;
 	}
 	.notice-page>input{
-		border-radius:19px;
+		border-radius:25px;
 	}
 	
-	#accordionFlushExample>div:nth-child(2n) button{
+	#accordionFlushExample>div:nth-child(2n) .accordion-button{
 		background-color:aliceblue;
 	}
 	
-	
+	.accordion-body-buttons{
+		display:flex;
+		justify-content:flex-end;
+	}
+	.body-buttons{
+		margin-left:10px;
+	}
+	[type="search"] + button{
+		height:50px;
+		border-radius:25px;
+	}
 </style>
 </head>
 <body>
@@ -47,20 +57,20 @@
 	<div id="wrapper">
 		<div id="page-title">
 		<c:if test="${param.bidx==1}">
-			공지사항
+			<a href="/serlist.do?bidx=1">공지사항</a>
 		</c:if>
 		<c:if test="${param.bidx==5}">
-			자주묻는질문
+			<a href="/serlist.do?bidx=5">자주묻는질문</a>
 		</c:if>
 		<c:if test="${param.bidx==6}">
-			이벤트
+			<a href="/serlist.do?bidx=6">이벤트</a>
 		</c:if>
 		</div>
 		<div>
 			<form action="serlist.do" class="d-flex notice-page" method="get">
 				<input type="hidden" name="bidx" value="${param.bidx}">
        	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
-        			<button class="accent-button">검색</button>
+        			<button class="accent-button normal-button">검색</button>
      		 </form>
 		</div>
 		<br>
@@ -84,7 +94,15 @@
 					      </button>
 					    </h2>
 					    <div id="a${notice.aIdx}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-					      <div class="accordion-body">${notice.content}</div>
+					      <div class="accordion-body">
+					      	<div>${notice.content}</div>
+						    <div class="accordion-body-buttons">
+						    	<c:if test="${login.auth == 3}">
+							      <button class="accent-button normal-button body-buttons">수정</button>
+							      <button class="accent-button normal-button body-buttons">삭제</button>
+							    </c:if>					    
+						    </div>
+					      </div>
 					    </div>
 					  </div>
 				 </c:forEach> 

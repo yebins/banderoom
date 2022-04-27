@@ -19,4 +19,9 @@ public class BoardDAO {
 		
 		return sqlSession.selectList("com.project.mapper.boardMapper.list",map);
 	}
+	
+	public int insertArticlesVO(ArticlesVO vo) {
+		
+		return sqlSession.insert("com.project.mapper.boardMapper.insertArticles",vo);
+	}
 }

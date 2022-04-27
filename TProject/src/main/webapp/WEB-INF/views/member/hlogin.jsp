@@ -130,7 +130,7 @@ function hLogin() {
 
 	function enterkey() {
 		if (window.event.keyCode == 13) {
-			gLogin();
+			hLogin();
 	  }
 	}
 
@@ -146,7 +146,7 @@ function hLogin() {
 					<div id="login-form-elements">
 						<input class="login-input" type="text" name="brn" placeholder="사업자등록번호">
 						<input class="login-input" type="password" name="password" placeholder="비밀번호" onkeyup="enterkey()">
-						<button class="accent-button login-submit" type="button" onclick="hLogin()">로그인</button>
+						<button class="normal-button accent-button login-submit" type="button" onclick="hLogin()">로그인</button>
 					</div>
 				</form>
 				<div id="login-link">
