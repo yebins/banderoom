@@ -1,10 +1,15 @@
 package com.project.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.project.service.BoardService;
 import com.project.vo.ArticlesVO;
-import com.project.vo.BoardsVO;
+import com.project.vo.GeneralMembersVO;
 
 
 /**
@@ -113,8 +118,35 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/serinfoupdate.do", method=RequestMethod.GET)
-	public String serinfoupdate() {
+	public String serinfoupdate(HttpServletResponse response,HttpServletRequest request) throws IOException {
+		PrintWriter pw=response.getWriter();
+		HttpSession session=request.getSession();
 		
-		return "serinfoupdate";
+		if(session.getAttribute("login") != null) {
+			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");			
+			if(vo.getAuth() ==3) {
+				return "serinfoupdate";
+			} else {
+				
+				return "redirect:/";
+			}
+		} else {
+			return "redirect:/";			
+		}		
+			
+	}
+	
+	@RequestMapping(value="/serinfoupdate.do", method=RequestMethod.POST)
+	public String serinfoupdate(Model model,ArticlesVO vo) {
+		System.out.println(vo.getbIdx());//글쓸때 선택한 게시판 확인
+		System.out.println(vo.getmIdx());//글쓸때 관리자 midx인지 확인
+		System.out.println(vo.getContent());//글쓴내용 확인
+		System.out.println(vo.getTitle());//글쓴제목 확인
+		System.out.println(vo.getmNickname());//글쓸때 관리자 닉네임확인
+		
+		boardService.insertArticlesVO(vo);
+		
+		
+		return "redirect:/serlist.do?bidx="+vo.getbIdx();
 	}
 }

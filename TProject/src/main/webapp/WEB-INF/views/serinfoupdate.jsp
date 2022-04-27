@@ -31,9 +31,13 @@
 	.note-statusbar{
 		display:none;
 	}
-	.submitbtn{
-		background-color:#FB6544;
+	.form-select{
+		width:30%;
 	}
+	.inner-box-select{
+		margin-bottom:10px;
+	}
+	
 </style>
 </head>
 <body>
@@ -44,23 +48,23 @@
 			관리자용 글쓰기
 		</div>
 		<div id="page-content">
-			<form>
+			<form action="serinfoupdate.do" method="post">
+			<input type="hidden" name="mIdx" value="${login.mIdx}">
+			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<div class="inner-box">
 				<div>
-					<select>
-						<option>공지사항</option>
-						<option>이벤트</option>
-						<option>이용약관</option>
-						<option>운영정책</option>
-						<option>개인정보처리방침</option>
-					</select>
-					<input type="textarea" class="list-title" placeholder="제목을 입력하세요">
+					<select name="bIdx" class="form-select inner-box-select" aria-label="Default select example">
+						  <option ${(param.bIdx == "1")?"selected":""} value="1">공지사항</option>
+						  <option ${(param.bIdx == "5")?"selected":""} value="5">자주묻는질문</option>
+						  <option ${(param.bIdx == "6")?"selected":""} value="6">이벤트</option>
+					</select>			
+					<input class="form-control me-3" name="title" type="text" placeholder="제목을 입력하세요">
 				</div>
 					<div class="inner-box-content">
 						<textarea id="summernote" name="content"></textarea>
 					</div>
 					<div class="inner-box-button-wrap">
-						<button class="accent-button" style="margin-left: 15px;">저장</button>
+						<button class="accent-button normal-button" style="margin-left: 15px;">저장</button>
 						<button class="normal-button">취소하기</button>
 					</div>
 				</div>
@@ -108,10 +112,31 @@
 	                 uploadImage(files[i], this);
 	              }
 	           }
-	        }
+	        }//callbacks end
 	   });
 	   $('#summernote').summernote('fontName', '맑은 고딕');
 	})
+	
+/*function uploadImage(file, editor){
+		var data = new FormData();
+		data.append("file", file);
+		console.log(file);
+		$.ajax({
+			data : data,
+			type : "POST",
+			url : "uploadImageFile.do",
+			contentType : false,
+			processData : false,
+			success : function(data){
+				console.log(data);
+				console.log(editor);
+				$(editor).summernote("insertImage",data.url);
+			}
+		});
+	}*/
+	function update(){
+		
+	}		
 </script>
 </body>
 </html>
