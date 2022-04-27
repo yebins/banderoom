@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.mapper.spaceMapper">
+	<insert id="spaceReg" parameterType="spacesVO">
+		insert into spaces (
+			idx,
+			type,
+			name,
+			address,
+			<if test="addressDetail != null">
+				addressdetail,
+			</if>
+			addr1,
+			<if test="addr2 != null">
+				addr2,
+			</if>
+			info,
+			facility,
+			caution,
+			capacity,
+			cost,
+			hostidx
+		) values (
+			#{idx},
+			#{type},
+			#{name},
+			#{address},
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			#{addr1},
+			<if test="addr2 != null">
+				#{addr2},
+			</if>
+			#{info},
+			#{facility},
+			#{caution},
+			#{capacity},
+			#{cost},
+			#{hostIdx}			
+		)
+	</insert>
+</mapper>

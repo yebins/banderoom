@@ -1,5 +1,7 @@
 package com.project.service;
 
-public interface SpaceService {
+import com.project.vo.SpacesVO;
 
+public interface SpaceService {
+	int spaceReg(SpacesVO vo);
 }
