@@ -127,6 +127,9 @@
 	.picture-upload:active {
 		filter: brightness(90%);
 	}
+	.dropdown-toggle::after {
+    display:none;
+	}
 </style>
 
 
@@ -183,6 +186,7 @@ $(function(){
 		
 		if (notecount != 1) {
 		 $(this).summernote('code', '<ol><li><span style="font-family: &quot;맑은 고딕&quot;;">﻿</span><br></li></ol>');			
+		 $(this).summernote('height', '3.0');
 		}
 		 $(this).summernote('fontName', '맑은 고딕');
 	})
@@ -190,9 +194,29 @@ $(function(){
 	window.scrollTo({top: 0});
 	
 	$(document).on("click", ".uploaded", function() {
-		
+		$(this).remove();
+		if (uploadCount == 4) {
+			$('.uploaded').css('margin-right', '20px');
+			$('.upload-button').css('display', 'flex');
+		}
+		uploadCount--;
 	})
 });
+
+function uploadImage(file, el) {
+	var formData = new FormData();
+	formData.append("file", file);
+	$.ajax({
+		type: "post",
+		data: formData,
+		contentType: false,
+		processData: false,
+		url: "/uploadPicture.do",
+		success: function(data) {
+			$(el).summernote('editor.insertImage', data.trim());
+		}
+	})
+}
 
 function searchAddr() {
 	new daum.Postcode({
@@ -213,26 +237,25 @@ function spacePictureUpload() {
 	var formData = new FormData($('#picture-upload-form')[0]);
 	
 	$.ajax({
-		url: "/uploadPicture.do",
+		url: "uploadPicture.do",
 		type: "post",
 		data: formData,
 		contentType: false,
 		processData: false,
 		success: function(data) {
 			
-			console.log(data);
-// 			var html = "";
-// 			html += "<div class='picture-upload uploaded'>";
-// 			html += "<img src='" + data + "' width='100%'>";
-// 			html += "<input type='hidden' name='spacePictureSrc' value='" + data + "'>";
-// 			html += "</div>"
-// 			$('.row-pictures').prepend(html);
-// 			uploadCount++;
+			var html = "";
+			html += "<div class='picture-upload uploaded'>";
+			html += "<img src='" + data.thumb + "' width='100%'>";
+			html += "<input type='hidden' name='spacePictureSrc' value='" + data.original + "'>";
+			html += "</div>"
+			$('.row-pictures').prepend(html);
+			uploadCount++;
 			
-// 			if (uploadCount == 4) {
-// 				$('.upload-button').css('display', 'none');
-// 				$('.uploaded').eq(3).css('margin', '0px');
-// 			}
+			if (uploadCount == 4) {
+				$('.upload-button').css('display', 'none');
+				$('.uploaded').eq(3).css('margin', '0px');
+			}
 		}
 	});
 }

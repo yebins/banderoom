@@ -13,8 +13,8 @@ public class SpaceServiceImpl implements SpaceService {
 	private SpaceDAO dao;
 
 	@Override
-	public int spaceReg(SpacesVO vo) {
-		return dao.spaceReg(vo);
+	public int spaceReg(SpacesVO vo, String[] spacePictureSrc) {
+		return dao.spaceReg(vo, spacePictureSrc);
 	}
 
 }

@@ -3,6 +3,10 @@
 
 <mapper namespace="com.project.mapper.spaceMapper">
 	<insert id="spaceReg" parameterType="spacesVO">
+		<selectKey keyProperty="idx" resultType="int" order="BEFORE">  
+    	select spaces_idx_seq.nextval FROM dual
+    </selectKey>
+	
 		insert into spaces (
 			idx,
 			type,
@@ -39,6 +43,18 @@
 			#{capacity},
 			#{cost},
 			#{hostIdx}			
+		)
+	</insert>
+	
+	<insert id="insertSpacePictures" parameterType="spacePicturesVO">
+		insert into space_pictures (
+			pictureidx,
+			spaceidx,
+			src
+		) values (
+			SPACE_PICTURES_PICTUREIDX_SEQ.nextval,
+			#{spaceIdx},
+			#{src}
 		)
 	</insert>
 </mapper>
