@@ -366,13 +366,13 @@ header {
        	<div class="sm-innerlist" onclick="location.href='/serlist.do?bidx=5&page=1'">
        	자주 묻는 질문
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serinfo?idx=1'">
+       	<div class="sm-innerlist" onclick="location.href='/serinfo.do?idx=1'">
        	이용약관
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serinfo?idx=2'">
+       	<div class="sm-innerlist" onclick="location.href='/serinfo.do?idx=2'">
        	개인정보처리방침
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serinfo?idx=3'">
+       	<div class="sm-innerlist" onclick="location.href='/serinfo.do?idx=3'">
        	운영정책
        	</div>
       </div>
