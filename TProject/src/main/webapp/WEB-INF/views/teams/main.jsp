@@ -11,6 +11,10 @@
 <title>팀원 모집 main</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
+#page-content{
+	position: relative;
+    height: 700px;
+}
 .form-select{
 	margin-right:10px;
 	width: 130px;
@@ -63,24 +67,39 @@
 	border:2px solid #FB6544;
 }
 .team-title{
-	padding: 14px;
+	padding: 10px;
 	width:280px;
-	height:50px;
+	height:61px;
 	background:#FB6544;
 	color:white;
+	font-size: 15px;
 }
 .team-content{
 	width:280px;
 	height:200px;
 	background:#FBE6B2;
-	padding: 14px;
 	color:#303030;
+	text-align: center;
+	font-size: 13px;
 }
-table:{
+table{
 	height:100%;
 	width:100%;
 }
+tr{
+	border-bottom:1px solid #FB6544;
+}
+tr:last-of-type{
+	border:none;
+}
 td{
+	padding:3px;
+}
+.team-btn{
+	position: absolute;
+    bottom: 50px;
+    right: 0px;
+    width: 130px;
 }
 </style>
 </head>
@@ -148,7 +167,7 @@ td{
 						<input class="form-control form-control-sm" type="text" value="모집 기간 선택">
 						<div class="search-btn d-inline-flex">
 							<input class="form-control form-control-sm search" type="text" placeholder="검색어를 입력하세요.">
-							<button type="submit" class="accent-button">검색하기</button>
+							<button type="submit" class="accent-button normal-button">검색하기</button>
 						</div>
 					</div>
 				</div>
@@ -156,7 +175,7 @@ td{
 			<div class="teams">
 				<div class="team-list">
 					<div class="team-title">
-					전주락밴드 팀원 모집합니다.
+					코스모스 락밴드에서 함께할 팀원을 모집합니다.
 					</div>
 					<div class="team-content">
 						<table>
@@ -174,7 +193,7 @@ td{
 							</tr>
 							<tr>
 								<td>파트</td>
-								<td>보컬 1명, 드럼 1명, 베이스 1명</td>
+								<td>보컬 1명, 드럼 1명, 베이스 1명, 키보드 1명</td>
 							</tr>
 							<tr>
 								<td>모집기간</td>
@@ -200,31 +219,9 @@ td{
 					</div>
 				</div>
 			</div>
+		<button class="accent-button normal-button team-btn" onclick="location.href='/teams/getTeams.do'">팀원 모집하기</button>
 		</div>
 		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 -->
-		<div style="margin-top:500px;">
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button>버튼</button> 
-			일반 버튼 (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="accent-button">버튼</button> 강조 버튼 (button class="accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button>일반버튼</button>
-					<button class="accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
-			</div>
-			<br><br>
-		</div>
-		<!-- 여기까지 -->
 		
 	</div>
 	
