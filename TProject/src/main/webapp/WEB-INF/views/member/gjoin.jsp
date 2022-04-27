@@ -59,6 +59,7 @@
 					<style>
 						div.inner-box-emailpw {
 							background-color: #FEE500;
+							padding: 40px 80px;
 						}
 					
 						form.joinform-emailpw {
