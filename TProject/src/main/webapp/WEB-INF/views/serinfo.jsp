@@ -23,16 +23,34 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			이용약관${serviceInfoVO.title}
+		<c:if test="${param.idx==1}">
+			이용약관
+		</c:if>
+		<c:if test="${param.idx==2}">
+			개인정보처리방침
+		</c:if>
+		<c:if test="${param.idx==3}">
+			운영정책
+		</c:if>
 		</div>
 		<div id="page-content">
 			<div class="inner-box">
 				<div class="inner-box-content">
-				내용입니다.${serviceInfoVO.content}
+					<c:if test="${param.idx==1}">
+					${serviceInfoVO.content}
+					</c:if>
+					<c:if test="${param.idx==2}">
+					${serviceInfoVO.content}
+					</c:if>
+					<c:if test="${param.idx==3}">
+					${serviceInfoVO.content}
+					</c:if>
 				</div>
 			</div>
 		<form action="serinfoupdate.do" method="get">
-			<button class="accent-button" id="serinfoupdate" style="margin-left: 15px;">글쓰기</button>
+	
+			<button class="normal-button accent-button" id="serinfoupdate" style="margin-left: 15px;">수정하기</button>
+		
 		</form>
 		</div>		
 	</div>
