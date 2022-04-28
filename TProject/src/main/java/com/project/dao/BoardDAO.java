@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.ServiceInfoVO;
 
 @Repository
 public class BoardDAO {
@@ -24,4 +25,5 @@ public class BoardDAO {
 		
 		return sqlSession.insert("com.project.mapper.boardMapper.insertArticles",vo);
 	}
+	
 }

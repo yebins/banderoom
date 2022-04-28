@@ -33,9 +33,11 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/register.do", method=RequestMethod.POST)
-	public String register(ArticlesVO vo) {
+	public String register(Model model,ArticlesVO vo) {
 		
-		return "redirect:/board/list.do";
+		boardService.insertArticlesVO(vo);
+		
+		return "redirect:/board/list.do?bidx=" + vo.getbIdx();
 	}
 	
 	@RequestMapping(value="/list.do",method=RequestMethod.GET)

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.mapper.spaceMapper">
+	<insert id="spaceReg" parameterType="spacesVO">
+		<selectKey keyProperty="idx" resultType="int" order="BEFORE">  
+    	select spaces_idx_seq.nextval FROM dual
+    </selectKey>
+	
+		insert into spaces (
+			idx,
+			type,
+			name,
+			address,
+			<if test="addressDetail != null">
+				addressdetail,
+			</if>
+			addr1,
+			<if test="addr2 != null">
+				addr2,
+			</if>
+			info,
+			facility,
+			caution,
+			capacity,
+			cost,
+			hostidx
+		) values (
+			#{idx},
+			#{type},
+			#{name},
+			#{address},
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			#{addr1},
+			<if test="addr2 != null">
+				#{addr2},
+			</if>
+			#{info},
+			#{facility},
+			#{caution},
+			#{capacity},
+			#{cost},
+			#{hostIdx}			
+		)
+	</insert>
+	
+	<insert id="insertSpacePictures" parameterType="spacePicturesVO">
+		insert into space_pictures (
+			pictureidx,
+			spaceidx,
+			src
+		) values (
+			SPACE_PICTURES_PICTUREIDX_SEQ.nextval,
+			#{spaceIdx},
+			#{src}
+		)
+	</insert>
+</mapper>
