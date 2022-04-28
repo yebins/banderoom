@@ -37,6 +37,11 @@
 		display: flex;
 		justify-content: flex-end;	
 	}
+	
+	.space-name {
+		font-size: 30px;
+		font-weight: bold;
+	}
 </style>
 </head>
 <body>
@@ -46,6 +51,16 @@
 		<c:if test="${spacesVO.getStatus() == 0}">
 			<div class="inner-box space-status">
 				등록 대기중인 공간입니다.
+			</div>
+		</c:if>
+		<c:if test="${spacesVO.getStatus() == 2}">
+			<div class="inner-box space-status">
+				등록 거부된 공간입니다.
+			</div>
+		</c:if>
+		<c:if test="${spacesVO.getStatus() == 3}">
+			<div class="inner-box space-status">
+				삭제된 공간입니다.
 			</div>
 		</c:if>
 		<div id="page-content">
@@ -63,12 +78,14 @@
 				  	<c:forEach var="i" begin="0" end="${spacePicturesVOs.size() - 1}" varStatus="status">
 				  		<c:if test="${status.first}">
 						    <div class="carousel-item active">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="window.open('${spacePicturesVOs[i].getSrc()}')">
+						    </div>
 				  		</c:if>
 				  		<c:if test="${!status.first}">
 				  			<div class="carousel-item">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="window.open('${spacePicturesVOs[i].getSrc()}')">
+						    </div>
 				  		</c:if>
-					      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="window.open('${spacePicturesVOs[i].getSrc()}')">
-					    </div>
 				    </c:forEach>
 				  </div>
 				  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -80,9 +97,16 @@
 				    <span class="visually-hidden">Next</span>
 				  </button>
 				</div>
-			</c:if>
 			</div>
-			
+			</c:if>
+				
+				<div class="space-type">
+					${spacesVO.getType()}
+				</div>
+				<div class="space-name">
+					${spacesVO.getName()}
+				</div>
+				
 			<c:if test="${spacesVO.getHostIdx() == hlogin.getmIdx()}">
 				<div class="outter-buttons">
 					<button type="button" class="normal-button" onclick="">삭제</button>
