@@ -75,10 +75,17 @@
 			글쓰기
 		</div>
 		<form action="register.do" method="post">
+			<input type="hidden" name="mIdx" value="${login.mIdx}">
+			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<div id="page-content">
 			<div class="inner-box" style="height:500px;">
 				<div>
-					<input type="text" name="title" class="list-title" placeholder="제목을 입력하세요">
+				<select name="bIdx" class="form-select inner-box-select" aria-label="Default select example">
+					<option ${(param.bIdx == "2")?"selected":""} value="2">자유게시판</option>
+					<option ${(param.bIdx == "4")?"selected":""} value="4">홍보게시판</option>
+					<option ${(param.bIdx == "3")?"selected":""} value="3">중고거래</option>
+				</select>	
+					<input type="text" name="title" class="list-title form-control me-3" placeholder="제목을 입력하세요">
 				</div>
 					<div class="inner-box-content">
 						<form method="post">
