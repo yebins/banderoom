@@ -37,6 +37,9 @@
 	.inner-box-select{
 		margin-bottom:10px;
 	}
+	.dropdown-toggle::after {
+    display:none;
+   }
 	
 </style>
 </head>
@@ -134,9 +137,20 @@
 			}
 		});
 	}*/
-	function update(){
-		
-	}		
+	function uploadImage(file, el) {
+		   var formData = new FormData();
+		   formData.append("file", file);
+		   $.ajax({
+		      type: "post",
+		      data: formData,
+		      contentType: false,
+		      processData: false,
+		      url: "/uploadPicture.do",
+		      success: function(data) {
+		         $(el).summernote('editor.insertImage', data.trim());
+		      }
+		   })
+		}
 </script>
 </body>
 </html>
