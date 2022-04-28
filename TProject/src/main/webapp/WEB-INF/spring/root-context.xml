@@ -5,12 +5,17 @@
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-	<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
-	<property name="url" value="jdbc:oracle:thin:@banderoomdb.cld6xir6e6m8.us-west-2.rds.amazonaws.com:1521:database" />
-	<property name="username" value="admin" /> 
-	<property name="password" value="admin1234!" />
-</bean>
+
+
+    <!-- Initialization for data source -->
+    <bean id="dataSource" class="oracle.ucp.jdbc.PoolDataSourceImpl">
+        <property name="connectionFactoryClassName" value="oracle.jdbc.pool.OracleDataSource" />
+
+        <!-- Connection URL uses a TNS alias -->
+        <property name="URL" value="jdbc:oracle:thin:@banderoomdb_high?TNS_ADMIN=C:/Wallet" />
+        <property name="user" value="admin" />
+        <property name="password" value="Banderoom123456!" />
+    </bean>
 
 <!-- mybatis 연동 -->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

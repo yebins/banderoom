@@ -56,31 +56,31 @@
 					
 					<c:if test="${kakao != null}">
 					
-					<style>
-						div.inner-box-emailpw {
-							background-color: #FEE500;
-							padding: 40px 80px;
-						}
-					
-						form.joinform-emailpw {
-							display: none;
-						}
+						<style>
+							div.inner-box-emailpw {
+								background-color: #FEE500;
+								padding: 40px 80px;
+							}
 						
+							form.joinform-emailpw {
+								display: none;
+							}
+							
+							
+						</style>
 						
-					</style>
-					
-					<script>
-						emailChecked = true;
-						pwChecked = true;
-						$('input[name=email]').val('${kakao.email}');
-					</script>
-					
-					<div id="kakao-account">
-						카카오 계정으로 회원가입 중입니다.
-					</div>
-					<div>
-						사이트 로그아웃 시 카카오 계정은 로그아웃되지 않습니다.
-					</div>
+						<script>
+							emailChecked = true;
+							pwChecked = true;
+							$('input[name=email]').val('${kakao.email}');
+						</script>
+						
+						<div id="kakao-account">
+							카카오 계정으로 회원가입 중입니다.
+						</div>
+						<div>
+							사이트 로그아웃 시 카카오 계정은 로그아웃되지 않습니다.
+						</div>
 					
 					</c:if>
 				</div>

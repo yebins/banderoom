@@ -19,6 +19,7 @@ public class SpacesVO {
 	private Date regDate;
 	private int hostIdx;
 	private int status; // 0: 등록 대기(기본값) 1: 등록 승인 2: 등록 거부 3: 삭제됨
+	private String thumb;
 	
 	public int getIdx() {
 		return idx;
@@ -109,5 +110,11 @@ public class SpacesVO {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public String getThumb() {
+		return thumb;
+	}
+	public void setThumb(String thumb) {
+		this.thumb = thumb;
 	}
 }
