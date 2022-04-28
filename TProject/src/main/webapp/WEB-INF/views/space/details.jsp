@@ -100,11 +100,13 @@
 			</div>
 			</c:if>
 				
-				<div class="space-type">
-					${spacesVO.getType()}
-				</div>
-				<div class="space-name">
-					${spacesVO.getName()}
+				<div class="title">
+					<div class="space-type">
+						${spacesVO.getType()}
+					</div>
+					<div class="space-name">
+						${spacesVO.getName()}
+					</div>
 				</div>
 				
 			<c:if test="${spacesVO.getHostIdx() == hlogin.getmIdx()}">
