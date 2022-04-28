@@ -301,7 +301,7 @@ header {
 		</c:if>
 		<c:if test="${hlogin != null}">
 		<div id="sm-buttons">
-			<div class="sm-button-wrap">
+			<div class="sm-button-wrap" onclick="location.href='/space/myspace.do'">
 				내 공간 관리
 			</div>
 			<div class="sm-button-wrap" onclick="location.href='/space/register.do'">

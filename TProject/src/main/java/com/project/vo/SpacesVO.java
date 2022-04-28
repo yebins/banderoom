@@ -8,6 +8,7 @@ public class SpacesVO {
 	private String type;
 	private String name;
 	private String address;
+	private String addressDetail;
 	private String addr1;
 	private String addr2;
 	private String info;
@@ -17,7 +18,7 @@ public class SpacesVO {
 	private int cost;
 	private Date regDate;
 	private int hostIdx;
-	private int status;
+	private int status; // 0: 등록 대기(기본값) 1: 등록 승인 2: 등록 거부 3: 삭제됨
 	
 	public int getIdx() {
 		return idx;
@@ -42,6 +43,12 @@ public class SpacesVO {
 	}
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	public String getAddressDetail() {
+		return addressDetail;
+	}
+	public void setAddressDetail(String addressDetail) {
+		this.addressDetail = addressDetail;
 	}
 	public String getAddr1() {
 		return addr1;

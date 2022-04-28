@@ -99,7 +99,9 @@
 				addressdetail,
 			</if>
 			addr1,
-			addr2,
+			<if test="addr2 != null">
+				addr2,
+			</if>
 			tel,
 			profilesrc,
 			gender,
@@ -115,7 +117,9 @@
 				#{addressDetail},
 			</if>
 			#{addr1},
-			#{addr2},
+			<if test="addr2 != null">
+				#{addr2},
+			</if>
 			#{tel},
 			#{profileSrc},
 			#{gender},
@@ -188,7 +192,9 @@
 				addressdetail,
 			</if>
 			addr1,
-			addr2,
+			<if test="addr2 != null">
+				addr2,
+			</if>
 			tel,
 			profilesrc,
 			gender
@@ -204,7 +210,9 @@
 				#{addressDetail},
 			</if>
 			#{addr1},
-			#{addr2},
+			<if test="addr2 != null">
+				#{addr2},
+			</if>
 			#{tel},
 			#{profileSrc},
 			#{gender}

@@ -1,11 +1,8 @@
 package com.project.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,8 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.BoardService;
 import com.project.vo.ArticlesVO;
@@ -57,7 +54,7 @@ public class HomeController {
 		
 		return "header";
 	}
-
+	
 	@RequestMapping(value = "/newfile.do")
 	public String newfile () {
 		
@@ -148,5 +145,30 @@ public class HomeController {
 		
 		
 		return "redirect:/serlist.do?bidx="+vo.getbIdx();
+	}
+	
+
+	@RequestMapping(value = "/uploadPicture.do") // 스마트 에디터 이미지 업로드
+	@ResponseBody
+	public String profileUpload(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws Exception {
+		
+		String path = request.getSession().getServletContext().getRealPath("/resources/upload");
+		String fileName = file.getOriginalFilename();
+		
+		String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+
+		UUID uuid = UUID.randomUUID();
+		String newFileName = uuid.toString() + extension;
+
+		File dir = new File(path);
+		if (!dir.exists()) {	// 해당 디렉토리가 존재하지 않는 경우
+			dir.mkdirs();				// 경로의 폴더가 없는 경우 상위 폴더에서부터 전부 생성
+		}
+		
+		File target = new File(path, newFileName);
+		
+		file.transferTo(target);
+		
+		return "/upload/" + newFileName;
 	}
 }
