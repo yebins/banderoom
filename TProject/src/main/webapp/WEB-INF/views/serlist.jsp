@@ -34,8 +34,12 @@
 		border-radius:25px;
 	}
 	
+	#accordionFlushExample>div .accordion-button {
+		background-color:#f6f6f6;
+	}
+	
 	#accordionFlushExample>div:nth-child(2n) .accordion-button{
-		background-color:aliceblue;
+		background-color:white;
 	}
 	
 	.accordion-body-buttons{
@@ -49,8 +53,76 @@
 		height:50px;
 		border-radius:25px;
 	}
+	.content-write {
+		display:flex;
+		justify-content:flex-end;
+		margin-top:50px;
+		margin-bottom:100px;
+	}
+	
+	.content-write a:visited{
+		color:white;
+	}
+	
+	
+	.accordion-flush{
+		border-radius:30px;
+		overflow:hidden;
+		box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
+	}
+	
+	.accordion-button:focus{
+		background-color:white;
+		border-bottom:1px solid gray;
+		box-shadow:none;
+	}
+
+	.accordion-button:not(.collapsed){
+		background-color:white;
+		border-bottom:1px solid #e0e0e0;
+		box-shadow:none;
+		border-left:3px solid #fb6544;
+		border-top:3px solid #fb6544;
+		border-right:3px solid #fb6544;
+	}
+	
+	.accordion-body{
+		border-bottom:3px solid #fb6544;
+		border-left:3px solid #fb6544;
+		border-right:3px solid #fb6544;
+	}
 </style>
+<script>
+	function accordionClick(obj) {
+		if ($(obj).hasClass("collapsed")) {
+			$(obj).parent().next().children(".accordion-body").css("border", "none");
+			$(obj).parent().parent(".accordion-item").css("border-top-left-radius", "none");
+			$(obj).parent().parent(".accordion-item").css("border-top-right-radius", "none");
+			$(obj).css("border-top-left-radius","0px");
+			$(obj).css("border-top-right-radius","0px");
+		} else {
+			$(obj).parent().next().children(".accordion-body").css("border-bottom", "3px solid #fb6544");
+			$(obj).parent().next().children(".accordion-body").css("border-left", "3px solid #fb6544");
+			$(obj).parent().next().children(".accordion-body").css("border-right", "3px solid #fb6544");
+			$(obj).parent().next().children(".accordion-body").css("border-bottom-left-radius", "20px");
+			$(obj).parent().next().children(".accordion-body").css("border-bottom-right-radius", "20px");
+			$(obj).css("border-top-right-radius", "20px");
+			$(obj).css("border-top-left-radius", "20px");
+			$(obj).parent().css("border-top-left-radius","20px");
+			$(obj).parent().css("border-top-right-radius","20px");
+			$(obj).parent().next(".accordion-collapse").css("border-bottom-left-radius","20px");
+			$(obj).parent().next(".accordion-collapse").css("border-bottom-right-radius","20px");
+			$(obj).parent().parent(".accordion-item").css("border-bottom-left-radius","20px");
+			$(obj).parent().parent(".accordion-item").css("border-bottom-right-radius","20px");
+			$(obj).parent().parent(".accordion-item").css("border-top-left-radius","20px");
+			$(obj).parent().parent(".accordion-item").css("border-top-right-radius","20px");
+			$(obj).parent().parent().parent(".accordion-flush").css("overflow","visible");
+		}
+	}
+	
+</script>
 </head>
+
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<c:import url="/header.do" />
@@ -80,15 +152,14 @@
 				<c:forEach var="notice" items="${list}" varStatus="st">
 					
 					  <div class="accordion-item" 
-					  <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
-					  <c:if test="${st.last}">style='border-bottom-left-radius:30px; border-bottom-right-radius:30px;'</c:if>					  
+					  <%-- <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
+					  <c:if test="${st.last}">style='border-bottom-left-radius:30px; border-bottom-right-radius:30px;'</c:if>					   --%>
 					  >
 					    <h2 class="accordion-header">
 					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
 					      		data-bs-target="#a${notice.aIdx}"
-							 aria-expanded="false"
+							 aria-expanded="false" onclick="accordionClick(this)"
 							 <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
-							 <c:if test="${st.last}">style='border-bottom-left-radius:30px; border-bottom-right-radius:30px;'</c:if>							 
 							 >
 					      	<div class="accordion-button-title">${notice.title}</div>
 					      </button>
@@ -106,6 +177,9 @@
 					    </div>
 					  </div>
 				 </c:forEach> 
+				  </div>
+				  <div class="content-write">
+					<button class="normal-button accent-button"><a href="serinfoupdate.do">글쓰기</a></button>
 				  </div>
 			</div>
 		</div>	
