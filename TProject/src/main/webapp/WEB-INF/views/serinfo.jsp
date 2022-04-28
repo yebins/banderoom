@@ -37,7 +37,7 @@
 			<div class="inner-box">
 				<div class="inner-box-content">
 					<c:if test="${param.idx==1}">
-					${serviceInfoVO.content}
+					${selectSerinfo.content}
 					</c:if>
 					<c:if test="${param.idx==2}">
 					${serviceInfoVO.content}
@@ -48,9 +48,9 @@
 				</div>
 			</div>
 		<form action="serinfoupdate.do" method="get">
-	
+		<c:if test="${login.auth==3}">
 			<button class="normal-button accent-button" id="serinfoupdate" style="margin-left: 15px;">수정하기</button>
-		
+		</c:if>
 		</form>
 		</div>		
 	</div>

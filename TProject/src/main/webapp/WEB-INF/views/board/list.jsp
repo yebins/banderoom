@@ -25,11 +25,15 @@
 	td,th{
 		text-align:center;
 		border-top: 1px solid #444444;
+		background-color:white;
 	}
 	th{
-		background-color: #FB6544;
-		color: white;
+		background-color: #FFDAC4;
+		color: black;
 		height:50px;
+	}
+	td{
+		height:30px;
 	}
 	#register{
 		position:relative;

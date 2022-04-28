@@ -60,7 +60,7 @@
 					</select>			
 					<input class="form-control me-3" name="title" type="text" placeholder="제목을 입력하세요">
 				</div>
-					<div class="inner-box-content">
+					<div class="inner-boxcontent">
 						<textarea id="summernote" name="content"></textarea>
 					</div>
 					<div class="inner-box-button-wrap">

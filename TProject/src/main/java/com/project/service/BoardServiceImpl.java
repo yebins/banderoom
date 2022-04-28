@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.dao.BoardDAO;
 import com.project.vo.ArticlesVO;
+import com.project.vo.ServiceInfoVO;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -31,4 +32,5 @@ public class BoardServiceImpl implements BoardService {
 		
 		return dao.insertArticlesVO(vo);
 	}
+
 }
