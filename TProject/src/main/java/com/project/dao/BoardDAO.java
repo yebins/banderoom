@@ -26,4 +26,14 @@ public class BoardDAO {
 		return sqlSession.insert("com.project.mapper.boardMapper.insertArticles",vo);
 	}
 	
+	public ServiceInfoVO selectOneServiceInfoVO(int idx) {
+		return sqlSession.selectOne("com.project.mapper.boardMapper.infoOne",idx);
+	}
+	
+	public int modifyServiceInfo(ServiceInfoVO vo) {
+		System.out.println(vo.getContent());
+		
+		return sqlSession.update("com.project.mapper.boardMapper.infoModify",vo);
+	}
+	
 }

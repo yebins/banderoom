@@ -47,4 +47,16 @@
 		)	
 	</insert>
 	
+	<select id="infoOne" parameterType="int" resultType="serviceInfoVO">
+		select idx
+			,title
+			,content
+			from service_info
+			where idx=#{idx}
+	</select>
+	
+	<update id="infoModify" parameterType="serviceInfoVO">
+		update service_info set content=#{content} where idx=#{idx}
+	</update> 
+	
 </mapper>
