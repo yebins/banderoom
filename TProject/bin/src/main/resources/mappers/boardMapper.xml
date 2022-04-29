@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.mapper.boardMapper">
+	
+	<select id="list" parameterType="map" resultType="articlesVO">
+		select * from articles
+		where bidx=#{bidx}
+		<if test="searchtitle != ''">
+		and title like '%'||#{searchtitle}||'%'
+		</if>
+		order by regdate desc
+	</select>
+	
+	<insert id="insertArticles" parameterType="articlesVO">
+		insert into articles(
+			aidx
+			,bidx
+			,title
+			,content
+			,midx
+			,mnickname
+		) values(
+			<if test="bIdx == 1">
+			articles_aidx_1_seq.nextval
+			</if>
+			<if test="bIdx == 2">
+			articles_aidx_2_seq.nextval
+			</if>
+			<if test="bIdx == 3">
+			articles_aidx_3_seq.nextval
+			</if>
+			<if test="bIdx == 4">
+			articles_aidx_4_seq.nextval
+			</if>
+			<if test="bIdx == 5">
+			articles_aidx_5_seq.nextval
+			</if>
+			<if test="bIdx == 6">
+			articles_aidx_6_seq.nextval
+			</if>
+			,#{bIdx}
+			,#{title}
+			,#{content}
+			,#{mIdx}
+			,#{mNickname}
+		)	
+	</insert>
+	
+	<select id="infoOne" parameterType="int" resultType="serviceInfoVO">
+		select idx
+			,title
+			,content
+			from service_info
+			where idx=#{idx}
+	</select>
+	
+	<update id="infoModify" parameterType="serviceInfoVO">
+		update service_info set content=#{content} where idx=#{idx}
+	</update> 
+	
+</mapper>

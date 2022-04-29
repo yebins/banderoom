@@ -11,12 +11,14 @@
         
         
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
-                        		
-        
-        
-        <property name="java-output-path" value="target/classes"/>
+        <wb-resource deploy-path="/" source-path="/"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
                 
         <property name="context-root" value="controller"/>
+        <property name="java-output-path" value="/TProject/target/classes"/>
                         	
     
     
