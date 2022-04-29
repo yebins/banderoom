@@ -78,7 +78,7 @@
 					<c:forEach var="item" items="${list}">
 						<tr>
 							<td>${item.aIdx }</td>
-							<td><a href="details.do?aIdx=${item.aIdx}">${item.title }</a></td>
+							<td><a href="details.do?bIdx=${param.bidx}&aIdx=${item.aIdx}">${item.title }</a></td>
 							<td>${item.mNickname }</td>
 							<td>
 								<fmt:formatDate value="${item.regDate }" pattern="yyyy-MM-dd"/>
