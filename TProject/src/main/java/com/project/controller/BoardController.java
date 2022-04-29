@@ -47,20 +47,6 @@ public class BoardController {
 		System.out.println(list.size());
 		model.addAttribute("list",list);
 		
-		Date date = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("mm-DD-yyyy");
-		SimpleDateFormat df = new SimpleDateFormat("mm-DD");
-		
-		
-		if(sdf.format(vo.getRegDate())==sdf.format(date)) {
-			String mm = df.format(vo.getRegDate());
-			try {
-				vo.setRegDate(df.parse(mm));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 		
 		return "board/list";
 	}

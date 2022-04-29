@@ -71,13 +71,12 @@
 		box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
 	}
 	
-	.accordion-button:focus{
+	.header-button:focus{
 		background-color:white;
-		border-bottom:1px solid gray;
 		box-shadow:none;
 	}
 
-	.accordion-button:not(.collapsed){
+	.header-button:not(.collapsed){
 		background-color:white;
 		border-bottom:1px solid #e0e0e0;
 		box-shadow:none;
@@ -86,7 +85,7 @@
 		border-right:3px solid #fb6544;
 	}
 	
-	.accordion-body{
+	.body-button{
 		border-bottom:3px solid #fb6544;
 		border-left:3px solid #fb6544;
 		border-right:3px solid #fb6544;
@@ -120,6 +119,7 @@
 		}
 	}
 	
+	
 </script>
 </head>
 
@@ -151,12 +151,12 @@
 				<div class="accordion accordion-flush" id="accordionFlushExample">
 				<c:forEach var="notice" items="${list}" varStatus="st">
 					
-					  <div class="accordion-item" 
+					  <div class="accordion-item"
 					  <%-- <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
 					  <c:if test="${st.last}">style='border-bottom-left-radius:30px; border-bottom-right-radius:30px;'</c:if>					   --%>
 					  >
 					    <h2 class="accordion-header">
-					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+					      <button class="accordion-button header-button collapsed" type="button" data-bs-toggle="collapse" 
 					      		data-bs-target="#a${notice.aIdx}"
 							 aria-expanded="false" onclick="accordionClick(this)"
 							 <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
@@ -165,7 +165,7 @@
 					      </button>
 					    </h2>
 					    <div id="a${notice.aIdx}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-					      <div class="accordion-body">
+					      <div class="accordion-body body-button">
 					      	<div>${notice.content}</div>
 						    <div class="accordion-body-buttons">
 						    	<c:if test="${login.auth == 3}">
@@ -187,7 +187,15 @@
 	</div>
 	
 <script>
-
+	/* function st(obj){
+    // window.scrollTo(x,y);
+    var offset=$(obj).offset();
+    var body=document.querySelector('html').offsetHeight;
+    console.log(body-offset.top);
+    console.log(body);
+    window.scrollTo({top:body-offset.top, behavior:'smooth'});
+    // behavior:smooth 부드럽게이동
+} */
 </script>
 </body>
 </html>
