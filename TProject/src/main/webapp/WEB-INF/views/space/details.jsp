@@ -12,6 +12,7 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
 	.space-status {
+		width: 100%;
 		background-color: #FBE6B2 !important;
 		padding: 40px 80px !important;
 		height: unset !important;
@@ -41,9 +42,126 @@
 	.space-name {
 		font-size: 30px;
 		font-weight: bold;
+		margin-bottom: 20px;
+	}
+	
+	.address {
+		display: flex;
+		align-items: center;
+	}
+	
+	.map-button {
+		width: 80px;
+		margin-left: 20px;
+	}
+	
+	#mapBackOveray {
+		width: 100%; 
+		height: 100vh; 
+		display: flex; 
+		visibility: hidden;
+		justify-content: center; 
+		align-items: center; 
+		background-color: rgba(0,0,0,0.5); 
+		position: fixed; 
+		top: 0px; 
+		left: 0px; 
+		z-index: 99999;
+	}
+	
+	#mapBackground {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+	
+	#map {
+		width: 80%;
+		height: 80vh;
+		padding: 50px;
+		z-index: 999999;
+		border-radius: 15px;
+		overflow: hidden;
+	}
+	
+	.space-content {
+		width: 100%;
+	}
+	
+	.space-info, .space-rsv {
+		padding: 40px 15px !important;
 	}
 </style>
+
+	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
+	
+	<script>
+	
+	var mapContainer;
+	
+	function drawMap() {
+		mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		    mapOption = {
+		        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+		        level: 3 // 지도의 확대 레벨
+		    };  
+		
+		// 지도를 생성합니다    
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		
+
+		// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+		var mapTypeControl = new kakao.maps.MapTypeControl();
+
+		// 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+		// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+		var zoomControl = new kakao.maps.ZoomControl();
+		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+		
+		
+		// 주소-좌표 변환 객체를 생성합니다
+		var geocoder = new kakao.maps.services.Geocoder();
+		
+		// 주소로 좌표를 검색합니다
+		geocoder.addressSearch('${spacesVO.getAddress()}', function(result, status) {
+		
+		    // 정상적으로 검색이 완료됐으면 
+		     if (status === kakao.maps.services.Status.OK) {
+		
+		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		
+		        // 결과값으로 받은 위치를 마커로 표시합니다
+		        var marker = new kakao.maps.Marker({
+		            map: map,
+		            position: coords
+		        });
+		
+		        // 인포윈도우로 장소에 대한 설명을 표시합니다
+		        var infowindow = new kakao.maps.InfoWindow({
+		            content: '<div style="width:150px;text-align:center;padding:6px 0;">${spacesVO.getName()}</div>'
+		        });
+		        infowindow.open(map, marker);
+		
+		        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+		        map.setCenter(coords);
+		    } 
+		});   
+
+	}
+	
+	function showMap() {
+		$("#map").children().remove();
+	    drawMap();
+		$("#mapBackOveray").css("visibility", "visible");
+    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	}
+	</script>
+	
 </head>
+
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<c:import url="/header.do" />
@@ -99,15 +217,55 @@
 				</div>
 			</div>
 			</c:if>
-				
-				<div class="title">
-					<div class="space-type">
-						${spacesVO.getType()}
+			
+			<div class="title">
+				<div class="space-type">
+					${spacesVO.getType()}
+				</div>
+				<div class="space-name">
+					${spacesVO.getName()}
+				</div>
+				<div class="address">
+					${spacesVO.getAddress()} ${spacesVO.getAddressDetail()}
+					<button class="normal-button map-button" onclick="showMap()">&nbsp;지도<img src="/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>
+				</div>
+			</div>
+			
+			<br>
+			
+			<div class="container space-content">
+				<div class="row">
+					<div class="col-sm-8 ml-auto">
+						<div class="inner-box space-info">
+							<div class="inner-box-content">
+								<div>
+								기본정보<br>
+								${spacesVO.getInfo()}
+								</div>
+								
+								<div>
+								보유 장비 / 시설<br>
+								${spacesVO.getFacility()}
+								</div>
+								
+								<div>
+								주의사항 <br>
+								${spacesVO.getCaution()}
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="space-name">
-						${spacesVO.getName()}
+					
+					<div class="col-sm">
+						<div class="inner-box space-rsv">
+							<div class="inner-box-content">
+								여기는 예약 정보가 들어갈 공간입니다.
+							</div>
+						</div>
 					</div>
 				</div>
+			</div>
+		</div>
 				
 			<c:if test="${spacesVO.getHostIdx() == hlogin.getmIdx()}">
 				<div class="outter-buttons">
@@ -141,7 +299,13 @@
 		</div>
 		<!-- 여기까지 -->
 		
+	
+	<div id="mapBackOveray">
+		<div id="mapBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>
+		<div id="map"></div>
 	</div>
+	
+	
 	
 </body>
 </html>
