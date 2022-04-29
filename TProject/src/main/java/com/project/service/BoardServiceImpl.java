@@ -46,5 +46,17 @@ public class BoardServiceImpl implements BoardService {
 		
 		return dao.modifyServiceInfo(vo);
 	}
+	
+	@Override
+	public ArticlesVO selectArticles(ArticlesVO vo) {
+		
+		return dao.selectArticles(vo);
+	}
+
+	@Override
+	public void readCount(ArticlesVO vo) {
+		
+		dao.readcount(vo);
+	}
 
 }

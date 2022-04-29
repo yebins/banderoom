@@ -9,7 +9,7 @@
 		<if test="searchtitle != ''">
 		and title like '%'||#{searchtitle}||'%'
 		</if>
-		order by regdate desc
+		order by aidx desc
 	</select>
 	
 	<insert id="insertArticles" parameterType="articlesVO">
@@ -58,5 +58,14 @@
 	<update id="infoModify" parameterType="serviceInfoVO">
 		update service_info set content=#{content} where idx=#{idx}
 	</update> 
+	
+	<select id="selectArticles" parameterType="ArticlesVO" resultType="ArticlesVO">
+		select * from articles
+		where aidx=#{aIdx} and bidx=#{bIdx}
+	</select>
+	
+	<update id="readCount" parameterType="ArticlesVO">
+		update articles set readcount= readcount+1 where aidx=#{aIdx} and bidx=#{bIdx}
+	</update>
 	
 </mapper>

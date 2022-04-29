@@ -13,5 +13,7 @@ public interface BoardService {
 	int insertArticlesVO(ArticlesVO vo);
 	ServiceInfoVO selectOneServiceInfo(int idx);
 	int updateServiceInfo(ServiceInfoVO vo);
+	ArticlesVO  selectArticles(ArticlesVO vo);
+	void readCount(ArticlesVO vo);
 	
 }

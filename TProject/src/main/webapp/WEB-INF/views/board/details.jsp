@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,24 +61,27 @@
 		<div class="inner-box" style="margin-top:30px;">
 			<div class="inner-box-content">
 				<div class="board-header">
-					<div class="board-header-title">제목 : ${vo.title }</div><div class="board-header-date">${vo.regDate }Date</div>
+					<div class="board-header-title">제목 : ${vo.title }</div>
+					<div class="board-header-date"><fmt:formatDate value="${vo.regDate }" pattern="yyyy-MM-dd hh:mm"/></div>
 				</div><hr>
 				<div class="board-middle">
-					<div class="board-middle-nickname">${vo.mNickname}닉네임</div><div class="board-middle-count">${vo.readCount}조회수&nbsp;&nbsp;추천수</div>
+					<div class="board-middle-nickname">${vo.mNickname}</div><div class="board-middle-count">조회수 : ${vo.readCount}&nbsp;&nbsp;추천수 : </div>
 				</div><hr>
 				<div class="board-content">
-					내용${vo.content}
+					${vo.content}
 					<div class="board-content-like">
 						<div class="board-content-likebutton">
-						<button class="normal-button" style="width:70px;">추천</button>&nbsp;<span>5</span>
+						<button class="normal-button" style="width:70px;">추천</button>&nbsp;<span>추천수</span>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="details-button">
 			<form action="update.do" method="get">
-				<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
-				<button class="normal-button" id="delete" style="margin-left: 15px;">삭제</button>
+				<c:if test="${login.mIdx == vo.mIdx}">
+					<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
+					<button class="normal-button" id="delete" style="margin-left: 15px;">삭제</button>
+				</c:if>	
 			</form>
 			</div>
 		</div>
