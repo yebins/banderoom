@@ -1,10 +1,12 @@
 package com.project.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.dao.SpaceDAO;
-import com.project.vo.SpacesVO;
+import com.project.vo.*;
 
 @Service
 public class SpaceServiceImpl implements SpaceService {
@@ -16,5 +18,26 @@ public class SpaceServiceImpl implements SpaceService {
 	public int spaceReg(SpacesVO vo, String[] spacePictureSrc) {
 		return dao.spaceReg(vo, spacePictureSrc);
 	}
+
+	@Override
+	public List<LocationsVO> getLocations() {
+		return dao.getLocations();
+	}
+
+	@Override
+	public List<SpacesVO> getSpaceList(int hostIdx) {
+		return dao.getSpaceList(hostIdx);
+	}
+
+	@Override
+	public SpacesVO details(SpacesVO vo) {
+		return dao.details(vo);
+	}
+
+	@Override
+	public List<SpacePicturesVO> spacePictureList(SpacesVO vo) {
+		return dao.spacePictureList(vo);
+	}
+
 
 }

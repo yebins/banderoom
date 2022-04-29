@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -50,6 +51,12 @@
 		<c:if test="${param.bidx==2 }">
 			자유게시판
 		</c:if>
+		<c:if test="${param.bidx==4 }">
+			홍보게시판
+		</c:if>
+		<c:if test="${param.bidx==3 }">
+			중고거래게시판
+		</c:if>
 		</div>
 		<div>
 			<form class="d-flex notice-page">
@@ -71,9 +78,11 @@
 					<c:forEach var="item" items="${list}">
 						<tr>
 							<td>${item.aIdx }</td>
-							<td><a href="view.do?aIdx=${item.aIdx}">${item.title }</a></td>
+							<td><a href="details.do?aIdx=${item.aIdx}">${item.title }</a></td>
 							<td>${item.mNickname }</td>
-							<td>${item.regDate }</td>
+							<td>
+								<fmt:formatDate value="${item.regDate }" pattern="yyyy-MM-dd"/>
+							</td>
 							<td>${item.readCount }</td>
 							<td>1</td><!-- 추천수 어떻게 가져옴니까... -->
 						</tr>
