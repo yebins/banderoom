@@ -2,22 +2,20 @@ package com.project.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.*;
 
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.SpaceService;
-import com.project.vo.SpacesVO;
+import com.project.vo.*;
 
 @Controller
 @RequestMapping(value = "/space")
@@ -36,14 +34,16 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value= "/register.do", method = RequestMethod.POST)
-	public String register(SpacesVO vo, String[] spacePictureSrc) {
-		
-		System.out.println(Arrays.toString(spacePictureSrc));
+	public String register(SpacesVO vo, String[] spacePictureSrc, String[] thumbSrc) {
+
+		if (thumbSrc != null && thumbSrc.length != 0) {
+			vo.setThumb(thumbSrc[0]);
+		}
 		
 		int result = spaceService.spaceReg(vo, spacePictureSrc);
 		
 		if (result > 0) {
-			return "redirect:/";
+			return "redirect:/space/myspace.do";
 		} else {
 			return null;
 		}
@@ -120,8 +120,33 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value = "/myspace.do")
-	public String myspace() {
+	public String myspace(Model model, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		if (session.getAttribute("hlogin") != null) {
+			model.addAttribute("spacesVOs", spaceService.getSpaceList(((HostMembersVO) session.getAttribute("hlogin")).getmIdx()));
+		} else if (session.getAttribute("login") != null) {
+			if (((GeneralMembersVO) session.getAttribute("login")).getAuth() == 3) {
+				model.addAttribute("spacesVOs", spaceService.getSpaceList(0));
+			}
+		}
+		
 		return "space/myspace";
+	}
+	
+	@RequestMapping(value = "/getlocations.do")
+	@ResponseBody
+	public List<LocationsVO> getLocations() {
+		return spaceService.getLocations();
+	}
+
+	@RequestMapping(value = "/details.do")
+	public String details(Model model, SpacesVO vo) {
+		model.addAttribute("spacesVO", spaceService.details(vo));
+		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
+		
+		return "space/details";
 	}
 
 }

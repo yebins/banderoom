@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import com.project.dao.BoardDAO;
 import com.project.vo.ArticlesVO;
@@ -31,6 +32,19 @@ public class BoardServiceImpl implements BoardService {
 	public int insertArticlesVO(ArticlesVO vo) {
 		
 		return dao.insertArticlesVO(vo);
+	}
+
+	@Override
+	public ServiceInfoVO selectOneServiceInfo(int idx) {
+		
+		
+		return dao.selectOneServiceInfoVO(idx);
+	}
+
+	@Override
+	public int updateServiceInfo(ServiceInfoVO vo) {
+		
+		return dao.modifyServiceInfo(vo);
 	}
 
 }

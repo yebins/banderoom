@@ -24,6 +24,9 @@
 			caution,
 			capacity,
 			cost,
+			<if test="thumb != null">
+				thumb,
+			</if>
 			hostidx
 		) values (
 			#{idx},
@@ -42,7 +45,10 @@
 			#{caution},
 			#{capacity},
 			#{cost},
-			#{hostIdx}			
+			<if test="thumb != null">
+				#{thumb},
+			</if>
+			#{hostIdx}
 		)
 	</insert>
 	
@@ -57,4 +63,61 @@
 			#{src}
 		)
 	</insert>
+	
+	<select id="getLocations" resultType="locationsVO">
+		select * from locations order by addr1, addr2
+	</select>
+	
+	<select id="getSpaceList" resultType="spacesVO" parameterType="spacesVO">
+		select idx,
+					 type,
+					 name,
+					 address,
+					 addressdetail,
+					 addr1,
+					 addr2,
+					 info,
+					 facility,
+					 caution,
+					 capacity,
+					 cost,
+					 regdate,
+					 hostidx,
+					 status,
+					 thumb
+		from spaces 
+		where status != 3
+			<if test="hostIdx != 0">
+			and hostidx = #{hostIdx}
+			</if>
+	</select>
+	
+	<select id="details" resultType="spacesVO" parameterType="spacesVO">
+		select idx,
+					 type,
+					 name,
+					 address,
+					 addressdetail,
+					 addr1,
+					 addr2,
+					 info,
+					 facility,
+					 caution,
+					 capacity,
+					 cost,
+					 regdate,
+					 hostidx,
+					 status,
+					 thumb
+		from spaces
+		where idx = #{idx}
+	</select>
+	
+	<select id="spacePictureList" resultType="spacePicturesVO" parameterType="spacesVO">
+		select pictureidx,
+					 spaceidx,
+					 src
+		from space_pictures
+		where spaceidx = #{idx}
+	</select>
 </mapper>

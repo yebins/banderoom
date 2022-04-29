@@ -130,6 +130,14 @@
 	.dropdown-toggle::after {
     display:none;
 	}
+	.note-editor.note-frame, .note-editor.note-airframe {
+    width: 100%;
+	}
+	#thumbnail-info {
+		margin-left: 50px;
+		color: #fb6544;
+		font-weight: normal;
+	}
 </style>
 
 
@@ -248,6 +256,7 @@ function spacePictureUpload() {
 			html += "<div class='picture-upload uploaded'>";
 			html += "<img src='" + data.thumb + "' width='100%'>";
 			html += "<input type='hidden' name='spacePictureSrc' value='" + data.original + "'>";
+			html += "<input type='hidden' name='thumbSrc' value='" + data.thumb + "'>";
 			html += "</div>"
 			$('.row-pictures').prepend(html);
 			uploadCount++;
@@ -292,7 +301,7 @@ function spacePictureUpload() {
 					</div>
 					
 					<div class="inner-box-row row-title">
-						사진
+						사진<span id="thumbnail-info">마지막에 업로드한 사진이 썸네일이 됩니다.</span>
 					</div>
 					<div class="inner-box-row row-pictures">
 						<label class="picture-upload upload-button" for="picture-upload">

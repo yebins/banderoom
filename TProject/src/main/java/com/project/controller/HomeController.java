@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.service.BoardService;
 import com.project.vo.ArticlesVO;
 import com.project.vo.GeneralMembersVO;
+import com.project.vo.ServiceInfoVO;
 
 
 /**
@@ -97,9 +98,51 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/serinfo.do")
-	public String serinfo() {
+	public String serinfo(Model model,Integer idx) {
+		if(idx == null) {
+			idx = 1;
+		}
+		
+		ServiceInfoVO vo=boardService.selectOneServiceInfo(idx);
+		model.addAttribute("vo",vo);
 		
 		return "serinfo";
+	}
+	
+	
+	@RequestMapping(value="/infoupdate.do")
+	public String serinfoUp(ServiceInfoVO vo,HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		System.out.println(vo.getIdx());
+		System.out.println(vo.getContent());
+		int result=0;
+		
+		//로그인했을때
+		if(session.getAttribute("login") != null) {
+			GeneralMembersVO login=(GeneralMembersVO)session.getAttribute("login");
+			
+			//권한체크
+			if(login.getAuth() == 3) {
+				result=boardService.updateServiceInfo(vo);
+				System.out.println(result);
+				request.setAttribute("msg", "수정이 됏다리");
+				request.setAttribute("url", "/serinfo.do");
+				
+				return "alert";
+			} else {
+				
+				request.setAttribute("msg", "권한도 없는놈이 어딜 감히");
+				request.setAttribute("url", "/serinfo.do");
+				
+				return "alert";
+			}
+			
+		}
+		//로그인안했을때
+		request.setAttribute("msg", "로그인하세유");
+		request.setAttribute("url", "/member/glogin.do");
+		
+		return "alert";
 	}
 	
 	@RequestMapping(value="/serlist.do",method=RequestMethod.GET)
@@ -107,7 +150,6 @@ public class HomeController {
 		System.out.println(bidx);//bidx값 확인
 		System.out.println(searchtitle);//검색어 확인
 		List<ArticlesVO> list=boardService.list(bidx,searchtitle);
-		
 		System.out.println(list.size());
 		model.addAttribute("list",list);
 		
