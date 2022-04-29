@@ -56,6 +56,12 @@ public class HomeController {
 		return "header";
 	}
 	
+	@RequestMapping(value = "/footer.do")
+	public String footer() {
+		
+		return "footer";
+	}
+	
 	@RequestMapping(value = "/newfile.do")
 	public String newfile () {
 		

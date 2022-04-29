@@ -1,10 +1,9 @@
 @charset "UTF-8";
 
-	div#page-content {
-		width: 70%;
-	}
 	
 	div.inner-box {
+		max-width: 800px;
+		margin: auto;
 		padding: 80px;
 		justify-content: flex-start;
 		height: auto;
@@ -32,7 +31,8 @@
 	}
 	
 	input.narrow {
-		width: 400px;
+		flex: 1;
+		margin-right: 20px;
 	}
 	
 	div.with-button {

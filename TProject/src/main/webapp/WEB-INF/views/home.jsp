@@ -48,5 +48,6 @@
 		
 	</div>
 	
+	<c:import url="/footer.do" />
 </body>
 </html>

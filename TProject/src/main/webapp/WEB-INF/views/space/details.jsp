@@ -11,6 +11,10 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
+
+	.page-content {
+		height: fit-content;
+	}
 	.space-status {
 		width: 100%;
 		background-color: #FBE6B2 !important;
@@ -88,9 +92,38 @@
 		width: 100%;
 	}
 	
-	.space-info, .space-rsv {
-		padding: 40px 15px !important;
+	.space-info {
+		padding: 40px !important;
 	}
+	
+	.colleft {
+		padding-left: 0px;
+	}
+	
+	.colright {
+		padding-right: 0px;		
+	}
+	
+	@media screen and (max-width: 576px) {
+		.space-info {
+			padding: 15px !important;
+		}
+		.colleft, .colright {
+			padding: 10px 0px;
+		}
+	}
+	
+	.space-info-subject {
+		font-size: 24px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+	
+	.space-info-subject:not(.space-info-subject:first-child) {
+		margin-top: 40px;
+	}
+	
+	
 </style>
 
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
@@ -235,34 +268,35 @@
 			
 			<div class="container space-content">
 				<div class="row">
-					<div class="col-sm-8 ml-auto">
+					<div class="col-sm-8 colleft">
 						<div class="inner-box space-info">
 							<div class="inner-box-content">
-								<div>
-								기본정보<br>
-								${spacesVO.getInfo()}
-								</div>
+									<div class="space-info-subject">기본정보</div>
+									${spacesVO.getInfo()}
 								
-								<div>
-								보유 장비 / 시설<br>
-								${spacesVO.getFacility()}
-								</div>
+									<div class="space-info-subject">보유 장비 / 시설</div>
+									${spacesVO.getFacility()}
 								
-								<div>
-								주의사항 <br>
-								${spacesVO.getCaution()}
-								</div>
+									<div class="space-info-subject">주의사항</div>
+									${spacesVO.getCaution()}
+								
 							</div>
 						</div>
 					</div>
 					
-					<div class="col-sm">
+					<c:if test="${login != null}">
+						
+					
+					<div class="col-sm colright">
 						<div class="inner-box space-rsv">
 							<div class="inner-box-content">
 								여기는 예약 정보가 들어갈 공간입니다.
 							</div>
 						</div>
 					</div>
+					
+					
+					</c:if>
 				</div>
 			</div>
 		</div>
@@ -306,6 +340,6 @@
 	</div>
 	
 	
-	
+	<c:import url="/footer.do" />
 </body>
 </html>
