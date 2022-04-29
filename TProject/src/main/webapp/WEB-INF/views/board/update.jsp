@@ -21,17 +21,6 @@
 	 .dropdown-toggle::after {
     display:none;
    }
-   .select-board{
-   	display:flex;
-   	flex-direction: row-reverse;
-   }
-   .inner-box-select{
-   		flex:0.15;
-   }
-   .form-control{
-   		flex:1;
-   		
-   }
 </style>
 
 <script src="/js/summernote/summernote-lite.js"></script>
@@ -101,29 +90,29 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			글쓰기
+			글수정
 		</div>
-		<form action="register.do" method="post">
+		<form action="update.do" method="post">
 			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<div id="page-content">
 			<div class="inner-box" style="height:500px;">
-				<div class="select-board">
-					<select name="bIdx" class="form-select inner-box-select" aria-label="Default select example">
-						<option ${(param.bIdx == "2")?"selected":""} value="2">자유게시판</option>
-						<option ${(param.bIdx == "4")?"selected":""} value="4">홍보게시판</option>
-						<option ${(param.bIdx == "3")?"selected":""} value="3">중고거래</option>
-					</select>	
-					<input type="text" name="title" class="list-title form-control me-3" placeholder="제목을 입력하세요">
+				<div>
+				<select name="bIdx" class="form-select inner-box-select" aria-label="Default select example">
+					<option ${(param.bIdx == "2")?"selected":""} value="2">자유게시판</option>
+					<option ${(param.bIdx == "4")?"selected":""} value="4">홍보게시판</option>
+					<option ${(param.bIdx == "3")?"selected":""} value="3">중고거래</option>
+				</select>	
+					<input type="text" name="title" class="list-title form-control me-3" placeholder="${vo.title }">
 				</div>
 					<div class="inner-box-content">
 						<form method="post">
-							<textarea name="content" id="summernote" style="width: 100%;"></textarea>
+							<textarea name="content" id="summernote" style="width: 100%;">${vo.content}</textarea>
 						</form>
 					</div>
 					<div class="inner-box-button-wrap">
 						<button class="normal-button accent-button" style="margin-left: 15px;">저장</button>
-						<button class="normal-button" style="margin-left: 10px;">취소하기</button>
+						<button class="normal-button">취소하기</button>
 					</div>
 			</div>
 		</form>
