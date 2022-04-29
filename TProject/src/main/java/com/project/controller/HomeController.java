@@ -101,6 +101,7 @@ public class HomeController {
 	public String serinfo(Model model,Integer idx) {
 		if(idx == null) {
 			idx = 1;
+			
 		}
 		
 		ServiceInfoVO vo=boardService.selectOneServiceInfo(idx);

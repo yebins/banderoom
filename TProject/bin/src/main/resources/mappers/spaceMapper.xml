@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.mapper.spaceMapper">
+	<insert id="spaceReg" parameterType="spacesVO">
+		<selectKey keyProperty="idx" resultType="int" order="BEFORE">  
+    	select spaces_idx_seq.nextval FROM dual
+    </selectKey>
+	
+		insert into spaces (
+			idx,
+			type,
+			name,
+			address,
+			<if test="addressDetail != null">
+				addressdetail,
+			</if>
+			addr1,
+			<if test="addr2 != null">
+				addr2,
+			</if>
+			info,
+			facility,
+			caution,
+			capacity,
+			cost,
+			<if test="thumb != null">
+				thumb,
+			</if>
+			hostidx
+		) values (
+			#{idx},
+			#{type},
+			#{name},
+			#{address},
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			#{addr1},
+			<if test="addr2 != null">
+				#{addr2},
+			</if>
+			#{info},
+			#{facility},
+			#{caution},
+			#{capacity},
+			#{cost},
+			<if test="thumb != null">
+				#{thumb},
+			</if>
+			#{hostIdx}
+		)
+	</insert>
+	
+	<insert id="insertSpacePictures" parameterType="spacePicturesVO">
+		insert into space_pictures (
+			pictureidx,
+			spaceidx,
+			src
+		) values (
+			SPACE_PICTURES_PICTUREIDX_SEQ.nextval,
+			#{spaceIdx},
+			#{src}
+		)
+	</insert>
+	
+	<select id="getLocations" resultType="locationsVO">
+		select * from locations order by addr1, addr2
+	</select>
+	
+	<select id="getSpaceList" resultType="spacesVO" parameterType="spacesVO">
+		select idx,
+					 type,
+					 name,
+					 address,
+					 addressdetail,
+					 addr1,
+					 addr2,
+					 info,
+					 facility,
+					 caution,
+					 capacity,
+					 cost,
+					 regdate,
+					 hostidx,
+					 status,
+					 thumb
+		from spaces 
+		where status != 3
+			<if test="hostIdx != 0">
+			and hostidx = #{hostIdx}
+			</if>
+	</select>
+	
+	<select id="details" resultType="spacesVO" parameterType="spacesVO">
+		select idx,
+					 type,
+					 name,
+					 address,
+					 addressdetail,
+					 addr1,
+					 addr2,
+					 info,
+					 facility,
+					 caution,
+					 capacity,
+					 cost,
+					 regdate,
+					 hostidx,
+					 status,
+					 thumb
+		from spaces
+		where idx = #{idx}
+	</select>
+	
+	<select id="spacePictureList" resultType="spacePicturesVO" parameterType="spacesVO">
+		select pictureidx,
+					 spaceidx,
+					 src
+		from space_pictures
+		where spaceidx = #{idx}
+	</select>
+</mapper>
