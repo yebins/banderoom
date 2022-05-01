@@ -148,12 +148,49 @@
 <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
 <script>
 
-var notecount = 0;
 var uploadCount = 0;
 
 $(function(){
+	
+	 
+	 // 기존 내용 넣어주기
+	 $("input[name=idx]").val("${spacesVO.getIdx()}");
+	 $("select[name=type]").val("${spacesVO.getType()}");
+	 $("input[name=name]").val("${spacesVO.getName()}");
+	 $("input[name=address]").val("${spacesVO.getAddress()}");
+	 $("input[name=addressDetail]").val("${spacesVO.getAddressDetail()}");
+	 $("input[name=addr1]").val("${spacesVO.getAddr1()}");
+	 $("input[name=addr2]").val("${spacesVO.getAddr2()}");	 
+	 $("textarea[name=info]").summernote('code', '${spacesVO.getInfo()}');
+	 $("textarea[name=facility]").summernote('code', '${spacesVO.getFacility()}');
+	 $("textarea[name=caution]").summernote('code', '${spacesVO.getCaution()}');
+	 $("input[name=capacity]").val("${spacesVO.getCapacity()}");
+	 $("input[name=cost]").val("${spacesVO.getCost()}");
+	 
+	 // 기존 사진 넣어주기
+		<c:if test="${spacePicturesVOs.size() != 0}">
+			<c:forEach var="i" begin="0" end="${spacePicturesVOs.size() - 1}">
+				
+				var html = "";
+				html += "<div class='picture-upload uploaded'>";
+				html += "<img src='${spacePicturesVOs[i].getThumbSrc()}' width='100%'>";
+				html += "<input type='hidden' name='src' value='${spacePicturesVOs[i].getSrc()}'>";
+				html += "<input type='hidden' name='thumbSrc' value='${spacePicturesVOs[i].getThumbSrc()}'>";
+				html += "</div>"
+				$('.row-pictures').prepend(html);
+				uploadCount++;
+				
+			</c:forEach>
+			
+
+			if (uploadCount == 4) {
+				$('.upload-button').css('display', 'none');
+				$('.uploaded').eq(3).css('margin', '0px');
+			}
+			
+		</c:if>
+	
 	$('.summernote').each(function() {
-		notecount++;
 		
 		$(this).summernote({
 	         toolbar: [
@@ -193,11 +230,10 @@ $(function(){
 	        }
 	   });
 		
-		if (notecount != 1) {
-		 $(this).summernote('code', '<ol><li><span style="font-family: &quot;맑은 고딕&quot;;">﻿</span><br></li></ol>');			
-		 $(this).summernote('height', '3.0');
-		}
 		 $(this).summernote('fontName', '맑은 고딕');
+		 
+	
+			
 	})
 
 	window.scrollTo({top: 0});
@@ -277,13 +313,14 @@ function spacePictureUpload() {
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			공간 등록하기
+			공간 수정하기
 		</div>
 		<div id="page-content">
 		<form id="picture-upload-form">
 			<input type="file" id="picture-upload" name="picture" style="display: none;" onchange="spacePictureUpload()">
 		</form>
-		<form action="register.do" method="post">
+		<form action="update.do" method="post">
+			<input type="hidden" name="idx">
 			<div class="inner-box" style="height: fit-content; padding: 50px 70px;">
 				<div class="inner-box-content">
 					<input type="hidden" name="hostIdx" value="${hlogin.getmIdx()}">

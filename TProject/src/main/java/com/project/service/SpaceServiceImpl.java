@@ -15,8 +15,13 @@ public class SpaceServiceImpl implements SpaceService {
 	private SpaceDAO dao;
 
 	@Override
-	public int spaceReg(SpacesVO vo, String[] spacePictureSrc) {
-		return dao.spaceReg(vo, spacePictureSrc);
+	public int spaceReg(SpacesVO vo, String[] src, String[] thumbSrc) {
+		return dao.spaceReg(vo, src, thumbSrc);
+	}
+
+	@Override
+	public int update(SpacesVO vo, String[] src, String[] thumbSrc) {
+		return dao.update(vo, src, thumbSrc);
 	}
 
 	@Override
@@ -67,5 +72,19 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 	}
 
+	@Override
+	public int acceptSpace(SpacesVO vo) {
+		return dao.acceptSpace(vo);
+	}
+
+	@Override
+	public int refuseSpace(SpacesVO vo) {
+		return dao.refuseSpace(vo);
+	}
+
+	@Override
+	public int requestAccpet(SpacesVO vo) {
+		return dao.requestAccept(vo);
+	}
 
 }

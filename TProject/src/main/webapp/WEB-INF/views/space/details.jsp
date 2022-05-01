@@ -20,9 +20,19 @@
 		background-color: #FBE6B2 !important;
 		padding: 40px 80px !important;
 		height: unset !important;
+		margin-top: 40px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.space-status-content {
 		font-size: 24px;
 		font-weight: bold;
-		margin-top: 40px;
+	}
+	
+	.space-status button{
+		margin-left: 10px;
 	}
 	
 	.space-status-refused {
@@ -208,6 +218,10 @@
 		margin-top: 40px;
 	}
 	
+	iframe {
+		max-width: 100%;
+	}
+	
 </style>
 
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
@@ -215,6 +229,11 @@
 	<script>
 	
 	var liked;
+	var mIdx = 0;
+	
+	<c:if test="${login != null}">
+	mIdx = ${login.getmIdx()};
+	</c:if>
 	
 	$(function() {
 		
@@ -227,7 +246,7 @@
 			type: "post",
 			url: "getlikedstatus.do",
 			data: {
-				mIdx: ${login.getmIdx()},
+				mIdx: mIdx,
 				spaceIdx: ${spacesVO.getIdx()}
 			},
 			success: function(result) {
@@ -248,7 +267,7 @@
 				type: "post",
 				url: "likespace.do",
 				data: {
-					mIdx: ${login.getmIdx()},
+					mIdx: mIdx,
 					spaceIdx: ${spacesVO.getIdx()}
 				},
 				success: function(result) {
@@ -270,7 +289,7 @@
 				type: "post",
 				url: "unlikespace.do",
 				data: {
-					mIdx: ${login.getmIdx()},
+					mIdx: mIdx,
 					spaceIdx: ${spacesVO.getIdx()}
 				},
 				success: function(result) {
@@ -351,7 +370,7 @@
     // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 	}
 	
-	function spaceDelete() {
+	function deleteSpace() {
 		if (confirm('정말 이 공간을 삭제하시겠습니까?')) {
 			location.href='delete.do?idx=${spacesVO.getIdx()}';
 		}
@@ -401,12 +420,30 @@
 	<div id="wrapper">
 		<c:if test="${spacesVO.getStatus() == 0}">
 			<div class="inner-box space-status space-status-waiting">
-				등록 대기중인 공간입니다.
+				<span class="space-status-content">등록 대기중인 공간입니다.</span>
+				
+				<c:if test="${login.getAuth() == 3}">
+				<div class="space-accept-buttons">
+					<button class="normal-button" onclick="location.href='refuseSpace.do?idx=${spacesVO.getIdx()}'">등록 거부</button>
+					<button class="normal-button accent-button" onclick="location.href='acceptSpace.do?idx=${spacesVO.getIdx()}'">등록 승인</button>
+				</div>
+				</c:if>
+				
 			</div>
 		</c:if>
 		<c:if test="${spacesVO.getStatus() == 2}">
 			<div class="inner-box space-status space-status-refused">
-				등록 거부된 공간입니다.
+				<div>
+					<span class="space-status-content" style="color: white;">등록 거부된 공간입니다.<br></span>
+					<span style="color: white; font-size: 17px;">수정 후 등록 재요청이 가능합니다.</span>
+				</div>
+				
+				<c:if test="${spacesVO.getHostIdx() == hlogin.getmIdx()}">
+				<div class="space-accept-buttons">
+					<button class="normal-button" style="width: 120px;" onclick="location.href='requestaccept.do?idx=${spacesVO.getIdx()}'">등록 재요청</button>
+				</div>
+				</c:if>
+				
 			</div>
 		</c:if>
 		<c:if test="${spacesVO.getStatus() == 3}">
@@ -512,8 +549,8 @@
 				
 			<c:if test="${spacesVO.getHostIdx() == hlogin.getmIdx()}">
 				<div class="outter-buttons">
-					<button type="button" class="normal-button" onclick="spaceDelete()">삭제</button>
-					<button class="normal-button accent-button" style="margin-left: 20px;">수정</button>
+					<button type="button" class="normal-button" onclick="deleteSpace()">삭제</button>
+					<button class="normal-button accent-button" style="margin-left: 20px;" onclick="location.href='update.do?idx=${spacesVO.getIdx()}'">수정</button>
 				</div>
 			</c:if>
 		

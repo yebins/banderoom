@@ -52,17 +52,58 @@
 		)
 	</insert>
 	
+	<update id="update" parameterType="spacesVO">
+		update spaces set
+		
+			<if test="thumb != null and thumb != ''">
+				thumb = #{thumb},
+			</if>
+			<if test="thumb == null or thumb == ''">
+				thumb = '',
+			</if>
+			type = #{type},
+			name = #{name},
+			address = #{address},
+			<if test="addressDetail != null and addressDetail != ''">
+				addressdetail = #{addressDetail},
+			</if>
+			<if test="addressDetail == null or addressDetail == ''">
+				addressdetail = '',
+			</if>
+			addr1 = #{addr1},
+			<if test="addr2 != null and addr2 != ''">
+				addr2 = #{addr2},
+			</if>
+			<if test="addr2 == null or addr2 == ''">
+				addr2 = '',
+			</if>
+			info = #{info},
+			facility = #{facility},
+			caution = #{caution},
+			capacity = #{capacity},
+			cost = #{cost}
+		
+		where idx = #{idx}
+	</update>
+	
 	<insert id="insertSpacePictures" parameterType="spacePicturesVO">
 		insert into space_pictures (
 			pictureidx,
 			spaceidx,
-			src
+			src,
+			thumbsrc
 		) values (
 			SPACE_PICTURES_PICTUREIDX_SEQ.nextval,
 			#{spaceIdx},
-			#{src}
+			#{src},
+			#{thumbSrc}
 		)
 	</insert>
+	
+	<delete id="deleteSpacePictrues" parameterType="spacesVO">
+		delete from space_pictures
+		where spaceidx = #{idx}
+	</delete>
 	
 	<select id="getLocations" resultType="locationsVO">
 		select * from locations order by addr1, addr2
@@ -116,7 +157,8 @@
 	<select id="spacePictureList" resultType="spacePicturesVO" parameterType="spacesVO">
 		select pictureidx,
 					 spaceidx,
-					 src
+					 src,
+					 thumbsrc
 		from space_pictures
 		where spaceidx = #{idx}
 	</select>
@@ -150,4 +192,22 @@
 		delete from liked_spaces
 		where spaceidx = #{spaceIdx} and midx = #{mIdx}
 	</delete>
+	
+	<update id="acceptSpace" parameterType="spacesVO">
+		update spaces
+		set status = 1
+		where idx = #{idx}
+	</update>
+	
+	<update id="refuseSpace" parameterType="spacesVO">
+		update spaces
+		set status = 2
+		where idx = #{idx}
+	</update>
+	
+	<update id="requestAccept" parameterType="spacesVO">
+		update spaces
+		set status = 0
+		where idx = #{idx}
+	</update>
 </mapper>
