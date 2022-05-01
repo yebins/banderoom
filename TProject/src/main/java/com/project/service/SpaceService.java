@@ -10,4 +10,8 @@ public interface SpaceService {
 	List<SpacesVO> getSpaceList(int hostIdx);
 	SpacesVO details(SpacesVO vo);
 	List<SpacePicturesVO> spacePictureList(SpacesVO vo);
+	int delete(SpacesVO vo);
+	int getLikedStatus(LikedSpacesVO vo);
+	int likeSpace(LikedSpacesVO vo);
+	int unlikeSpace(LikedSpacesVO vo);
 }

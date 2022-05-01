@@ -149,4 +149,77 @@ public class SpaceController {
 		return "space/details";
 	}
 
+	@RequestMapping(value = "/delete.do")
+	public String delete(Model model, HttpServletRequest request, SpacesVO vo) {
+		
+		if (request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		} else {
+			
+			vo = spaceService.details(vo);
+			
+			if (((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx() == vo.getHostIdx()) {
+				
+				spaceService.delete(vo);
+				
+				return "redirect:/space/myspace.do";
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
+		}
+	}
+
+	@RequestMapping(value = "/update.do")
+	public String update(Model model, HttpServletRequest request, SpacesVO vo) {
+
+		if (request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		} else {
+			
+			vo = spaceService.details(vo);
+			
+			if (((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx() == vo.getHostIdx()) {
+				
+				return "redirect:/space/details.do?idx=" + vo.getIdx();
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
+		}
+	}
+
+	@RequestMapping(value = "/getlikedstatus.do")
+	@ResponseBody
+	public int getLikedStatus(LikedSpacesVO vo) {
+		return spaceService.getLikedStatus(vo);
+	}
+
+	@RequestMapping(value = "/likespace.do")
+	@ResponseBody
+	public int likeSpace(LikedSpacesVO vo) {
+		System.out.println(vo.getmIdx() + " / " + vo.getSpaceIdx());
+		return spaceService.likeSpace(vo);
+	}
+
+	@RequestMapping(value = "/unlikespace.do")
+	@ResponseBody
+	public int unlikeSpace(LikedSpacesVO vo) {
+		return spaceService.unlikeSpace(vo);
+	}
+
 }

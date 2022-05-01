@@ -22,18 +22,66 @@
 		height: unset !important;
 		font-size: 24px;
 		font-weight: bold;
-		margin: 40px 0px;
+		margin-top: 40px;
+	}
+	
+	.space-status-refused {
+		background-color: #FB6544 !important;
+		color: white;
+	}
+	
+	.space-status-deleted {
+		background-color: #FD7F7F !important;
 	}
 	
 	.pictures {
 		overflow: hidden;
 		padding: 0px !important;
 		height: unset !important;
-		margin-bottom: 40px;
+		margin-top: 40px;
+	}
+	
+	.carousel-inner {
+		height: 500px;
+		display: flex;
+		align-items: center;
 	}
 	
 	img.d-block:hover {
 		cursor: pointer;
+	}
+	
+	
+	#imgBackOveray {
+		width: 100%; 
+		height: 100vh; 
+		display: flex; 
+		visibility: hidden;
+		justify-content: center; 
+		align-items: center; 
+		background-color: rgba(0,0,0,0.7); 
+		position: fixed; 
+		top: 0px; 
+		left: 0px; 
+		z-index: 99999;
+	}
+	
+	#imgBackground {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+	
+	#img {
+		width: 80%;
+		height: 80vh;
+		z-index: 999999;
+		border-radius: 15px;
+		overflow: hidden;
+	}
+	
+	.title {
+		margin-top: 40px;
 	}
 	
 	.outter-buttons {
@@ -47,6 +95,32 @@
 		font-size: 30px;
 		font-weight: bold;
 		margin-bottom: 20px;
+		
+		display: flex;
+		align-items: center;
+	}
+	
+	.like-space {
+		margin-left: 20px;
+		width: 40px;
+		height: 40px;
+		background: white;
+		border-radius: 25px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.like-space:hover {
+		cursor: pointer;
+	}
+	.like-space:active {
+		filter: brightness(90%);
+	}
+	
+	.like-space img {
+		width: 20px;
 	}
 	
 	.address {
@@ -88,12 +162,20 @@
 		overflow: hidden;
 	}
 	
+	.map-popup:hover {
+		cursor: pointer;
+	}
+	
 	.space-content {
 		width: 100%;
 	}
 	
 	.space-info {
 		padding: 40px !important;
+	}
+	
+	.space-info li {
+		margin-bottom: 16px;
 	}
 	
 	.colleft {
@@ -105,6 +187,9 @@
 	}
 	
 	@media screen and (max-width: 576px) {
+		.carousel-inner {
+			height: 50vh;
+		}
 		.space-info {
 			padding: 15px !important;
 		}
@@ -123,12 +208,86 @@
 		margin-top: 40px;
 	}
 	
-	
 </style>
 
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 	
 	<script>
+	
+	var liked;
+	
+	$(function() {
+		
+		getLikedStatus();
+		
+	})
+	
+	function getLikedStatus() {
+		$.ajax({
+			type: "post",
+			url: "getlikedstatus.do",
+			data: {
+				mIdx: ${login.getmIdx()},
+				spaceIdx: ${spacesVO.getIdx()}
+			},
+			success: function(result) {
+				if (result == 0) {					// 찜하지 않았음
+					$(".like-space img").attr("src", "/images/heart-empty.png");
+					liked = 0;
+				} else if (result == 1) {		// 찜했음
+					$(".like-space img").attr("src", "/images/heart-filled.png");
+					liked = 1;
+				}
+			}
+		});
+	}
+	
+	function likeSpace() {
+		if (liked == 0) {					// 찜하지 않았음
+			$.ajax({
+				type: "post",
+				url: "likespace.do",
+				data: {
+					mIdx: ${login.getmIdx()},
+					spaceIdx: ${spacesVO.getIdx()}
+				},
+				success: function(result) {
+					if (result == -1) {
+						console.log("-1: 이미 찜했음");
+					} else if (result == 0) {
+						console.log("0: 오류");
+					} else if (result == 1) {
+						console.log("1: 찜하기 완료");
+					}
+					
+					getLikedStatus();
+				}
+				
+			});
+			
+		} else if (liked == 1) {	// 찜했음
+			$.ajax({
+				type: "post",
+				url: "unlikespace.do",
+				data: {
+					mIdx: ${login.getmIdx()},
+					spaceIdx: ${spacesVO.getIdx()}
+				},
+				success: function(result) {
+					if (result == -1) {
+						console.log("-1: 찜하지 않음");
+					} else if (result == 0) {
+						console.log("0: 오류");
+					} else if (result == 1) {
+						console.log("1: 찜하기 해제 완료");
+					}
+					
+					getLikedStatus();
+				}
+			});
+		}
+		
+	}
 	
 	var mapContainer;
 	
@@ -174,7 +333,7 @@
 		
 		        // 인포윈도우로 장소에 대한 설명을 표시합니다
 		        var infowindow = new kakao.maps.InfoWindow({
-		            content: '<div style="width:150px;text-align:center;padding:6px 0;">${spacesVO.getName()}</div>'
+		            content: '<div class="map-popup" style="width:150px;text-align:center;padding:6px 0;" onclick="window.open(\'https://map.kakao.com/link/search/${spacesVO.getAddress()}\')">${spacesVO.getName()}</div>'
 		        });
 		        infowindow.open(map, marker);
 		
@@ -191,6 +350,47 @@
 		$("#mapBackOveray").css("visibility", "visible");
     // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 	}
+	
+	function spaceDelete() {
+		if (confirm('정말 이 공간을 삭제하시겠습니까?')) {
+			location.href='delete.do?idx=${spacesVO.getIdx()}';
+		}
+	}
+	
+	function drawImage(obj) {
+
+		var div = $("#img"); // 이미지를 감싸는 div
+		var img = $("<img>"); // 이미지
+		
+	  $(div).css("width", "80%");
+	  $(div).css("height", "80vh");
+	    
+		$("#img").children().remove();
+		$("#imgBackOveray").css("visibility", "visible");
+		
+		$(div).append(img);
+		
+		$(img).attr("src", $(obj).attr("src"));
+		
+		var divAspect = $(div).height() / $(div).width(); // div의 가로세로비는 알고 있는 값이다
+		var imgAspect = $(img).height() / $(img).width();
+		
+		console.log($(img).height() + ", " + $(img).width())
+		console.log(divAspect + ", " + imgAspect);
+	
+		if (imgAspect >= divAspect) {
+		    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
+		    $(img).css("width", "auto");
+		    $(img).css("height", "100%");
+		    $(div).css("width", $(img).width() + "px");
+		} else {
+		    // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
+		    $(img).css("width", "100%");
+		    $(img).css("height", "auto");
+			  $(div).css("height", $(img).height() + "px");
+		}
+	}
+	
 	</script>
 	
 </head>
@@ -200,20 +400,23 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<c:if test="${spacesVO.getStatus() == 0}">
-			<div class="inner-box space-status">
+			<div class="inner-box space-status space-status-waiting">
 				등록 대기중인 공간입니다.
 			</div>
 		</c:if>
 		<c:if test="${spacesVO.getStatus() == 2}">
-			<div class="inner-box space-status">
+			<div class="inner-box space-status space-status-refused">
 				등록 거부된 공간입니다.
 			</div>
 		</c:if>
 		<c:if test="${spacesVO.getStatus() == 3}">
-			<div class="inner-box space-status">
+			<div class="inner-box space-status space-status-deleted">
 				삭제된 공간입니다.
 			</div>
 		</c:if>
+		
+		<c:if test="${spacesVO.getStatus() != 3}"> <!-- 삭제된 공간은 데이터를 출력하지 않음 -->
+		
 		<div id="page-content">
 		<c:if test="${spacePicturesVOs.size() != 0}">
 			<div class="inner-box pictures">
@@ -229,12 +432,12 @@
 				  	<c:forEach var="i" begin="0" end="${spacePicturesVOs.size() - 1}" varStatus="status">
 				  		<c:if test="${status.first}">
 						    <div class="carousel-item active">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="window.open('${spacePicturesVOs[i].getSrc()}')">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage(this)">
 						    </div>
 				  		</c:if>
 				  		<c:if test="${!status.first}">
 				  			<div class="carousel-item">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="window.open('${spacePicturesVOs[i].getSrc()}')">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage(this)">
 						    </div>
 				  		</c:if>
 				    </c:forEach>
@@ -256,7 +459,12 @@
 					${spacesVO.getType()}
 				</div>
 				<div class="space-name">
-					${spacesVO.getName()}
+					<span>${spacesVO.getName()}</span>
+					<c:if test="${login != null}">
+					<div class="like-space" onclick="likeSpace()">
+						<img src="/images/heart-empty.png">
+					</div>
+					</c:if>
 				</div>
 				<div class="address">
 					${spacesVO.getAddress()} ${spacesVO.getAddressDetail()}
@@ -291,6 +499,7 @@
 						<div class="inner-box space-rsv">
 							<div class="inner-box-content">
 								여기는 예약 정보가 들어갈 공간입니다.
+								<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 							</div>
 						</div>
 					</div>
@@ -303,10 +512,12 @@
 				
 			<c:if test="${spacesVO.getHostIdx() == hlogin.getmIdx()}">
 				<div class="outter-buttons">
-					<button type="button" class="normal-button" onclick="">삭제</button>
+					<button type="button" class="normal-button" onclick="spaceDelete()">삭제</button>
 					<button class="normal-button accent-button" style="margin-left: 20px;">수정</button>
 				</div>
 			</c:if>
+		
+		</c:if>
 		</div>
 		
 		<!-- 여기까지 틀이고 밑에는 요소 공통사항
@@ -333,6 +544,10 @@
 		</div>
 		<!-- 여기까지 -->
 		
+	<div id="imgBackOveray">
+		<div id="imgBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>
+		<div id="img"></div>
+	</div>
 	
 	<div id="mapBackOveray">
 		<div id="mapBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>

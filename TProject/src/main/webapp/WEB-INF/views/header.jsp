@@ -71,6 +71,7 @@ header {
 }
 
 #sm-profile {
+	min-height: 150px;
 	height: 150px;
 	display: flex;
 	flex-direction: column;
@@ -111,7 +112,7 @@ header {
 	height: 100px;
 	display: flex;
 	justify-content: center;
-	border: 1px solid lightgray;
+	border-right: 3px solid lightgray;
 	border-left: none;
 	align-items: center;
 	background-color: #fb6544;
@@ -207,6 +208,10 @@ header {
 
 #sidemenu .sm-list-area {
 	overflow: auto;
+}
+
+#sidemenu .sm-list-area::-webkit-scrollbar {
+	display: none;
 }
 </style>
 
@@ -310,6 +315,26 @@ header {
 		</div>
 		</c:if>
 			<div class="sm-list-area">
+			
+		<c:if test="${login.getAuth() == 3}">
+			<div class="accordion-item">
+		<h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c0" aria-expanded="true" aria-controls="collapseOne">
+        관리자 메뉴
+      </button>
+    </h2>
+    <div id="c0" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+       	<div class="sm-innerlist" onclick="location.href='/space/myspace.do'">
+       	공간 관리
+       	</div>
+       	<div class="sm-innerlist" onclick="">
+       	신고회원 관리
+       	</div>
+      </div>
+    </div>
+    </div>
+		</c:if>
 			
 			<div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">

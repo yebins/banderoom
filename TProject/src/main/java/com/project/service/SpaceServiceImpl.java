@@ -39,5 +39,33 @@ public class SpaceServiceImpl implements SpaceService {
 		return dao.spacePictureList(vo);
 	}
 
+	@Override
+	public int delete(SpacesVO vo) {
+		return dao.delete(vo);
+	}
+
+	@Override
+	public int getLikedStatus(LikedSpacesVO vo) {
+		return dao.getLikedStatus(vo);
+	}
+
+	@Override
+	public int likeSpace(LikedSpacesVO vo) {
+		if (dao.getLikedStatus(vo) == 1) {
+			return -1; // 이미 찜했음
+		} else {
+			return dao.likeSpace(vo);
+		}
+	}
+
+	@Override
+	public int unlikeSpace(LikedSpacesVO vo) {
+		if (dao.getLikedStatus(vo) == 0) {
+			return -1; // 찜하지 않았음
+		} else {
+			return dao.unlikeSpace(vo);
+		}
+	}
+
 
 }

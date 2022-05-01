@@ -50,4 +50,24 @@ public class SpaceDAO {
 	public List<SpacePicturesVO> spacePictureList(SpacesVO vo) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.spacePictureList", vo);
 	}
+	
+	public int delete(SpacesVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.delete", vo);
+	}
+	
+	public List<LikedSpacesVO> likedSpacesList(SpacesVO vo) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.likedSpacesList", vo);
+	}
+	
+	public int getLikedStatus(LikedSpacesVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.getLikedStatus", vo);
+	}
+	
+	public int likeSpace(LikedSpacesVO vo) {
+		return sqlSession.insert("com.project.mapper.spaceMapper.likeSpace", vo);
+	}
+	
+	public int unlikeSpace(LikedSpacesVO vo) {
+		return sqlSession.delete("com.project.mapper.spaceMapper.unlikeSpace", vo);
+	}
 }

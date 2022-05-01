@@ -120,4 +120,34 @@
 		from space_pictures
 		where spaceidx = #{idx}
 	</select>
+	
+	<update id="delete" parameterType="spacesVO">
+		update spaces set status = 3 where idx = #{idx}
+	</update>
+	
+	<select id="likedSpacesList" parameterType="spacesVO" resultType="likedSpacesVO">
+		select spaceidx, midx
+		from liked_spaces
+		where spaceidx = #{idx}
+	</select>
+	
+	<select id="getLikedStatus" parameterType="likedSpacesVO" resultType="int">
+		select count(*) from liked_spaces
+		where spaceidx = #{spaceIdx} and midx = #{mIdx}
+	</select>
+	
+	<insert id="likeSpace" parameterType="likedSpacesVO">
+		insert into liked_spaces (
+			spaceidx,
+			midx
+		) values (
+			#{spaceIdx},
+			#{mIdx}
+		)
+	</insert>
+	
+	<delete id="unlikeSpace" parameterType="likedSpacesVO">
+		delete from liked_spaces
+		where spaceidx = #{spaceIdx} and midx = #{mIdx}
+	</delete>
 </mapper>
