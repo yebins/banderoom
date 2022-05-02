@@ -46,4 +46,14 @@ public class BoardDAO {
 		sqlSession.update("com.project.mapper.boardMapper.readCount", vo);
 	}
 	
+	public int serlistModify(ArticlesVO vo) {
+		
+		return sqlSession.update("com.project.mapper.boardMapper.serlistModify", vo);
+	}
+	
+	public int serlistDelete(ArticlesVO vo) {
+	
+		return sqlSession.update("com.project.mapper.boardMapper.serlistDelete", vo);
+	}
+	
 }

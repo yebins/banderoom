@@ -56,7 +56,7 @@
 	</select>
 	
 	<update id="infoModify" parameterType="serviceInfoVO">
-		update service_info set content=#{content} where idx=#{idx}
+		update service_info set content = #{content} where idx=#{idx}
 	</update> 
 	
 	<select id="selectArticles" parameterType="ArticlesVO" resultType="ArticlesVO">
@@ -67,5 +67,15 @@
 	<update id="readCount" parameterType="ArticlesVO">
 		update articles set readcount= readcount+1 where aidx=#{aIdx} and bidx=#{bIdx}
 	</update>
+	
+	<update id="serlistModify" parameterType="articlesVO">
+		update articles	set title=#{title},content=#{content}
+		where aidx=#{aIdx}
+		and bidx=#{bIdx}
+	</update>
+	
+	<delete id="serlistDelete" parameterType="articlesVO">
+		delete from articles where aidx=#{aIdx} and bidx=#{bIdx}
+	</delete>
 	
 </mapper>

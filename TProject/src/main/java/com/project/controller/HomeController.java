@@ -1,8 +1,13 @@
 package com.project.controller;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,7 +18,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.BoardService;
@@ -151,16 +159,105 @@ public class HomeController {
 		
 		return "alert";
 	}
+	//serlist 수정버튼 >> 글 정보 읽어오기
+	@RequestMapping(value="/serlistModify.do" ,method=RequestMethod.GET)
+	public String serlistModify(Model model,ArticlesVO vo,HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		if(session.getAttribute("login") != null) {
+			GeneralMembersVO login=(GeneralMembersVO)(session.getAttribute("login"));
+			
+			if(login.getAuth() == 3) {
+				
+				ArticlesVO vo1=boardService.selectArticles(vo);
+				model.addAttribute("vo",vo1);
+				
+				return "serlistModify";
+			} else {
+				
+				request.setAttribute("msg", "권한도 없는놈이 어딜 감히");
+				request.setAttribute("url", "/serlist.do");
+				
+				return "alert";
+			}
+		}
+		System.out.println(vo.getaIdx()+","+vo.getbIdx());
+		
+		request.setAttribute("msg", "로그인부터하려무나");
+		request.setAttribute("url", "/member/glogin.do");
+		
+		return "alert";
+	}
+	//serviceInfo 수정한 데이터 처리
+	@RequestMapping(value="/serlistModify.do", method=RequestMethod.POST)
+	public String serlistModify(ArticlesVO vo,HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		if(session.getAttribute("login") != null) {
+			GeneralMembersVO login=(GeneralMembersVO)(session.getAttribute("login"));
+			
+			if(login.getAuth() == 3) {
+				
+				int result=boardService.serlistModify(vo);
+				
+				if(result > 0 ) {
+					request.setAttribute("msg", "수정 성공");
+					request.setAttribute("url", "/serlist.do/bidx="+vo.getbIdx());					
+					return "alert";
+				} else {
+					
+					request.setAttribute("msg", "수정 실패");
+					request.setAttribute("url", "/serlist.do"+vo.getbIdx());	
+					return "alert";
+				}
+						
+			} else {
+				
+				request.setAttribute("msg", "권한도 없는놈이 어딜 감히");
+				request.setAttribute("url", "/serlist.do"+vo.getbIdx());
+				
+				return "alert";
+			}
+		}
+		
+		request.setAttribute("msg", "로그인부터하려무나");
+		request.setAttribute("url", "/member/glogin.do");
+		
+		return "alert";
+	}
 	
 	@RequestMapping(value="/serlist.do",method=RequestMethod.GET)
 	public String serlist(Model model,Integer bidx,String searchtitle) {
 		System.out.println(bidx);//bidx값 확인
 		System.out.println(searchtitle);//검색어 확인
+		if(bidx == null) {
+			bidx=1;
+		}
+		
 		List<ArticlesVO> list=boardService.list(bidx,searchtitle);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
 		
 		return "serlist";
+	}
+	
+	@RequestMapping(value="/serlistDelete.do")
+	@ResponseBody
+	public int serlistDelete(ArticlesVO vo,HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		int result=-2;
+		
+		if(session.getAttribute("login") != null) {
+			GeneralMembersVO login=(GeneralMembersVO)(session.getAttribute("login"));
+			
+			if(login.getAuth() == 3) {
+				
+				return boardService.serlistDelete(vo);
+			} else {
+				
+				return -1;
+			}
+		} 
+		
+		return -2;
 	}
 	
 	@RequestMapping(value="/serinfoupdate.do", method=RequestMethod.GET)
