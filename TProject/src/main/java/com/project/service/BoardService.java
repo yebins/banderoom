@@ -9,7 +9,7 @@ import com.project.vo.ServiceInfoVO;
 
 public interface BoardService {
 	
-	List<ArticlesVO> list(Integer bidx,String searchtitle);
+	List<ArticlesVO> list(int bIdx,String searchtitle);
 	int insertArticlesVO(ArticlesVO vo);
 	ServiceInfoVO selectOneServiceInfo(int idx);
 	int updateServiceInfo(ServiceInfoVO vo);
@@ -17,4 +17,5 @@ public interface BoardService {
 	void readCount(ArticlesVO vo);
 	int serlistModify(ArticlesVO vo);
 	int serlistDelete(ArticlesVO vo);
+	int boardUpdate(ArticlesVO vo);
 }

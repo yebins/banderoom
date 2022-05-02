@@ -78,18 +78,27 @@
 			</div>
 			<div class="details-button">
 			<form action="update.do" method="get">
+				<input type="hidden" name="aIdx" value="${param.aIdx}">
+				<input type="hidden" name="bIdx" value="${param.bIdx}">
 				<c:if test="${login.mIdx == vo.mIdx}">
 					<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
+				</c:if>	
+			</form>
+			<form action="delete.do">
+				<input type="hidden" name="aIdx" value="${param.aIdx}">
+				<input type="hidden" name="bIdx" value="${param.bIdx}">
+				<c:if test="${login.mIdx == vo.mIdx}">
 					<button class="normal-button" id="delete" style="margin-left: 15px;">삭제</button>
 				</c:if>	
 			</form>
 			</div>
 		</div>
 		<div class="board-recommand">
-			<input class="normal-button" value="프사" style="width:50px;" readonly><input type="text" class="normal-button" style="width:500px;" placeholder="댓글을 입력하세요.">
+			<input class="normal-button" value="프사" style="width:50px;" readonly>
+			<input type="text" class="normal-button" style="width:500px;" placeholder="댓글을 입력하세요.">
 			<button class="normal-button accent-button" id="update">등록</button>
 		</div>
-		
 	</div>
+	<c:import url="/footer.do" />
 </body>
 </html>

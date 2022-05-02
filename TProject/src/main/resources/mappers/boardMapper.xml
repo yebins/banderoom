@@ -5,7 +5,7 @@
 	
 	<select id="list" parameterType="map" resultType="articlesVO">
 		select * from articles
-		where bidx=#{bidx}
+		where bidx=#{bIdx}
 		<if test="searchtitle != ''">
 		and title like '%'||#{searchtitle}||'%'
 		</if>
@@ -77,5 +77,12 @@
 	<delete id="serlistDelete" parameterType="articlesVO">
 		delete from articles where aidx=#{aIdx} and bidx=#{bIdx}
 	</delete>
+	
+	<update id="boardUpdate" parameterType="ArticlesVO">
+		update articles	set title=#{title},content=#{content}
+		where aidx=#{aIdx}
+		and bidx=#{bIdx}
+	</update>
+	
 	
 </mapper>

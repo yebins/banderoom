@@ -19,11 +19,11 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO dao;
 	
 	@Override
-	public List<ArticlesVO> list(Integer bidx,String searchtitle) {
+	public List<ArticlesVO> list(int bIdx,String searchtitle) {
 		if(searchtitle == null) searchtitle="";
 		Map<String,Object> map=new HashMap<String, Object>();
 		map.put("searchtitle", searchtitle);
-		map.put("bidx", bidx);
+		map.put("bIdx", bIdx);
 		
 		return dao.list(map);
 	}
@@ -69,6 +69,12 @@ public class BoardServiceImpl implements BoardService {
 	public int serlistDelete(ArticlesVO vo) {
 		
 		return dao.serlistDelete(vo);
+	}
+
+	@Override
+	public int boardUpdate(ArticlesVO vo) {
+		
+		return dao.boardUpdate(vo);
 	}
 
 }
