@@ -66,9 +66,9 @@
 
 	function checkEmailKey() {
 		var email = $('input[name=email]').val();
-		var key = $('#email-key').val();
+		var regkey = $('#email-key').val();
 
-		if (key == null || key == '') {
+		if (regkey == null || regkey == '') {
 			alert('값을 입력해 주세요.');
 			return;
 		}
@@ -76,7 +76,7 @@
 		$.ajax({
 			type : "post",
 			url : "checkEmail.do",
-			data : "email=" + email + "&key=" + key,
+			data : "email=" + email + "&regkey=" + regkey,
 			success : function(data) {
 				if (data == 0) {
 					emailChecked = true;
@@ -246,9 +246,9 @@
 
 	function checkTelKey() {
 		var tel = $('input[name=tel]').val();
-		var key = $('#tel-key').val();
+		var regkey = $('#tel-key').val();
 
-		if (key == null || key == '') {
+		if (regkey == null || regkey == '') {
 			alert('값을 입력해 주세요.');
 			return;
 		}
@@ -256,7 +256,7 @@
 		$.ajax({
 			type : "post",
 			url : "checkTel.do",
-			data : "tel=" + tel + "&key=" + key,
+			data : "tel=" + tel + "&regkey=" + regkey,
 			success : function(data) {
 				if (data == 0) {
 					telChecked = true;
