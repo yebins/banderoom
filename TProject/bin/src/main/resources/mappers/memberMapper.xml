@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.mapper.memberMapper">
+	<select id="isEmailKeyExist" resultType="int" parameterType="emailRegVO">
+		select count(*) from emailreg
+		where email = #{email}
+	</select>
+	
+	<insert id="setEmailKey" parameterType="emailRegVO">
+		insert into emailreg (
+			email,
+			key,
+			deadline
+		) values (
+			#{email},
+			#{key},
+			(sysdate + 30/(24*60))
+		)
+	</insert>
+	
+	<update id="updateEmailKey" parameterType="emailRegVO">
+		update emailreg set
+			key = #{key},
+			deadline = (sysdate + 30/(24*60))
+			
+		where email = #{email}
+	</update>
+	
+	<select id="selectEmailReg" parameterType="emailRegVO" resultType="emailRegVO">
+		select email, key, deadline
+		from emailreg
+		where email = #{email}
+	</select>
+	
+	<select id="isEmailExist" resultType="int" parameterType="Map">
+		select count(email) from 
+		<if test="memberType == 'general'">
+			general_members 
+		</if>
+		<if test="memberType == 'host'">
+			host_members 
+		</if>
+		where email = #{email}
+	</select>
+	
+	<select id="isNicknameExist" resultType="int" parameterType="Map">
+		select count(nickname) from
+		<if test="memberType == 'general'">
+			general_members 
+		</if>
+		<if test="memberType == 'host'">
+			host_members 
+		</if>
+		where nickname = #{nickname}
+	</select>
+	
+	
+	<select id="isTelKeyExist" resultType="int" parameterType="telRegVO">
+		select count(*) from telreg
+		where tel = #{tel}
+	</select>
+	
+	<insert id="setTelKey" parameterType="telRegVO">
+		insert into telreg (
+			tel,
+			key,
+			deadline
+		) values (
+			#{tel},
+			#{key},
+			(sysdate + 5/(24*60))
+		)
+	</insert>
+	
+	<update id="updateTelKey" parameterType="telRegVO">
+		update telreg set
+			key = #{key},
+			deadline = (sysdate + 5/(24*60))
+			
+		where tel = #{tel}
+	</update>
+	
+	<select id="selectTelReg" parameterType="telRegVO" resultType="telRegVO">
+		select tel, key, deadline
+		from telreg
+		where tel = #{tel}
+	</select>
+	
+	<insert id="gjoin" parameterType="generalMembersVO">
+		insert into general_members (
+			midx,
+			email,
+			password,
+			name,
+			nickname,
+			address,
+			<if test="addressDetail != null">
+				addressdetail,
+			</if>
+			addr1,
+			<if test="addr2 != null">
+				addr2,
+			</if>
+			tel,
+			profilesrc,
+			gender,
+			iskakao
+		) values (
+			general_members_midx_seq.nextval,
+			#{email},
+			#{password},
+			#{name},
+			#{nickname},
+			#{address},
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			#{addr1},
+			<if test="addr2 != null">
+				#{addr2},
+			</if>
+			#{tel},
+			#{profileSrc},
+			#{gender},
+			#{isKakao}
+		)
+	</insert>
+	
+	<select id="kakaoLogin" parameterType="generalMembersVO" resultType="generalMembersVO">
+		select midx,
+					 email,
+					 password,
+					 name,
+					 nickname,
+					 address,
+					 addressDetail,
+					 addr1,
+					 addr2,
+					 tel,
+					 profileSrc,
+					 gender,
+					 point,
+					 auth,
+					 isKakao,
+					 joinDate
+		from general_members
+		where email = #{email}
+		and isKakao = 'Y'
+		and auth != 2
+	</select>
+	
+	<select id="gLogin" parameterType="generalMembersVO" resultType="generalMembersVO">
+		select midx,
+					 email,
+					 password,
+					 name,
+					 nickname,
+					 address,
+					 addressDetail,
+					 addr1,
+					 addr2,
+					 tel,
+					 profileSrc,
+					 gender,
+					 point,
+					 auth,
+					 isKakao,
+					 joinDate
+		from general_members
+		where email = #{email}
+		and password = #{password}
+		and isKakao = 'N'
+		and auth != 2
+	</select>
+	
+	<select id="isBrnExist" resultType="int" parameterType="String">
+		select count(brn) from host_members where brn = #{brn}
+	</select>
+	
+	
+	<insert id="hjoin" parameterType="hostMembersVO">
+		insert into host_members (
+			midx,
+			brn,
+			email,
+			password,
+			name,
+			nickname,
+			address,
+			<if test="addressDetail != null">
+				addressdetail,
+			</if>
+			addr1,
+			<if test="addr2 != null">
+				addr2,
+			</if>
+			tel,
+			profilesrc,
+			gender
+		) values (
+			general_members_midx_seq.nextval,
+			#{brn},
+			#{email},
+			#{password},
+			#{name},
+			#{nickname},
+			#{address},
+			<if test="addressDetail != null">
+				#{addressDetail},
+			</if>
+			#{addr1},
+			<if test="addr2 != null">
+				#{addr2},
+			</if>
+			#{tel},
+			#{profileSrc},
+			#{gender}
+		)
+	</insert>
+	
+	<select id="hLogin" parameterType="hostMembersVO" resultType="hostMembersVO">
+		select midx,
+					 brn,
+					 email,
+					 password,
+					 name,
+					 nickname,
+					 address,
+					 addressDetail,
+					 addr1,
+					 addr2,
+					 tel,
+					 profileSrc,
+					 gender,
+					 auth,
+					 joinDate
+		from host_members
+		where brn = #{brn}
+		and password = #{password}
+		and auth != 2
+	</select>
+	
+</mapper>

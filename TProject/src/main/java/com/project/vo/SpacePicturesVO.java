@@ -5,6 +5,7 @@ public class SpacePicturesVO {
 	private int pictureIdx;
 	private int spaceIdx;
 	private String src;
+	private String thumbSrc;
 	
 	public int getPictureIdx() {
 		return pictureIdx;
@@ -23,5 +24,11 @@ public class SpacePicturesVO {
 	}
 	public void setSrc(String src) {
 		this.src = src;
+	}
+	public String getThumbSrc() {
+		return thumbSrc;
+	}
+	public void setThumbSrc(String thumbSrc) {
+		this.thumbSrc = thumbSrc;
 	}
 }

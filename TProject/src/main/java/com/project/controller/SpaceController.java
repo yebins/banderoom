@@ -34,18 +34,56 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value= "/register.do", method = RequestMethod.POST)
-	public String register(SpacesVO vo, String[] spacePictureSrc, String[] thumbSrc) {
+	public String register(SpacesVO vo, String[] src, String[] thumbSrc) {
 
 		if (thumbSrc != null && thumbSrc.length != 0) {
 			vo.setThumb(thumbSrc[0]);
 		}
 		
-		int result = spaceService.spaceReg(vo, spacePictureSrc);
+		int result = spaceService.spaceReg(vo, src, thumbSrc);
 		
 		if (result > 0) {
 			return "redirect:/space/myspace.do";
 		} else {
 			return null;
+		}
+	}
+
+	@RequestMapping(value= "/update.do", method = RequestMethod.POST)
+	public String update(HttpServletRequest request, Model model, SpacesVO vo, String[] src, String[] thumbSrc) {
+
+
+		
+		if (request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		} else {
+			
+			if (((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx() == vo.getHostIdx()) {
+
+				if (thumbSrc != null && thumbSrc.length != 0) {
+					vo.setThumb(thumbSrc[0]);
+				}
+				
+				int result = spaceService.update(vo, src, thumbSrc);
+				
+				if (result > 0) {
+					return "redirect:/space/details.do?idx=" + vo.getIdx();
+				} else {
+					return null;
+				}
+				
+				
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
 		}
 	}
 	
@@ -147,6 +185,159 @@ public class SpaceController {
 		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
 		
 		return "space/details";
+	}
+
+	@RequestMapping(value = "/delete.do")
+	public String delete(Model model, HttpServletRequest request, SpacesVO vo) {
+		
+		if (request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		} else {
+			
+			vo = spaceService.details(vo);
+			
+			if (((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx() == vo.getHostIdx()) {
+				
+				spaceService.delete(vo);
+				
+				return "redirect:/space/myspace.do";
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
+		}
+	}
+
+	@RequestMapping(value = "/update.do", method = RequestMethod.GET)
+	public String update(Model model, HttpServletRequest request, SpacesVO vo) {
+
+		if (request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		} else {
+			
+			vo = spaceService.details(vo);
+			
+			if (((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx() == vo.getHostIdx()) {
+
+				model.addAttribute("spacesVO", spaceService.details(vo));
+				model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
+				
+				return "space/update";
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
+		}
+	}
+
+	@RequestMapping(value = "/getlikedstatus.do")
+	@ResponseBody
+	public int getLikedStatus(LikedSpacesVO vo) {
+		return spaceService.getLikedStatus(vo);
+	}
+
+	@RequestMapping(value = "/likespace.do")
+	@ResponseBody
+	public int likeSpace(LikedSpacesVO vo) {
+		return spaceService.likeSpace(vo);
+	}
+
+	@RequestMapping(value = "/unlikespace.do")
+	@ResponseBody
+	public int unlikeSpace(LikedSpacesVO vo) {
+		return spaceService.unlikeSpace(vo);
+	}
+	
+	@RequestMapping(value = "/acceptSpace.do")
+	public String acceptSpace(HttpServletRequest request, Model model, SpacesVO vo) {
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			
+			if (((GeneralMembersVO) request.getSession().getAttribute("login")).getAuth() == 3) {
+				
+				spaceService.acceptSpace(vo);
+				
+				return "redirect:/space/details.do?idx=" + vo.getIdx();
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
+		}
+	}
+
+	@RequestMapping(value = "/refuseSpace.do")
+	public String refuseSpace(HttpServletRequest request, Model model, SpacesVO vo) {
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			
+			if (((GeneralMembersVO) request.getSession().getAttribute("login")).getAuth() == 3) {
+				
+				spaceService.refuseSpace(vo);
+				
+				return "redirect:/space/details.do?idx=" + vo.getIdx();
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
+		}
+	}
+
+	@RequestMapping(value = "/requestaccept.do")
+	public String requestAccpet(Model model, HttpServletRequest request, SpacesVO vo) {
+		
+		if (request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		} else {
+			
+			vo = spaceService.details(vo);
+			
+			if (((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx() == vo.getHostIdx()) {
+				
+				spaceService.requestAccpet(vo);
+				
+				return  "redirect:/space/details.do?idx=" + vo.getIdx();
+			} else {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/space/details.do?idx=" + vo.getIdx());
+				
+				return "alert";
+			}
+		}
 	}
 
 }

@@ -26,15 +26,22 @@
     border-radius: 25px;
     padding: 0px 20px;
 		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border: none;
 	}
 	.form-select:focus {
 		outline: none;
 		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-		border: 1px solid #ced4da;
+		border: none;
 		}
 	.form-select:active {
 		filter: brightness(90%);
 		}
+	.reset-filter {
+    margin-left: 20px;
+    width: 160px;
+    height: 50px;
+    border-radius: 25px;
+	}
 		
 	.inner-box-content {
 		display: flex;
@@ -83,6 +90,13 @@
 	.space-rest-info {
 		display: flex;
 		justify-content: space-between;
+	}
+	
+	.status-accepted {
+		color: #14C681;
+	}
+	.status-refused {
+		color: #FB6544;
 	}
 		
 </style>
@@ -151,6 +165,7 @@
 		var addr1Filter = $("#addr1").val();
 		var addr2Filter = $("#addr2").val();
 		var typeFilter = $("#space-type").val();
+		var statusFilter = $("#space-status").val();
 
 		$(".spacebox").css("display", "flex");
 		
@@ -180,7 +195,25 @@
 				}
 			})
 		}
+
+		if (statusFilter != "") {
+			$("input.status-hidden").each(function() {
+				var status = $(this).val();
+				if (status != statusFilter) {
+					$(this).parent().css("display", "none");
+				}
+			})
+		}
 		
+	}
+	
+	function resetFilter() {
+		$("#addr1").val("");
+		$("#addr2").val("");
+		$("#space-type").val("");
+		$("#space-status").val("");
+		
+		listFilter();
 		
 	}
 	
@@ -208,6 +241,13 @@
 					<option>밴드연습실</option>
 					<option>댄스연습실</option>
 				</select>
+				<select id="space-status" class="form-select form-select-sm" onchange="listFilter()">
+					<option value="">등록 상태</option>
+					<option value="0">등록 대기</option>
+					<option value="1">등록 완료</option>
+					<option value="2">등록 거부됨</option>
+				</select>
+				<button class="normal-button reset-filter" onclick="resetFilter()">필터 초기화</button>
 			</div>
 			
 			<c:forEach var="vo" items="${spacesVOs}">
@@ -215,6 +255,7 @@
 					<input type="hidden" class="addr1-hidden" value="${vo.getAddr1()}">
 					<input type="hidden" class="addr2-hidden" value="${vo.getAddr2()}">
 					<input type="hidden" class="type-hidden" value="${vo.getType()}">
+					<input type="hidden" class="status-hidden" value="${vo.getStatus()}">
 					<div class="inner-box-content">
 						<div class="space-thumb">
 							<c:choose>
@@ -246,13 +287,13 @@
 								<div class="space-status">
 									<c:choose>
 										<c:when test="${vo.getStatus() == 0}">
-											등록 대기
+											<span class="status-waiting">등록 대기</span>
 										</c:when>
 										<c:when test="${vo.getStatus() == 1}">
-											등록 승인
+											<span class="status-accepted">등록 완료</span>
 										</c:when>
 										<c:when test="${vo.getStatus() == 2}">
-											등록 거부
+											<span class="status-refused">등록 거부됨</span>
 										</c:when>
 									</c:choose>
 								</div>
@@ -290,5 +331,6 @@
 		
 	</div>
 	
+	<c:import url="/footer.do" />
 </body>
 </html>
