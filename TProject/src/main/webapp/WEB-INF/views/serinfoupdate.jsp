@@ -40,7 +40,9 @@
 	.dropdown-toggle::after {
     display:none;
    }
-	
+   	div#page-title{
+   		font-size:2rem;
+   	}
 </style>
 </head>
 <body>

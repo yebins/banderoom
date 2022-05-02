@@ -15,5 +15,6 @@ public interface BoardService {
 	int updateServiceInfo(ServiceInfoVO vo);
 	ArticlesVO  selectArticles(ArticlesVO vo);
 	void readCount(ArticlesVO vo);
-	
+	int serlistModify(ArticlesVO vo);
+	int serlistDelete(ArticlesVO vo);
 }

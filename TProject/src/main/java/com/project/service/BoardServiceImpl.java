@@ -59,4 +59,16 @@ public class BoardServiceImpl implements BoardService {
 		dao.readcount(vo);
 	}
 
+	@Override
+	public int serlistModify(ArticlesVO vo) {
+		
+		return dao.serlistModify(vo);
+	}
+
+	@Override
+	public int serlistDelete(ArticlesVO vo) {
+		
+		return dao.serlistDelete(vo);
+	}
+
 }

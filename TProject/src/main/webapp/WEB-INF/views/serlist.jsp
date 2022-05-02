@@ -90,6 +90,15 @@
 		border-left:3px solid #fb6544;
 		border-right:3px solid #fb6544;
 	}
+	div#page-title{
+		font-size:2rem;
+	}
+	
+	h2 .accordion-header{
+		background-color:#f6f6f6;
+		border-radius:20px;
+		box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
+	}
 </style>
 <script>
 	function accordionClick(obj) {
@@ -169,8 +178,8 @@
 					      	<div>${notice.content}</div>
 						    <div class="accordion-body-buttons">
 						    	<c:if test="${login.auth == 3}">
-							      <button class="accent-button normal-button body-buttons">수정</button>
-							      <button class="accent-button normal-button body-buttons">삭제</button>
+							      <button class="accent-button normal-button body-buttons" onclick="location.href='serlistModify.do?aIdx=${notice.aIdx}&bIdx=${param.bidx}'">수정</button>
+							      <button class="accent-button normal-button body-buttons" onclick="remove('${notice.aIdx}','${notice.bIdx}')">삭제</button>
 							    </c:if>					    
 						    </div>
 					      </div>
@@ -196,6 +205,56 @@
     window.scrollTo({top:body-offset.top, behavior:'smooth'});
     // behavior:smooth 부드럽게이동
 } */
+		
+		let search=document.querySelector("input[type='search']");
+		console.log(search);
+		search.addEventListener("keyup",(e)=>{
+			console.log(e.key);
+			console.log(e.target.value);
+				let inputValue=e.target.value;
+			const items=document.querySelectorAll(".accordion-button-title");
+			console.log(items);			
+			items.forEach((el)=>{
+				let str=el.innerText;
+				console.log(str);
+				if(str.includes(inputValue)){
+					el.parentNode.parentNode.parentNode.style.display='block';
+				} else {
+					console.log(el.parentNode.parentNode.parentNode.style.display='none');
+				}
+			})
+		})	
+	
+		
+		function remove(aidx,bidx){
+			var data={
+					'aIdx':aidx,
+					'bIdx':bidx
+					}
+			if(confirm('리얼삭제')){
+				$.ajax({
+					url:"serlistDelete.do",
+					type:"post",
+					data:data,
+					success:function(result){
+						if(result>0) {
+							alert('삭제성공');
+							location.href='serlist.do?bidx='+bidx;
+						} else if(result = 0){
+							alert('삭제실패');						
+							location.href='serlist.do?bidx='+bidx;
+						} else if(result = -1){
+							alert('권한없음');
+							location.href='serlist.do?bidx='+bidx;
+						} else{
+							alert('로그인하세요');
+							location.href='/member/glogin.do?';
+						} 
+					}
+					
+				})
+			}
+		}
 </script>
 </body>
 </html>
