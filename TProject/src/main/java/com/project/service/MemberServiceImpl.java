@@ -213,4 +213,17 @@ public class MemberServiceImpl implements MemberService {
 	public HostMembersVO hLogin(HostMembersVO vo) {
 		return dao.hLogin(vo);
 	}
+
+	@Override
+	public GeneralMembersVO oneMemberInfo(GeneralMembersVO vo) {
+		
+		GeneralMembersVO vo1=(GeneralMembersVO)dao.oneMemberInfo(vo);
+		vo1.setPassword("");
+		vo1.setName("");
+		vo1.setTel("");
+		
+		return vo1;
+	}
+	
+	
 }

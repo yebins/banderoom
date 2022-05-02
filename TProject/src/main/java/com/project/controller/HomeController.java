@@ -200,7 +200,7 @@ public class HomeController {
 				
 				if(result > 0 ) {
 					request.setAttribute("msg", "수정 성공");
-					request.setAttribute("url", "/serlist.do/bidx="+vo.getbIdx());					
+					request.setAttribute("url", "/serlist.do/bIdx="+vo.getbIdx());					
 					return "alert";
 				} else {
 					
@@ -225,14 +225,14 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/serlist.do",method=RequestMethod.GET)
-	public String serlist(Model model,Integer bidx,String searchtitle) {
-		System.out.println(bidx);//bidx값 확인
+	public String serlist(Model model,Integer bIdx,String searchtitle) {
+		System.out.println(bIdx);//bIdx값 확인
 		System.out.println(searchtitle);//검색어 확인
-		if(bidx == null) {
-			bidx=1;
+		if(bIdx == null) {
+			bIdx=1;
 		}
 		
-		List<ArticlesVO> list=boardService.list(bidx,searchtitle);
+		List<ArticlesVO> list=boardService.list(bIdx,searchtitle);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
 		
@@ -290,7 +290,7 @@ public class HomeController {
 		boardService.insertArticlesVO(vo);
 		
 		
-		return "redirect:/serlist.do?bidx="+vo.getbIdx();
+		return "redirect:/serlist.do?bIdx="+vo.getbIdx();
 	}
 	
 
@@ -317,4 +317,6 @@ public class HomeController {
 		
 		return "/upload/" + newFileName;
 	}
+	
+	
 }

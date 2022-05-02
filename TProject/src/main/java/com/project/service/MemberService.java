@@ -15,4 +15,5 @@ public interface MemberService {
 	int checkBrn(String brn);
 	int hjoin(HostMembersVO vo);
 	HostMembersVO hLogin(HostMembersVO vo);
+	GeneralMembersVO oneMemberInfo(GeneralMembersVO vo);
 }

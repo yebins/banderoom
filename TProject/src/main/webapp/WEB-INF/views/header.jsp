@@ -134,7 +134,29 @@ header {
 	align-items: center;
 	margin-bottom: 20px;
 }
+
+
+.modal-body {
+	display: flex;
+	align-items: center;
+	margin-bottom: 20px;
+}
+.modal-dialog{
+	margin:0;
+}
+
 #sm-profile-picture-wrap {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+	overflow: hidden;
+	margin-right: 20px;
+}
+#sm-profile-picture-wrap-modal {
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -212,6 +234,11 @@ header {
 
 #sidemenu .sm-list-area::-webkit-scrollbar {
 	display: none;
+}
+
+.modal-footer {
+	display:flex;
+	justify-content:center;
 }
 </style>
 
@@ -344,10 +371,10 @@ header {
     </h2>
     <div id="c1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bidx=1&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=1&page=1'">
        	공지사항
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bidx=6&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=6&page=1'">
        	이벤트
        	</div>
       </div>
@@ -365,13 +392,13 @@ header {
     </h2>
     <div id="c2" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bidx=2&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bIdx=2&page=1'">
        	자유게시판
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bidx=4&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bIdx=4&page=1'">
        	홍보게시판
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bidx=3&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bIdx=3&page=1'">
        	중고거래
        	</div>
       </div>
@@ -388,7 +415,7 @@ header {
     </h2>
     <div id="c3" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bidx=5&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=5&page=1'">
        	자주 묻는 질문
        	</div>
        	<div class="sm-innerlist" onclick="location.href='/serinfo.do?idx=1'">
@@ -405,7 +432,64 @@ header {
   </div>
 			</div>
 	</div>
+	<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">미니프로필</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <div id="sm-profile-picture-wrap-modal">
+				<img src="" width="100%">
+		</div>
+		<div id="sm-profile-nickname-wrap-modal">
+			<div id="sm-profile-nickname-modal">
+					<a data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+			</div>
+		</div>
+      </div>
+      <div class="modal-footer">
+        <button class="normal-button accent-button" style="margin-left: 15px;">쪽지보내기</button>
+        <button class="normal-button accent-button" style="margin-left: 15px;">신고</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal Scripts -->
+<script>
+
+function profileModal(obj,obj2){
 	
+	console.log(obj2);
+	obj2.addEventListener("click",(e)=>{
+		locX=e.clientX;
+		locY=e.clientY;
+		console.log(e.clientX);
+	})
+	 
+	let locX=0;
+	let locY=0;
+	 
+	
+	$.ajax({
+		url:'/member/miniProfile.do',
+		type:'post',
+		data:{mIdx:obj},
+		success:function(vo){
+
+			console.log(vo);
+			console.log(vo.mIdx);
+			let profileSrc=document.querySelector("#sm-profile-picture-wrap-modal").children;
+			profileSrc[0].setAttribute("src",vo.profileSrc);
+			let profileNickname=document.querySelector("#sm-profile-nickname-modal").children;
+			profileNickname[0].innerText=vo.nickname;
+		}
+	})
+}
+<!-- modal scripts-->
+</script>
 <!-- Channel Plugin Scripts -->
 <script>
   (function() {

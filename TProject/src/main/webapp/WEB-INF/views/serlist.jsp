@@ -137,19 +137,19 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-		<c:if test="${param.bidx==1}">
-			<a href="/serlist.do?bidx=1">공지사항</a>
+		<c:if test="${param.bIdx==1}">
+			<a href="/serlist.do?bIdx=1">공지사항</a>
 		</c:if>
-		<c:if test="${param.bidx==5}">
-			<a href="/serlist.do?bidx=5">자주묻는질문</a>
+		<c:if test="${param.bIdx==5}">
+			<a href="/serlist.do?bIdx=5">자주묻는질문</a>
 		</c:if>
-		<c:if test="${param.bidx==6}">
-			<a href="/serlist.do?bidx=6">이벤트</a>
+		<c:if test="${param.bIdx==6}">
+			<a href="/serlist.do?bIdx=6">이벤트</a>
 		</c:if>
 		</div>
 		<div>
 			<form action="serlist.do" class="d-flex notice-page" method="get">
-				<input type="hidden" name="bidx" value="${param.bidx}">
+				<input type="hidden" name="bIdx" value="${param.bIdx}">
        	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
         			<button class="accent-button normal-button">검색</button>
      		 </form>
@@ -161,8 +161,7 @@
 				<c:forEach var="notice" items="${list}" varStatus="st">
 					
 					  <div class="accordion-item"
-					  <%-- <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
-					  <c:if test="${st.last}">style='border-bottom-left-radius:30px; border-bottom-right-radius:30px;'</c:if>					   --%>
+					 	<c:if test="${st.first}">style="border-radius:30px"</c:if>
 					  >
 					    <h2 class="accordion-header">
 					      <button class="accordion-button header-button collapsed" type="button" data-bs-toggle="collapse" 
@@ -178,7 +177,7 @@
 					      	<div>${notice.content}</div>
 						    <div class="accordion-body-buttons">
 						    	<c:if test="${login.auth == 3}">
-							      <button class="accent-button normal-button body-buttons" onclick="location.href='serlistModify.do?aIdx=${notice.aIdx}&bIdx=${param.bidx}'">수정</button>
+							      <button class="accent-button normal-button body-buttons" onclick="location.href='serlistModify.do?aIdx=${notice.aIdx}&bIdx=${param.bIdx}'">수정</button>
 							      <button class="accent-button normal-button body-buttons" onclick="remove('${notice.aIdx}','${notice.bIdx}')">삭제</button>
 							    </c:if>					    
 						    </div>
@@ -223,13 +222,14 @@
 					console.log(el.parentNode.parentNode.parentNode.style.display='none');
 				}
 			})
-		})	
-	
+		})
 		
-		function remove(aidx,bidx){
+		
+		
+		function remove(aIdx,bIdx){
 			var data={
-					'aIdx':aidx,
-					'bIdx':bidx
+					'aIdx':aIdx,
+					'bIdx':bIdx
 					}
 			if(confirm('리얼삭제')){
 				$.ajax({
@@ -239,13 +239,13 @@
 					success:function(result){
 						if(result>0) {
 							alert('삭제성공');
-							location.href='serlist.do?bidx='+bidx;
+							location.href='serlist.do?bIdx='+bIdx;
 						} else if(result = 0){
 							alert('삭제실패');						
-							location.href='serlist.do?bidx='+bidx;
+							location.href='serlist.do?bIdx='+bIdx;
 						} else if(result = -1){
 							alert('권한없음');
-							location.href='serlist.do?bidx='+bidx;
+							location.href='serlist.do?bIdx='+bIdx;
 						} else{
 							alert('로그인하세요');
 							location.href='/member/glogin.do?';
@@ -256,5 +256,6 @@
 			}
 		}
 </script>
+<c:import url="/footer.do" />
 </body>
 </html>
