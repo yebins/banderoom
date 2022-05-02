@@ -89,7 +89,6 @@
 	
 	<insert id="gjoin" parameterType="generalMembersVO">
 		insert into general_members (
-			midx,
 			email,
 			password,
 			name,
@@ -107,7 +106,6 @@
 			gender,
 			iskakao
 		) values (
-			general_members_midx_seq.nextval,
 			#{email},
 			#{password},
 			#{name},
@@ -181,7 +179,6 @@
 	
 	<insert id="hjoin" parameterType="hostMembersVO">
 		insert into host_members (
-			midx,
 			brn,
 			email,
 			password,
@@ -199,7 +196,6 @@
 			profilesrc,
 			gender
 		) values (
-			general_members_midx_seq.nextval,
 			#{brn},
 			#{email},
 			#{password},
