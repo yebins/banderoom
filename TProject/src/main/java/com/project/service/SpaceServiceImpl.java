@@ -87,4 +87,14 @@ public class SpaceServiceImpl implements SpaceService {
 		return dao.requestAccept(vo);
 	}
 
+	@Override
+	public List<SpacesVO> spaceList() {
+		return dao.spaceList();
+	}
+
+	@Override
+	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
+		return dao.spaceReviewList(vo);
+	}
+
 }

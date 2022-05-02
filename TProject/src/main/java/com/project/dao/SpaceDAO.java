@@ -105,4 +105,12 @@ public class SpaceDAO {
 	public int requestAccept(SpacesVO vo) {
 		return sqlSession.update("com.project.mapper.spaceMapper.requestAccept", vo);
 	}
+	
+	public List<SpacesVO> spaceList() {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceList");
+	}
+	
+	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceReviewList", vo);
+	}
 }

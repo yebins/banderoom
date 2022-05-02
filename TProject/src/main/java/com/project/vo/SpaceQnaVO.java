@@ -2,7 +2,7 @@ package com.project.vo;
 
 import java.util.Date;
 
-public class SpaceQnaQVO {
+public class SpaceQnaVO {
 	
 	private int qnaIdx;
 	private int spaceIdx;
@@ -11,6 +11,8 @@ public class SpaceQnaQVO {
 	private String content;
 	private String publicYN;
 	private Date regDate;
+	private String answer;
+	private Date answerDate;
 	
 	public int getQnaIdx() {
 		return qnaIdx;
@@ -53,5 +55,17 @@ public class SpaceQnaQVO {
 	}
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
+	}
+	public String getAnswer() {
+		return answer;
+	}
+	public void setAnswer(String answer) {
+		this.answer = answer;
+	}
+	public Date getAnswerDate() {
+		return answerDate;
+	}
+	public void setAnswerDate(Date answerDate) {
+		this.answerDate = answerDate;
 	}
 }

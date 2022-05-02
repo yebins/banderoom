@@ -210,4 +210,22 @@
 		set status = 0
 		where idx = #{idx}
 	</update>
+	
+	<select id="spaceList" resultType="spacesVO">
+		select * from spaces
+		where status = 1
+	</select>
+	
+	<select id="spaceReviewList" parameterType="spacesVO" resultType="spaceReviewVO">
+		select reviewidx,
+					 spaceidx,
+					 picturesrc,
+					 score,
+					 midx,
+					 mnickname,
+					 content,
+					 regdate
+		from space_review
+		where spaceidx = #{idx}
+	</select>
 </mapper>

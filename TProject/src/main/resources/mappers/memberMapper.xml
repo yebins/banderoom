@@ -10,25 +10,25 @@
 	<insert id="setEmailKey" parameterType="emailRegVO">
 		insert into emailreg (
 			email,
-			key,
+			regkey,
 			deadline
 		) values (
 			#{email},
-			#{key},
-			(sysdate + 30/(24*60))
+			#{regkey},
+			(date_add(now(), interval 30 minute))
 		)
 	</insert>
 	
 	<update id="updateEmailKey" parameterType="emailRegVO">
 		update emailreg set
-			key = #{key},
-			deadline = (sysdate + 30/(24*60))
+			regkey = #{regkey},
+			deadline = (date_add(now(), interval 30 minute))
 			
 		where email = #{email}
 	</update>
 	
 	<select id="selectEmailReg" parameterType="emailRegVO" resultType="emailRegVO">
-		select email, key, deadline
+		select email, regkey, deadline
 		from emailreg
 		where email = #{email}
 	</select>
@@ -64,25 +64,25 @@
 	<insert id="setTelKey" parameterType="telRegVO">
 		insert into telreg (
 			tel,
-			key,
+			regkey,
 			deadline
 		) values (
 			#{tel},
-			#{key},
-			(sysdate + 5/(24*60))
+			#{regkey},
+			(date_add(now(), interval 5 minute))
 		)
 	</insert>
 	
 	<update id="updateTelKey" parameterType="telRegVO">
 		update telreg set
-			key = #{key},
-			deadline = (sysdate + 5/(24*60))
+			regkey = #{regkey},
+			deadline = (date_add(now(), interval 5 minute))
 			
 		where tel = #{tel}
 	</update>
 	
 	<select id="selectTelReg" parameterType="telRegVO" resultType="telRegVO">
-		select tel, key, deadline
+		select tel, regkey, deadline
 		from telreg
 		where tel = #{tel}
 	</select>

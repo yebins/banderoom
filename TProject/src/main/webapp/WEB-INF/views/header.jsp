@@ -296,7 +296,7 @@ header {
 		</div>
 		<c:if test="${login != null}">
 		<div id="sm-buttons">
-			<div class="sm-button-wrap">
+			<div class="sm-button-wrap" onclick="location.href='/space/list.do?page=1'">
 				연습실 대여
 			</div>
 			<div class="sm-button-wrap" onclick="location.href='/teams/main.do'">

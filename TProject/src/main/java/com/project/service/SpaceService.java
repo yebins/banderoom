@@ -18,4 +18,6 @@ public interface SpaceService {
 	int acceptSpace(SpacesVO vo);
 	int refuseSpace(SpacesVO vo);
 	int requestAccpet(SpacesVO vo);
+	List<SpacesVO> spaceList();
+	List<SpaceReviewVO> spaceReviewList(SpacesVO vo);
 }

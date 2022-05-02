@@ -5,7 +5,7 @@ import java.util.Date;
 public class TelRegVO {
 	
 	private String tel;
-	private String key;
+	private String regkey;
 	private Date deadLine;
 	
 	public String getTel() {
@@ -14,11 +14,11 @@ public class TelRegVO {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
-	public String getKey() {
-		return key;
+	public String getRegkey() {
+		return regkey;
 	}
-	public void setKey(String key) {
-		this.key = key;
+	public void setRegkey(String regkey) {
+		this.regkey = regkey;
 	}
 	public Date getDeadLine() {
 		return deadLine;

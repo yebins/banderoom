@@ -154,7 +154,13 @@
 	<version>1.4</version> 
 </dependency>
 
-<!-- https://mvnrepository.com/artifact/com.oracle.ojdbc/ojdbc8 -->
+	 <!-- MySQL -->
+       <dependency>
+           <groupId>mysql</groupId>
+           <artifactId>mysql-connector-java</artifactId>
+           <version>8.0.11</version>
+       </dependency>
+<!-- https://mvnrepository.com/artifact/com.oracle.ojdbc/ojdbc8
 <dependency>
     <groupId>com.oracle.ojdbc</groupId>
     <artifactId>ojdbc8</artifactId>
@@ -169,7 +175,7 @@
 				    <artifactId>ons</artifactId>
 	        </exclusion>
 	   </exclusions>
-</dependency>
+</dependency> -->
 
 
 <!-- jackson -->

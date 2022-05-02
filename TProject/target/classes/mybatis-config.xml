@@ -21,8 +21,7 @@
 		<typeAlias type="com.project.vo.ReservationsVO" alias="reservationsVO"/>
 		<typeAlias type="com.project.vo.ServiceInfoVO" alias="serviceInfoVO"/>
 		<typeAlias type="com.project.vo.SpacePicturesVO" alias="spacePicturesVO"/>
-		<typeAlias type="com.project.vo.SpaceQnaAVO" alias="spaceQnaAVO"/>
-		<typeAlias type="com.project.vo.SpaceQnaQVO" alias="spaceQnaQVO"/>
+		<typeAlias type="com.project.vo.SpaceQnaVO" alias="spaceQnaVO"/>
 		<typeAlias type="com.project.vo.SpaceReviewVO" alias="spaceReviewVO"/>
 		<typeAlias type="com.project.vo.SpacesVO" alias="spacesVO"/>
 		<typeAlias type="com.project.vo.TeamsVO" alias="teamsVO"/>

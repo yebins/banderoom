@@ -229,8 +229,15 @@ public class SpaceController {
 			vo = spaceService.details(vo);
 			
 			if (((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx() == vo.getHostIdx()) {
-
-				model.addAttribute("spacesVO", spaceService.details(vo));
+				
+				// 작은따옴표가 들어가면 깨져서 이스케이프 문자로 치환
+				vo.setName(vo.getName().replaceAll("'", "\\\\'"));
+				vo.setAddressDetail(vo.getAddressDetail().replaceAll("'", "\\\\'"));
+				vo.setInfo(vo.getInfo().replaceAll("'", "\\\\'"));
+				vo.setFacility(vo.getFacility().replaceAll("'", "\\\\'"));
+				vo.setCaution(vo.getCaution().replaceAll("'", "\\\\'"));
+				
+				model.addAttribute("spacesVO", vo);
 				model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
 				
 				return "space/update";
@@ -338,6 +345,57 @@ public class SpaceController {
 				return "alert";
 			}
 		}
+	}
+	
+	@RequestMapping(value = "/list.do")
+	public String list(Model model, HttpServletRequest request, Integer page, SpacesVO vo) {
+		
+		List<SpacesVO> spaceList = spaceService.spaceList();
+		model.addAttribute("spaceList", spaceList);
+		
+		Map<Integer, Integer> reviewCount = new HashMap<>();
+		
+		Iterator<SpacesVO> iterator = spaceList.iterator();
+		Map<Integer, Double> reviewAvg = new HashMap<>();
+		List<SpaceReviewVO> reviewList = new ArrayList<SpaceReviewVO>();
+		
+		Map<Integer, Integer> likedStatus = new HashMap<>();
+		
+		while (iterator.hasNext()) {
+			
+			SpacesVO spacesVO = iterator.next(); 
+			reviewList = spaceService.spaceReviewList(spacesVO);
+			reviewCount.put(spacesVO.getIdx(), reviewList.size());
+			
+			double sum = 0;
+			double avg = 0;
+			
+			Iterator<SpaceReviewVO> reviewIterator = reviewList.iterator();
+			
+			if (reviewList.size() != 0) {
+				while (iterator.hasNext()) {
+					
+					sum += reviewIterator.next().getScore();
+				}
+				
+				avg = sum / reviewList.size();
+			} else {
+				avg = 0;
+			}
+
+			reviewAvg.put(spacesVO.getIdx(), avg);
+			
+			LikedSpacesVO liked = new LikedSpacesVO();
+			liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+			liked.setSpaceIdx(spacesVO.getIdx());
+			likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
+		}
+		
+		model.addAttribute("reviewCount", reviewCount);
+		model.addAttribute("reviewAvg", reviewAvg);
+		model.addAttribute("likedStatus", likedStatus);
+		
+		return "space/list";
 	}
 
 }
