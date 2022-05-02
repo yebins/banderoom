@@ -241,4 +241,8 @@
 		and auth != 2
 	</select>
 	
+	<select id="oneMemberInfo" parameterType="generalMembersVO" resultType="generalMembersVO">
+		select * from general_members where midx=#{mIdx}
+	</select>
+	
 </mapper>
