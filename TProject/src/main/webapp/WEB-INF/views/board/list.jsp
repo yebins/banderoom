@@ -79,7 +79,7 @@
 						<tr>
 							<td>${item.aIdx }</td>
 							<td><a href="details.do?bIdx=${param.bidx}&aIdx=${item.aIdx}">${item.title }</a></td>
-							<td>${item.mNickname }</td>
+							<td class="miniProfile" onclick="profileModal('${item.mIdx}',this)" data-bs-toggle="modal" data-bs-target="#exampleModal">${item.mNickname }</td>
 							<td>
 								<fmt:formatDate value="${item.regDate }" pattern="yyyy-MM-dd"/>
 							</td>
@@ -100,5 +100,6 @@
 		</form>
 	</div>
 	
+<c:import url="/footer.do" />
 </body>
 </html>
