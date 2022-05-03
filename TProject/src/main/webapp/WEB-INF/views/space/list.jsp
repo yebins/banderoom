@@ -320,35 +320,40 @@
 				</div>
 			</form>
 			
-			<div class="container">
-			  <div class="row row-cols-1 row-cols-sm-3">
-					<c:forEach var="i" begin="0" end="${spaceList.size() - 1}">
-						<div class="col spacecol">
-							<div class="inner-box spacebox" onclick="location.href='details.do?idx=${spaceList[i].getIdx()}'">
-							
-							<c:if test="${likedStatus.get(spaceList[i].getIdx()) == 1 }">
-							<img class="liked-space" src="/images/heart-filled.png">
-							</c:if>
-								<div class="space-thumb">
-									<img src="${spaceList[i].thumb}" width="100%">
-								</div>
-								<div class="space-info">
-									<div class="space-name">${spaceList[i].getName()}</div>
-									<div class="space-restinfo">
-										<div class="space-type">${spaceList[i].getType()}</div>
-										<div class="space-restinfo-restinfo">
-											<div class="space-addr">${spaceList[i].getAddr1()} ${spaceList[i].getAddr2()}</div>
-											<div class="space-score">
-												⭐ ${reviewAvg.get(spaceList[i].getIdx())} (${reviewCount.get(spaceList[i].getIdx())})
+			<c:if test="${spaceList != null}">
+				<div class="container">
+				  <div class="row row-cols-1 row-cols-sm-3">
+						<c:forEach var="i" begin="0" end="${spaceList.size() - 1}">
+							<div class="col spacecol">
+								<div class="inner-box spacebox" onclick="location.href='details.do?idx=${spaceList[i].getIdx()}'">
+								
+								<c:if test="${likedStatus.get(spaceList[i].getIdx()) == 1 }">
+								<img class="liked-space" src="/images/heart-filled.png">
+								</c:if>
+									<div class="space-thumb">
+										<img src="${spaceList[i].thumb}" width="100%">
+									</div>
+									<div class="space-info">
+										<div class="space-name">${spaceList[i].getName()}</div>
+										<div class="space-restinfo">
+											<div class="space-type">${spaceList[i].getType()}</div>
+											<div class="space-restinfo-restinfo">
+												<div class="space-addr">${spaceList[i].getAddr1()} ${spaceList[i].getAddr2()}</div>
+												<div class="space-score">
+													⭐ ${reviewAvg.get(spaceList[i].getIdx())} (${reviewCount.get(spaceList[i].getIdx())})
+												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</c:forEach>
-			  </div>
-			</div>
+						</c:forEach>
+				  </div>
+				</div>
+			</c:if>
+			<c:if test="${spaceList == null}">
+				등록된 공간이 없습니다.
+			</c:if>
 		</div>
 		
 		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
