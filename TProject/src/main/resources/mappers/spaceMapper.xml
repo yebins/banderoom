@@ -2,13 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Config 3.0/EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.mapper.spaceMapper">
-	<insert id="spaceReg" parameterType="spacesVO">
-		<selectKey keyProperty="idx" resultType="int" order="BEFORE">  
-    	select spaces_idx_seq.nextval FROM dual
-    </selectKey>
+	<insert id="spaceReg" parameterType="spacesVO" useGeneratedKeys="true" keyProperty="idx">
 	
 		insert into spaces (
-			idx,
 			type,
 			name,
 			address,
@@ -29,7 +25,6 @@
 			</if>
 			hostidx
 		) values (
-			#{idx},
 			#{type},
 			#{name},
 			#{address},
@@ -52,17 +47,56 @@
 		)
 	</insert>
 	
+	<update id="update" parameterType="spacesVO">
+		update spaces set
+		
+			<if test="thumb != null and thumb != ''">
+				thumb = #{thumb},
+			</if>
+			<if test="thumb == null or thumb == ''">
+				thumb = '',
+			</if>
+			type = #{type},
+			name = #{name},
+			address = #{address},
+			<if test="addressDetail != null and addressDetail != ''">
+				addressdetail = #{addressDetail},
+			</if>
+			<if test="addressDetail == null or addressDetail == ''">
+				addressdetail = '',
+			</if>
+			addr1 = #{addr1},
+			<if test="addr2 != null and addr2 != ''">
+				addr2 = #{addr2},
+			</if>
+			<if test="addr2 == null or addr2 == ''">
+				addr2 = '',
+			</if>
+			info = #{info},
+			facility = #{facility},
+			caution = #{caution},
+			capacity = #{capacity},
+			cost = #{cost}
+		
+		where idx = #{idx}
+	</update>
+	
 	<insert id="insertSpacePictures" parameterType="spacePicturesVO">
 		insert into space_pictures (
-			pictureidx,
 			spaceidx,
-			src
+			src,
+			thumbsrc
 		) values (
-			SPACE_PICTURES_PICTUREIDX_SEQ.nextval,
 			#{spaceIdx},
-			#{src}
+			#{src},
+			#{thumbSrc}
 		)
 	</insert>
+	
+	<delete id="deleteSpacePictrues" parameterType="spacesVO">
+		delete from space_pictures
+		where spaceidx = #{idx}
+	</delete>
 	
 	<select id="getLocations" resultType="locationsVO">
 		select * from locations order by addr1, addr2
@@ -116,8 +150,75 @@
 	<select id="spacePictureList" resultType="spacePicturesVO" parameterType="spacesVO">
 		select pictureidx,
 					 spaceidx,
-					 src
+					 src,
+					 thumbsrc
 		from space_pictures
+		where spaceidx = #{idx}
+	</select>
+	
+	<update id="delete" parameterType="spacesVO">
+		update spaces set status = 3 where idx = #{idx}
+	</update>
+	
+	<select id="likedSpacesList" parameterType="spacesVO" resultType="likedSpacesVO">
+		select spaceidx, midx
+		from liked_spaces
+		where spaceidx = #{idx}
+	</select>
+	
+	<select id="getLikedStatus" parameterType="likedSpacesVO" resultType="int">
+		select count(*) from liked_spaces
+		where spaceidx = #{spaceIdx} and midx = #{mIdx}
+	</select>
+	
+	<insert id="likeSpace" parameterType="likedSpacesVO">
+		insert into liked_spaces (
+			spaceidx,
+			midx
+		) values (
+			#{spaceIdx},
+			#{mIdx}
+		)
+	</insert>
+	
+	<delete id="unlikeSpace" parameterType="likedSpacesVO">
+		delete from liked_spaces
+		where spaceidx = #{spaceIdx} and midx = #{mIdx}
+	</delete>
+	
+	<update id="acceptSpace" parameterType="spacesVO">
+		update spaces
+		set status = 1
+		where idx = #{idx}
+	</update>
+	
+	<update id="refuseSpace" parameterType="spacesVO">
+		update spaces
+		set status = 2
+		where idx = #{idx}
+	</update>
+	
+	<update id="requestAccept" parameterType="spacesVO">
+		update spaces
+		set status = 0
+		where idx = #{idx}
+	</update>
+	
+	<select id="spaceList" resultType="spacesVO">
+		select * from spaces
+		where status = 1
+	</select>
+	
+	<select id="spaceReviewList" parameterType="spacesVO" resultType="spaceReviewVO">
+		select reviewidx,
+					 spaceidx,
+					 picturesrc,
+					 score,
+					 midx,
+					 mnickname,
+					 content,
+					 regdate
+		from space_review
 		where spaceidx = #{idx}
 	</select>
 </mapper>

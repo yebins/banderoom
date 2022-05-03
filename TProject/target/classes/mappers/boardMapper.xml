@@ -5,11 +5,11 @@
 	
 	<select id="list" parameterType="map" resultType="articlesVO">
 		select * from articles
-		where bidx=#{bidx}
+		where bidx=#{bIdx}
 		<if test="searchtitle != ''">
 		and title like '%'||#{searchtitle}||'%'
 		</if>
-		order by regdate desc
+		order by aidx desc
 	</select>
 	
 	<insert id="insertArticles" parameterType="articlesVO">
@@ -56,7 +56,33 @@
 	</select>
 	
 	<update id="infoModify" parameterType="serviceInfoVO">
-		update service_info set content=#{content} where idx=#{idx}
+		update service_info set content = #{content} where idx=#{idx}
 	</update> 
+	
+	<select id="selectArticles" parameterType="ArticlesVO" resultType="ArticlesVO">
+		select * from articles
+		where aidx=#{aIdx} and bidx=#{bIdx}
+	</select>
+	
+	<update id="readCount" parameterType="ArticlesVO">
+		update articles set readcount= readcount+1 where aidx=#{aIdx} and bidx=#{bIdx}
+	</update>
+	
+	<update id="serlistModify" parameterType="articlesVO">
+		update articles	set title=#{title},content=#{content}
+		where aidx=#{aIdx}
+		and bidx=#{bIdx}
+	</update>
+	
+	<delete id="serlistDelete" parameterType="articlesVO">
+		delete from articles where aidx=#{aIdx} and bidx=#{bIdx}
+	</delete>
+	
+	<update id="boardUpdate" parameterType="ArticlesVO">
+		update articles	set title=#{title},content=#{content}
+		where aidx=#{aIdx}
+		and bidx=#{bIdx}
+	</update>
+	
 	
 </mapper>

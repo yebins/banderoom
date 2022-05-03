@@ -35,6 +35,7 @@
 	}
 	td{
 		height:30px;
+		font-size:12px;
 	}
 	#register{
 		position:relative;
@@ -48,19 +49,20 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-		<c:if test="${param.bidx==2 }">
+		<c:if test="${param.bIdx==2 }">
 			자유게시판
 		</c:if>
-		<c:if test="${param.bidx==4 }">
+		<c:if test="${param.bIdx==4 }">
 			홍보게시판
 		</c:if>
-		<c:if test="${param.bidx==3 }">
+		<c:if test="${param.bIdx==3 }">
 			중고거래게시판
 		</c:if>
 		</div>
 		<div>
-			<form class="d-flex notice-page">
-       	 		<input class="form-control me-3" type="search" placeholder="Search" aria-label="Search">
+			<form action="list.do" class="d-flex notice-page" method="get">
+				<input type="hidden" name="bIdx" value="${param.bIdx}">
+       	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
         			<button class="normal-button accent-button">검색</button>
      		 </form>
 		</div>
@@ -78,7 +80,7 @@
 					<c:forEach var="item" items="${list}">
 						<tr>
 							<td>${item.aIdx }</td>
-							<td><a href="details.do?aIdx=${item.aIdx}">${item.title }</a></td>
+							<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${item.aIdx}">${item.title }</a></td>
 							<td>${item.mNickname }</td>
 							<td>
 								<fmt:formatDate value="${item.regDate }" pattern="yyyy-MM-dd"/>
@@ -96,9 +98,10 @@
 			</table>
 		</div>
 		<form action="register.do" method="get">
+		<input type="hidden" name="bIdx" value="${param.bIdx}">
 			<button class="normal-button accent-button" id="register" style="margin-left: 15px;">글쓰기</button>
 		</form>
 	</div>
-	
+	<c:import url="/footer.do" />
 </body>
 </html>

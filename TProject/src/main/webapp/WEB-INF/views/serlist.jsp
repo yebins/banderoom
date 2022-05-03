@@ -71,13 +71,12 @@
 		box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
 	}
 	
-	.accordion-button:focus{
+	.header-button:focus{
 		background-color:white;
-		border-bottom:1px solid gray;
 		box-shadow:none;
 	}
 
-	.accordion-button:not(.collapsed){
+	.header-button:not(.collapsed){
 		background-color:white;
 		border-bottom:1px solid #e0e0e0;
 		box-shadow:none;
@@ -86,10 +85,19 @@
 		border-right:3px solid #fb6544;
 	}
 	
-	.accordion-body{
+	.body-button{
 		border-bottom:3px solid #fb6544;
 		border-left:3px solid #fb6544;
 		border-right:3px solid #fb6544;
+	}
+	div#page-title{
+		font-size:2rem;
+	}
+	
+	h2 .accordion-header{
+		background-color:#f6f6f6;
+		border-radius:20px;
+		box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 	}
 </style>
 <script>
@@ -120,6 +128,7 @@
 		}
 	}
 	
+	
 </script>
 </head>
 
@@ -128,19 +137,19 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-		<c:if test="${param.bidx==1}">
-			<a href="/serlist.do?bidx=1">공지사항</a>
+		<c:if test="${param.bIdx==1}">
+			<a href="/serlist.do?bIdx=1">공지사항</a>
 		</c:if>
-		<c:if test="${param.bidx==5}">
-			<a href="/serlist.do?bidx=5">자주묻는질문</a>
+		<c:if test="${param.bIdx==5}">
+			<a href="/serlist.do?bIdx=5">자주묻는질문</a>
 		</c:if>
-		<c:if test="${param.bidx==6}">
-			<a href="/serlist.do?bidx=6">이벤트</a>
+		<c:if test="${param.bIdx==6}">
+			<a href="/serlist.do?bIdx=6">이벤트</a>
 		</c:if>
 		</div>
 		<div>
 			<form action="serlist.do" class="d-flex notice-page" method="get">
-				<input type="hidden" name="bidx" value="${param.bidx}">
+				<input type="hidden" name="bIdx" value="${param.bIdx}">
        	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
         			<button class="accent-button normal-button">검색</button>
      		 </form>
@@ -151,12 +160,11 @@
 				<div class="accordion accordion-flush" id="accordionFlushExample">
 				<c:forEach var="notice" items="${list}" varStatus="st">
 					
-					  <div class="accordion-item" 
-					  <%-- <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
-					  <c:if test="${st.last}">style='border-bottom-left-radius:30px; border-bottom-right-radius:30px;'</c:if>					   --%>
+					  <div class="accordion-item"
+					 	<c:if test="${st.first}">style="border-radius:30px"</c:if>
 					  >
 					    <h2 class="accordion-header">
-					      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+					      <button class="accordion-button header-button collapsed" type="button" data-bs-toggle="collapse" 
 					      		data-bs-target="#a${notice.aIdx}"
 							 aria-expanded="false" onclick="accordionClick(this)"
 							 <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
@@ -165,12 +173,12 @@
 					      </button>
 					    </h2>
 					    <div id="a${notice.aIdx}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-					      <div class="accordion-body">
+					      <div class="accordion-body body-button">
 					      	<div>${notice.content}</div>
 						    <div class="accordion-body-buttons">
 						    	<c:if test="${login.auth == 3}">
-							      <button class="accent-button normal-button body-buttons">수정</button>
-							      <button class="accent-button normal-button body-buttons">삭제</button>
+							      <button class="accent-button normal-button body-buttons" onclick="location.href='serlistModify.do?aIdx=${notice.aIdx}&bIdx=${param.bIdx}'">수정</button>
+							      <button class="accent-button normal-button body-buttons" onclick="remove('${notice.aIdx}','${notice.bIdx}')">삭제</button>
 							    </c:if>					    
 						    </div>
 					      </div>
@@ -187,7 +195,67 @@
 	</div>
 	
 <script>
-
+	/* function st(obj){
+    // window.scrollTo(x,y);
+    var offset=$(obj).offset();
+    var body=document.querySelector('html').offsetHeight;
+    console.log(body-offset.top);
+    console.log(body);
+    window.scrollTo({top:body-offset.top, behavior:'smooth'});
+    // behavior:smooth 부드럽게이동
+} */
+		
+		let search=document.querySelector("input[type='search']");
+		console.log(search);
+		search.addEventListener("keyup",(e)=>{
+			console.log(e.key);
+			console.log(e.target.value);
+				let inputValue=e.target.value;
+			const items=document.querySelectorAll(".accordion-button-title");
+			console.log(items);			
+			items.forEach((el)=>{
+				let str=el.innerText;
+				console.log(str);
+				if(str.includes(inputValue)){
+					el.parentNode.parentNode.parentNode.style.display='block';
+				} else {
+					console.log(el.parentNode.parentNode.parentNode.style.display='none');
+				}
+			})
+		})
+		
+		
+		
+		function remove(aIdx,bIdx){
+			var data={
+					'aIdx':aIdx,
+					'bIdx':bIdx
+					}
+			if(confirm('리얼삭제')){
+				$.ajax({
+					url:"serlistDelete.do",
+					type:"post",
+					data:data,
+					success:function(result){
+						if(result>0) {
+							alert('삭제성공');
+							location.href='serlist.do?bIdx='+bIdx;
+						} else if(result = 0){
+							alert('삭제실패');						
+							location.href='serlist.do?bIdx='+bIdx;
+						} else if(result = -1){
+							alert('권한없음');
+							location.href='serlist.do?bIdx='+bIdx;
+						} else{
+							alert('로그인하세요');
+							location.href='/member/glogin.do?';
+						} 
+					}
+					
+				})
+			}
+		}
 </script>
+<c:import url="/footer.do" />
 </body>
 </html>

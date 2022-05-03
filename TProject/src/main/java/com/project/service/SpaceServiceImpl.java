@@ -15,8 +15,13 @@ public class SpaceServiceImpl implements SpaceService {
 	private SpaceDAO dao;
 
 	@Override
-	public int spaceReg(SpacesVO vo, String[] spacePictureSrc) {
-		return dao.spaceReg(vo, spacePictureSrc);
+	public int spaceReg(SpacesVO vo, String[] src, String[] thumbSrc) {
+		return dao.spaceReg(vo, src, thumbSrc);
+	}
+
+	@Override
+	public int update(SpacesVO vo, String[] src, String[] thumbSrc) {
+		return dao.update(vo, src, thumbSrc);
 	}
 
 	@Override
@@ -39,5 +44,57 @@ public class SpaceServiceImpl implements SpaceService {
 		return dao.spacePictureList(vo);
 	}
 
+	@Override
+	public int delete(SpacesVO vo) {
+		return dao.delete(vo);
+	}
+
+	@Override
+	public int getLikedStatus(LikedSpacesVO vo) {
+		return dao.getLikedStatus(vo);
+	}
+
+	@Override
+	public int likeSpace(LikedSpacesVO vo) {
+		if (dao.getLikedStatus(vo) == 1) {
+			return -1; // 이미 찜했음
+		} else {
+			return dao.likeSpace(vo);
+		}
+	}
+
+	@Override
+	public int unlikeSpace(LikedSpacesVO vo) {
+		if (dao.getLikedStatus(vo) == 0) {
+			return -1; // 찜하지 않았음
+		} else {
+			return dao.unlikeSpace(vo);
+		}
+	}
+
+	@Override
+	public int acceptSpace(SpacesVO vo) {
+		return dao.acceptSpace(vo);
+	}
+
+	@Override
+	public int refuseSpace(SpacesVO vo) {
+		return dao.refuseSpace(vo);
+	}
+
+	@Override
+	public int requestAccpet(SpacesVO vo) {
+		return dao.requestAccept(vo);
+	}
+
+	@Override
+	public List<SpacesVO> spaceList() {
+		return dao.spaceList();
+	}
+
+	@Override
+	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
+		return dao.spaceReviewList(vo);
+	}
 
 }

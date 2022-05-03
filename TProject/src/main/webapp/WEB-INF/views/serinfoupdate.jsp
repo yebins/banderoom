@@ -40,7 +40,9 @@
 	.dropdown-toggle::after {
     display:none;
    }
-	
+   	div#page-title{
+   		font-size:2rem;
+   	}
 </style>
 </head>
 <body>
@@ -120,23 +122,6 @@
 	   $('#summernote').summernote('fontName', '맑은 고딕');
 	})
 	
-/*function uploadImage(file, editor){
-		var data = new FormData();
-		data.append("file", file);
-		console.log(file);
-		$.ajax({
-			data : data,
-			type : "POST",
-			url : "uploadImageFile.do",
-			contentType : false,
-			processData : false,
-			success : function(data){
-				console.log(data);
-				console.log(editor);
-				$(editor).summernote("insertImage",data.url);
-			}
-		});
-	}*/
 	function uploadImage(file, el) {
 		   var formData = new FormData();
 		   formData.append("file", file);
@@ -152,5 +137,6 @@
 		   })
 		}
 </script>
+<c:import url="/footer.do" />
 </body>
 </html>

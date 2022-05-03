@@ -102,4 +102,8 @@ public class MemberDAO {
 	public HostMembersVO hLogin(HostMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.hLogin", vo);
 	}
+	
+	public GeneralMembersVO oneMemberInfo(GeneralMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.oneMemberInfo",vo);
+	}
 }

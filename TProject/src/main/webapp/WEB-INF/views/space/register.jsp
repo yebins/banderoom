@@ -104,6 +104,7 @@
 		justify-content: flex-start;
 	}
 	.picture-upload {
+		min-width: 200px;
 		width: 200px;
 		height: 150px;
 		background: white;
@@ -255,7 +256,7 @@ function spacePictureUpload() {
 			var html = "";
 			html += "<div class='picture-upload uploaded'>";
 			html += "<img src='" + data.thumb + "' width='100%'>";
-			html += "<input type='hidden' name='spacePictureSrc' value='" + data.original + "'>";
+			html += "<input type='hidden' name='src' value='" + data.original + "'>";
 			html += "<input type='hidden' name='thumbSrc' value='" + data.thumb + "'>";
 			html += "</div>"
 			$('.row-pictures').prepend(html);
@@ -390,5 +391,6 @@ function spacePictureUpload() {
 		
 	</div>
 	
+	<c:import url="/footer.do" />
 </body>
 </html>

@@ -232,4 +232,13 @@ public class MemberController {
 	public String test() {
 		return "member/test";
 	}
+	
+	@RequestMapping(value="miniProfile.do")
+	@ResponseBody
+	public GeneralMembersVO miniProfile(GeneralMembersVO vo) {
+		System.out.println(vo.getmIdx());
+		GeneralMembersVO vo1=(GeneralMembersVO)memberService.oneMemberInfo(vo);
+		
+		return vo1;
+	}
 }

@@ -6,16 +6,16 @@
 	<!-- Root Context: defines shared resources visible to all other web components -->
 		
 
-
-    <!-- Initialization for data source -->
-    <bean id="dataSource" class="oracle.ucp.jdbc.PoolDataSourceImpl">
-        <property name="connectionFactoryClassName" value="oracle.jdbc.pool.OracleDataSource" />
-
-        <!-- Connection URL uses a TNS alias -->
-        <property name="URL" value="jdbc:oracle:thin:@banderoomdb_high?TNS_ADMIN=C:/Wallet" />
-        <property name="user" value="admin" />
-        <property name="password" value="Banderoom123456!" />
-    </bean>
+	 <!-- MySQL dataSource -->
+    <bean id="dataSource"
+        class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
+        <property name="url"
+            value="jdbc:mysql://jjezen.cafe24.com:3307/oneTeam?serverTimezone=UTC&amp;characterEncoding=utf8&amp;useSSL=false&amp;autoReconnection=true">
+        </property>
+        <property name="username" value="oneTeam"></property>
+        <property name="password" value="oneTeam1234!"></property>
+    </bean>        
 
 <!-- mybatis 연동 -->
 <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

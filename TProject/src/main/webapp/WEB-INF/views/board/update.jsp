@@ -21,6 +21,10 @@
 	 .dropdown-toggle::after {
     display:none;
    }
+	.change-title{
+		display:flex;
+		width:100%;
+	}
 </style>
 
 <script src="/js/summernote/summernote-lite.js"></script>
@@ -93,17 +97,14 @@
 			글수정
 		</div>
 		<form action="update.do" method="post">
-			<input type="hidden" name="mIdx" value="${login.mIdx}">
+			<input type="hidden" name="aIdx" value="${param.aIdx}">
+			<input type="hidden" name="bIdx" value="${param.bIdx}">
+			<input type="hidden" name="mIdx" value="${login.getmIdx()}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<div id="page-content">
 			<div class="inner-box" style="height:500px;">
-				<div>
-				<select name="bIdx" class="form-select inner-box-select" aria-label="Default select example">
-					<option ${(param.bIdx == "2")?"selected":""} value="2">자유게시판</option>
-					<option ${(param.bIdx == "4")?"selected":""} value="4">홍보게시판</option>
-					<option ${(param.bIdx == "3")?"selected":""} value="3">중고거래</option>
-				</select>	
-					<input type="text" name="title" class="list-title form-control me-3" placeholder="${vo.title }">
+				<div class="change-title">
+					<input type="text" name="title" class="list-title form-control me-3" value="${vo.title}">
 				</div>
 					<div class="inner-box-content">
 						<form method="post">
@@ -117,5 +118,6 @@
 			</div>
 		</form>
 	</div>
+	<c:import url="/footer.do" />
 </body>
 </html>

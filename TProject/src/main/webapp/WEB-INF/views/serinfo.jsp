@@ -20,8 +20,8 @@
 
 	.sendInfo{
 		display:flex;
-		justify-content:flex-end;
-	}
+			justify-content:flex-end;
+		}
 	
 	.sendInfo button{
 		margin-top:20px;
@@ -54,8 +54,7 @@
 		</div>
 		<div id="page-content">
 			<form action="infoupdate.do" method="post">
-				<input type="hidden" value="${vo.idx}">
-				<input type="hidden" value="${vo.title}">
+				<input type="hidden" name="idx" value="${vo.idx}">
 				<div class="inner-box">
 					<div class="inner-box-content">
 						${vo.content}
@@ -76,8 +75,8 @@
 	function modify(obj){
 		$(obj).css("display","none");
 		$(obj).next().css("display","block");
+		document.querySelector(".inner-box-content").style.display='none';
 		
-		$('.inner-box-content').css("display","none");
 		$('.note-frame').css("display","block");
 		$('.note-editable').html('${vo.content}');
 		
@@ -141,5 +140,6 @@
 			   })
 			}
 </script>
+<c:import url="/footer.do" />
 </body>
 </html>

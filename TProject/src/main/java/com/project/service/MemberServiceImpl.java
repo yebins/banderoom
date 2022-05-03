@@ -85,7 +85,7 @@ public class MemberServiceImpl implements MemberService {
 			
 			EmailRegVO erVO = new EmailRegVO();
 			erVO.setEmail(email);
-			erVO.setKey(tempKey);
+			erVO.setRegkey(tempKey);
 			
 			if (dao.isEmailKeyExist(erVO)) {
 				dao.updateEmailKey(erVO);
@@ -104,15 +104,15 @@ public class MemberServiceImpl implements MemberService {
 	public int checkEmail(EmailRegVO vo) {
 		EmailRegVO check = dao.selectEmailReg(vo);
 		
-		System.out.println(vo.getKey());
+		System.out.println(vo.getRegkey());
 		
 		if (check == null) {
 			return 1; // 해당 이메일 없음
 		}
 
-		System.out.println(check.getKey());
+		System.out.println(check.getRegkey());
 		
-		if (check.getKey().equals(vo.getKey())) {
+		if (check.getRegkey().equals(vo.getRegkey())) {
 			
 			System.out.println(new Date());
 			System.out.println(check.getDeadLine());
@@ -152,7 +152,7 @@ public class MemberServiceImpl implements MemberService {
 			tempKey += pwCollection[(int) (Math.random() * pwCollection.length)];
 		}
 		
-		vo.setKey(tempKey);
+		vo.setRegkey(tempKey);
 		String smsContent = "banderoom 인증번호입니다.\n" + tempKey;
 		
 		Sms.sendSms(vo.getTel(), smsContent);
@@ -174,7 +174,7 @@ public class MemberServiceImpl implements MemberService {
 			return 1; // 해당 번호 없음
 		}
 		
-		if (check.getKey().equals(vo.getKey())) {
+		if (check.getRegkey().equals(vo.getRegkey())) {
 			if (new Date().after(check.getDeadLine())) {
 				return 3; // 인증시간 만료
 			}
@@ -213,4 +213,17 @@ public class MemberServiceImpl implements MemberService {
 	public HostMembersVO hLogin(HostMembersVO vo) {
 		return dao.hLogin(vo);
 	}
+
+	@Override
+	public GeneralMembersVO oneMemberInfo(GeneralMembersVO vo) {
+		
+		GeneralMembersVO vo1=(GeneralMembersVO)dao.oneMemberInfo(vo);
+		vo1.setPassword("");
+		vo1.setName("");
+		vo1.setTel("");
+		
+		return vo1;
+	}
+	
+	
 }
