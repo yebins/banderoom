@@ -12,8 +12,18 @@ public class TeamsController {
 		return "teams/main";
 	}
 	
-	@RequestMapping(value="/getTeams.do")
-	public String getTeams() {
-		return "teams/getTeams";
+	@RequestMapping(value="/register.do")
+	public String register() {
+		return "teams/register";
+	}
+	
+	@RequestMapping(value="/details.do")
+	public String details() {
+		return "teams/details";
+	}
+	
+	@RequestMapping(value="/application.do")
+	public String application() {
+		return "teams/application";
 	}
 }
