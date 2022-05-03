@@ -195,9 +195,16 @@
 				$("#part").css("display", "none");
 				
 			}
-		}else{
-			$("#write-genre").css("display", "block");
+		}else if($("#field").val() == "dance"){
+			$("#write-genre").css("display", "none");
 			$("#write-part").css("display", "none");
+			
+			if(obj.value == "그 외") {
+				$("#write-genre").css("display", "block");
+				$("#write-part").css("display", "none");
+				$("#part").css("display", "none");
+				
+			}
 		}
 		
 		target.options.length = 0;
@@ -239,6 +246,38 @@
 			result = parseInt(result)-1+"명";
 			}
 		}$("#result").text(result);
+	}
+	
+	function addPart(){
+		var field = $("#field").val();
+		var part = $("#part").val();
+		var people = $("#result").text();
+		console.log(part);
+		console.log(field);
+		console.log(people);
+		
+		if(field == "band" && part != "장르를 선택하세요."){
+			if(part == "그 외 파트"){
+				$(".select-parts").append("<span class='select-part'>"+$('#write-part').val()+" "+people+"</span>");
+				$(".select-parts").append("<button type='button' class='x' onclick='remove(this)'>x</button>");
+			}else{
+				$(".select-parts").append("<span class='select-part'>"+part+" "+people+"</span>");
+			$(".select-parts").append("<button type='button' class='x' onclick='remove(this)'>x</button>");
+			}
+		}else if(field == "dance"){
+			if($(".select-part")){
+				$(".select-parts").empty();
+				$(".select-parts").append("<span class='select-part'>"+people+"</span>");
+			}else{
+				$(".select-parts").append("<span class='select-part'>"+people+"</span>");
+			}
+		}
+		
+	}
+	
+	function remove(obj){
+		$(obj).prev().remove();
+		$(obj).remove();
 	}
 	
 	$(function(){
@@ -366,6 +405,26 @@
 .dropdown-toggle::after {
 	display:none;
 }
+.select-parts{
+	text-align: left;
+	margin-bottom: 15px;
+}
+.select-part{
+	border:1px solid #ced4da;
+    border-radius: 17.5px;
+    padding: 6px;
+    font-size: 12px;
+    background: #FBE6B2;
+    margin-right:5px;
+}
+.x{
+	font-size: 5px;
+    height: 20px;
+    width: 20px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+	margin-right: 15px;
+}
 </style>
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
@@ -379,49 +438,54 @@
 		</div>
 		<div id="page-content">
 			<form action="#">
-			<div class="form">
-					<div class="search-top">
-						<select class="form-select form-select-sm">
-							<option>지역</option>
-							<option>서울특별시</option>
-							<option>전라북도</option>
-						</select>
-						<select class="form-select form-select-sm">
-							<option>세부지역</option>
-							<option>전주시 덕진구</option>
-							<option>전주시 완산구</option>
-							<option>군산시</option>
-						</select>
-						<select class="form-select form-select-sm">
-							<option>팀 레벨</option>
-							<option>초급</option>
-							<option>중급</option>
-							<option>고급</option>
-						</select>
-						<select class="form-select form-select-sm" name="field" id="field" onchange="selectField(this)">
-							<option selected hidden>분야 선택</option>
-							<option value="band">밴드</option>
-							<option value="dance">댄스</option>
-						</select>
-						<select class="form-select form-select-sm" name="genre" id="genre" onchange="selectGenre(this)">
-							<option>분야를 선택하세요.</option>
-						</select>
-						<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" style="display:none;">
-					</div><br>
-					
-					<div class="mb-3 d-flex search-bottom">
-						<select class="form-select form-select-sm part" name="part" id="part" onchange="selectPart(this)">
-							<option>장르를 선택하세요.</option>
-						</select>
-						<input class="form-control form-control-sm" id="write-part" type="text" name="part" placeholder="파트 입력" style="display:none;">
-						<div class="btn-group people-num">
-							<button type="button" class="btn btn-outline-secondary left-btn" onclick='count("minus")' disabled="disabled">-</button>
-							<button type="button" class="btn btn-outline-secondary" id="result">1명</button>
-							<button type="button" class="btn btn-outline-secondary right-btn"onclick="count('plus')">+</button>
+				<div class="form">
+						<div class="search-top">
+							<select class="form-select form-select-sm">
+								<option>지역</option>
+								<option>서울특별시</option>
+								<option>전라북도</option>
+							</select>
+							<select class="form-select form-select-sm">
+								<option>세부지역</option>
+								<option>전주시 덕진구</option>
+								<option>전주시 완산구</option>
+								<option>군산시</option>
+							</select>
+							<select class="form-select form-select-sm">
+								<option>팀 레벨</option>
+								<option>초급</option>
+								<option>중급</option>
+								<option>고급</option>
+							</select>
+							<select class="form-select form-select-sm" name="field" id="field" onchange="selectField(this)">
+								<option selected hidden>분야 선택</option>
+								<option value="band">밴드</option>
+								<option value="dance">댄스</option>
+							</select>
+							<select class="form-select form-select-sm" name="genre" id="genre" onchange="selectGenre(this)">
+								<option>분야를 선택하세요.</option>
+							</select>
+							<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" style="display:none;">
+						</div><br>
+						
+						<div class="mb-3 d-flex search-bottom">
+							<select class="form-select form-select-sm part" name="part" id="part" onchange="selectPart(this)">
+								<option>장르를 선택하세요.</option>
+							</select>
+							<input class="form-control form-control-sm" id="write-part" type="text" name="part" placeholder="파트 입력" style="display:none;">
+							<div class="btn-group people-num">
+								<button type="button" class="btn btn-outline-secondary left-btn" onclick='count("minus")' disabled="disabled">-</button>
+								<button type="button" class="btn btn-outline-secondary" id="result">1명</button>
+								<button type="button" class="btn btn-outline-secondary right-btn"onclick="count('plus')">+</button>
+							</div>
+							<button type="button" class="normal-button add-part" style="width:40px; margin-right:10px;" onclick="addPart()">추가</button>
+							<input class="form-control form-control-sm" placeholder="마감 날짜 입력">
 						</div>
-						<button type="button" class="normal-button add-part" style="width:40px;">추가</button>
-					</div>
-			</div>
+						<div class="select-parts">
+						</div>
+				</div>
+			
+			
 				<div class="inner-box" style="height:700px;">
 					<div>
 						<input type="text" name="title" class="form-control list-title" placeholder="제목을 입력하세요.">
