@@ -204,9 +204,28 @@
 		where idx = #{idx}
 	</update>
 	
-	<select id="spaceList" resultType="spacesVO">
-		select * from spaces
-		where status = 1
+	<select id="spaceList" resultType="spacesVO" parameterType="HashMap">
+		select * from (
+			select row_number() over(order by idx) as rownum, s.*
+			from spaces s where s.status = 1
+			
+			<if test="vo != null">
+				<if test="vo.addr1 != null and vo.addr1 != ''">
+				and addr1 = #{vo.addr1}
+				</if>
+				<if test="vo.addr2 != null and vo.addr2 != ''">
+				and addr2 = #{vo.addr2}
+				</if>
+				<if test="vo.type != null and vo.type != ''">
+				and type = #{vo.type}
+				</if>
+				<if test="vo.name != null and vo.name != ''">
+				and name like concat('%', #{vo.name}, '%')
+				</if>
+				
+			</if>
+			
+		) a where a.rownum <![CDATA[>=]]> #{start} and a.rownum <![CDATA[<=]]> #{end}
 	</select>
 	
 	<select id="spaceReviewList" parameterType="spacesVO" resultType="spaceReviewVO">
@@ -220,5 +239,14 @@
 					 regdate
 		from space_review
 		where spaceidx = #{idx}
+	</select>
+	
+	<!-- 테스트용 -->
+	<select id="getAddr1" resultType="String">
+		select distinct addr1 from locations;
+	</select>
+	
+	<select id="getAddr2" parameterType="locationsVO" resultType="String">
+		select addr2 from locations where addr1 = #{addr1}
 	</select>
 </mapper>

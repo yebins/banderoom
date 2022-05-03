@@ -348,9 +348,25 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value = "/list.do")
-	public String list(Model model, HttpServletRequest request, Integer page, SpacesVO vo) {
+	public String list(Model model, HttpServletRequest request, Integer page, Integer search, SpacesVO vo) {
 		
-		List<SpacesVO> spaceList = spaceService.spaceList();
+		System.out.println(vo.getType());
+		
+		Map<String, Object> params = new HashMap<>();
+		if (page == null) {
+			page = 1;
+		}
+		int start = page * 12 - 11;
+		int end = page * 12;
+		
+		if (search != null) {
+			params.put("vo", vo);
+		}
+		params.put("start", start);
+		params.put("end", end);
+		
+		
+		List<SpacesVO> spaceList = spaceService.spaceList(params);
 		model.addAttribute("spaceList", spaceList);
 		
 		Map<Integer, Integer> reviewCount = new HashMap<>();
@@ -386,9 +402,14 @@ public class SpaceController {
 			reviewAvg.put(spacesVO.getIdx(), avg);
 			
 			LikedSpacesVO liked = new LikedSpacesVO();
-			liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
-			liked.setSpaceIdx(spacesVO.getIdx());
-			likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
+			
+			if ((GeneralMembersVO) request.getSession().getAttribute("login") != null) {
+				liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+				liked.setSpaceIdx(spacesVO.getIdx());
+				likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
+			} else {
+				likedStatus.put(spacesVO.getIdx(), 0);
+			}
 		}
 		
 		model.addAttribute("reviewCount", reviewCount);
@@ -397,5 +418,125 @@ public class SpaceController {
 		
 		return "space/list";
 	}
+	
+	@RequestMapping(value = "addlist.do")
+	@ResponseBody
+	public Map<String, Object> addList(HttpServletRequest request, Integer page) {
+		
+		Map<String, Object> map = new HashMap<>();
 
+		Map<String, Object> params = new HashMap<>();
+		if (page == null) {
+			page = 1;
+		}
+		int start = page * 12 - 11;
+		int end = page * 12;
+		
+		
+		params.put("start", start);
+		params.put("end", end);
+		
+		
+		List<SpacesVO> spaceList = spaceService.spaceList(params);
+		map.put("spaceList", spaceList);
+		
+		Map<Integer, Integer> reviewCount = new HashMap<>();
+		
+		Iterator<SpacesVO> iterator = spaceList.iterator();
+		Map<Integer, Double> reviewAvg = new HashMap<>();
+		List<SpaceReviewVO> reviewList = new ArrayList<SpaceReviewVO>();
+		
+		Map<Integer, Integer> likedStatus = new HashMap<>();
+		
+		while (iterator.hasNext()) {
+			
+			SpacesVO spacesVO = iterator.next(); 
+			reviewList = spaceService.spaceReviewList(spacesVO);
+			reviewCount.put(spacesVO.getIdx(), reviewList.size());
+			
+			double sum = 0;
+			double avg = 0;
+			
+			Iterator<SpaceReviewVO> reviewIterator = reviewList.iterator();
+			
+			if (reviewList.size() != 0) {
+				while (iterator.hasNext()) {
+					
+					sum += reviewIterator.next().getScore();
+				}
+				
+				avg = sum / reviewList.size();
+			} else {
+				avg = 0;
+			}
+
+			reviewAvg.put(spacesVO.getIdx(), avg);
+			
+			LikedSpacesVO liked = new LikedSpacesVO();
+			
+			if ((GeneralMembersVO) request.getSession().getAttribute("login") != null) {
+				liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+				liked.setSpaceIdx(spacesVO.getIdx());
+				likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
+			} else {
+				likedStatus.put(spacesVO.getIdx(), 0);
+			}
+		}
+		
+		map.put("reviewCount", reviewCount);
+		map.put("reviewAvg", reviewAvg);
+		map.put("likedStatus", likedStatus);
+		
+		return map;
+	}
+	
+	/*
+	@RequestMapping(value="setlist.do")
+	public String setListData() {
+		SpacesVO vo = new SpacesVO();
+		String[] thumbSrc = {"THUMB_3896211e-5540-43e4-9a6b-17fac70d9da3.jpg"};
+		String[] src = {"3896211e-5540-43e4-9a6b-17fac70d9da3.jpg"};
+		
+		int result = 0;
+		
+		// 랜덤값 넣기
+		//타입
+		String[] type = {"녹음실", "밴드연습실", "댄스연습실"};
+		
+		//주소
+		LocationsVO loc = new LocationsVO();
+		List<String> addr1s = spaceService.getAddr1();
+		
+		for (int i = 0; i < 100; i++) {
+			
+			vo.setType(type[(int) (Math.random() * type.length)]);
+			vo.setName("테스트용 공간");
+			
+			String addr1 = addr1s.get((int) (Math.random() * addr1s.size()));
+			loc.setAddr1(addr1);
+			List<String> addr2s = spaceService.getAddr2(loc);
+			String addr2 = addr2s.get((int) (Math.random() * addr2s.size()));
+			
+			vo.setAddress(addr1 + " " + addr2);
+			vo.setAddr1(addr1);
+			vo.setAddr2(addr2);
+			vo.setInfo("테스트용 공간의 기본정보입니다.");
+			vo.setCaution("테스트용 공간의 주의사항입니다.");
+			vo.setFacility("테스트용 공간의 시설정보입니다.");
+			vo.setCost(5000);
+			vo.setHostIdx(1);
+			
+
+			if (thumbSrc != null && thumbSrc.length != 0) {
+				vo.setThumb(thumbSrc[0]);
+			}
+			
+			result = spaceService.spaceReg(vo, src, thumbSrc);
+			System.out.println(result);
+		}
+		
+		return "redirect:/";
+		
+	}
+	*/
 }

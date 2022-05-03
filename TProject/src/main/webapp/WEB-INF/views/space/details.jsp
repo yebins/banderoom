@@ -172,6 +172,12 @@
 		overflow: hidden;
 	}
 	
+	.map-popup {
+		width: 150px;
+		text-align: center;
+		padding: 6px; 
+		font-size: 14px;
+	}
 	.map-popup:hover {
 		cursor: pointer;
 	}
@@ -352,7 +358,7 @@
 		
 		        // 인포윈도우로 장소에 대한 설명을 표시합니다
 		        var infowindow = new kakao.maps.InfoWindow({
-		            content: '<div class="map-popup" style="width:150px;text-align:center;padding:6px 0;" onclick="window.open(\'https://map.kakao.com/link/search/${spacesVO.getAddress()}\')">${spacesVO.getName()}</div>'
+		            content: '<div class="map-popup" onclick="window.open(\'https://map.kakao.com/link/search/${spacesVO.getAddress()}\')">${spacesVO.getName()}</div>'
 		        });
 		        infowindow.open(map, marker);
 		

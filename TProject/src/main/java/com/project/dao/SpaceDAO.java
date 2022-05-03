@@ -1,6 +1,6 @@
 package com.project.dao;
 
-import java.util.List;
+import java.util.*;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,11 +106,19 @@ public class SpaceDAO {
 		return sqlSession.update("com.project.mapper.spaceMapper.requestAccept", vo);
 	}
 	
-	public List<SpacesVO> spaceList() {
-		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceList");
+	public List<SpacesVO> spaceList(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceList", params);
 	}
 	
 	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceReviewList", vo);
+	}
+	
+	// 테스트용
+	public List<String> getAddr1() {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.getAddr1");
+	}
+	public List<String> getAddr2(LocationsVO vo) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.getAddr2", vo);		
 	}
 }

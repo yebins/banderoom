@@ -151,6 +151,16 @@
 		font-weight: bold;
 	}
 	
+	.space-cost span {
+		font-size: 20px;
+	}
+	
+	.space-type-cost-wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+	}
+	
 	.space-restinfo-restinfo {
 		display: flex;
 		justify-content: space-between;
@@ -159,14 +169,145 @@
 		font-weight: normal;
 	}
 		
+	#mapBackOveray {
+		width: 100%; 
+		height: 100vh; 
+		display: flex; 
+		visibility: hidden;
+		justify-content: center; 
+		align-items: center; 
+		background-color: rgba(0,0,0,0.5); 
+		position: fixed; 
+		top: 0px; 
+		left: 0px; 
+		z-index: 99999;
+	}
+	
+	#mapBackground {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+	
+	#map {
+		width: 80%;
+		height: 80vh;
+		padding: 50px;
+		z-index: 999999;
+		border-radius: 15px;
+		overflow: hidden;
+	}
+	
+	.map-popup {
+		width: 150px;
+		text-align: center;
+		padding: 6px; 
+		font-size: 14px;
+	}
+	.map-popup:hover {
+		cursor: pointer;
+	}
+	
+	.spinner-border {
+		width: 100px;
+		height: 100px;
+		margin: 40px;
+		border-width: .5em;
+		color: #FB6544;
+	}
 </style>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 <script>
 
 	var locations;
+	var page = 1;
+	var loading = false;
+	var allLoaded = false;
+	
+	function addList() {
+		if (loading || allLoaded) {
+			return;
+		}
+		
+		var loadingDiv = $('<div class="spinner-border" role="status"></div>');
+		$('#wrapper').append(loadingDiv);
+		
+		loading = true;
+		page++;
+		var searchData = 'page=' + page + '&';
+		
+		if ('${param.search}' == 1) {
+			searchData += $('form#search-form').serialize();
+		}
+		
+		$.ajax({
+			type: "get",
+			url: "addlist.do",
+			data: searchData,
+			success: function(data) {
+				
+				for (var i = 0; i < Object.keys(data.spaceList).length; i++) {
+
+					var html = '<div class="col spacecol">';
+					html += '<div class="inner-box spacebox" onclick="location.href=\'details.do?idx=' + data.spaceList[i].idx + '\'">';
+					html += '<input type="hidden" name="idx" value="' + data.spaceList[i].idx + '">';
+					html += '<input type="hidden" name="address" value="' + data.spaceList[i].address + '">';
+					if (data.likedStatus[data.spaceList[i].idx] == 1) {
+						html += '<img class="liked-space" src="/images/heart-filled.png">';
+					}
+					html += '<div class="space-thumb">';
+					html += '<img src="' + data.spaceList[i].thumb + '" width="100%">';
+					html += '</div>';
+					html += '<div class="space-info">';
+					html += '<div class="space-name">' + data.spaceList[i].name + '</div>';
+					html += '<div class="space-restinfo">';
+					html += '<div class="space-type-cost-wrap">';
+					html += '<div class="space-type">' + data.spaceList[i].type + '</div>';
+					html += '<div class="space-cost">';
+					html += '<span>';
+					
+					var fmt = data.spaceList[i].cost.toLocaleString('ko-KR');
+					
+					html += fmt;
+					
+					html += '</span>';
+					html += '원 / 시간';
+					html += '</div>';
+					html += '</div>';
+					html += '<div class="space-restinfo-restinfo">';
+					html += '<div class="space-addr">' + data.spaceList[i].addr1 + ' ' + data.spaceList[i].addr2 + '</div>';
+					html += '<div class="space-score">';
+					html += '⭐ ' + data.reviewAvg[data.spaceList[i].idx].toFixed(1) + ' (' + data.reviewCount[data.spaceList[i].idx] + ')';
+					html += '</div></div></div></div></div></div>';
+					
+					$(".spacerow").append(html);
+					
+				}
+				
+				
+				if (Object.keys(data.spaceList).length < 12) {
+					
+					allLoaded = true;
+				}
+				
+				drawMap();
+				$(loadingDiv).remove();
+				loading = false;
+				
+				
+			}
+		})
+	}
 	
 	$(function() {
+		
+		
+		window.onscroll = function(e) {
+			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+				addList();
+			}
+		}
 		
 		$.ajax({
 			type: "get",
@@ -189,6 +330,9 @@
 				}
 			}
 		})
+		
+
+		drawMap();
 	})
 	
 	function showAddr2() {
@@ -214,16 +358,19 @@
 			}
 		}
 		$("#addr2").css("display", "block");
-	
+		
 	}
 
 	var mapContainer;
 	
 	function drawMap() {
+		
+		$("#map").children().remove();
+	
 		mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		    mapOption = {
 		        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-		        level: 3 // 지도의 확대 레벨
+		        level: 9 // 지도의 확대 레벨
 		    };  
 		
 		// 지도를 생성합니다    
@@ -245,12 +392,13 @@
 		// 주소-좌표 변환 객체를 생성합니다
 		var geocoder = new kakao.maps.services.Geocoder();
 		
-		// 주소로 좌표를 검색합니다
-		geocoder.addressSearch('${login.getAddr1()} ${login.getAddr2()}', function(result, status) {
+		$(".spacebox").each(function(idx, item) {
+			
+			console.log(item);
 		
-		    // 정상적으로 검색이 완료됐으면 
-		     if (status === kakao.maps.services.Status.OK) {
-		
+
+			geocoder.addressSearch($(item).children('input[name=address]').val(), function(result, status) {
+
 		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 		
 		        // 결과값으로 받은 위치를 마커로 표시합니다
@@ -261,20 +409,42 @@
 		
 		        // 인포윈도우로 장소에 대한 설명을 표시합니다
 		        var infowindow = new kakao.maps.InfoWindow({
-		            content: '<div class="map-popup" style="width:150px;text-align:center;padding:6px 0;" onclick="window.open(\'https://map.kakao.com/link/search/${spacesVO.getAddress()}\')">${spacesVO.getName()}</div>'
+		            content: '<div class="map-popup" onclick="location.href=\'details.do?idx=' + $(item).children('input[name=idx]').val() + '\'">' + $(item).find('.space-name').text() + '</div>'
 		        });
 		        infowindow.open(map, marker);
 		
+			});
+			
+		})
+		
+		
+
+		// 주소로 좌표를 검색합니다
+		<c:if test="${login != null}">
+			var myAddress = '${login.getAddr1()} ${login.getAddr2()}';
+		</c:if>
+		<c:if test="${login == null}">
+			var myAddress = '서울시 중구';
+		</c:if>
+		geocoder.addressSearch(myAddress, function(result, status) {
+		
+		    // 정상적으로 검색이 완료됐으면 
+		     if (status === kakao.maps.services.Status.OK) {
+
+		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		        
 		        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-		        map.setCenter(coords);
+		        setTimeout(function() {
+			        map.setCenter(coords);
+		        }, 500)
 		    } 
-		});   
+		});
 
 	}
 	
 	function showMap() {
-		$("#map").children().remove();
-	    drawMap();
+		//$("#map").children().remove();
+	    //drawMap();
 		$("#mapBackOveray").css("visibility", "visible");
     // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 	}
@@ -290,6 +460,7 @@
 		</div>
 		<div id="page-content">
 			<form id="search-form">
+			<input type="hidden" name="search" value="1">
 				<div class="inner-box">
 					<div class="inner-box-content">
 						<div class="filters">
@@ -320,13 +491,14 @@
 				</div>
 			</form>
 			
-			<c:if test="${spaceList != null}">
+			<c:if test="${spaceList.size() != 0}">
 				<div class="container">
-				  <div class="row row-cols-1 row-cols-sm-3">
+				  <div class="row row-cols-1 row-cols-sm-3 spacerow">
 						<c:forEach var="i" begin="0" end="${spaceList.size() - 1}">
 							<div class="col spacecol">
 								<div class="inner-box spacebox" onclick="location.href='details.do?idx=${spaceList[i].getIdx()}'">
-								
+								<input type="hidden" name="idx" value="${spaceList[i].getIdx()}">
+								<input type="hidden" name="address" value="${spaceList[i].getAddress()}">
 								<c:if test="${likedStatus.get(spaceList[i].getIdx()) == 1 }">
 								<img class="liked-space" src="/images/heart-filled.png">
 								</c:if>
@@ -336,7 +508,15 @@
 									<div class="space-info">
 										<div class="space-name">${spaceList[i].getName()}</div>
 										<div class="space-restinfo">
-											<div class="space-type">${spaceList[i].getType()}</div>
+											<div class="space-type-cost-wrap">
+												<div class="space-type">${spaceList[i].getType()}</div>
+												<div class="space-cost">
+													<span>
+														<fmt:formatNumber value="${spaceList[i].getCost()}" pattern="#,###" /> 
+													</span>
+													원 / 시간
+												</div>
+											</div>
 											<div class="space-restinfo-restinfo">
 												<div class="space-addr">${spaceList[i].getAddr1()} ${spaceList[i].getAddr2()}</div>
 												<div class="space-score">
@@ -351,7 +531,7 @@
 				  </div>
 				</div>
 			</c:if>
-			<c:if test="${spaceList == null}">
+			<c:if test="${spaceList.size() == 0}">
 				등록된 공간이 없습니다.
 			</c:if>
 		</div>

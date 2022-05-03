@@ -1,6 +1,6 @@
 package com.project.service;
 
-import java.util.List;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,13 +88,21 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public List<SpacesVO> spaceList() {
-		return dao.spaceList();
+	public List<SpacesVO> spaceList(Map<String, Object> params) {
+		return dao.spaceList(params);
 	}
 
 	@Override
 	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
 		return dao.spaceReviewList(vo);
+	}
+	
+	//테스트용
+	public List<String> getAddr1() {
+		return dao.getAddr1();
+	}
+	public List<String> getAddr2(LocationsVO vo) {
+		return dao.getAddr2(vo);
 	}
 
 }

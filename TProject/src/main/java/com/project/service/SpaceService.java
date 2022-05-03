@@ -1,6 +1,6 @@
 package com.project.service;
 
-import java.util.List;
+import java.util.*;
 
 import com.project.vo.*;
 
@@ -18,6 +18,11 @@ public interface SpaceService {
 	int acceptSpace(SpacesVO vo);
 	int refuseSpace(SpacesVO vo);
 	int requestAccpet(SpacesVO vo);
-	List<SpacesVO> spaceList();
+	List<SpacesVO> spaceList(Map<String, Object> params);
 	List<SpaceReviewVO> spaceReviewList(SpacesVO vo);
+	
+
+	//테스트용
+	public List<String> getAddr1();
+	public List<String> getAddr2(LocationsVO vo);
 }
