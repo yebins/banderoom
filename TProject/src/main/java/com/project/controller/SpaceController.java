@@ -350,8 +350,6 @@ public class SpaceController {
 	@RequestMapping(value = "/list.do")
 	public String list(Model model, HttpServletRequest request, Integer page, Integer search, SpacesVO vo) {
 		
-		System.out.println(vo.getType());
-		
 		Map<String, Object> params = new HashMap<>();
 		if (page == null) {
 			page = 1;
@@ -421,7 +419,7 @@ public class SpaceController {
 	
 	@RequestMapping(value = "addlist.do")
 	@ResponseBody
-	public Map<String, Object> addList(HttpServletRequest request, Integer page) {
+	public Map<String, Object> addList(HttpServletRequest request, Integer page, Integer search, SpacesVO vo) {
 		
 		Map<String, Object> map = new HashMap<>();
 
@@ -432,6 +430,9 @@ public class SpaceController {
 		int start = page * 12 - 11;
 		int end = page * 12;
 		
+		if (search != null) {
+			params.put("vo", vo);
+		}
 		
 		params.put("start", start);
 		params.put("end", end);

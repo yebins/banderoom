@@ -323,7 +323,7 @@ header {
 		</div>
 		<c:if test="${login != null}">
 		<div id="sm-buttons">
-			<div class="sm-button-wrap" onclick="location.href='/space/list.do?page=1'">
+			<div class="sm-button-wrap" onclick="location.href='/space/list.do'">
 				연습실 대여
 			</div>
 			<div class="sm-button-wrap" onclick="location.href='/teams/main.do'">

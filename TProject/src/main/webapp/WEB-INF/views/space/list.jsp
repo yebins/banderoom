@@ -212,7 +212,7 @@
 		width: 100px;
 		height: 100px;
 		margin: 40px;
-		border-width: .5em;
+		border-width: 10px;
 		color: #FB6544;
 	}
 </style>
@@ -328,11 +328,24 @@
 					var html = "<option>" + addr1[i] + "</option>"
 					$("#addr1").append(html);
 				}
+				
+
+				$("select[name=addr1]").val("${param.addr1}");
+				
+				if ($("select[name=addr1]").val() != '') {
+					showAddr2();
+				}
+				
+				$("select[name=addr2]").val("${param.addr2}");
+				$("select[name=type]").val("${param.type}");
+				$("input[name=name]").val("${param.name}");
+
+				drawMap();
 			}
 		})
 		
 
-		drawMap();
+		
 	})
 	
 	function showAddr2() {
@@ -366,11 +379,17 @@
 	function drawMap() {
 		
 		$("#map").children().remove();
+		
+		var level = 9;
+		
+		if ($("select[name=addr1]").val() != '') {
+			level = 6;
+		}
 	
 		mapContainer = document.getElementById('map'), // 지도를 표시할 div 
 		    mapOption = {
 		        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-		        level: 9 // 지도의 확대 레벨
+		        level: level // 지도의 확대 레벨
 		    };  
 		
 		// 지도를 생성합니다    
@@ -394,8 +413,6 @@
 		
 		$(".spacebox").each(function(idx, item) {
 			
-			console.log(item);
-		
 
 			geocoder.addressSearch($(item).children('input[name=address]').val(), function(result, status) {
 
@@ -426,6 +443,11 @@
 		<c:if test="${login == null}">
 			var myAddress = '서울시 중구';
 		</c:if>
+		
+		if ($("select[name=addr1]").val() != "") {
+			myAddress = $("select[name=addr1]").val() + " " + $("select[name=addr2]").val();
+		}
+		
 		geocoder.addressSearch(myAddress, function(result, status) {
 		
 		    // 정상적으로 검색이 완료됐으면 
@@ -448,7 +470,7 @@
 		$("#mapBackOveray").css("visibility", "visible");
     // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 	}
-	
+
 </script>
 </head>
 <body>
@@ -469,9 +491,9 @@
 									<option value="">지역</option>
 									<option id="addr1-loading" value="">로드 중..</option>
 								</select>
-								<select id="addr2" class="form-select form-select-sm" name="addr2" style="display: none;" onchange="listFilter()">
+								<select id="addr2" class="form-select form-select-sm" name="addr2" style="display: none;">
 								</select>
-								<select id="space-type" class="form-select form-select-sm" name="type" onchange="listFilter()">
+								<select id="space-type" class="form-select form-select-sm" name="type">
 									<option value="">분류</option>
 									<option>녹음실</option>
 									<option>밴드연습실</option>
@@ -480,7 +502,7 @@
 							</div>
 							<div class="filter-buttons">
 								<button type="button" class="normal-button map-button" onclick="showMap()">&nbsp;지도<img src="/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>
-								<button type="button" class="normal-button search-button reset-filter" onclick="resetFilter()">필터 초기화</button>
+								<button type="button" class="normal-button search-button reset-filter" onclick="location.href='list.do'">필터 초기화</button>
 							</div>
 						</div>
 						<div class="search-text">
