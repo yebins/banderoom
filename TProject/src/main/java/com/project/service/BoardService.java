@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.ui.Model;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
 public interface BoardService {
@@ -18,4 +19,8 @@ public interface BoardService {
 	int serlistModify(ArticlesVO vo);
 	int serlistDelete(ArticlesVO vo);
 	int boardUpdate(ArticlesVO vo);
+	int likedStatus(LikedArticlesVO vo);
+	int likedAtricles(LikedArticlesVO vo);
+	int unLikedArticles(LikedArticlesVO vo);
+	int likeCount(int aIdx);
 }
