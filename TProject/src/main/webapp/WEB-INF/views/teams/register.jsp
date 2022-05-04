@@ -12,6 +12,11 @@
 <script src="/js/summernote/lang/summernote-ko-KR.js"></script>
 <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
 
+<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<!-- Air datepicker css -->
+<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+
 <script>
 /*	$( document ).ready(function(){
 		   
@@ -280,6 +285,8 @@
 		$(obj).remove();
 	}
 	
+	
+	
 	$(function(){
 		$('#summernote').summernote({
 	         toolbar: [
@@ -320,6 +327,10 @@
 	   });
 	   $('#summernote').summernote('fontName', '맑은 고딕');
 	   
+	   $("#datepicker").datepicker({
+			language: 'ko'
+		}); 
+	   
 	});
 	
 	function uploadImage(file, el) {
@@ -335,8 +346,8 @@
 	         $(el).summernote('editor.insertImage', data.trim());
 	      }
 	   })
-	}
-	
+	   
+	}	
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -394,6 +405,9 @@
 }
 .inner-box{
 	margin-bottom: 100px;
+}
+.inner-box-content{
+	margin:10px 0px;
 }
 .list-content{
 	width:100%;
@@ -479,7 +493,7 @@
 							<button type="button" class="btn btn-outline-secondary right-btn"onclick="count('plus')">+</button>
 						</div>
 						<button type="button" class="normal-button add-part" style="width:40px; margin-right:10px;" onclick="addPart()">추가</button>
-						<input class="form-control form-control-sm" placeholder="마감 날짜 입력" name="endDate">
+						<input class="form-control form-control-sm" placeholder="마감 날짜 선택" name="endDate" id="datepicker">
 					</div>
 					<div class="select-parts">
 					</div>
@@ -505,6 +519,6 @@
 		</div>
 		
 	</div>
-	
+	<c:import url="/footer.do" />
 </body>
 </html>
