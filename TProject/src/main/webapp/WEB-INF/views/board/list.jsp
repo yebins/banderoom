@@ -81,7 +81,7 @@
 						<tr>
 							<td>${item.aIdx }</td>
 							<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${item.aIdx}">${item.title }</a></td>
-							<td>${item.mNickname }</td>
+							<td onclick="profileOpen(${item.mIdx})">${item.mNickname }</td>
 							<td>
 								<fmt:formatDate value="${item.regDate }" pattern="yyyy-MM-dd"/>
 							</td>

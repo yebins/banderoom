@@ -14,32 +14,15 @@
 	
 	<insert id="insertArticles" parameterType="articlesVO">
 		insert into articles(
-			aidx
-			,bidx
+			
+			bidx
 			,title
 			,content
 			,midx
 			,mnickname
 		) values(
-			<if test="bIdx == 1">
-			articles_aidx_1_seq.nextval
-			</if>
-			<if test="bIdx == 2">
-			articles_aidx_2_seq.nextval
-			</if>
-			<if test="bIdx == 3">
-			articles_aidx_3_seq.nextval
-			</if>
-			<if test="bIdx == 4">
-			articles_aidx_4_seq.nextval
-			</if>
-			<if test="bIdx == 5">
-			articles_aidx_5_seq.nextval
-			</if>
-			<if test="bIdx == 6">
-			articles_aidx_6_seq.nextval
-			</if>
-			,#{bIdx}
+			
+			#{bIdx}
 			,#{title}
 			,#{content}
 			,#{mIdx}
@@ -53,7 +36,7 @@
 			,content
 			from service_info
 			where idx=#{idx}
-	</select>
+		</select>
 	
 	<update id="infoModify" parameterType="serviceInfoVO">
 		update service_info set content = #{content} where idx=#{idx}

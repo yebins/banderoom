@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.BoardService;
+import com.project.service.MemberService;
 import com.project.vo.ArticlesVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.ServiceInfoVO;
@@ -38,6 +41,9 @@ public class HomeController {
 	
 	@Autowired
 	private BoardService boardService;
+	@Autowired
+	private MemberService memberService;
+	
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -200,7 +206,7 @@ public class HomeController {
 				
 				if(result > 0 ) {
 					request.setAttribute("msg", "수정 성공");
-					request.setAttribute("url", "/serlist.do/bIdx="+vo.getbIdx());					
+					request.setAttribute("url", "/serlist.do?bIdx="+vo.getbIdx());					
 					return "alert";
 				} else {
 					
@@ -235,6 +241,7 @@ public class HomeController {
 		List<ArticlesVO> list=boardService.list(bIdx,searchtitle);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
+		model.addAttribute("bIdx",bIdx);
 		
 		return "serlist";
 	}
@@ -293,6 +300,38 @@ public class HomeController {
 		return "redirect:/serlist.do?bIdx="+vo.getbIdx();
 	}
 	
+	@RequestMapping(value="/messagePopup.do")
+	public String messagePopup(Model model,GeneralMembersVO vo) {
+		System.out.println(vo.getmIdx());
+		GeneralMembersVO vo1=memberService.oneMemberInfo(vo);
+		model.addAttribute("vo",vo1);
+		
+		return "messagePopup";
+	}
+	
+	@RequestMapping(value="/messageSend.do")
+	@ResponseBody
+	public int messageSend(String content,int receiver,HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		System.out.println("보낸내용"+content);
+		System.out.println("받는사람"+receiver);
+		
+		if(session.getAttribute("login") != null) {
+			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");
+			int sender=vo.getmIdx();
+			Map<String,Object> map=new HashMap<String,Object>();
+			map.put("content", content);
+			map.put("receiver", receiver);
+			map.put("sender",sender);
+			
+			return memberService.sendMessage(map);
+			
+		} else{
+			return -1;
+		}
+		
+	}
+	
 
 	@RequestMapping(value = "/uploadPicture.do") // 스마트 에디터 이미지 업로드
 	@ResponseBody
@@ -318,5 +357,17 @@ public class HomeController {
 		return "/upload/" + newFileName;
 	}
 	
-	
+	@RequestMapping(value="/jlist.do",method=RequestMethod.GET)
+	public String jList(Model model,Integer bIdx,String searchtitle) {
+		if(bIdx == null) {
+			bIdx=3;
+		}
+		
+		List<ArticlesVO> list=(List<ArticlesVO>)boardService.list(bIdx, searchtitle);
+		System.out.println(list.size());
+		
+		model.addAttribute("list",list);
+		
+		return "/board/jlist";
+	}
 }

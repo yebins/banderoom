@@ -30,6 +30,7 @@
 		width:600px;
 		height:50px;
 	}
+	.
 	.notice-page>input{
 		border-radius:25px;
 	}
@@ -63,6 +64,7 @@
 	.content-write a:visited{
 		color:white;
 	}
+	
 	
 	
 	.accordion-flush{
@@ -99,6 +101,9 @@
 		border-radius:20px;
 		box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 	}
+	input[type='search']{
+		border-radius:25px;
+	}
 </style>
 <script>
 	function accordionClick(obj) {
@@ -125,6 +130,7 @@
 			$(obj).parent().parent(".accordion-item").css("border-top-left-radius","20px");
 			$(obj).parent().parent(".accordion-item").css("border-top-right-radius","20px");
 			$(obj).parent().parent().parent(".accordion-flush").css("overflow","visible");
+		
 		}
 	}
 	
@@ -137,19 +143,19 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-		<c:if test="${param.bIdx==1}">
+		<c:if test="${bIdx==1}">
 			<a href="/serlist.do?bIdx=1">공지사항</a>
 		</c:if>
-		<c:if test="${param.bIdx==5}">
+		<c:if test="${bIdx==5}">
 			<a href="/serlist.do?bIdx=5">자주묻는질문</a>
 		</c:if>
-		<c:if test="${param.bIdx==6}">
+		<c:if test="${bIdx==6}">
 			<a href="/serlist.do?bIdx=6">이벤트</a>
 		</c:if>
 		</div>
 		<div>
 			<form action="serlist.do" class="d-flex notice-page" method="get">
-				<input type="hidden" name="bIdx" value="${param.bIdx}">
+				<input type="hidden" name="bIdx" value="${bIdx}">
        	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
         			<button class="accent-button normal-button">검색</button>
      		 </form>
@@ -159,15 +165,15 @@
 			<div id="page-content">
 				<div class="accordion accordion-flush" id="accordionFlushExample">
 				<c:forEach var="notice" items="${list}" varStatus="st">
-					
 					  <div class="accordion-item"
-					 	<c:if test="${st.first}">style="border-radius:30px"</c:if>
+					 	<c:if test="${st.first}">style="border-top-left-radius:20px; border-top-right-radius:20px;"</c:if>
+					 	<c:if test="${st.last}">style="border-bottom-left-radius:20px; border-bottom-right-radius:20px;"</c:if>
 					  >
 					    <h2 class="accordion-header">
 					      <button class="accordion-button header-button collapsed" type="button" data-bs-toggle="collapse" 
 					      		data-bs-target="#a${notice.aIdx}"
 							 aria-expanded="false" onclick="accordionClick(this)"
-							 <c:if test="${st.first}">style='border-top-left-radius:30px; border-top-right-radius:30px;'</c:if>
+							 <c:if test="${st.first}">style='border-top-left-radius:20px; border-top-right-radius:20px;'</c:if>
 							 >
 					      	<div class="accordion-button-title">${notice.title}</div>
 					      </button>
@@ -177,7 +183,7 @@
 					      	<div>${notice.content}</div>
 						    <div class="accordion-body-buttons">
 						    	<c:if test="${login.auth == 3}">
-							      <button class="accent-button normal-button body-buttons" onclick="location.href='serlistModify.do?aIdx=${notice.aIdx}&bIdx=${param.bIdx}'">수정</button>
+							      <button class="accent-button normal-button body-buttons" onclick="location.href='serlistModify.do?aIdx=${notice.aIdx}&bIdx=${bIdx}'">수정</button>
 							      <button class="accent-button normal-button body-buttons" onclick="remove('${notice.aIdx}','${notice.bIdx}')">삭제</button>
 							    </c:if>					    
 						    </div>

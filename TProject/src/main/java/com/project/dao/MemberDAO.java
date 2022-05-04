@@ -6,7 +6,10 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.project.vo.*;
+import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
+import com.project.vo.HostMembersVO;
+import com.project.vo.TelRegVO;
 
 @Repository
 public class MemberDAO {
@@ -105,5 +108,10 @@ public class MemberDAO {
 	
 	public GeneralMembersVO oneMemberInfo(GeneralMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.oneMemberInfo",vo);
+	}
+	
+	public int sendMessage(Map<String,Object> map) {
+		
+		return sqlSession.insert("com.project.mapper.memberMapper.sendMessage",map);
 	}
 }
