@@ -52,12 +52,6 @@
 		<c:if test="${param.bIdx==2 }">
 			자유게시판
 		</c:if>
-		<c:if test="${param.bIdx==4 }">
-			홍보게시판
-		</c:if>
-		<c:if test="${param.bIdx==3 }">
-			중고거래게시판
-		</c:if>
 		</div>
 		<div>
 			<form action="list.do" class="d-flex notice-page" method="get">
@@ -77,16 +71,16 @@
 					<th width="8%">추천수</th>
 				</tr>
 				<c:if test="${list.size() > 0 }">
-					<c:forEach var="item" items="${list}">
+					<c:forEach var="i" begin="0" end="${list.size()-1}">
 						<tr>
-							<td>${item.aIdx }</td>
-							<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${item.aIdx}">${item.title }</a></td>
-							<td>${item.mNickname }</td>
+							<td>${list.get(i).aIdx }</td>
+							<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}">${list.get(i).title }</a></td>
+							<td>${list.get(i).mNickname }</td>
 							<td>
-								<fmt:formatDate value="${item.regDate }" pattern="yyyy-MM-dd"/>
+								<fmt:formatDate value="${list.get(i).regDate }" pattern="yyyy-MM-dd"/>
 							</td>
-							<td>${item.readCount }</td>
-							<td>1</td><!-- 추천수 어떻게 가져옴니까... -->
+							<td>${list.get(i).readCount }</td>
+							<td>${likeList.get(list.get(i).aIdx)}</td>
 						</tr>
 					</c:forEach>
 				</c:if>

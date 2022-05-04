@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 
 import com.project.dao.BoardDAO;
 import com.project.vo.ArticlesVO;
+import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
 @Service
@@ -77,4 +78,35 @@ public class BoardServiceImpl implements BoardService {
 		return dao.boardUpdate(vo);
 	}
 
+	@Override
+	public int likedStatus(LikedArticlesVO vo) {
+		
+		return dao.likedStatus(vo);
+	}
+
+	@Override
+	public int likedAtricles(LikedArticlesVO vo) {
+		if(dao.likedStatus(vo)==1) {
+			return -1;
+		}else {
+			return dao.likedAtricles(vo);
+		}
+	}
+
+	@Override
+	public int unLikedArticles(LikedArticlesVO vo) {
+		if(dao.likedStatus(vo)==0) {
+			return -1;
+		}else {
+			return dao.unLikedArticles(vo);
+		}
+	}
+
+	@Override
+	public int likeCount(int aIdx) {
+		
+		return dao.likeCount(aIdx);
+	}
+		
+	
 }

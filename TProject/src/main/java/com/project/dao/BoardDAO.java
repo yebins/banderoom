@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
 @Repository
@@ -59,6 +60,26 @@ public class BoardDAO {
 	public int boardUpdate(ArticlesVO vo) {
 		
 		return sqlSession.update("com.project.mapper.boardMapper.boardUpdate", vo);
+	}
+	
+	public int likedStatus(LikedArticlesVO vo) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.likedStatus",vo);
+	}
+	
+	public int likedAtricles(LikedArticlesVO vo) {
+		
+		return sqlSession.insert("com.project.mapper.boardMapper.likedAtricles",vo);
+	}
+	
+	public int unLikedArticles(LikedArticlesVO vo) {
+		
+		return sqlSession.delete("com.project.mapper.boardMapper.unLikedArticles",vo);
+	}
+	
+	public int likeCount(int aIdx){
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.likeCount", aIdx);
 	}
 	
 }
