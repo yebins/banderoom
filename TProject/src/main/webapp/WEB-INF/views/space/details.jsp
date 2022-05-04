@@ -10,6 +10,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
 <style>
 
 	.page-content {
@@ -223,6 +224,27 @@
 	.space-info-subject:not(.space-info-subject:first-child) {
 		margin-top: 40px;
 	}
+
+	.space-rsv .space-info-subject{
+		margin: 25px 10px;
+	}
+
+	.space-rsv-subject {
+		font-size: 14px;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+
+	.space-rsv input[type=text] {
+		width: 100%;
+    flex: 1;
+    height: 40px;
+    border-radius: 20px;
+    padding: 0px 20px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+    border: none;
+		margin-top: 10px;
+	}
 	
 	iframe {
 		max-width: 100%;
@@ -236,6 +258,7 @@
 	
 	var liked;
 	var mIdx = 0;
+	var selectedDate;
 	
 	<c:if test="${login != null}">
 	mIdx = ${login.getmIdx()};
@@ -244,6 +267,8 @@
 	$(function() {
 		
 		getLikedStatus();
+    calendarInit();
+
 		
 	})
 	
@@ -415,7 +440,120 @@
 			  $(div).css("height", $(img).height() + "px");
 		}
 	}
+
+
+	// 달력
 	
+	var selectedDate;
+	
+	/*
+	    달력 렌더링 할 때 필요한 정보 목록 
+	
+	    현재 월(초기값 : 현재 시간)
+	    금월 마지막일 날짜와 요일
+	    전월 마지막일 날짜와 요일
+	*/
+	
+	function calendarInit() {
+	
+	    // 날짜 정보 가져오기
+	    var date = new Date(); // 현재 날짜(로컬 기준) 가져오기
+	    var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+	    var kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+	    var today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+	  
+	    var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+	    // 달력에서 표기하는 날짜 객체
+	  
+	    
+	    var currentYear = thisMonth.getFullYear(); // 달력에서 표기하는 연
+	    var currentMonth = thisMonth.getMonth(); // 달력에서 표기하는 월
+	    var currentDate = thisMonth.getDate(); // 달력에서 표기하는 일
+	
+	    // kst 기준 현재시간
+	    // console.log(thisMonth);
+	
+	    // 캘린더 렌더링
+	    renderCalender(thisMonth);
+	
+	    function renderCalender(thisMonth) {
+	
+	        // 렌더링을 위한 데이터 정리
+	        currentYear = thisMonth.getFullYear();
+	        currentMonth = thisMonth.getMonth();
+	        currentDate = thisMonth.getDate();
+	
+	        // 이전 달의 마지막 날 날짜와 요일 구하기
+	        var startDay = new Date(currentYear, currentMonth, 0);
+	        var prevDate = startDay.getDate();
+	        var prevDay = startDay.getDay();
+	
+	        // 이번 달의 마지막날 날짜와 요일 구하기
+	        var endDay = new Date(currentYear, currentMonth + 1, 0);
+	        var nextDate = endDay.getDate();
+	        var nextDay = endDay.getDay();
+	
+	        // console.log(prevDate, prevDay, nextDate, nextDay);
+	
+	        // 현재 월 표기
+	        $('.year-month').text(currentYear + '년 ' + (currentMonth + 1) + '월');
+	
+	        // 렌더링 html 요소 생성
+	        calendar = document.querySelector('.dates')
+	        calendar.innerHTML = '';
+	        
+	        // 지난달
+	        for (var i = prevDate - prevDay; i <= (prevDay == 6 ? 0 : prevDate); i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div class="day prev disable">' + i + '</div>'
+	        }
+	        // 이번달
+	        for (var i = 1; i <= nextDate; i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div id="day-' + i + '" class="day current">' + i + '</div>'
+	        }
+	        // 다음달
+	        for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay - 1); i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div class="day next disable">' + i + '</div>'
+	        }
+					
+	        console.log(prevDate, prevDay);
+	        // 오늘 날짜 표기
+	        if (today.getMonth() == currentMonth) {
+	            todayDate = today.getDate();
+	            var currentMonthDate = document.querySelectorAll('.dates .current');
+	            currentMonthDate[todayDate -1].classList.add('today');
+	        }
+	        
+	
+	        $('.day.current').on('click', function() {
+	        	selectedDate = new Date('' + currentYear + '-' + (currentMonth + 1) + '-' + $(this).attr('id').slice(4));
+	        	$("#selectedDate").text(selectedDate.getFullYear() + "년 " + (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일")
+	        })
+	    }
+	
+	    // 이전달로 이동
+	    $('.go-prev').on('click', function() {
+	        thisMonth = new Date(currentYear, currentMonth - 1, 1);
+	        renderCalender(thisMonth);
+	    });
+	
+	    // 다음달로 이동
+	    $('.go-next').on('click', function() {
+	        thisMonth = new Date(currentYear, currentMonth + 1, 1);
+	        renderCalender(thisMonth); 
+	    });
+	    
+	    
+	}
+	
+	function showTimeSelect() {
+		// ajax로 해당 날짜 예약 리스트 불러오는 코드 추가
+	// 	11 12
+	// 	16 20
+	// 	에약되어있으면
+	// 	11~12 비활성화 (11번째부터 12번째전까지 (1개)
+	// 	16~17, 17~18, 19~20 비활성화 (16번째부터 20번째 전까지 3개)
+			
+	}
 	</script>
 	
 </head>
@@ -541,8 +679,45 @@
 					<div class="col-sm colright">
 						<div class="inner-box space-rsv">
 							<div class="inner-box-content">
-								여기는 예약 정보가 들어갈 공간입니다.
-								<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+								<div class="space-info-subject">예약</div>
+								<form id="rsv">
+									<div class="space-rsv-subject">시작 날짜 / 시간</div>
+									<input type="text" class="rsv-date" placeholder="시작 날짜를 입력하세요." readonly>
+									<div class="space-rsv-subject">종료 날짜 / 시간</div>
+									<input type="text" class="rsv-date" placeholder="종료 날짜를 입력하세요." readonly>
+								</form>
+
+								<div class="calendar">
+									<div class="sec_cal">
+									  <div class="cal_nav">
+									    <a href="javascript:;" class="nav-btn go-prev">prev</a>
+									    <div class="year-month"></div>
+									    <a href="javascript:;" class="nav-btn go-next">next</a>
+									  </div>
+									  <div class="cal_wrap">
+									    <div class="days">
+									      <div class="day">SUN</div>
+									      <div class="day">MON</div>
+									      <div class="day">TUE</div>
+									      <div class="day">WED</div>
+									      <div class="day">THU</div>
+									      <div class="day">FRI</div>
+									      <div class="day">SAT</div>
+									    </div>
+									    <div class="dates"></div>
+									  </div>
+									</div>
+									
+									<div id="selectedDate"></div>
+									
+									<div id="timetable">
+										<c:forEach var="i" begin="9" end="23">
+										<div class="timeselector">
+											<c:if test="${i == 9}">0</c:if>${i}시 ~ ${i + 1}시
+										</div>
+										</c:forEach>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

@@ -11,7 +11,7 @@ public class ArticlesVO {
 	private String mNickname;
 	private Date regDate;
 	private int readCount;
-	private int status;
+	private int status; // 0: 기본 1: 삭제 그외는 알아서
 	
 	public int getaIdx() {
 		return aIdx;
