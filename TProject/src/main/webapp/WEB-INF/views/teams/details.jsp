@@ -84,12 +84,12 @@
 						<button type="button" class="normal-button">삭제</button> 
 						<button type="button" class="normal-button accent-button" 
 						onclick="window.open('application.do', '_blank', 
-                       'top=140, left=300, width=500, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');">지원하기</button> 
+                       'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');">지원하기</button> 
 					</div>
 				</div>
 		</div>
 		
 	</div>
-	
+	<c:import url="/footer.do" />
 </body>
 </html>
