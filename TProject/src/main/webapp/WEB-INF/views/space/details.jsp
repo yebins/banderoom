@@ -10,6 +10,12 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+
+<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<!-- Air datepicker css -->
+<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+
 <link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
 <style>
 
@@ -268,9 +274,24 @@
 		
 		getLikedStatus();
     calendarInit();
+    $("#startDate").datepicker({
+        language: 'ko',
+        minDate: new Date(),
+        inline: true,
+        classes: "start"
+     }); 
+    
+    var disable = new Date("2022-05-24");
+    
+    console.log($(".datepicker.start .datepicker--cell-day[data-date=" + disable.getDate() + "][data-month=" + disable.getMonth() + "][data-year=" + disable.getFullYear() + "]").addClass("-disabled-"));
+    	
 
-		
 	})
+	
+	function disableDate() {
+		console.log('발동');
+		$(".datepicker.start .datepicker--cell-day[data-date=" + disable.getDate() + "][data-month=" + disable.getMonth() + "][data-year=" + disable.getFullYear() + "]").addClass("-disabled-");
+	}
 	
 	function getLikedStatus() {
 		$.ajax({
@@ -523,10 +544,16 @@
 	            currentMonthDate[todayDate -1].classList.add('today');
 	        }
 	        
+	        
 	
 	        $('.day.current').on('click', function() {
 	        	selectedDate = new Date('' + currentYear + '-' + (currentMonth + 1) + '-' + $(this).attr('id').slice(4));
-	        	$("#selectedDate").text(selectedDate.getFullYear() + "년 " + (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일")
+	        	nextMonthDate = new Date().setMonth()
+	        	if (selectedDate >= new Date() || selectedDate < selectedDate.)
+	        	$('.day.current').css("background-color", "white")
+	        	$('.day.current.today').css("background-color", "rgb(242,242,242)")
+	        	$("#selectedDate").text(selectedDate.getFullYear() + "년 " + (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일");
+	        	$(this).css("background-color", "#fb6544")
 	        })
 	    }
 	
@@ -553,6 +580,18 @@
 	// 	11~12 비활성화 (11번째부터 12번째전까지 (1개)
 	// 	16~17, 17~18, 19~20 비활성화 (16번째부터 20번째 전까지 3개)
 			
+	}
+	
+	function showEndDate() {			
+		
+    $("#endDate").datepicker({
+        language: 'ko',
+        minDate: new Date($("#startDate").val())
+     }); 
+	    
+		if (new Date($("#startDate").val()) > new Date($("#endDate").val())) {
+			$("#endDate").val("");		
+		}
 	}
 	</script>
 	
@@ -682,9 +721,10 @@
 								<div class="space-info-subject">예약</div>
 								<form id="rsv">
 									<div class="space-rsv-subject">시작 날짜 / 시간</div>
-									<input type="text" class="rsv-date" placeholder="시작 날짜를 입력하세요." readonly>
+									<input type="text" id="startDate" class="rsv-date" placeholder="시작 날짜를 입력하세요." 
+										onblur="showEndDate()" oninput="disableDate()" readonly>
 									<div class="space-rsv-subject">종료 날짜 / 시간</div>
-									<input type="text" class="rsv-date" placeholder="종료 날짜를 입력하세요." readonly>
+									<input type="text" id="endDate" class="rsv-date" placeholder="종료 날짜를 입력하세요." readonly>
 								</form>
 
 								<div class="calendar">
