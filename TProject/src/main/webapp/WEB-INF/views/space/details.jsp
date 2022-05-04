@@ -10,12 +10,6 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
-
-<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
-<!-- Air datepicker css -->
-<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
-<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
-
 <link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
 <style>
 
@@ -232,7 +226,12 @@
 	}
 
 	.space-rsv .space-info-subject{
-		margin: 25px 10px;
+		margin: 25px 10px 0px 10px;
+	}
+	
+	.rsv-info {
+		font-size: 14px;
+		margin: 10px 0px 0px 10px;
 	}
 
 	.space-rsv-subject {
@@ -251,6 +250,64 @@
     border: none;
 		margin-top: 10px;
 	}
+	.day.current:hover {
+		cursor: pointer;
+	}
+	.day.current.selected {
+		background-color: #fb6544;
+		color: white !important;
+	}
+
+	#timeselect {
+		display: none;
+	}
+	#timetable {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		height: 300px;
+		overflow: auto;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border-radius: 10px;
+		margin-top: 20px;
+	}
+	.timeselector {
+		height: calc(100% / 8);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-left: 1px solid lightgray;
+		border-bottom: 1px solid lightgray;
+	}
+	.timeselector:nth-child(8n) {
+		border-right: 1px solid lightgray;
+		border-bottom: none;
+	}
+	.timeselector:hover {
+		cursor: pointer;
+	}
+	.time-selected {
+		background-color: #fb6544;
+		color: white;
+	}
+	.time-disabled {
+		background-color: lightgray;
+	}
+
+	.loadingDiv {
+		height: 300px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 20px;
+	}
+	.spinner-border {
+		width: 100px;
+		height: 100px;
+		margin: 40px;
+		border-width: 10px;
+		color: #FB6544;
+	}
 	
 	iframe {
 		max-width: 100%;
@@ -266,7 +323,7 @@
 	var mIdx = 0;
 	var selectedDate;
 	
-	<c:if test="${login != null}">
+	<c:if test="${login != null}">	//로그인 안되어있으면 mIdx = 0 으로 초기화
 	mIdx = ${login.getmIdx()};
 	</c:if>
 	
@@ -274,24 +331,8 @@
 		
 		getLikedStatus();
     calendarInit();
-    $("#startDate").datepicker({
-        language: 'ko',
-        minDate: new Date(),
-        inline: true,
-        classes: "start"
-     }); 
-    
-    var disable = new Date("2022-05-24");
-    
-    console.log($(".datepicker.start .datepicker--cell-day[data-date=" + disable.getDate() + "][data-month=" + disable.getMonth() + "][data-year=" + disable.getFullYear() + "]").addClass("-disabled-"));
-    	
 
-	})
-	
-	function disableDate() {
-		console.log('발동');
-		$(".datepicker.start .datepicker--cell-day[data-date=" + disable.getDate() + "][data-month=" + disable.getMonth() + "][data-year=" + disable.getFullYear() + "]").addClass("-disabled-");
-	}
+	});
 	
 	function getLikedStatus() {
 		$.ajax({
@@ -446,8 +487,6 @@
 		var divAspect = $(div).height() / $(div).width(); // div의 가로세로비는 알고 있는 값이다
 		var imgAspect = $(img).height() / $(img).width();
 		
-		console.log($(img).height() + ", " + $(img).width())
-		console.log(divAspect + ", " + imgAspect);
 	
 		if (imgAspect >= divAspect) {
 		    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
@@ -474,6 +513,9 @@
 	    금월 마지막일 날짜와 요일
 	    전월 마지막일 날짜와 요일
 	*/
+	
+
+	var rsvLoading = false;
 	
 	function calendarInit() {
 	
@@ -536,7 +578,6 @@
 	            calendar.innerHTML = calendar.innerHTML + '<div class="day next disable">' + i + '</div>'
 	        }
 					
-	        console.log(prevDate, prevDay);
 	        // 오늘 날짜 표기
 	        if (today.getMonth() == currentMonth) {
 	            todayDate = today.getDate();
@@ -544,16 +585,20 @@
 	            currentMonthDate[todayDate -1].classList.add('today');
 	        }
 	        
-	        
-	
 	        $('.day.current').on('click', function() {
-	        	selectedDate = new Date('' + currentYear + '-' + (currentMonth + 1) + '-' + $(this).attr('id').slice(4));
-	        	nextMonthDate = new Date().setMonth()
-	        	if (selectedDate >= new Date() || selectedDate < selectedDate.)
-	        	$('.day.current').css("background-color", "white")
-	        	$('.day.current.today').css("background-color", "rgb(242,242,242)")
-	        	$("#selectedDate").text(selectedDate.getFullYear() + "년 " + (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일");
-	        	$(this).css("background-color", "#fb6544")
+		        if (!rsvLoading) {
+		        	selectedDate = new Date('' + currentYear + '-' + (currentMonth + 1) + '-' + $(this).attr('id').slice(4));
+		        	nextMonthDate = new Date().setMonth(new Date().getMonth() + 1);
+		        	
+		        	if (selectedDate >= new Date().setHours(0,0,0,0) && selectedDate < nextMonthDate) {
+			        	$('.day.current').removeClass('selected');
+			        	$("#rsv-date").text(selectedDate.getFullYear() + "년 " 
+			        			+ (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일");
+			        	$(this).addClass('selected');
+			        	
+			        	showTimeSelect(selectedDate);
+		        	}
+		        }
 	        })
 	    }
 	
@@ -573,25 +618,60 @@
 	}
 	
 	function showTimeSelect() {
-		// ajax로 해당 날짜 예약 리스트 불러오는 코드 추가
-	// 	11 12
-	// 	16 20
-	// 	에약되어있으면
-	// 	11~12 비활성화 (11번째부터 12번째전까지 (1개)
-	// 	16~17, 17~18, 19~20 비활성화 (16번째부터 20번째 전까지 3개)
-			
+		
+		rsvLoading = true;
+		$("#timeselect").css("display", "none");
+		var loadingDiv = $('<div class="loadingDiv"><div class="spinner-border" role="status"></div></div>');
+		$()
+		
+		$(".calendar").append(loadingDiv);
+
+		setTimeout(function() {
+			$(loadingDiv).remove();
+			$("#timeselect").css("display", "block");
+			rsvLoading = false;
+		}, 500)
+		
 	}
 	
-	function showEndDate() {			
+	var startSelected = false;
+	var startTime;
+	var endTime;
+	var startDate;
+	var endDate;
+	
+	function selectTime(time) {
 		
-    $("#endDate").datepicker({
-        language: 'ko',
-        minDate: new Date($("#startDate").val())
-     }); 
-	    
-		if (new Date($("#startDate").val()) > new Date($("#endDate").val())) {
-			$("#endDate").val("");		
+		if (!startSelected) {
+			$(".timeselector").removeClass("time-selected");
+			startTime = +$(time).attr("data-starttime");
+			endTime = +$(time).attr("data-endtime");
+			startDate = new Date(selectedDate).setHours(startTime, 0, 0, 0);
+			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
+			console.log(new Date(startDate) + "/" + new Date(endDate));
+			$(time).addClass("time-selected");
+			startSelected = true;
+		} else {
+			endTime = +$(time).attr("data-endtime");
+			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
+			
+			if (endTime <= startTime) {
+				var temp = startTime;
+				startTime = endTime - 1;
+				endTime = temp + 1;
+
+				startDate = new Date(selectedDate).setHours(startTime, 0, 0, 0);
+				endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
+			}
+			
+			for (var i = startTime; i < endTime; i++) {
+				$(".timeselector[data-starttime=" + i + "]").addClass("time-selected");
+			}
+
+			console.log(new Date(startDate) + "/" + new Date(endDate));
+			startSelected = false;
 		}
+		
 	}
 	</script>
 	
@@ -719,14 +799,10 @@
 						<div class="inner-box space-rsv">
 							<div class="inner-box-content">
 								<div class="space-info-subject">예약</div>
-								<form id="rsv">
-									<div class="space-rsv-subject">시작 날짜 / 시간</div>
-									<input type="text" id="startDate" class="rsv-date" placeholder="시작 날짜를 입력하세요." 
-										onblur="showEndDate()" oninput="disableDate()" readonly>
-									<div class="space-rsv-subject">종료 날짜 / 시간</div>
-									<input type="text" id="endDate" class="rsv-date" placeholder="종료 날짜를 입력하세요." readonly>
-								</form>
-
+								<div class="rsv-info">
+									예약은 오늘 날짜부터 한 달간 가능합니다.
+								</div>
+								
 								<div class="calendar">
 									<div class="sec_cal">
 									  <div class="cal_nav">
@@ -736,27 +812,39 @@
 									  </div>
 									  <div class="cal_wrap">
 									    <div class="days">
-									      <div class="day">SUN</div>
-									      <div class="day">MON</div>
-									      <div class="day">TUE</div>
-									      <div class="day">WED</div>
-									      <div class="day">THU</div>
-									      <div class="day">FRI</div>
-									      <div class="day">SAT</div>
+									      <div class="day">일</div>
+									      <div class="day">월</div>
+									      <div class="day">화</div>
+									      <div class="day">수</div>
+									      <div class="day">목</div>
+									      <div class="day">금</div>
+									      <div class="day">토</div>
 									    </div>
 									    <div class="dates"></div>
 									  </div>
 									</div>
 									
-									<div id="selectedDate"></div>
-									
-									<div id="timetable">
-										<c:forEach var="i" begin="9" end="23">
-										<div class="timeselector">
-											<c:if test="${i == 9}">0</c:if>${i}시 ~ ${i + 1}시
+									<div id="timeselect">
+										<div class="space-rsv-subject">
+										시간 선택
 										</div>
-										</c:forEach>
+										<div id="timetable">
+											<c:forEach var="i" begin="9" end="23">
+											<div class="timeselector" data-starttime="${i}" data-endtime="${i + 1}"
+													onclick="selectTime(this)">
+												<c:if test="${i == 9}">0</c:if>${i}시 ~ ${i + 1}시
+											</div>
+											</c:forEach>
+											<div class="timeselector-blank"></div>
+										</div>
 									</div>
+								</div>
+								
+								<div id="rsv-form-wrap">
+									<div id="rsv-date">
+										예약일자를 선택해 주세요.
+									</div>
+									
 								</div>
 							</div>
 						</div>
