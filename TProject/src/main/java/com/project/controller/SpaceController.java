@@ -540,18 +540,4 @@ public class SpaceController {
 		
 	}
 	*/
-	
-	@RequestMapping(value = "/test.do")
-	public String test(Model model, SpacesVO vo) {
-
-		model.addAttribute("spacesVO", spaceService.details(vo));
-		
-		String[] thisMonthFullDateList = {"24", "26"};
-		
-		String[] nextMonthFullDateList = {"3", "20"};
-		
-		model.addAttribute("thisMonthFullDateList", thisMonthFullDateList);
-		model.addAttribute("nextMonthFullDateList", nextMonthFullDateList);
-		return "space/test";
-	}
 }

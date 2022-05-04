@@ -74,8 +74,9 @@
 
 .sec_cal .cal_wrap .days {
     display: flex;
-    margin-bottom: 20px;
-    padding-bottom: 20px;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     border-bottom: 1px solid #ddd;
 }
 
@@ -87,19 +88,20 @@
     display:flex;
     align-items: center;
     justify-content: center;
-    width: calc(100% / 7);
     text-align: left;
     color: #999;
     font-size: 16px;
     text-align: center;
-    border-radius:5px;
-    height: 44px;
+		height: 40px;
+		width: 40px;
+		border-radius: 20px;
 }
 
-.current.today {background: rgb(242 242 242);}
+.current.today {background: #FBE6B2;}
 
 .sec_cal .cal_wrap .dates {
     display: flex;
+    justify-content: space-between;
     flex-flow: wrap;
     height: 240px;
 }
