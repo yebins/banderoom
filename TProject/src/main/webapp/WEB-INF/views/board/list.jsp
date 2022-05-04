@@ -75,7 +75,7 @@
 						<tr>
 							<td>${list.get(i).aIdx }</td>
 							<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}">${list.get(i).title }</a></td>
-							<td>${list.get(i).mNickname }</td>
+							<td onclick="profileOpen(${item.mIdx})">${list.get(i).mNickname }</td>
 							<td>
 								<fmt:formatDate value="${list.get(i).regDate }" pattern="yyyy-MM-dd"/>
 							</td>

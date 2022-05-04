@@ -241,4 +241,17 @@
 		select * from general_members where midx=#{mIdx}
 	</select>
 	
+	<insert id="sendMessage" parameterType="map">
+		insert into messages(
+			sender
+			,receiver
+			,content
+			,sentdate
+		) values(
+			#{sender}
+			,#{receiver}
+			,#{content}
+			,now()
+		)
+	</insert>
 </mapper>

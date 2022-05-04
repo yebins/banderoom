@@ -43,6 +43,10 @@
    	div#page-title{
    		font-size:2rem;
    	}
+   	.inner-box-button-wrap>button{
+   		margin-left:15px;
+   		margin-top:15px;
+   	}
 </style>
 </head>
 <body>
@@ -69,8 +73,8 @@
 						<textarea id="summernote" name="content"></textarea>
 					</div>
 					<div class="inner-box-button-wrap">
-						<button class="accent-button normal-button" style="margin-left: 15px;">저장</button>
-						<button class="normal-button">취소하기</button>
+						<button class="accent-button normal-button">저장</button>
+						<button type="button" class="normal-button" onclick="location.href='serlist.do'">취소하기</button>
 					</div>
 				</div>
 			</form>	

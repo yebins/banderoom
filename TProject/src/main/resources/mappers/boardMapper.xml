@@ -14,12 +14,14 @@
 	
 	<insert id="insertArticles" parameterType="articlesVO">
 		insert into articles(
+			
 			bidx
 			,title
 			,content
 			,midx
 			,mnickname
 		) values(
+			
 			#{bIdx}
 			,#{title}
 			,#{content}
@@ -34,7 +36,7 @@
 			,content
 			from service_info
 			where idx=#{idx}
-	</select>
+		</select>
 	
 	<update id="infoModify" parameterType="serviceInfoVO">
 		update service_info set content = #{content} where idx=#{idx}

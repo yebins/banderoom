@@ -135,16 +135,6 @@ header {
 	margin-bottom: 20px;
 }
 
-
-.modal-body {
-	display: flex;
-	align-items: center;
-	margin-bottom: 20px;
-}
-.modal-dialog{
-	margin:0;
-}
-
 #sm-profile-picture-wrap {
 	display: flex;
 	justify-content: center;
@@ -156,6 +146,7 @@ header {
 	overflow: hidden;
 	margin-right: 20px;
 }
+
 #sm-profile-picture-wrap-modal {
 	display: flex;
 	justify-content: center;
@@ -236,10 +227,10 @@ header {
 	display: none;
 }
 
-.modal-footer {
-	display:flex;
-	justify-content:center;
+.miniprofile:hover{
+	cursor:pointer;
 }
+
 </style>
 
 <script>
@@ -432,64 +423,27 @@ header {
   </div>
 			</div>
 	</div>
-	<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-sm">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">미니프로필</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-       <div id="sm-profile-picture-wrap-modal">
-				<img src="" width="100%">
-		</div>
-		<div id="sm-profile-nickname-wrap-modal">
-			<div id="sm-profile-nickname-modal">
-					<a data-bs-toggle="modal" data-bs-target="#exampleModal"></a>
+	
+	
+	<div class="inner-box mini-profile" style="width: 300px; height: 200px; display: flex; position: fixed; visibility: hidden; top: 10px; left: 0px; 	 ">
+		<div class="inner-box-content " style="padding: 15px 20px;position:relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+	        <button type="button" class="btn-close" style="position: absolute; top: 0px; right: 0px;" onclick="$(this).parent().parent().css('visibility', 'hidden')"></button>
+				<div class="mini-profile-wrap" style="width: 100%; display: flex; align-items: center; ">
+			        <div id="sm-profile-picture-wrap-modal">
+							<img src="" width="100%">
+					</div>
+					<div id="sm-profile-nickname-wrap-modal">
+						<div id="sm-profile-nickname-modal">
+						</div>
+					</div>
+					<input type="hidden" id="sm-profile-mIdx" value="">
+				</div>
+			<div class="mini-profile-buttons" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+			<button class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;" onclick="messagePopup()">쪽지보내기</button>
+	        <button class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;">신고</button>
 			</div>
 		</div>
-      </div>
-      <div class="modal-footer">
-        <button class="normal-button accent-button" style="margin-left: 15px;">쪽지보내기</button>
-        <button class="normal-button accent-button" style="margin-left: 15px;">신고</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal Scripts -->
-<script>
-
-function profileModal(obj,obj2){
-	
-	console.log(obj2);
-	obj2.addEventListener("click",(e)=>{
-		locX=e.clientX;
-		locY=e.clientY;
-		console.log(e.clientX);
-	})
-	 
-	let locX=0;
-	let locY=0;
-	 
-	
-	$.ajax({
-		url:'/member/miniProfile.do',
-		type:'post',
-		data:{mIdx:obj},
-		success:function(vo){
-
-			console.log(vo);
-			console.log(vo.mIdx);
-			let profileSrc=document.querySelector("#sm-profile-picture-wrap-modal").children;
-			profileSrc[0].setAttribute("src",vo.profileSrc);
-			let profileNickname=document.querySelector("#sm-profile-nickname-modal").children;
-			profileNickname[0].innerText=vo.nickname;
-		}
-	})
-}
-<!-- modal scripts-->
-</script>
+	</div>
 <!-- Channel Plugin Scripts -->
 <script>
   (function() {
@@ -539,4 +493,36 @@ function profileModal(obj,obj2){
   });
 </script>
 <!-- End Channel Plugin -->
+<script>
+	function profileOpen(mIdx) {
+		var X=window.event.clientX;
+		var Y=window.event.clientY-10;
+		
+		document.querySelector('.mini-profile').style.transform='translate('+X+'px,'+Y+'px)';
+		
+		$.ajax({
+			url:'/member/miniProfile.do',
+			type:'post',
+			data:{mIdx:mIdx},
+			success:function(vo){
+
+				console.log(vo);
+								
+				$('div.mini-profile').css('visibility', 'visible');
+				$('#sm-profile-picture-wrap-modal img').attr('src', vo.profileSrc);
+				$('#sm-profile-nickname-modal').text(vo.nickname);
+				$('#sm-profile-mIdx').val(mIdx);
+			}
+		})
+		
+		
+	}
+	
+	function messagePopup(){
+		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
+		var mIdx=document.querySelector("#sm-profile-mIdx").value;
+		console.log(mIdx);
+		window.open("/messagePopup.do?mIdx="+mIdx,"쪽지보내기",option);
+	}
+</script>
 </header>

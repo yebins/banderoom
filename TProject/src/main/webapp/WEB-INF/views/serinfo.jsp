@@ -14,7 +14,7 @@
 <script src="/js/summernote/lang/summernote-ko-KR.js"></script>
 <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
 <style>
-	div.inner-box {
+	div.service-content {
 		height:600px;
 	}
 
@@ -55,7 +55,7 @@
 		<div id="page-content">
 			<form action="infoupdate.do" method="post">
 				<input type="hidden" name="idx" value="${vo.idx}">
-				<div class="inner-box">
+				<div class="inner-box service-content">
 					<div class="inner-box-content">
 						${vo.content}
 					</div>
@@ -68,14 +68,14 @@
 					</c:if>
 				</div>
 			</form>
-		</div>		
+		</div>
 	</div>
 <script>
 
 	function modify(obj){
 		$(obj).css("display","none");
 		$(obj).next().css("display","block");
-		document.querySelector(".inner-box-content").style.display='none';
+		$(obj).parent().prev().children().css("display","none");
 		
 		$('.note-frame').css("display","block");
 		$('.note-editable').html('${vo.content}');

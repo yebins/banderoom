@@ -1,6 +1,11 @@
 package com.project.service;
 
-import com.project.vo.*;
+import java.util.Map;
+
+import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
+import com.project.vo.HostMembersVO;
+import com.project.vo.TelRegVO;
 
 public interface MemberService {
 
@@ -16,4 +21,5 @@ public interface MemberService {
 	int hjoin(HostMembersVO vo);
 	HostMembersVO hLogin(HostMembersVO vo);
 	GeneralMembersVO oneMemberInfo(GeneralMembersVO vo);
+	int sendMessage(Map<String,Object> map);
 }

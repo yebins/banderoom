@@ -224,6 +224,12 @@ public class MemberServiceImpl implements MemberService {
 		
 		return vo1;
 	}
+
+	@Override
+	public int sendMessage(Map<String, Object> map) {
+		
+		return dao.sendMessage(map);
+	}
 	
 	
 }
