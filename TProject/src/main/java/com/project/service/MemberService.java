@@ -22,4 +22,5 @@ public interface MemberService {
 	HostMembersVO hLogin(HostMembersVO vo);
 	GeneralMembersVO oneMemberInfo(GeneralMembersVO vo);
 	int sendMessage(Map<String,Object> map);
+	HostMembersVO getHostMember(HostMembersVO vo);
 }

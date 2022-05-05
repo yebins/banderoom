@@ -254,4 +254,8 @@
 			,now()
 		)
 	</insert>
+	
+	<select id="getHostMember" parameterType="hostMembersVO" resultType="hostMembersVO">
+		select * from host_members where midx=#{mIdx}
+	</select>
 </mapper>

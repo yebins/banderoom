@@ -8,6 +8,8 @@
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
@@ -260,6 +262,7 @@
 
 	#timeselect {
 		display: none;
+		height: 341px;
 	}
 	#timetable {
 		display: flex;
@@ -276,12 +279,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border-left: 1px solid lightgray;
-		border-bottom: 1px solid lightgray;
 	}
 	.timeselector:nth-child(8n) {
-		border-right: 1px solid lightgray;
-		border-bottom: none;
+		border: none;
 	}
 	.timeselector:hover {
 		cursor: pointer;
@@ -291,11 +291,12 @@
 		color: white;
 	}
 	.time-disabled {
-		background-color: lightgray;
+		background-color: darkgray;
+		color: white;
 	}
 
 	.loadingDiv {
-		height: 300px;
+		height: 341px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -309,8 +310,92 @@
 		color: #FB6544;
 	}
 	
+	#rsv-form-wrap {
+		display: none;
+    margin-top: 40px;
+	}
+	#rsv-date {
+    margin-left: 10px;
+    font-size: 28px;
+    font-weight: bold;
+	}
+	#rsv-time {
+		margin-left: 10px;
+		height: 20px;
+	}
+	#rsv-peopleNum {
+		margin-top: 40px;
+	}
+	
+	.peopleNum-buttons-wrap {
+	  display: flex;
+    justify-content: center;
+    align-items: center;
+	}
+	
+	.peopleNum-buttons {
+	  display: flex;
+    height: 36px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+  }
+	.peopleNum-buttons * {
+		margin: 0px;
+	}
+	
+	.peopleNum-button {
+	  border: none;
+    background: white;
+    width: 36px;
+	}
+	.peopleNum-button:active {
+		filter: brightness(90%); 
+	}
+	
+	#rsv-input-peopleNum {
+    border: none;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    text-align: center;
+	}
+	#rsv-input-peopleNum::-webkit-outer-spin-button,
+	#rsv-input-peopleNum::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+	}
+	
+	.rsv-costs-wrap {
+		margin-top: 40px;
+	}
+	
 	iframe {
 		max-width: 100%;
+	}
+	
+	.space-cost, .rsv-cost {
+		text-align: right;
+	}
+	.space-cost span {
+		font-size: 28px;
+	}
+	.rsv-cost span {
+		font-size: 28px;
+		font-weight: bold;
+	}
+	
+	.submit-button-wrap {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 40px;
+	}
+	
+	.rsv-submit {
+		width: 100%;
+		font-size: 20px;
+		height: 50px;
+		border-radius: 25px;
 	}
 	
 </style>
@@ -321,7 +406,6 @@
 	
 	var liked;
 	var mIdx = 0;
-	var selectedDate;
 	
 	<c:if test="${login != null}">	//로그인 안되어있으면 mIdx = 0 으로 초기화
 	mIdx = ${login.getmIdx()};
@@ -331,6 +415,15 @@
 		
 		getLikedStatus();
     calendarInit();
+    
+    for (i = 0; i < 16; i++) {
+    	if (i < 8) {
+    		$(".timeselector").eq(i).css("border-right", "1px solid lightgray");
+    	}
+    	if (i % 8 != 7) {
+    		$(".timeselector").eq(i).css("border-bottom", "1px solid lightgray");    		
+    	}
+    }
 
 	});
 	
@@ -596,6 +689,8 @@
 			        			+ (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일");
 			        	$(this).addClass('selected');
 			        	
+			        	
+			        	
 			        	showTimeSelect(selectedDate);
 		        	}
 		        }
@@ -616,11 +711,44 @@
 	    
 	    
 	}
+
+	var startSelected = false;
+	var startTime;
+	var endTime;
+	var startDate;
+	var endDate;
+	var timeCount = 0;
+	var cost = 0;
 	
 	function showTimeSelect() {
 		
+		var today = new Date();
+
 		rsvLoading = true;
+		
+		// 시간 초기화
 		$("#timeselect").css("display", "none");
+		$(".timeselector").removeClass("time-selected");
+		$(".timeselector").removeClass("time-disabled");
+		startSelected = false;
+		startTime = null;
+		endTime = null;
+		startDate = null;
+		endDate = null;
+		timeCount = 0;
+		cost = 0;
+		$("#rsv-time").text("");
+		$(".rsv-cost span").text((${spacesVO.cost} * timeCount).toLocaleString());
+		
+		// 오늘을 선택했을 경우 지난 시간은 선택 불가
+   	if ("" + selectedDate.getFullYear() + selectedDate.getMonth() + selectedDate.getDate()
+   			== "" + today.getFullYear() + today.getMonth() + today.getDate()) {
+   		
+   		for (var i = 9; i <= new Date().getHours(); i++) {   			
+   			$(".timeselector[data-starttime=" + i + "]").addClass("time-disabled");   			
+   		}
+   	}
+		
 		var loadingDiv = $('<div class="loadingDiv"><div class="spinner-border" role="status"></div></div>');
 		$()
 		
@@ -630,28 +758,33 @@
 			$(loadingDiv).remove();
 			$("#timeselect").css("display", "block");
 			rsvLoading = false;
+
+			$("#rsv-form-wrap").css("display", "block");
 		}, 500)
+		
 		
 	}
 	
-	var startSelected = false;
-	var startTime;
-	var endTime;
-	var startDate;
-	var endDate;
 	
 	function selectTime(time) {
 		
+		if ($(time).hasClass("time-disabled")) {
+			return;
+		}
+
+		
 		if (!startSelected) {
+			timeCount = 1;
+			
 			$(".timeselector").removeClass("time-selected");
 			startTime = +$(time).attr("data-starttime");
 			endTime = +$(time).attr("data-endtime");
 			startDate = new Date(selectedDate).setHours(startTime, 0, 0, 0);
 			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
-			console.log(new Date(startDate) + "/" + new Date(endDate));
 			$(time).addClass("time-selected");
 			startSelected = true;
 		} else {
+			timeCount = 0;
 			endTime = +$(time).attr("data-endtime");
 			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
 			
@@ -664,13 +797,101 @@
 				endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
 			}
 			
+			
 			for (var i = startTime; i < endTime; i++) {
 				$(".timeselector[data-starttime=" + i + "]").addClass("time-selected");
+				timeCount++;
 			}
 
-			console.log(new Date(startDate) + "/" + new Date(endDate));
 			startSelected = false;
 		}
+		
+		$("#rsv-time").text(startTime + "시 ~ " + endTime + "시, " + timeCount + "시간");
+		$(".rsv-cost span").text((${spacesVO.cost} * timeCount).toLocaleString());
+		cost = ${spacesVO.cost} * timeCount;
+		
+	}
+	
+	function changePeopleNum(num) {
+		
+		var currentNum = +$("#rsv-input-peopleNum").val();
+		currentNum += num;
+		
+		if (currentNum > ${spacesVO.capacity}) {
+			currentNum = ${spacesVO.capacity};
+		} else if (currentNum < 1) {
+			currentNum = 1;
+		}
+		
+		$("#rsv-input-peopleNum").val(currentNum);
+		
+	}
+	
+	function rsvSubmit() {
+		if (
+			startTime == null ||
+			endTime == null ||
+			timeCount == 0 ||
+			cost == 0
+		) {
+			alert('결제 정보를 입력해 주세요.');
+			return;
+		}
+		
+		
+		var startDateObj = new Date(startDate);
+		var startDateString = "";
+		startDateString += startDateObj.getFullYear() + "-";
+		if (startDateObj.getMonth() + 1 < 10) {
+			startDateString += "0";
+		}
+		startDateString += (startDateObj.getMonth() + 1) + "-";
+		if (startDateObj.getDate() < 10) {
+			startDateString += "0";
+		}
+		startDateString += startDateObj.getDate() + "-";
+		if (startDateObj.getHours() < 10) {
+			startDateString += "0";
+		}
+		startDateString += startDateObj.getHours();
+		
+
+		var endDateObj = new Date(endDate);
+		var endDateString = "";
+		endDateString += endDateObj.getFullYear() + "-";
+		if (endDateObj.getMonth() + 1 < 10) {
+			endDateString += "0";
+		}
+		endDateString += (endDateObj.getMonth() + 1) + "-";
+		if (endDateObj.getDate() < 10) {
+			endDateString += "0";
+		}
+		endDateString += endDateObj.getDate() + "-";
+		if (endDateObj.getHours() < 10) {
+			endDateString += "0";
+		}
+		endDateString += endDateObj.getHours();
+		
+		
+		var rsvForm = $("<form action='payment.do' method='post' display='none'></form>");
+		var spaceIdxInput = $("<input type='text' name='spaceIdx' value='" + ${spacesVO.idx} + "'>");
+		var peopleNumInput = $("<input type='text' name='peopleNum' value='" + $("#rsv-input-peopleNum").val() + "'>");
+		var startDateInput = $("<input type='text' name='startDate' value='" + startDateString + "'>");
+		var endDateInput = $("<input type='text' name='endDate' value='" + endDateString + "'>");
+		var rsvHoursInput = $("<input type='text' name='rsvHours' value='" + timeCount + "'>");
+		var costInput = $("<input type='text' name='cost' value='" + cost + "'>");
+		
+		$("body").append(rsvForm);
+		
+		$(rsvForm).append(spaceIdxInput);
+		$(rsvForm).append(peopleNumInput);
+		$(rsvForm).append(startDateInput);
+		$(rsvForm).append(endDateInput);
+		$(rsvForm).append(rsvHoursInput);
+		$(rsvForm).append(costInput);
+		
+		$(rsvForm).submit();
+		
 		
 	}
 	</script>
@@ -841,10 +1062,51 @@
 								</div>
 								
 								<div id="rsv-form-wrap">
+									<div class="space-rsv-subject">
+										예약 날짜와 시간
+									</div> 
 									<div id="rsv-date">
-										예약일자를 선택해 주세요.
+									
+									</div>
+									<div id="rsv-time">
+										
+									</div>
+									<div id="rsv-peopleNum">
+										<div class="space-rsv-subject">
+											예약 인원
+										</div>
+										<div class="peopleNum-buttons-wrap">
+											총&nbsp;&nbsp;
+											<div class="peopleNum-buttons">
+												<button class="peopleNum-button" onclick="changePeopleNum(-1)">-</button>
+												<input id="rsv-input-peopleNum" type="number" name="peopleNum" min="1" max="${spacesVO.capacity}" value="1">
+												<button class="peopleNum-button" onclick="changePeopleNum(1)">+</button>
+											</div>
+											&nbsp;&nbsp;명
+										</div>
+									</div>
+								</div>
+							
+								<div class="rsv-costs-wrap">
+									<div class="space-rsv-subject">
+										시간당 이용료
+									</div>					
+									<div class="space-cost">
+										<span><fmt:formatNumber value="${spacesVO.cost}" pattern="#,###"/></span>
+										 원 / 시간
+									</div>
+									<div class="space-rsv-subject">
+										총 이용료
+									</div>
+									<div class="rsv-cost">
+										<span>0</span>
+										 원 / 시간
 									</div>
 									
+								</div>
+								
+								<div class="submit-button-wrap">
+									<button class="normal-button accent-button rsv-submit" onclick="rsvSubmit()">결제하기</button>
 								</div>
 							</div>
 						</div>
@@ -866,29 +1128,6 @@
 		</c:if>
 		</div>
 		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button class="normal-button">버튼</button> 
-			일반 버튼 (button class="normal-button") (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="normal-button accent-button">버튼</button> 강조 버튼 (button class="normal-button accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button class="normal-button">일반버튼</button>
-					<button class="normal-button accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
-			</div>
-			<br><br>
-		</div>
-		<!-- 여기까지 -->
 		
 	<div id="imgBackOveray">
 		<div id="imgBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>
@@ -899,6 +1138,8 @@
 		<div id="mapBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>
 		<div id="map"></div>
 	</div>
+	
+	<input type="date" id="test">
 	
 	
 	<c:import url="/footer.do" />

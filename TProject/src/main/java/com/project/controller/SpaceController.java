@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.service.MemberService;
 import com.project.service.SpaceService;
 import com.project.vo.*;
 
@@ -21,6 +22,8 @@ import com.project.vo.*;
 @RequestMapping(value = "/space")
 public class SpaceController {
 
+	@Autowired
+	private MemberService memberService;
 	@Autowired
 	private SpaceService spaceService;
 	
@@ -489,6 +492,36 @@ public class SpaceController {
 		map.put("likedStatus", likedStatus);
 		
 		return map;
+	}
+	
+	@RequestMapping(value = "/payment.do", method = RequestMethod.POST)
+	public String payment(Model model, HttpServletRequest request, ReservationsVO rsvVO) {
+
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			
+			SpacesVO spacesVO = new SpacesVO();
+			spacesVO.setIdx(rsvVO.getSpaceIdx());
+			spacesVO = spaceService.details(spacesVO);
+			HostMembersVO hostVO = new HostMembersVO();
+			hostVO.setmIdx(spacesVO.getHostIdx());
+			hostVO = memberService.getHostMember(hostVO);
+			rsvVO.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+			
+			request.getSession().setAttribute("login", memberService.gLogin(
+					(GeneralMembersVO) request.getSession().getAttribute("login")));
+			
+			model.addAttribute("spacesVO", spacesVO);
+			model.addAttribute("hostVO", hostVO);
+			model.addAttribute("rsvVO", rsvVO);
+			
+			return "space/payment";
+		}		
 	}
 	
 	/*
