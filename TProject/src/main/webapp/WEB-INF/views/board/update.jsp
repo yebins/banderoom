@@ -25,6 +25,9 @@
 		display:flex;
 		width:100%;
 	}
+	.inner-box-content, .inner-box-button-wrap{
+   		margin-top:20px;
+   }
 </style>
 
 <script src="/js/summernote/summernote-lite.js"></script>
@@ -113,7 +116,7 @@
 					</div>
 					<div class="inner-box-button-wrap">
 						<button class="normal-button accent-button" style="margin-left: 15px;">저장</button>
-						<button class="normal-button">취소하기</button>
+						<button class="normal-button" style="margin-left: 10px;">취소하기</button>
 					</div>
 				</div>
 			</div>

@@ -19,12 +19,17 @@ public class BoardDAO {
 	
 	public List<ArticlesVO> list(Map map){
 		
-		return sqlSession.selectList("com.project.mapper.boardMapper.list",map);
+		return sqlSession.selectList("com.project.mapper.boardMapper.list", map);
+	}
+	
+	public List<ArticlesVO> pageCount(Map map){
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.pageCount", map);
 	}
 	
 	public int insertArticlesVO(ArticlesVO vo) {
 		
-		return sqlSession.insert("com.project.mapper.boardMapper.insertArticles",vo);
+		return sqlSession.insert("com.project.mapper.boardMapper.insertArticles", vo);
 	}
 	
 	public ServiceInfoVO selectOneServiceInfoVO(int idx) {
