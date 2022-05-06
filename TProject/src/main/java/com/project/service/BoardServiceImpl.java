@@ -133,6 +133,7 @@ public class BoardServiceImpl implements BoardService {
 		map.put("articlesCount", count);
 		System.out.println(map.toString());
 		System.out.println(count);
+		
 		request.setAttribute("count", count);
 				
 		return dao.jlist(map);	
