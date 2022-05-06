@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import com.project.dao.BoardDAO;
+import com.project.util.PagingUtil;
 import com.project.vo.ArticlesVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
@@ -20,11 +21,16 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO dao;
 	
 	@Override
-	public List<ArticlesVO> list(int bIdx,String searchtitle) {
+	public List<ArticlesVO> list(int bIdx, String searchtitle, int page) {
 		if(searchtitle == null) searchtitle="";
 		Map<String,Object> map=new HashMap<String, Object>();
 		map.put("searchtitle", searchtitle);
 		map.put("bIdx", bIdx);
+		
+		PagingUtil pu = new PagingUtil(dao.pageCount(map).size(), page, 10);
+		
+		map.put("start", pu.getStart());
+		map.put("end", pu.getEnd());
 		
 		return dao.list(map);
 	}
@@ -106,6 +112,17 @@ public class BoardServiceImpl implements BoardService {
 	public int likeCount(int aIdx) {
 		
 		return dao.likeCount(aIdx);
+	}
+
+	@Override
+	public List<ArticlesVO> pageCount(int bIdx, String searchtitle) {
+		if(searchtitle == null) searchtitle="";
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("searchtitle", searchtitle);
+		map.put("bIdx", bIdx);
+		
+		System.out.println(dao.pageCount(map).size());
+		return dao.pageCount(map);
 	}
 		
 	
