@@ -239,7 +239,7 @@ public class HomeController {
 			bIdx=1;
 		}
 		
-		List<ArticlesVO> list=boardService.list(bIdx,searchtitle);
+		List<ArticlesVO> list=boardService.list(bIdx,searchtitle, 1);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
 		model.addAttribute("bIdx",bIdx);

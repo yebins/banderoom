@@ -3,17 +3,23 @@
 
 <mapper namespace="com.project.mapper.boardMapper">
 	
-	<select id="list" parameterType="map" resultType="articlesVO">
-		select 
-			* 
-		from 
-			articles
-		where 
-			bidx=#{bIdx}
+	<select id="list" parameterType="map" resultType="ArticlesVO">
+		select * from 
+		(select row_number() over(order by aIdx desc) as rownum, s.* from articles s
+		where bIdx=#{bIdx}
 		<if test="searchtitle != ''">
-		and title like '%'||#{searchtitle}||'%' 
+		and title like concat('%',#{searchtitle},'%')
 		</if>
-		order by aidx desc
+		order by aIdx desc) a
+		<![CDATA[where rownum >= #{start} and rownum <= #{end}]]>
+	</select>
+	
+	<select id="pageCount" parameterType="map" resultType="ArticlesVO">
+		select * from articles
+		where bidx = #{bIdx}
+		<if test="searchtitle != ''">
+		and title like concat('%',#{searchtitle},'%')
+		</if>
 	</select>
 	
 	<insert id="insertArticles" parameterType="articlesVO">

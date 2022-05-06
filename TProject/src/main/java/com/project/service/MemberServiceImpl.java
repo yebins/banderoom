@@ -230,6 +230,11 @@ public class MemberServiceImpl implements MemberService {
 		
 		return dao.sendMessage(map);
 	}
+
+	@Override
+	public HostMembersVO getHostMember(HostMembersVO vo) {
+		return dao.getHostMember(vo);
+	}
 	
 	
 }

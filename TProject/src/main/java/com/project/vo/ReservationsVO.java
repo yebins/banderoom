@@ -2,14 +2,19 @@ package com.project.vo;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 public class ReservationsVO {
 
 	private int resIdx;
 	private int mIdx;
 	private int spaceIdx;
 	private int peopleNum;
+	@DateTimeFormat(pattern = "yyyy-MM-dd-HH")
 	private Date startDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd-HH")
 	private Date endDate;
+	private int rsvHours;
 	private Date resDate;
 	private int cost;
 	
@@ -48,6 +53,12 @@ public class ReservationsVO {
 	}
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
+	}
+	public int getRsvHours() {
+		return rsvHours;
+	}
+	public void setRsvHours(int rsvHours) {
+		this.rsvHours = rsvHours;
 	}
 	public Date getResDate() {
 		return resDate;

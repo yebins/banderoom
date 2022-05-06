@@ -19,7 +19,19 @@ button:hover, input[type=button]:hover, input[type=submit]:hover, input[type=res
 
 a {
 	text-decoration: none;
-	color: black;
+	color: #303030;
+}
+a:link {
+	text-decoration: none;
+	color: #303030;
+}
+a:visited {
+	text-decoration: none;
+	color: #303030;
+}
+a:hover {
+	text-decoration: none;
+	color: #303030;
 }
 
 #wrapper {

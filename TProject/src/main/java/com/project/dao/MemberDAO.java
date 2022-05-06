@@ -111,7 +111,10 @@ public class MemberDAO {
 	}
 	
 	public int sendMessage(Map<String,Object> map) {
-		
 		return sqlSession.insert("com.project.mapper.memberMapper.sendMessage",map);
+	}
+	
+	public HostMembersVO getHostMember (HostMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.getHostMember", vo);
 	}
 }

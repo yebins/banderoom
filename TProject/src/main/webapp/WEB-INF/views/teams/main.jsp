@@ -31,7 +31,7 @@
 	border-radius:17.5px;
 }
 .search{
-	width:600px;
+	width:580px;
 	margin-right:10px;
 }
 .form{
@@ -51,43 +51,49 @@
     display: flex;
     width: 100%;
 }
-.teams{
-	margin-top:100px;
-	position:relative;
+.container{
+	margin-top:40px;
+}
+.team-col{
+	width:33.3%;
+	padding-bottom:24px;
 }
 .team-list{
-	width:280px;
-	border-radius:25px;
+	width:100%;
+	border-radius:15px;
 	overflow:hidden;
 	box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
-	border:2px solid #FBE6B2;
-	position:absolute;
 }
 .team-list:hover{
-	border:2px solid #FB6544;
+	cursor: pointer;
+	outline:3px solid #FB6544;
+}
+.team-list:active {
+	filter: brightness(90%);
 }
 .team-title{
-	padding: 10px;
-	width:280px;
-	height:61px;
-	background:#FB6544;
-	color:white;
+	padding: 15px;
+	width:100%;
+	height:73px;
+	background:#FBE6B2;
+	color:#303030;
 	font-size: 15px;
 }
 .team-content{
-	width:280px;
-	height:200px;
-	background:#FBE6B2;
+	width:100%;
+	height:220px;
+	background:white;
 	color:#303030;
 	text-align: center;
 	font-size: 13px;
+	padding:0px 5px;
 }
 table{
 	height:100%;
 	width:100%;
 }
 tr{
-	border-bottom:1px solid #FB6544;
+	border-bottom:1px solid #FBE6B2;
 }
 tr:last-of-type{
 	border:none;
@@ -172,50 +178,69 @@ td{
 					</div>
 				</div>
 			</form>
-			<div class="teams">
-				<div class="team-list" onclick="location.href='details.do'">
-					<div class="team-title">
-					코스모스 락밴드에서 함께할 팀원을 모집합니다.
+			
+			<div class="container">
+				<div class="row row-cols-1 row-cols-sm-3">
+					<div class="col team-col" onclick="location.href='details.do'">
+						<div class="team-list">
+							<div class="team-title">
+							코스모스 락밴드에서 함께할 팀원을 모집합니다.
+							</div>
+							<div class="team-content">
+								<table>
+									<tr>
+										<td style="width: 75px;">지역</td>
+										<td>전라북도 전주시 덕진구</td>
+									</tr>
+									<tr>
+										<td>수준</td>
+										<td>초급</td>
+									</tr>
+									<tr>
+										<td>장르</td>
+										<td>락</td>
+									</tr>
+									<tr>
+										<td>파트</td>
+										<td>보컬 1명, 드럼 1명, 베이스 1명, 키보드 1명</td>
+									</tr>
+									<tr>
+										<td>모집기간</td>
+										<td>2022년 04월 25일까지</td>
+									</tr>
+								</table>
+							</div>
+						</div>
 					</div>
-					<div class="team-content">
-						<table>
-							<tr>
-								<td style="width: 75px;">지역</td>
-								<td>전라북도 전주시 덕진구</td>
-							</tr>
-							<tr>
-								<td>수준</td>
-								<td>초급</td>
-							</tr>
-							<tr>
-								<td>장르</td>
-								<td>락</td>
-							</tr>
-							<tr>
-								<td>파트</td>
-								<td>보컬 1명, 드럼 1명, 베이스 1명, 키보드 1명</td>
-							</tr>
-							<tr>
-								<td>모집기간</td>
-								<td>2022년 04월 25일까지</td>
-							</tr>
-						</table>
+					<div class="col team-col">
+						<div class="team-list">
+							<div class="team-title">
+							제목
+							</div>
+							<div class="team-content">
+							내용
+							</div>
+						</div>
 					</div>
-				</div>
-				<div class="team-list" style="right:360px;">
-					<div class="team-title">
-					제목
+					<div class="col team-col">
+						<div class="team-list">
+							<div class="team-title">
+							제목
+							</div>
+							<div class="team-content">
+							내용
+							</div>
+						</div>
 					</div>
-					<div class="team-content">
-					내용
-					</div>
-				</div>
-				<div class="team-list" style="right:0px;">
-					<div class="team-title">
-					제목
-					</div>
-					<div class="team-content">
-					내용
+					<div class="col team-col">
+						<div class="team-list">
+							<div class="team-title">
+							제목
+							</div>
+							<div class="team-content">
+							내용
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -224,6 +249,6 @@ td{
 		
 		
 	</div>
-	
+	<c:import url="/footer.do" />
 </body>
 </html>

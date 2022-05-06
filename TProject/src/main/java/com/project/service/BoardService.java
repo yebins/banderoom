@@ -11,7 +11,7 @@ import com.project.vo.ServiceInfoVO;
 
 public interface BoardService {
 	
-	List<ArticlesVO> list(int bIdx,String searchtitle);
+	List<ArticlesVO> list(int bIdx,String searchtitle, int page);
 	int insertArticlesVO(ArticlesVO vo);
 	ServiceInfoVO selectOneServiceInfo(int idx);
 	int updateServiceInfo(ServiceInfoVO vo);
@@ -24,5 +24,6 @@ public interface BoardService {
 	int likedAtricles(LikedArticlesVO vo);
 	int unLikedArticles(LikedArticlesVO vo);
 	int likeCount(int aIdx);
+	List<ArticlesVO> pageCount(int bIdx, String searchtitle);
 	List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request);
 }
