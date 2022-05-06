@@ -163,7 +163,7 @@
 </style>
 <script>
 	
-	var payMethod;
+	var payMethod = "";
 	var point = 0;
 	var total = ${rsvVO.cost}
 	
@@ -211,6 +211,10 @@
 			terms = $(button).attr("data-terms");
 			$(".terms-detail[data-terms=" + terms + "]").css("display", "block");
 		}
+	}
+	
+	function paySubmit() {
+		if (payMethod = "") {}
 	}
 	
 </script>
@@ -462,7 +466,7 @@
 		</div>
 		
 		<div class="submit-button-wrap">
-			<button class="normal-button accent-button submit-button">결제하기</button>
+			<button class="normal-button accent-button submit-button" onclick="paySubmit()">결제하기</button>
 		</div>
 		
 	</div>

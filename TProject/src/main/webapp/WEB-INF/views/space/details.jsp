@@ -1139,8 +1139,6 @@
 		<div id="map"></div>
 	</div>
 	
-	<input type="date" id="test">
-	
 	
 	<c:import url="/footer.do" />
 </body>

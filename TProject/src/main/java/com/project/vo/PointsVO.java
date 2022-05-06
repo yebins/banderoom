@@ -4,6 +4,7 @@ public class PointsVO {
 
 	private int pointIdx;
 	private int mIdx;
+	private int resIdx;
 	private String content;
 	private int amount;
 	private int balance;
@@ -13,6 +14,12 @@ public class PointsVO {
 	}
 	public void setPointIdx(int pointIdx) {
 		this.pointIdx = pointIdx;
+	}
+	public int getResIdx() {
+		return resIdx;
+	}
+	public void setResIdx(int resIdx) {
+		this.resIdx = resIdx;
 	}
 	public int getmIdx() {
 		return mIdx;
