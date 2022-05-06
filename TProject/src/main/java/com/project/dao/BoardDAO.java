@@ -87,4 +87,13 @@ public class BoardDAO {
 		return sqlSession.selectOne("com.project.mapper.boardMapper.likeCount", aIdx);
 	}
 	
+	public List<ArticlesVO> jlist(Map<String,Object> map){
+		System.out.println(map.toString());
+		return sqlSession.selectList("com.project.mapper.boardMapper.jlistArticle",map);
+	}
+	
+	public int jlistCount(Map<String,Object> map) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.jlistArticleCount", map);
+	}
 }

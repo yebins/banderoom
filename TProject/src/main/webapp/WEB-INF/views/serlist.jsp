@@ -50,7 +50,7 @@
 	.body-buttons{
 		margin-left:10px;
 	}
-	[type="search"] + button{
+	[type="search"] + button{	
 		height:50px;
 		border-radius:25px;
 	}
@@ -87,11 +87,6 @@
 		border-right:3px solid #fb6544;
 	}
 	
-	.body-button{
-		border-bottom:3px solid #fb6544;
-		border-left:3px solid #fb6544;
-		border-right:3px solid #fb6544;
-	}
 	div#page-title{
 		font-size:2rem;
 	}
@@ -107,31 +102,37 @@
 </style>
 <script>
 	function accordionClick(obj) {
-		if ($(obj).hasClass("collapsed")) {
-			$(obj).parent().next().children(".accordion-body").css("border", "none");
-			$(obj).parent().parent(".accordion-item").css("border-top-left-radius", "none");
-			$(obj).parent().parent(".accordion-item").css("border-top-right-radius", "none");
-			$(obj).css("border-top-left-radius","0px");
-			$(obj).css("border-top-right-radius","0px");
-		} else {
-			$(obj).parent().next().children(".accordion-body").css("border-bottom", "3px solid #fb6544");
-			$(obj).parent().next().children(".accordion-body").css("border-left", "3px solid #fb6544");
-			$(obj).parent().next().children(".accordion-body").css("border-right", "3px solid #fb6544");
-			$(obj).parent().next().children(".accordion-body").css("border-bottom-left-radius", "20px");
-			$(obj).parent().next().children(".accordion-body").css("border-bottom-right-radius", "20px");
-			$(obj).css("border-top-right-radius", "20px");
-			$(obj).css("border-top-left-radius", "20px");
-			$(obj).parent().css("border-top-left-radius","20px");
-			$(obj).parent().css("border-top-right-radius","20px");
-			$(obj).parent().next(".accordion-collapse").css("border-bottom-left-radius","20px");
-			$(obj).parent().next(".accordion-collapse").css("border-bottom-right-radius","20px");
-			$(obj).parent().parent(".accordion-item").css("border-bottom-left-radius","20px");
-			$(obj).parent().parent(".accordion-item").css("border-bottom-right-radius","20px");
-			$(obj).parent().parent(".accordion-item").css("border-top-left-radius","20px");
-			$(obj).parent().parent(".accordion-item").css("border-top-right-radius","20px");
-			$(obj).parent().parent().parent(".accordion-flush").css("overflow","visible");
 		
-		}
+		$(obj).css('border-top-left-radius','30px');
+		$(obj).css('border-top-right-radius','30px');
+		$(obj).parent().parent().css('background-color','transparent');
+		$(obj).parent().next().children('div').css('background-color','white');
+		$(obj).parent().next().children('div').css({"border-bottom-left-radius":"30px","border-bottom-right-radius":"30px"});
+		$(obj).parent().next().children('div').css({"border-style":"solid","border-top":"none","border-color":"#fb6544"});
+		$(obj).css({'border':'3px solid #fb6544','border-bottom':'1px solid lightgray'});
+		
+		obj.addEventListener('blur',(e)=>{
+			$(obj).css("border-style","none");
+			$(obj).parent().next().children('div').css({"border-bottom-left-radius":"0","border-bottom-right-radius":"0"});
+			$(obj).parent().next().children('div').css({"border-style":"none","border-top":"none","border-color":"#fb6544"});
+			
+			var item=document.querySelectorAll('.accordion-item-serlist')
+			
+			for(let i=0; i<item.length; i++){
+				if( i == 0){
+					item[i].children[0].children[0].style.borderTopRadius='30px';
+				} else if(i == (item.length-1)){
+					item[i].children[0].children[0].style.borderBottomRadius='30px';
+					item[i].children[0].children[0].style.borderTopLeftRadius='0';
+					item[i].children[0].children[0].style.borderTopRightRadius='0';	
+				} else {
+					item[i].children[0].children[0].style.borderTopLeftRadius='0';
+					item[i].children[0].children[0].style.borderTopRightRadius='0';	
+				} 
+			}
+			
+		})
+	
 	}
 	
 	
@@ -165,15 +166,12 @@
 			<div id="page-content">
 				<div class="accordion accordion-flush" id="accordionFlushExample">
 				<c:forEach var="notice" items="${list}" varStatus="st">
-					  <div class="accordion-item"
-					 	<c:if test="${st.first}">style="border-top-left-radius:20px; border-top-right-radius:20px;"</c:if>
-					 	<c:if test="${st.last}">style="border-bottom-left-radius:20px; border-bottom-right-radius:20px;"</c:if>
-					  >
+					  <div class="accordion-item accordion-item-serlist">
 					    <h2 class="accordion-header">
 					      <button class="accordion-button header-button collapsed" type="button" data-bs-toggle="collapse" 
 					      		data-bs-target="#a${notice.aIdx}"
 							 aria-expanded="false" onclick="accordionClick(this)"
-							 <c:if test="${st.first}">style='border-top-left-radius:20px; border-top-right-radius:20px;'</c:if>
+							 <c:if test="${st.first}">style="border-top-left-radius:30px; border-top-right-radius:30px;"</c:if>
 							 >
 					      	<div class="accordion-button-title">${notice.title}</div>
 					      </button>

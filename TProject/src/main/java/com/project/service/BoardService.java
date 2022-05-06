@@ -1,8 +1,9 @@
 package com.project.service;
 
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.ui.Model;
+import javax.servlet.http.HttpServletRequest;
 
 import com.project.vo.ArticlesVO;
 import com.project.vo.LikedArticlesVO;
@@ -24,4 +25,5 @@ public interface BoardService {
 	int unLikedArticles(LikedArticlesVO vo);
 	int likeCount(int aIdx);
 	List<ArticlesVO> pageCount(int bIdx, String searchtitle);
+	List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request);
 }
