@@ -541,32 +541,29 @@ public class SpaceController {
 		// 포인트 사용 내역
 		PointsVO pointsVO = new PointsVO();
 		pointsVO.setAmount(-rsvVO.getUsedPoint());
-		pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
-		pointsVO.setContent("공간 예약 사용_" + spacesVO.getName());
-		pointsVO.setmIdx(gMemberVO.getmIdx());
-		pointsVO.setResIdx(rsvVO.getResIdx());
-		spaceService.insertPoint(pointsVO);
-		memberService.setPoint(pointsVO);
-		gMemberVO = memberService.gLogin(gMemberVO);
+		if (pointsVO.getAmount() != 0) {
+			pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
+			pointsVO.setContent("공간 예약 사용_" + spacesVO.getName());
+			pointsVO.setmIdx(gMemberVO.getmIdx());
+			pointsVO.setResIdx(rsvVO.getResIdx());
+			spaceService.insertPoint(pointsVO);
+			memberService.setPoint(pointsVO);
+			gMemberVO = memberService.gLogin(gMemberVO);
+		}
 		
 		// 포인트 적립 내역
 		pointsVO = new PointsVO();
 		pointsVO.setAmount((int) Math.round(rsvVO.getTotalCost() * 0.01));
-		pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
-		pointsVO.setContent("공간 예약 적립_" + spacesVO.getName());
-		pointsVO.setmIdx(gMemberVO.getmIdx());
-		pointsVO.setResIdx(rsvVO.getResIdx());
-		spaceService.insertPoint(pointsVO);
-		memberService.setPoint(pointsVO);
-		gMemberVO = memberService.gLogin(gMemberVO);
-		
-		
-		request.getSession().setAttribute("login", gMemberVO);
-		
-		model.addAttribute("spacesVO", spacesVO);
-		model.addAttribute("hostVO", hostVO);
-		model.addAttribute("rsvVO", rsvVO);
-		
+		if (pointsVO.getAmount() != 0) {
+			pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
+			pointsVO.setContent("공간 예약 적립_" + spacesVO.getName());
+			pointsVO.setmIdx(gMemberVO.getmIdx());
+			pointsVO.setResIdx(rsvVO.getResIdx());
+			spaceService.insertPoint(pointsVO);
+			memberService.setPoint(pointsVO);
+			gMemberVO = memberService.gLogin(gMemberVO);
+		}
+				
 		return "redirect:/space/paysuccess.do?resIdx=" + rsvVO.getResIdx();
 	}
 	
@@ -606,15 +603,24 @@ public class SpaceController {
 	
 	@RequestMapping(value="getrsvfulldates.do")
 	@ResponseBody
-	public List<String> getRsvFullDates(String nowDate, String afterMonth) {
+	public List<String> getRsvFullDates(String spaceIdx, String nowDate, String afterMonth) {
 		
 		Map<String, String> params = new HashMap<String, String>();
+		params.put("spaceIdx", spaceIdx);
 		params.put("nowDate", nowDate);
 		params.put("afterMonth", afterMonth);
+		
+		System.out.println(params.toString());
 		
 		return spaceService.getRsvFullDates(params);
 	}
 	
+	@RequestMapping(value = "getrsvhours.do")
+	@ResponseBody
+	public List<Map<String, String>> getRsvHours(@RequestParam Map<String, String> date) {
+		
+		return spaceService.getRsvHours(date);
+	}
 	/*
 	@RequestMapping(value="setlist.do")
 	public String setListData() {
