@@ -2,10 +2,7 @@ package com.project.service;
 
 import java.util.Map;
 
-import com.project.vo.EmailRegVO;
-import com.project.vo.GeneralMembersVO;
-import com.project.vo.HostMembersVO;
-import com.project.vo.TelRegVO;
+import com.project.vo.*;
 
 public interface MemberService {
 
@@ -23,4 +20,5 @@ public interface MemberService {
 	GeneralMembersVO oneMemberInfo(GeneralMembersVO vo);
 	int sendMessage(Map<String,Object> map);
 	HostMembersVO getHostMember(HostMembersVO vo);
+	int setPoint(PointsVO vo);
 }

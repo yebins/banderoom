@@ -20,7 +20,10 @@ public interface SpaceService {
 	int requestAccpet(SpacesVO vo);
 	List<SpacesVO> spaceList(Map<String, Object> params);
 	List<SpaceReviewVO> spaceReviewList(SpacesVO vo);
-	
+	ReservationsVO insertRsv(ReservationsVO vo);
+	int insertPoint(PointsVO vo);
+	ReservationsVO getRSV(ReservationsVO vo);
+	List<String> getRsvFullDates(Map<String, String> params);
 
 	//테스트용
 	public List<String> getAddr1();

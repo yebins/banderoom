@@ -1,5 +1,6 @@
 package com.project.service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,5 +105,27 @@ public class SpaceServiceImpl implements SpaceService {
 	public List<String> getAddr2(LocationsVO vo) {
 		return dao.getAddr2(vo);
 	}
+
+	@Override
+	public ReservationsVO insertRsv(ReservationsVO rsvVO) {
+		return dao.getRSV(dao.insertRsv(rsvVO));
+	}
+
+	@Override
+	public int insertPoint(PointsVO vo) {
+		return dao.insertPoint(vo);		
+	}
+
+	@Override
+	public ReservationsVO getRSV(ReservationsVO vo) {
+		return dao.getRSV(vo);
+	}
+
+	@Override
+	public List<String> getRsvFullDates(Map<String, String> params) {
+		return dao.getRsvFullDates(params);
+	}
+	
+	
 
 }

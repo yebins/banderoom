@@ -258,4 +258,10 @@
 	<select id="getHostMember" parameterType="hostMembersVO" resultType="hostMembersVO">
 		select * from host_members where midx=#{mIdx}
 	</select>
+	
+	<update id="setPoint" parameterType="pointsVO">
+		update general_members set
+			point = #{balance}
+			where midx = #{mIdx}
+	</update>
 </mapper>

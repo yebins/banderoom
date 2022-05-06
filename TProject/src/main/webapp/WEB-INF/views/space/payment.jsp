@@ -161,11 +161,20 @@
 	}
 	
 </style>
+
+<!-- iamport.payment.js -->
+ <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+ 
 <script>
-	
+
+	// 결제 설정
+	var IMP = window.IMP;
+	IMP.init("imp34520606");
+
 	var payMethod = "";
 	var point = 0;
 	var total = ${rsvVO.cost}
+	
 	
 	function setPayMethod(button) {
 		$("button.pay-method").removeClass("accent-button");
@@ -196,6 +205,14 @@
 	
 	function calcTotal() {
 		total = ${rsvVO.cost} - point;
+		if (total < 0) {
+			point += total;
+			total = 0;			
+
+			$(".rsv-input.point").val(point);
+		}
+				
+		$("#gettingPoint").text(Math.round(total * 0.01));
 		$(".total-cost span").text(total.toLocaleString());
 	}
 	
@@ -214,9 +231,100 @@
 	}
 	
 	function paySubmit() {
-		if (payMethod = "") {}
+		if (
+				!$("#term-1").is(":checked") ||
+				!$("#term-2").is(":checked") ||
+				!$("#term-3").is(":checked")
+				) {
+			
+			alert('약관에 동의해 주세요.');
+			
+			return;
+		}
+		
+		if (payMethod == '') {
+			alert('결제 방식을 선택해 주세요.');
+			return;
+		}
+
+		payWithCard();
 	}
+
+	function payWithCard() {
+		
+		if (total == 0) {
+
+			var rsvForm = $("<form action='paysuccess.do' method='post' display='none'>");
+
+			var mIdxInput = $("<input type='text' name='mIdx' value='${login.mIdx}'>");
+			var spaceIdxInput = $("<input type='text' name='spaceIdx' value='${spacesVO.idx}'>");
+			var peopleNumInput = $("<input type='text' name='peopleNum' value='${rsvVO.peopleNum}'>");
+			var startDateInput = $("<input type='text' name='startDate' value='" + $("textarea#startDate").val().trim() + "'>");
+			var endDateInput = $("<input type='text' name='endDate' value='" + $("textarea#endDate").val().trim() + "'>");
+			var rsvHoursInput = $("<input type='text' name='rsvHours' value='${rsvVO.rsvHours}'>");
+			var costInput = $("<input type='text' name='cost' value='${rsvVO.cost}'>");
+			var usedPointInput = $("<input type='text' name='usedPoint' value='" + point + "'>");
+			var totalCostInput = $("<input type='text' name='totalCost' value='" + total + "'>");
+			
+			$("body").append(rsvForm);
+			
+			$(rsvForm).append(mIdxInput);
+			$(rsvForm).append(spaceIdxInput);
+			$(rsvForm).append(peopleNumInput);
+			$(rsvForm).append(startDateInput);
+			$(rsvForm).append(endDateInput);
+			$(rsvForm).append(rsvHoursInput);
+			$(rsvForm).append(costInput);
+			$(rsvForm).append(usedPointInput);
+			$(rsvForm).append(totalCostInput);
+			
+			$(rsvForm).submit();
+		} else {
+			
+			IMP.request_pay({ // param
+				pg: "html5_inicis",
+				pay_method: "card",
+				name: "공간 예약_${spacesVO.name}",
+				amount: total,
+				buyer_email: "${login.email}",
+				buyer_name: "${login.name}",
+				buyer_tel: "${login.tel}"
+			}, function (rsp) { // callback
+				if (rsp.success) {
+					
+							var rsvForm = $("<form action='paysuccess.do' method='post' display='none'>");
 	
+							var mIdxInput = $("<input type='text' name='mIdx' value='${login.mIdx}'>");
+							var spaceIdxInput = $("<input type='text' name='spaceIdx' value='${spacesVO.idx}'>");
+							var peopleNumInput = $("<input type='text' name='peopleNum' value='${rsvVO.peopleNum}'>");
+							var startDateInput = $("<input type='text' name='startDate' value='" + $("textarea#startDate").val().trim() + "'>");
+							var endDateInput = $("<input type='text' name='endDate' value='" + $("textarea#endDate").val().trim() + "'>");
+							var rsvHoursInput = $("<input type='text' name='rsvHours' value='${rsvVO.rsvHours}'>");
+							var costInput = $("<input type='text' name='cost' value='${rsvVO.cost}'>");
+							var usedPointInput = $("<input type='text' name='usedPoint' value='" + point + "'>");
+							var totalCostInput = $("<input type='text' name='totalCost' value='" + total + "'>");
+							
+							$("body").append(rsvForm);
+							
+							$(rsvForm).append(mIdxInput);
+							$(rsvForm).append(spaceIdxInput);
+							$(rsvForm).append(peopleNumInput);
+							$(rsvForm).append(startDateInput);
+							$(rsvForm).append(endDateInput);
+							$(rsvForm).append(rsvHoursInput);
+							$(rsvForm).append(costInput);
+							$(rsvForm).append(usedPointInput);
+							$(rsvForm).append(totalCostInput);
+							
+							$(rsvForm).submit();
+					
+				} else {
+					alert('결제에 실패했습니다.');
+				}
+			});
+		}
+			
+	}
 </script>
 </head>
 <body>
@@ -348,6 +456,12 @@
 						<fmt:formatDate value="${rsvVO.startDate}" pattern="yyyy년 M월 d일 H시"/>
 						~ <fmt:formatDate value="${rsvVO.endDate}" pattern="H시"/>, ${rsvVO.rsvHours}시간
 					</div>
+					<textarea id="startDate" style="display: none" readonly>
+						<fmt:formatDate value="${rsvVO.startDate}" pattern="yyyy-MM-dd-HH"/>
+					</textarea>
+					<textarea id="endDate" style="display: none" readonly>
+						<fmt:formatDate value="${rsvVO.endDate}" pattern="yyyy-MM-dd-HH"/>
+					</textarea>
 					<div class="small-title">
 						예약 인원
 					</div>
@@ -392,6 +506,10 @@
 					<div class="content total-cost">
 						<span><fmt:formatNumber value="${rsvVO.cost}" pattern="#,###"/></span>원
 					</div>
+					<div class="small-title">
+						적립 예정 포인트
+					</div>
+					<span id="gettingPoint"><fmt:formatNumber value="${rsvVO.cost * 0.01}" pattern="#,###"/></span> P
 					<div class="small-title">
 						약관 동의
 					</div>

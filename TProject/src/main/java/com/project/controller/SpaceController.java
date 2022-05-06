@@ -524,6 +524,97 @@ public class SpaceController {
 		}		
 	}
 	
+	@RequestMapping(value = "paysuccess.do", method = RequestMethod.POST)
+	public String paySuccess(Model model, HttpServletRequest request, ReservationsVO rsvVO) {
+		GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+		
+		rsvVO = spaceService.insertRsv(rsvVO);
+
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(rsvVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		HostMembersVO hostVO = new HostMembersVO();
+		hostVO.setmIdx(spacesVO.getHostIdx());
+		hostVO = memberService.getHostMember(hostVO);
+
+
+		// 포인트 사용 내역
+		PointsVO pointsVO = new PointsVO();
+		pointsVO.setAmount(-rsvVO.getUsedPoint());
+		pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
+		pointsVO.setContent("공간 예약 사용_" + spacesVO.getName());
+		pointsVO.setmIdx(gMemberVO.getmIdx());
+		pointsVO.setResIdx(rsvVO.getResIdx());
+		spaceService.insertPoint(pointsVO);
+		memberService.setPoint(pointsVO);
+		gMemberVO = memberService.gLogin(gMemberVO);
+		
+		// 포인트 적립 내역
+		pointsVO = new PointsVO();
+		pointsVO.setAmount((int) Math.round(rsvVO.getTotalCost() * 0.01));
+		pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
+		pointsVO.setContent("공간 예약 적립_" + spacesVO.getName());
+		pointsVO.setmIdx(gMemberVO.getmIdx());
+		pointsVO.setResIdx(rsvVO.getResIdx());
+		spaceService.insertPoint(pointsVO);
+		memberService.setPoint(pointsVO);
+		gMemberVO = memberService.gLogin(gMemberVO);
+		
+		
+		request.getSession().setAttribute("login", gMemberVO);
+		
+		model.addAttribute("spacesVO", spacesVO);
+		model.addAttribute("hostVO", hostVO);
+		model.addAttribute("rsvVO", rsvVO);
+		
+		return "redirect:/space/paysuccess.do?resIdx=" + rsvVO.getResIdx();
+	}
+	
+	@RequestMapping(value = "paysuccess.do", method = RequestMethod.GET)
+	public String paySuccess(Model model, HttpServletRequest request, int resIdx) {
+		GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+
+		ReservationsVO rsvVO = new ReservationsVO();
+		rsvVO.setResIdx(resIdx);
+		rsvVO = spaceService.getRSV(rsvVO);
+		
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(rsvVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		HostMembersVO hostVO = new HostMembersVO();
+		hostVO.setmIdx(spacesVO.getHostIdx());
+		hostVO = memberService.getHostMember(hostVO);
+
+		request.getSession().setAttribute("login", gMemberVO);
+		
+		model.addAttribute("spacesVO", spacesVO);
+		model.addAttribute("hostVO", hostVO);
+		model.addAttribute("rsvVO", rsvVO);
+		
+		return "space/paysuccess";
+	}
+	
+	@RequestMapping(value = "test.do")
+	public String test(Model model, ReservationsVO vo) {
+		
+		vo = spaceService.getRSV(vo);
+		
+		model.addAttribute("rsvVO", vo);
+		
+		return "space/test";
+	}
+	
+	@RequestMapping(value="getrsvfulldates.do")
+	@ResponseBody
+	public List<String> getRsvFullDates(String nowDate, String afterMonth) {
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("nowDate", nowDate);
+		params.put("afterMonth", afterMonth);
+		
+		return spaceService.getRsvFullDates(params);
+	}
+	
 	/*
 	@RequestMapping(value="setlist.do")
 	public String setListData() {

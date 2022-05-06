@@ -235,6 +235,11 @@ public class MemberServiceImpl implements MemberService {
 	public HostMembersVO getHostMember(HostMembersVO vo) {
 		return dao.getHostMember(vo);
 	}
+
+	@Override
+	public int setPoint(PointsVO vo) {
+		return dao.setPoint(vo);
+	}
 	
 	
 }

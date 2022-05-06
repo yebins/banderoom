@@ -249,4 +249,57 @@
 	<select id="getAddr2" parameterType="locationsVO" resultType="String">
 		select addr2 from locations where addr1 = #{addr1}
 	</select>
+	
+	<insert id="insertRsv" parameterType="reservationsVO" useGeneratedKeys="true" keyProperty="resIdx">
+		insert into reservations(
+			midx,
+			spaceidx,
+			peoplenum,
+			startdate,
+			enddate,
+			rsvhours,
+			cost,
+			usedpoint,
+			totalcost
+		) values (
+			#{mIdx},
+			#{spaceIdx},
+			#{peopleNum},
+			#{startDate},
+			#{endDate},
+			#{rsvHours},
+			#{cost},
+			#{usedPoint},
+			#{totalCost}
+		)
+	</insert>
+	
+	<insert id="insertPoint" parameterType="pointsVO">
+		insert into points (
+			residx,
+			midx,
+			content,
+			amount,
+			balance
+		) values (
+			#{resIdx},
+			#{mIdx},
+			#{content},
+			#{amount},
+			#{balance}
+		)
+	</insert>
+	
+	<select id="getRSV" parameterType="reservationsVO" resultType="reservationsVO">
+		select * from reservations where residx = #{resIdx}
+	</select>
+	
+	<select id="getRsvFullDates" parameterType="hashmap" resultType="String">
+		select date from (
+			select date(startdate) as date, sum(rsvhours) as rsvhours
+			from reservations r 
+			where date(startdate) between #{nowDate} and #{afterMonth}
+			group by date
+			) a	where a.rsvhours = 15;
+	</select>
 </mapper>

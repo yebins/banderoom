@@ -259,6 +259,10 @@
 		background-color: #fb6544;
 		color: white !important;
 	}
+	.day.rsv-full {
+		background-color: darkgray;
+		color: white !important;
+	}
 
 	#timeselect {
 		display: none;
@@ -424,8 +428,61 @@
     		$(".timeselector").eq(i).css("border-bottom", "1px solid lightgray");    		
     	}
     }
+    
 
 	});
+	
+	function getRsvFullDates() {
+
+	    // 다음 한 달간 예약정보 조회 (날짜별 총 예약 시간)
+	    var now = new Date();
+	    var nextDay = new Date(new Date().setMonth(new Date().getMonth() + 1));
+	    
+			var nowString="";
+			nowString += now.getFullYear() + "-";
+			if (now.getMonth() + 1 < 10) {
+				nowString += "0";
+			}
+			nowString += (now.getMonth() + 1) + "-";
+			if (now.getDate() < 10) {
+				nowString += "0";
+			}
+			nowString += now.getDate();
+
+			var nextDayString="";
+			nextDayString += nextDay.getFullYear() + "-";
+			if (nextDay.getMonth() + 1 < 10) {
+				nextDayString += "0";
+			}
+			nextDayString += (nextDay.getMonth() + 1) + "-";
+			if (nextDay.getDate() < 10) {
+				nextDayString += "0";
+			}
+			nextDayString += nextDay.getDate();
+			
+	    $.ajax({
+	    	type: "get",
+	    	url: "getrsvfulldates.do",
+	    	data: "nowDate=" + nowString + "&afterMonth=" + nextDayString,
+	    	success: function(data) {
+					disableFullDates(data);
+	    	}
+	    })
+	}
+	
+	function disableFullDates(dates) {
+		
+		console.log(dates);
+		for (idx in dates) {
+			var disableDate = new Date(dates[idx]);
+			
+			var disableYear = disableDate.getFullYear();
+			var disableMonth = disableDate.getMonth() + 1;
+			var disableDay = disableDate.getDate();
+			
+			$(".year-" + disableYear + ".month-" + disableMonth + ".day-" + disableDay).addClass("rsv-full");
+		}
+	}
 	
 	function getLikedStatus() {
 		$.ajax({
@@ -655,7 +712,7 @@
 	        $('.year-month').text(currentYear + '년 ' + (currentMonth + 1) + '월');
 	
 	        // 렌더링 html 요소 생성
-	        calendar = document.querySelector('.dates')
+	        calendar = document.querySelector('.dates');
 	        calendar.innerHTML = '';
 	        
 	        // 지난달
@@ -664,7 +721,8 @@
 	        }
 	        // 이번달
 	        for (var i = 1; i <= nextDate; i++) {
-	            calendar.innerHTML = calendar.innerHTML + '<div id="day-' + i + '" class="day current">' + i + '</div>'
+	            calendar.innerHTML = calendar.innerHTML + '<div id="day-' + i 
+	            	+ '" class="day current year-' + currentYear + ' month-' + (currentMonth + 1) + ' day-' + i + '">' + i + '</div>';
 	        }
 	        // 다음달
 	        for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay - 1); i++) {
@@ -678,7 +736,13 @@
 	            currentMonthDate[todayDate -1].classList.add('today');
 	        }
 	        
+	        getRsvFullDates();
+	        
 	        $('.day.current').on('click', function() {
+	        	if ($(this).hasClass('rsv-full')) {
+	        		return;
+	        	}
+	        	
 		        if (!rsvLoading) {
 		        	selectedDate = new Date('' + currentYear + '-' + (currentMonth + 1) + '-' + $(this).attr('id').slice(4));
 		        	nextMonthDate = new Date().setMonth(new Date().getMonth() + 1);
@@ -1022,6 +1086,10 @@
 								<div class="space-info-subject">예약</div>
 								<div class="rsv-info">
 									예약은 오늘 날짜부터 한 달간 가능합니다.
+								</div>
+								<div class="rsv-cal-info">
+									<div class="day current today"></div>
+									<div class="day current rsv-full"></div>
 								</div>
 								
 								<div class="calendar">
