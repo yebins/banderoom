@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 import com.project.dao.BoardDAO;
 import com.project.vo.ArticlesVO;
@@ -106,6 +107,35 @@ public class BoardServiceImpl implements BoardService {
 	public int likeCount(int aIdx) {
 		
 		return dao.likeCount(aIdx);
+	}
+
+	@Override
+	public List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request) {
+		//page+(page-1)*5;
+		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
+		int start = page+(page-1)*5;
+		int end=page*6;
+		//if(searchtitle == null) searchtitle ="";
+		
+		/*
+		 * jlist.put("searchtitle",searchtitle); jlist.put("start",start);
+		 * jlist.put("end",end);
+		 */
+		
+		/*
+		 * if(status == null) { status=0; }
+		 */
+		//jlist.put("status", status);
+		//System.out.println(jlist.toString());
+		int count=dao.jlistCount(map);
+		map.put("start", start);
+		map.put("end", end);
+		map.put("articlesCount", count);
+		System.out.println(map.toString());
+		System.out.println(count);
+		request.setAttribute("count", count);
+				
+		return dao.jlist(map);	
 	}
 		
 	

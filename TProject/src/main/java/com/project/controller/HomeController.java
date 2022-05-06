@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.util.AbstractSequentialList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -358,15 +359,40 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/jlist.do",method=RequestMethod.GET)
-	public String jList(Model model,Integer bIdx,String searchtitle) {
-		if(bIdx == null) {
-			bIdx=3;
+	public String jList(@RequestParam Map<String, Object> params, Model model,HttpServletRequest request) {
+		if(params.get("bIdx") == null) {
+			params.put("bIdx", 3);
 		}
+		System.out.println(params.toString());
+		List<ArticlesVO> list = boardService.Jlist(params,request);
 		
-		List<ArticlesVO> list=(List<ArticlesVO>)boardService.list(bIdx, searchtitle);
-		System.out.println(list.size());
+		Map<String,String> map=new HashMap<String, String>();
+			for(int i=0;i<list.size();i++) {
+				String co=list.get(i).getContent().replaceAll(" ", "");
+				
+				
+				if(co.indexOf("<imgsrc") > -1) {					
+				int startIndex=co.indexOf("<imgsrc");
+				String co2=co.substring(startIndex+10);
+				String[] co3=co2.split("\"");
+				String url=co3[0];				
+				map.put("url"+i, url);
+				} else {
+					map.put("url"+i, "gggg");
+				}
+			}
 		
-		model.addAttribute("list",list);
+		int articlesTotal=(Integer)request.getAttribute("count");
+		System.out.println("총게시물"+articlesTotal);
+		
+		//카멜?기법
+		model.addAttribute("list", list);
+		model.addAttribute("status", params.get("status"));
+		model.addAttribute("searchtitle", params.get("searchtitle"));
+		model.addAttribute("articlesTotal",articlesTotal);
+		model.addAttribute("imgsrc", map);
+		
+		System.out.println(map.toString());
 		
 		return "/board/jlist";
 	}

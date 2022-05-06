@@ -4,10 +4,14 @@
 <mapper namespace="com.project.mapper.boardMapper">
 	
 	<select id="list" parameterType="map" resultType="articlesVO">
-		select * from articles
-		where bidx=#{bIdx}
+		select 
+			* 
+		from 
+			articles
+		where 
+			bidx=#{bIdx}
 		<if test="searchtitle != ''">
-		and title like '%'||#{searchtitle}||'%'
+		and title like '%'||#{searchtitle}||'%' 
 		</if>
 		order by aidx desc
 	</select>
@@ -93,4 +97,36 @@
 		where aidx = #{aIdx}
 	</select>
 	
+	<select id="jlistArticle" parameterType="map" resultType="articlesVO">
+			select * from
+			(SELECT
+		<![CDATA[
+			  @rownum:=@rownum+1 as rownum, 
+			  art.*
+			FROM articles art,(select @rownum:=0) rn_art
+		]]>
+			where bIdx=3
+			<if test='searchtitle != null and !"".equals(searchtitle)'>
+			and title like CONCAT('%',#{searchtitle},'%')
+			</if>
+			<if test="status != 0 and status != null">
+			and status=#{status}
+			</if>
+			order by aidx desc) list
+		<![CDATA[
+			where rownum>=#{start} and rownum <=#{end}
+			]]>
+	</select>
+	
+	<select id="jlistArticleCount" parameterType="Map" resultType="int">
+		select count(aIdx)
+		from articles
+		where bidx=3
+		<if test='searchtitle != null and !"".equals(searchtitle)'>
+		and title like CONCAT('%',#{searchtitle},'%')
+		</if>
+		<if test="status != 0 and status != null">
+		and status=#{status}
+		</if>
+	</select>
 </mapper>
