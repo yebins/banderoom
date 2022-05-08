@@ -139,4 +139,8 @@ public class SpaceDAO {
 	public List<String> getRsvFullDates(Map<String, String> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getRsvFullDates", params);
 	}
+	
+	public List<Map<String, Date>> getRsvHours(Map<String, String> date) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.getRsvHours", date);
+	}
 }

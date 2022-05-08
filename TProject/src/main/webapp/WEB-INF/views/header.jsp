@@ -318,7 +318,7 @@ header {
 				연습실 대여
 			</div>
 			<div class="sm-button-wrap" onclick="location.href='/teams/main.do'">
-				사람구하는그거
+				팀원 모집
 			</div>
 		</div>
 		</c:if>

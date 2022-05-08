@@ -263,6 +263,21 @@
 		background-color: darkgray;
 		color: white !important;
 	}
+	
+	.rsv-cal-info {
+		display: flex;
+		align-items: center;
+		margin-top: 20px;
+		padding-left: 10px;
+	}
+	.dayex {
+		width: 30px;
+		height: 30px;
+		border-radius: 15px;
+	}
+	.dayinfo {
+		margin: 0px 20px 0px 10px;
+	}
 
 	#timeselect {
 		display: none;
@@ -463,7 +478,7 @@
 	    $.ajax({
 	    	type: "get",
 	    	url: "getrsvfulldates.do",
-	    	data: "nowDate=" + nowString + "&afterMonth=" + nextDayString,
+	    	data: "spaceIdx=${spacesVO.idx}&nowDate=" + nowString + "&afterMonth=" + nextDayString,
 	    	success: function(data) {
 					disableFullDates(data);
 	    	}
@@ -472,7 +487,6 @@
 	
 	function disableFullDates(dates) {
 		
-		console.log(dates);
 		for (idx in dates) {
 			var disableDate = new Date(dates[idx]);
 			
@@ -817,15 +831,40 @@
 		$()
 		
 		$(".calendar").append(loadingDiv);
-
-		setTimeout(function() {
-			$(loadingDiv).remove();
-			$("#timeselect").css("display", "block");
-			rsvLoading = false;
-
-			$("#rsv-form-wrap").css("display", "block");
-		}, 500)
 		
+		
+		//예약 시간 정보 받아오기
+		var date = {
+				spaceIdx: '${spacesVO.idx}',
+				date: "" + selectedDate.getFullYear() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getDate()
+		}
+		
+		$.ajax({
+			type: "get",
+			url: "getrsvhours.do",
+			data: date,
+			success: function(data) {
+				
+				for (i in data) {
+					if (data[i].end == 0) {
+						data[i].end = '24';						
+					}
+					
+					for (var j = +data[i].start; j < +data[i].end; j++) {
+						if (j)
+						console.log(j);
+						$(".timeselector[data-starttime=" + j + "]").addClass("time-disabled");
+					}
+				}
+				
+				$(loadingDiv).remove();
+				$("#timeselect").css("display", "block");
+				rsvLoading = false;
+
+				$("#rsv-form-wrap").css("display", "block");
+			}
+		})
+
 		
 	}
 	
@@ -848,19 +887,30 @@
 			$(time).addClass("time-selected");
 			startSelected = true;
 		} else {
-			timeCount = 0;
+			var timeChanged = false;
+			
 			endTime = +$(time).attr("data-endtime");
-			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
 			
 			if (endTime <= startTime) {
 				var temp = startTime;
 				startTime = endTime - 1;
 				endTime = temp + 1;
-
-				startDate = new Date(selectedDate).setHours(startTime, 0, 0, 0);
-				endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
+				
+				timeChanged = true;
 			}
 			
+			for (var i = startTime; i < endTime; i++) {
+				if ($(".timeselector[data-starttime=" + i + "]").hasClass("time-disabled")) {
+					if (timeChanged) {
+						startTime = endTime - 1;
+					}
+					return;
+				}
+			}
+
+			startDate = new Date(selectedDate).setHours(startTime, 0, 0, 0);
+			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
+			timeCount = 0;
 			
 			for (var i = startTime; i < endTime; i++) {
 				$(".timeselector[data-starttime=" + i + "]").addClass("time-selected");
@@ -1088,8 +1138,10 @@
 									예약은 오늘 날짜부터 한 달간 가능합니다.
 								</div>
 								<div class="rsv-cal-info">
-									<div class="day current today"></div>
-									<div class="day current rsv-full"></div>
+									<div class="day current today dayex"></div>
+									<div class="dayinfo">오늘</div>
+									<div class="day current rsv-full dayex"></div>
+									<div class="dayinfo">예약 불가</div>
 								</div>
 								
 								<div class="calendar">

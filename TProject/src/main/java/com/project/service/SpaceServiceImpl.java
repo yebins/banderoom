@@ -125,6 +125,29 @@ public class SpaceServiceImpl implements SpaceService {
 	public List<String> getRsvFullDates(Map<String, String> params) {
 		return dao.getRsvFullDates(params);
 	}
+
+	@Override
+	public List<Map<String, String>> getRsvHours(Map<String, String> date) {
+		
+		List<Map<String, String>> result = new ArrayList<Map<String,String>>();
+		
+		List<Map<String, Date>> rsvHours = dao.getRsvHours(date);
+		SimpleDateFormat sdf = new SimpleDateFormat("HH");
+		
+		Iterator<Map<String, Date>> iterator = rsvHours.iterator();
+		
+		while (iterator.hasNext()) {
+			Map<String, Date> element = iterator.next();
+			Map<String, String> resultElement = new HashMap<String, String>();
+			
+			resultElement.put("start", sdf.format(element.get("startDate")));
+			resultElement.put("end", sdf.format(element.get("endDate")));
+			
+			result.add(resultElement);
+		}
+		
+		return result;
+	}
 	
 	
 

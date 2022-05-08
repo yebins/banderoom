@@ -24,6 +24,7 @@ public interface SpaceService {
 	int insertPoint(PointsVO vo);
 	ReservationsVO getRSV(ReservationsVO vo);
 	List<String> getRsvFullDates(Map<String, String> params);
+	List<Map<String, String>> getRsvHours(Map<String, String> date);
 
 	//테스트용
 	public List<String> getAddr1();

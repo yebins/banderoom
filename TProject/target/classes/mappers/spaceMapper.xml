@@ -297,9 +297,14 @@
 	<select id="getRsvFullDates" parameterType="hashmap" resultType="String">
 		select date from (
 			select date(startdate) as date, sum(rsvhours) as rsvhours
-			from reservations r 
-			where date(startdate) between #{nowDate} and #{afterMonth}
+			from reservations
+			where spaceidx = #{spaceIdx} and date(startdate) between #{nowDate} and #{afterMonth}
 			group by date
 			) a	where a.rsvhours = 15;
+	</select>
+	
+	<select id="getRsvHours" parameterType="Map" resultType="Map">
+		select startDate, endDate from reservations
+		where spaceidx = #{spaceIdx} and date(startdate) = #{date}
 	</select>
 </mapper>
