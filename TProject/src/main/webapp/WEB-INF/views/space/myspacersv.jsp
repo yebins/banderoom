@@ -29,10 +29,8 @@
 		z-index: 8;
 	}
 	.inner-box.current-rsv:hover {
+		outline: 3px solid #fb6544;
 		cursor: pointer;
-	}
-	.inner-box.current-rsv:active {
-		filter: brightness(90%);
 	}
 	
 	.inner-box.current-rsv > .inner-box-content {
@@ -178,11 +176,14 @@
 	}
 	
 	function showMap(address, name) {
+		event.stopPropagation();
 		$("#map").children().remove();
 	    drawMap(address, name);
 		$("#mapBackOveray").css("visibility", "visible");
 	// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 	}
+	
+	
 
 </script>	
 </head>

@@ -228,6 +228,10 @@
 		) a where a.rownum <![CDATA[>=]]> #{start} and a.rownum <![CDATA[<=]]> #{end}
 	</select>
 	
+	<select id="spaceReviewCntAvg" parameterType="spacesVO" resultType="Map">
+		select spaceidx, count(score) as count, avg(score) as avg from space_review where spaceidx = #{idx} group by spaceidx 
+	</select>
+	
 	<select id="spaceReviewList" parameterType="spacesVO" resultType="spaceReviewVO">
 		select reviewidx,
 					 spaceidx,

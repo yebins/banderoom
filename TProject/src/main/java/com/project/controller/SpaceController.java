@@ -610,8 +610,6 @@ public class SpaceController {
 		params.put("nowDate", nowDate);
 		params.put("afterMonth", afterMonth);
 		
-		System.out.println(params.toString());
-		
 		return spaceService.getRsvFullDates(params);
 	}
 	
