@@ -242,11 +242,6 @@
 			return;
 		}
 		
-		if (payMethod == '') {
-			alert('결제 방식을 선택해 주세요.');
-			return;
-		}
-
 		payWithCard();
 	}
 
@@ -483,14 +478,7 @@
 			
 			<div class="inner-box">
 				<div class="inner-box-content pay-content">
-					<div class="small-title" style="margin-top: 0px;">
-						결제 방법
-					</div>
-					<div class="content">
-						<button class="normal-button pay-method" data-method="card" onclick="setPayMethod(this)">신용카드</button>
-						<button class="normal-button pay-method" data-method="kakao" onclick="setPayMethod(this)">카카오페이</button>
-					</div>
-					<div class="small-title">
+					<div class="small-title" style="margin-top: 0px">
 						포인트 사용 (<fmt:formatNumber value="${login.point}" pattern="#,###"/>P 사용 가능)
 					</div>
 					<div class="content">

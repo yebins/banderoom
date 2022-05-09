@@ -148,6 +148,11 @@ public class SpaceServiceImpl implements SpaceService {
 		
 		return result;
 	}
+
+	@Override
+	public List<ReservationsVO> getCurrentRsv(GeneralMembersVO vo) {
+		return dao.getCurrentRsv(vo);
+	}
 	
 	
 

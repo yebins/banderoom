@@ -25,6 +25,7 @@ public interface SpaceService {
 	ReservationsVO getRSV(ReservationsVO vo);
 	List<String> getRsvFullDates(Map<String, String> params);
 	List<Map<String, String>> getRsvHours(Map<String, String> date);
+	List<ReservationsVO> getCurrentRsv(GeneralMembersVO vo);
 
 	//테스트용
 	public List<String> getAddr1();

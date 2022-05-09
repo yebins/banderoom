@@ -307,4 +307,28 @@
 		select startDate, endDate from reservations
 		where spaceidx = #{spaceIdx} and date(startdate) = #{date}
 	</select>
+	
+	<select id="getCurrentRsv" parameterType="generalMembersVO" resultType="reservationsVO">
+		select 
+			a.residx, 
+			a.midx, 
+			a.spaceidx, 
+			a.peoplenum, 
+			a.startdate, 
+			a.enddate, 
+			a.rsvhours, 
+			a.resdate, 
+			b.idx,
+			b.type, 
+			b.name, 
+			b.address, 
+			b.addressDetail,
+			b.addr1, 
+			b.addr2, 
+			b.thumb 
+		from reservations a, spaces b
+		where a.enddate >= now()
+		and a.spaceidx = b.idx
+		order by startdate;
+	</select>
 </mapper>

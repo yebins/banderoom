@@ -621,6 +621,22 @@ public class SpaceController {
 		
 		return spaceService.getRsvHours(date);
 	}
+	
+	@RequestMapping(value = "myspacersv.do")
+	public String mySpaceRsv(Model model, HttpServletRequest request) {
+
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			
+			model.addAttribute("currentRsv", spaceService.getCurrentRsv(((GeneralMembersVO) request.getSession().getAttribute("login"))));
+			return "space/myspacersv";
+		}
+	}
 	/*
 	@RequestMapping(value="setlist.do")
 	public String setListData() {

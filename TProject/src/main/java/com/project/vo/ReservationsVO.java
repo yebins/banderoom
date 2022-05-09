@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
-public class ReservationsVO {
+public class ReservationsVO extends SpacesVO {
 
 	private int resIdx;
 	private int mIdx;

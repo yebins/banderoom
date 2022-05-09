@@ -143,4 +143,8 @@ public class SpaceDAO {
 	public List<Map<String, Date>> getRsvHours(Map<String, String> date) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getRsvHours", date);
 	}
+	
+	public List<ReservationsVO> getCurrentRsv(GeneralMembersVO vo) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.getCurrentRsv", vo);
+	}
 }
