@@ -5,7 +5,31 @@
 
 	<insert id="register" parameterType="teamsVO">
 		INSERT INTO teams(
-			
+			 midx
+			,mnickname
+			,addr1
+			,addr2
+			,teamlevel
+			,type
+			,genre
+			,title
+			,content
+			,regdate
+			,status
+			,enddate
+		)VALUES(
+			 #{midx}
+			,#{mnickname}
+			,#{addr1}
+			,#{addr2}
+			,#{teamlevel}
+			,#{type}
+			,#{genre}
+			,#{title}
+			,#{content}
+			,now()
+			,0
+			,#{enddate}
 		)
 		
 		 

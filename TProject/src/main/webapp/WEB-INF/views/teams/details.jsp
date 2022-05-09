@@ -34,7 +34,7 @@
     padding: 6px;
     font-size: 13px;
     margin-left: 10px;
-    box-shadow: 0px 4px 10px rgb(0 0 0 / 20%);
+    box-shadow: 1px 1px 4px 0px rgb(0 0 0 / 20%);
 }
 #content{
 	width:100%;
