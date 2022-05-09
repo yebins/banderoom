@@ -13,7 +13,6 @@
 <style>
 #page-content{
 	position: relative;
-    height: 700px;
 }
 .form-select{
 	margin-right:10px;
@@ -52,7 +51,7 @@
     width: 100%;
 }
 .container{
-	margin-top:40px;
+	margin-top:80px;
 }
 .team-col{
 	width:33.3%;
@@ -103,9 +102,9 @@ td{
 }
 .team-btn{
 	position: absolute;
-    bottom: 50px;
-    right: 0px;
-    width: 130px;
+    top: 170px;
+    right: 12px;
+    width: 150px;
 }
 </style>
 </head>
@@ -244,7 +243,7 @@ td{
 					</div>
 				</div>
 			</div>
-		<button class="accent-button normal-button team-btn" onclick="location.href='/teams/register.do'">팀원 모집하기</button>
+		<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
 		</div>
 		
 		

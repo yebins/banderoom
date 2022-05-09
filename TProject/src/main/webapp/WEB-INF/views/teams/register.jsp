@@ -18,149 +18,21 @@
 <script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
 
 <script>
-/*	$( document ).ready(function(){
-		   
-		var field = {
-	    	" ":"분야",
-	    	"band":"밴드",
-	        "dance":"댄스"
-	    };
-	    
-	    //field가 밴드일경우
-	    var band_genre = {
-	    	" ":"장르 선택",
-	    	"rock": "락",
-	        "pop": "팝",
-	        "jazz": "재즈",
-	        "etc": "그 외"
-	    };
-	    
-	    //field가 댄스일경우
-	    var dance_genre = {
-	    	" ":"장르 선택",
-	    	"hiphop": "힙합",
-	        "breaking": "브레이킹",
-	        "popping": "팝핑",
-	        "rocking": "락킹",
-	        "k-pop": "K-POP",
-	        "etc": "그 외"
-	    };
-	    
-	    var rock_part = {
-	    	" ":"파트 선택",
-	    	"vocal":"보컬",
-	    	"elec":"일렉 기타",
-	    	"drum":"드럼",
-	    	"bass":"베이스",
-	    	"keyboard":"키보드",
-	    	"etc":"그 외"
-	    };
-	    
-	    var pop_part = {
-	    	" ":"파트 선택",
-	    	"vocal":"보컬",
-	    	"elec":"일렉 기타",
-	    	"drum":"드럼",
-	    	"bass":"베이스",
-	    	"keyboard":"키보드",
-	    	"acoustic":"어쿠스틱 기타",
-	    	"piano":"피아노",
-	    	"synth":"신디사이저",
-	    	"etc":"그 외"
-	    };
-	    
-	    var jazz_part = {
-	    	" ":"파트 선택",
-	    	"vocal":"보컬",
-	    	"guitar":"기타",
-	    	"drum":"드럼",
-	    	"piano":"피아노",
-	    	"bass":"베이스",
-	    	"더블":"더블베이스",
-	    	"콘트라":"콘트라베이스",
-	    	"트럼펫":"트럼펫",
-	    	"색소폰":"색소폰",
-	    	"etc":"그 외"
-	    };
-	    
-	    
-	   //sel1에 서버에서 받아온 값을 넣기위해..
-	   // map배열과 select 태그 id를 넘겨주면 option 태그를 붙여줌.
-	   // map[키이름] = 그 키에 해당하는 value를 반환한다.
-	   //retOption(데이터맵, select함수 id)
-/*	   function retOption(mapArr, select){
-			if(mapArr != null || mapArr != undefined){
-				var html = '';
-	    	
-		    	var keys = Object.keys(mapArr);
-		    	for (var i in keys) {
-		    	    html += "<option value=" + "'" + keys[i] + "'>" + mapArr[keys[i]] + "</option>";
-		    	}
-	    	}
-	    	console.log(html);
-	        $("select[id='" + select +"']").html(html);
-	   }
-	   */
-	   
-/*	   $("select[id='field']").on("change", function(){
-	    	var option = $("#field option:selected").val(); //밴드, 댄스 선택
-	        var subSelName = '';
-	    	if(option == "band") {
-	        	subSelName = "band_genre";
-	        	$("#part").css("display", "block");
-	        } else if(option == "dance"){
-	        	subSelName = "dance_genre";
-		        $("#part").css("display", "none");
-	        }
-	       // retOption(eval(subSelName), "genre");
-	    })
-	  // retOption(field, "field");
-	   
-	   $("select[id='genre']").on("change", function(){ //장르선택
-	    	var option = $("#genre option:selected").val();
-	        var subSelName = '';
-	        if($("#field option:selected").val() == "band"){
-		        if(option == "rock") {
-		        	subSelName = "rock_part";
-		        	$("#write-genre").css("display", "none");
-		        } else if(option == "pop"){
-		        	subSelName = "pop_part";
-		        	$("#write-genre").css("display", "none");
-		        } else if(option == "jazz"){
-		        	subSelName = "jazz_part";
-		        	$("#write-genre").css("display", "none");
-		        } else if(option == "etc"){
-		        	$("#write-genre").css("display", "block");
-		        	$("#write-part").css("display", "block");
-		        	$("#part").css("display","none");
-		        }
-	        }else if($("#field option:selected").val() == "dance"){
-	        	if(option == "etc"){
-	        		$("#write-genre").css("display", "block");
-	        	}else{
-	        		$("#write-genre").css("display", "none");
-	        	}
-	        }
-	      //  retOption(eval(subSelName), "part");
-	    })
-	  // retOption(genre, "genre");
-	});
-	
-*/
+
 
 	function selectField(obj){ //obj:분야
-		var band = ["장르 선택", "락", "팝", "재즈", "그 외"];
-		var dance = ["장르 선택", "힙합", "브레이킹", "팝핑", "그 외"];
+		var band = ["장르 선택", "락", "팝", "재즈", "직접 입력"];
+		var dance = ["장르 선택", "힙합", "브레이킹", "팝핑", "왁킹", "락킹", "K-POP", "직접 입력"];
 		var target = document.getElementById("genre");
 	
 		if(obj.value == "band") {
 			var field = band;
-			$("#part").css("display","block");
+			$("#part").prop('disabled',false);
 		}
 		else if(obj.value == "dance") {
 			var field = dance;
-			$("#part").css("display","none");
-			$("#write-part").css("display", "none");
+			$("#part").prop('disabled',true);
+			$("#write-part").prop('disabled',true);
 		}
 	
 		target.options.length = 0;
@@ -175,16 +47,16 @@
 	}
 
 	function selectGenre(obj){ //obj:장르
-		var rock = ["보컬", "일렉 기타", "드럼", "그 외 파트"];
-		var pop = ["보컬", "일렉 기타", "드럼", "그 외 파트"];
-		var jazz = ["보컬", "어쿠스틱 기타", "드럼", "그 외 파트"];
+		var rock = ["보컬", "일렉 기타", "드럼", "베이스", "키보드", "직접 입력"];
+		var pop = ["보컬", "일렉 기타", "드럼", "베이스", "키보드", "어쿠스틱 기타", "피아노", "신디사이저", "직접 입력"];
+		var jazz = ["보컬", "어쿠스틱 기타", "드럼", "피아노", "베이스", "더블베이스", "콘트라베이스", "트럼펫", "색소폰", "직접 입력"];
 		var target = document.getElementById("part");
 		
 		if($("#field").val() == "band"){
-			if(obj.value != "그 외"){
-				$("#write-genre").css("display", "none");
-				$("#write-part").css("display", "none");
-				$("#part").css("display", "block");
+			if(obj.value != "직접 입력"){
+				$("#write-genre").prop('disabled',true);
+				$("#write-part").prop('disabled',true);
+				$("#part").prop('disabled',false);
 				
 				if(obj.value == "락") {
 					var genre = rock;
@@ -194,21 +66,23 @@
 					var genre = jazz;
 				}
 			}
-			else if(obj.value == "그 외") {
-				$("#write-genre").css("display", "block");
-				$("#write-part").css("display", "block");
-				$("#part").css("display", "none");
+			else if(obj.value == "직접 입력") {
+				$("#write-genre").prop('disabled',false);
+				$("#write-part").prop('disabled',false);
+				$("#part").prop('disabled',true);
 				
 			}
-		}else if($("#field").val() == "dance"){
-			$("#write-genre").css("display", "none");
-			$("#write-part").css("display", "none");
 			
-			if(obj.value == "그 외") {
-				$("#write-genre").css("display", "block");
-				$("#write-part").css("display", "none");
-				$("#part").css("display", "none");
+		}else if($("#field").val() == "dance"){
+			
+			if(obj.value == "직접 입력") {
+				$("#write-genre").prop('disabled',false);
+				$("#write-part").prop('disabled',true);
+				$("#part").prop('disabled',true);
 				
+			}else{
+				$("#write-genre").prop('disabled',true);
+				$("#write-part").prop('disabled',true);
 			}
 		}
 		
@@ -225,13 +99,11 @@
 	
 	function selectPart(obj){ //obj:파트
 		
-		if(obj.value == "그 외 파트"){
-			//$("#write-genre").css("display", "none");
-			$("#write-part").css("display", "block");
-			//$("#part").css("display", "block");
+		if(obj.value == "직접 입력"){
+			$("#write-part").prop('disabled',false);
 		}
-		else if(obj.value != "그 외 파트") {
-			$("#write-part").css("display", "none");
+		else if(obj.value != "직접 입력") {
+			$("#write-part").prop('disabled',true);
 			
 		}
 		
@@ -257,26 +129,25 @@
 		var field = $("#field").val();
 		var part = $("#part").val();
 		var people = $("#result").text();
-		console.log(part);
-		console.log(field);
-		console.log(people);
+		
 		
 		if(field == "band" && part != "장르를 선택하세요."){
-			if(part == "그 외 파트"){
-				$(".select-parts").append("<span class='select-part'>"+$('#write-part').val()+" "+people+"</span>");
+			if(part == null || part == "직접 입력"){
+				$(".select-parts").append("<span class='select-part' name='part'>"+$('#write-part').val()+" "+people+"</span>");
 				$(".select-parts").append("<button type='button' class='x' onclick='remove(this)'>x</button>");
 			}else{
-				$(".select-parts").append("<span class='select-part'>"+part+" "+people+"</span>");
-			$(".select-parts").append("<button type='button' class='x' onclick='remove(this)'>x</button>");
+				$(".select-parts").append("<span class='select-part' name='part'>"+part+" "+people+"</span>");
+				$(".select-parts").append("<button type='button' class='x' onclick='remove(this)'>x</button>");
 			}
 		}else if(field == "dance"){
 			if($(".select-part")){
 				$(".select-parts").empty();
-				$(".select-parts").append("<span class='select-part'>"+people+"</span>");
+				$(".select-parts").append("<span class='select-part' name='peoplenum'>"+people+"</span>");
 			}else{
-				$(".select-parts").append("<span class='select-part'>"+people+"</span>");
+				$(".select-parts").append("<span class='select-part' name='peoplenum'>"+people+"</span>");
 			}
 		}
+		$("#write-part").val("");
 		
 	}
 	
@@ -479,14 +350,14 @@
 						<select class="form-select form-select-sm" name="genre" id="genre" onchange="selectGenre(this)">
 							<option>분야를 선택하세요.</option>
 						</select>
-						<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" style="display:none;">
+						<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" disabled>
 					</div><br>
 					
 					<div class="mb-3 d-flex search-bottom">
-						<select class="form-select form-select-sm part" name="part" id="part" onchange="selectPart(this)">
+						<select class="form-select form-select-sm part" id="part" onchange="selectPart(this)">
 							<option>장르를 선택하세요.</option>
 						</select>
-						<input class="form-control form-control-sm" id="write-part" type="text" name="part" placeholder="파트 입력" style="display:none;">
+						<input class="form-control form-control-sm" id="write-part" type="text" name="part" placeholder="파트 입력" disabled>
 						<div class="btn-group people-num">
 							<button type="button" class="btn btn-outline-secondary left-btn" onclick='count("minus")' disabled="disabled">-</button>
 							<button type="button" class="btn btn-outline-secondary" id="result">1명</button>
@@ -495,7 +366,7 @@
 						<button type="button" class="normal-button add-part" style="width:40px; margin-right:10px;" onclick="addPart()">추가</button>
 						<input class="form-control form-control-sm" placeholder="마감 날짜 선택" name="endDate" id="datepicker">
 					</div>
-					<div class="select-parts">
+						<div class="select-parts">
 					</div>
 				</div>
 			
