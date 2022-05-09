@@ -135,4 +135,88 @@
 		and status=#{status}
 		</if>
 	</select>
+	
+	<select id="jlistOneArticle" parameterType="map" resultType="map">
+		select * from(
+		select 
+			a.aIdx
+			,a.bIdx
+			,a.title
+			,a.content
+			,a.midx
+			,a.mnickname
+			,a.regdate
+			,a.readcount
+			,a.status
+			,count(la.aidx) likeCount 
+		from
+			articles a
+		left join 
+			liked_articles la 
+		on 
+			a.bidx = la.bidx 
+		and 
+			a.aidx =la.aidx
+		group by 
+			a.aIdx
+			,a.bIdx
+			,a.title
+			,a.content
+			,a.midx
+			,a.mnickname
+			,a.regdate
+			,a.readcount
+			,a.status
+			) one
+		where
+			bidx = #{bIdx}
+		and
+			aidx = #{aIdx}
+	</select>
+	
+	<insert id="commentWrite" parameterType="map">
+		insert into comments(
+			bidx
+			,aidx
+			,midx
+			,mnickname
+			,content
+			,picsrc
+			,regdate
+			) values(
+			#{bIdx}
+			,#{aIdx}
+			,#{mIdx}
+			,#{mNickname}
+			,#{content}
+			,#{picsrc}
+			,now()
+			)		
+	</insert>
+	
+	<select id="commentList" parameterType="map" resultType="commentsVO">
+		<![CDATA[
+		select * from
+			(SELECT
+			  @rownum:=@rownum+1 as rownum, 
+			  cmt.*
+			FROM 
+				comments cmt,(select @rownum:=0) rn_cmt
+		]]>
+			where 
+				bIdx=#{bIdx}
+			and 
+				aIdx=#{aIdx}
+			order by 
+				cidx ) list
+		<![CDATA[
+			where 
+				rownum>=${start} and rownum <=#{end}
+		]]>
+	</select>
+	
+	<select id="commentCount" parameterType="map" resultType="int">
+		select count(cIdx) from comments where aIdx=#{aIdx}
+	</select>
+
 </mapper>
