@@ -139,34 +139,36 @@
      		 </form>
 		</div>
 		<div id="page-content" class="JBoard">
-			<c:forEach var="item" items="${list}" begin="0" end="5" varStatus="st">
-				<div class="inner-box JArticle ${(item.status == 99)?'sold':''}">
-					<div class="inner-box-content-thumbnail ">
-						<c:choose>
-							<c:when test=""	>
-								<img src=""/>
-							</c:when>
-							<c:otherwise>
-								<img src="https://images.unsplash.com/photo-1651579293356-ec8c360a3bf8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8Q0R3dXdYSkFiRXd8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60">
-							</c:otherwise>
-						</c:choose>
-					</div>
-					<div class="inner-box-content-state-title">
+			<c:if test="${fn:length(list) gt 0}">
+				<c:forEach var="item" begin="0" end="${fn:length(list) -1}" varStatus="st">
+					<div class="inner-box JArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='/jlist/detail.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}'">
+						<div class="inner-box-content-thumbnail ">
 							<c:choose>
-								<c:when test="${item.status eq '97'}"><span>[판매]</span></c:when>
-								<c:when test="${item.status eq '98'}"><span>[구매]</span></c:when>
-								<c:when test="${item.status eq '99'}"><span>[거래완료]</span></c:when>
-								<c:otherwise>[status가 엄서요]</c:otherwise>
+								<c:when test="${imgsrc.get(item) ne ''}">
+									<img src="${imgsrc.get(item)}"/>
+								</c:when>
+								<c:otherwise>
+									<img src="https://images.unsplash.com/photo-1651579293356-ec8c360a3bf8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8Q0R3dXdYSkFiRXd8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60">
+								</c:otherwise>
 							</c:choose>
-						<span>${item.title}</span>
+						</div>
+						<div class="inner-box-content-state-title">
+								<c:choose>
+									<c:when test="${list.get(item).status eq '97'}"><span>[판매]</span></c:when>
+									<c:when test="${list.get(item).status eq '98'}"><span>[구매]</span></c:when>
+									<c:when test="${list.get(item).status eq '99'}"><span>[거래완료]</span></c:when>
+									<c:otherwise>[status가 엄서요]</c:otherwise>
+								</c:choose>
+							<span>${list.get(item).title}</span>
+						</div>
+						<div class="inner-box-content-articleInfo">
+						<span><fmt:formatDate pattern="yyyy.MM.dd" value="${list.get(item).regDate}"/></span>&nbsp;<span> 조회수 ${list.get(item).readCount} </span><span class="miniprofile" style="margin-left:auto;" onclick="profileOpen('${list.get(item).mIdx}')">${list.get(item).mNickname}</span>
+						</div>
 					</div>
-					<div class="inner-box-content-articleInfo">
-					<span><fmt:formatDate pattern="yyyy.MM.dd" value="${item.regDate}"/></span>&nbsp;<span> 조회수 ${item.readCount} </span><span class="miniprofile" style="margin-left:auto;" onclick="profileOpen('${item.mIdx}')">${item.mNickname}</span>
-					</div>
-				</div>
-			</c:forEach>
+				</c:forEach>
+			</c:if>
 			<div class="content-write">
-				<button class="normal-button accent-button">글쓰기</button>
+				<button class="normal-button accent-button" onclick="location.href='/board/register.do?bIdx=3'">글쓰기</button>
 			</div>
 				<c:set var="articlesTotal" value="${articlesTotal}"/>
 				<c:set var="page" value="${(param.page == null)?1:param.page}"/>

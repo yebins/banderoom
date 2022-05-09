@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
-import java.util.AbstractSequentialList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.service.BoardService;
 import com.project.service.MemberService;
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.ServiceInfoVO;
 
@@ -366,21 +366,28 @@ public class HomeController {
 		System.out.println(params.toString());
 		List<ArticlesVO> list = boardService.Jlist(params,request);
 		
-		Map<String,String> map=new HashMap<String, String>();
+		if( list.size() >0) {
+			
+		Map<Integer,String> map=new HashMap<Integer, String>();
 			for(int i=0;i<list.size();i++) {
 				String co=list.get(i).getContent().replaceAll(" ", "");
 				
 				
-				if(co.indexOf("<imgsrc") > -1) {					
-				int startIndex=co.indexOf("<imgsrc");
-				String co2=co.substring(startIndex+10);
+				if(co.indexOf("<img") > -1) {					
+				int startIndex=co.indexOf("<img");
+				startIndex=co.indexOf("src", startIndex);
+				String co2=co.substring(startIndex+5);
 				String[] co3=co2.split("\"");
 				String url=co3[0];				
-				map.put("url"+i, url);
+				map.put(i, url);
 				} else {
-					map.put("url"+i, "gggg");
+					map.put(i, "");
 				}
+				model.addAttribute("imgsrc", map);
+				
+				System.out.println(map.toString());
 			}
+		}
 		
 		int articlesTotal=(Integer)request.getAttribute("count");
 		System.out.println("총게시물"+articlesTotal);
@@ -390,10 +397,52 @@ public class HomeController {
 		model.addAttribute("status", params.get("status"));
 		model.addAttribute("searchtitle", params.get("searchtitle"));
 		model.addAttribute("articlesTotal",articlesTotal);
-		model.addAttribute("imgsrc", map);
-		
-		System.out.println(map.toString());
 		
 		return "/board/jlist";
+		
+		
 	}
+	
+		@RequestMapping(value="jlist/detail.do", method=RequestMethod.GET)
+		public String jlistView(Model model,ArticlesVO vo,@RequestParam Map<String, Object> params,HttpServletRequest request) {
+		System.out.println(params.get("bIdx"));
+		System.out.println(params.get("aIdx"));
+			
+		boardService.readCount(vo);
+		
+		Map<String, Object> one = boardService.jlistOneArticle(params,request);
+		
+		GeneralMembersVO writer=new GeneralMembersVO();
+		int a=(int) one.get("midx");
+		
+		System.out.println(a);
+		writer.setmIdx(a);
+		
+		writer=memberService.oneMemberInfo(writer);
+		
+		
+		System.out.println("컨트롤러"+one.toString());
+		
+		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));
+		model.addAttribute("vo",one);
+		model.addAttribute("profileSrc",writer.getProfileSrc());
+		
+		return "/board/jlist/details";
+	}
+		
+		@RequestMapping(value="jlist/commentWrite.do")
+		@ResponseBody
+		public int commentWrite(@RequestParam Map<String, Object> params) {
+		
+		
+		return boardService.commentWrite(params);
+		}
+		
+		@RequestMapping(value="jlist/commentList.do")
+		@ResponseBody
+		public List<CommentsVO> commentsList(@RequestParam Map<String, Object> params){
+			
+			
+			return boardService.commentList(params);
+		}
 }

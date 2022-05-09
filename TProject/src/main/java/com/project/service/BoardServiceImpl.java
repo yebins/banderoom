@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.project.dao.BoardDAO;
 import com.project.util.PagingUtil;
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentsVO;
+import com.project.vo.GeneralMembersVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
@@ -154,6 +156,39 @@ public class BoardServiceImpl implements BoardService {
 				
 		return dao.jlist(map);	
 	}
-		
 	
+	public Map<String, Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request) {
+		
+		int count=dao.commentCount(map); // 댓글총개수
+		request.setAttribute("cmtCount", count);
+		
+		return dao.jlistOneArticle(map);
+	}
+
+	@Override
+	public int commentWrite(Map<String, Object> map) {
+		
+		return dao.commentWrite(map);
+	}
+
+	@Override
+	public List<CommentsVO> commentList(Map<String, Object> map) {
+		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
+		int start = page+(page-1)*9;
+		int end=page*10;
+		
+		
+		
+		map.put("start", start);
+		map.put("end", end);
+
+		
+		System.out.println(map.toString());
+		System.out.println("댓글개수"+dao.commentList(map).size());
+		
+		return dao.commentList(map);
+	}
+	
+	
+		
 }

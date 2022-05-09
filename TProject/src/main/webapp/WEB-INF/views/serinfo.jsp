@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
 <style>
 	div.service-content {
+		overflow:scroll;
+		overflow-x:hidden;
 		height:600px;
 	}
 
@@ -59,7 +61,7 @@
 					<div class="inner-box-content">
 						${vo.content}
 					</div>
-					<textarea id="summernote" name="content"></textarea>
+					<textarea id="summernote" name="content">${vo.content}</textarea>
 				</div>
 				<div class="sendInfo">
 					<c:if test="${login.auth==3}">
@@ -78,7 +80,6 @@
 		$(obj).parent().prev().children().css("display","none");
 		
 		$('.note-frame').css("display","block");
-		$('.note-editable').html('${vo.content}');
 		
 	}
 

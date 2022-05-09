@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentsVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
@@ -26,4 +27,7 @@ public interface BoardService {
 	int likeCount(int aIdx);
 	List<ArticlesVO> pageCount(int bIdx, String searchtitle);
 	List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request);
+	Map<String,Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request);
+	int commentWrite(Map<String, Object> map);
+	List<CommentsVO> commentList(Map<String, Object> params);
 }

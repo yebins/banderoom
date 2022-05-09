@@ -12,6 +12,7 @@ public class ArticlesVO {
 	private Date regDate;
 	private int readCount;
 	private int status; // 0: 기본 1: 삭제 그외는 알아서
+	private int likeCount;
 	
 	public int getaIdx() {
 		return aIdx;
@@ -66,5 +67,11 @@ public class ArticlesVO {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public int getLikeCount() {
+		return likeCount;
+	}
+	public void setLikeCount(int likeCount) {
+		this.likeCount = likeCount;
 	}
 }
