@@ -127,6 +127,55 @@
 		align-items: center;
 		margin-top: 20px;
 	}
+	.filters-wrap select {
+		width: fit-content;
+		padding: 0px 15px;
+	}
+	.dateInput {
+		margin-left: 10px;
+		width: 250px;
+		text-align: center;
+		border: 1px solid lightgray;
+		height: 40px;
+		border-radius: 20px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+	}
+	.dateInput-button {
+		margin-left: 10px;
+	}
+	
+	.past-rsv-box {
+		margin-top: 20px;
+		padding: 0px 15px !important;
+	}
+	
+	.past-rsv-wrap {
+		padding: 15px 0px;	
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	.past-rsv-wrap:not(.past-rsv-wrap:first-child) {
+		border-top: 1px solid lightgray;
+	}
+	
+	.past-rsv-name {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+	
+	.past-rsv-info-items {
+		display: inline-flex;
+	}
+	.small-title {
+		font-size: 14px;
+		font-weight: bold;
+	}
+	.small-content {
+		font-size: 14px;
+		margin-left: 5px;
+	}
 </style>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 <script>
@@ -195,16 +244,20 @@
 	}
 	
 	$(function() {
-
-	 	$("#startDateInput").datepicker({
-			language: 'ko'
-		}); 
-
-	 	$("#endDateInput").datepicker({
-			language: 'ko'
-		}); 
-		   
+		if (${param.dateRange != null || param.dateAll != null}) {
+			$("select[name=dateType]").val('${param.dateType}');
+			var div = document.getElementById("scroll-here");
+			div.scrollIntoView();
+		}
 	})
+	
+	function review(resIdx) {
+		
+
+		window.open('review.do?resIdx=' + resIdx, '_blank', 
+        'top=140, left=200, width=800, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
+	}
+	
 
 </script>	
 </head>
@@ -221,7 +274,7 @@
 			</div>
 			
 			<c:forEach var="rsvVO" items="${currentRsv}">
-				<div class="inner-box current-rsv" onclick="location.href='/space/details.do?idx=${rsvVO.idx}'">
+				<div class="inner-box current-rsv" onclick="location.href='rsvdetails.do?resIdx=${rsvVO.resIdx}'">
 					<div class="inner-box-content">
 						<div class="space-thumb"><img src="${rsvVO.thumb}"></div>
 						<div class="rsv-info">
@@ -241,12 +294,68 @@
 					</div>
 				</div>
 			</c:forEach>
-			
+			<div id="scroll-here"></div>
 			<div class="big-title" style="margin-top: 60px;">
-				과거 예약 내역
+				예약 내역
 			</div>
 			<div class="filters-wrap">
-				<input class="datepicker" type="text" id="startDateInput" readonly><span> ~ </span><input class="datepicker" type="text" id="endDateInput" readonly>
+				<form action="myspacersv.do">
+					<select name="dateType" class="normal-button">
+						<option value="resDate">예약일</option>
+						<option value="startDate">공간 사용일</option>
+					</select>
+					<input class="datepicker-here dateInput" name="dateRange"
+						data-language="ko" data-range="true" data-multiple-dates-separator=" ~ "
+						type="text" id="dateRange" autocomplete="false" placeholder="기간 선택" value="${param.dateRange}" readonly>
+					<button type="button" class="normal-button dateInput-button" onclick="location.href='myspacersv.do?dateAll=1'">전체보기</button>
+					<button class="normal-button accent-button dateInput-button">검색</button>
+				</form>
+			</div>
+			<div>
+				<div class="inner-box past-rsv-box">
+					<c:forEach var="rsvVO" items="${pastRsv}">
+						<div class="past-rsv-wrap">
+							<div class="past-rsv-info-wrap">
+								<div class="past-rsv-name"><a href="details.do?idx=${rsvVO.idx}">${rsvVO.name}</a></div>
+								<div class="past-rsv-info">
+									<div class="past-rsv-info-items">
+										<div class="small-title">공간 사용일</div>
+										<div class="small-content">
+											<fmt:formatDate value="${rsvVO.startDate}" pattern="yyyy/MM/dd H시~"/>
+											<fmt:formatDate value="${rsvVO.endDate}" pattern="k시"/>, ${rsvVO.rsvHours}시간
+										</div>
+									</div>&nbsp;&nbsp;
+									<div class="past-rsv-info-items">
+										<div class="small-title">예약일</div>
+										<div class="small-content">
+											<fmt:formatDate value="${rsvVO.resDate}" pattern="yyyy/MM/dd"/>
+										</div>
+									</div>
+								</div>
+								<div class="past-rsv-info">
+									<div class="past-rsv-info-items">
+										<div class="small-title">이용료</div>
+										<div class="small-content">
+											<fmt:formatNumber value="${rsvVO.cost}" pattern="#,###" />원
+										</div>
+									</div>&nbsp;&nbsp;
+									<div class="past-rsv-info-items">
+										<div class="small-title">결제 금액</div>
+										<div class="small-content">
+											<fmt:formatNumber value="${rsvVO.totalCost}" pattern="#,###" />원
+										</div>
+									</div>&nbsp;&nbsp;
+								</div>
+							</div>
+							<div class="past-rsv-buttons">
+								<c:if test="${rsvVO.endDate < today}">
+									<button class="normal-button accent-button" onclick="review(${rsvVO.resIdx})">후기 작성</button>&nbsp;
+								</c:if>
+								<button class="normal-button" onclick="location.href='rsvdetails.do?resIdx=${rsvVO.resIdx}'">예약 상세</button>
+							</div>
+						</div>
+					</c:forEach>
+				</div>
 			</div>
 			
 			

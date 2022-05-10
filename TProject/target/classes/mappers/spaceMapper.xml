@@ -233,7 +233,7 @@
 	</select>
 	
 	<select id="spaceReviewList" parameterType="spacesVO" resultType="spaceReviewVO">
-		select reviewidx,
+		select residx,
 					 spaceidx,
 					 picturesrc,
 					 score,
@@ -295,7 +295,17 @@
 	</insert>
 	
 	<select id="getRSV" parameterType="reservationsVO" resultType="reservationsVO">
-		select * from reservations where residx = #{resIdx}
+		select
+			s.type, 
+			s.name, 
+			s.address, 
+			s.addressdetail, 
+			s.hostidx, 
+			s.thumb, 
+			r.* 
+			from spaces s, reservations r 
+			where s.idx = r.spaceidx
+			and residx = #{resIdx}
 	</select>
 	
 	<select id="getRsvFullDates" parameterType="hashmap" resultType="String">
@@ -331,8 +341,59 @@
 			b.addr2, 
 			b.thumb 
 		from reservations a, spaces b
-		where a.enddate >= now()
+		where a.enddate <![CDATA[>=]]> now()
 		and a.spaceidx = b.idx
+		and a.midx = #{mIdx}
 		order by startdate;
+	</select>
+	
+	<select id="getPastRsv" parameterType="hashmap" resultType="reservationsVO">
+		select
+			a.residx,
+			a.midx,
+			a.spaceidx,
+			a.peoplenum,
+			a.startdate,
+			a.enddate,
+			a.rsvhours,
+			a.resdate,
+			a.cost,
+			a.usedPoint,
+			a.totalCost,
+			b.idx,
+			b.type, 
+			b.name, 
+			b.address, 
+			b.addressDetail,
+			b.addr1, 
+			b.addr2, 
+			b.thumb 
+		from reservations a, spaces b
+		where a.spaceidx = b.idx
+		and a.midx = #{mIdx}
+		<if test="start != null and start != ''">
+			<if test="dateType == 'resDate'">
+				<if test="end == null or end == ''">
+					and date(a.resdate) = #{start}
+					order by resdate
+				</if>
+				<if test="end != null and end != ''">
+					and date(a.resdate) <![CDATA[>=]]> #{start}
+					and date(a.resdate) <![CDATA[<=]]> #{end}
+					order by resdate
+				</if>
+			</if>
+			<if test="dateType == 'startDate'">
+				<if test="end == null or end == ''">
+					and date(a.startdate) = #{start}
+					order by startdate
+				</if>
+				<if test="end != null and end != ''">
+					and date(a.startdate) <![CDATA[>=]]> #{start}
+					and date(a.startdate) <![CDATA[<=]]> #{end}
+					order by startdate
+				</if>
+			</if>
+		</if>
 	</select>
 </mapper>

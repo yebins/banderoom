@@ -621,7 +621,25 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value = "myspacersv.do")
-	public String mySpaceRsv(Model model, HttpServletRequest request) {
+	public String mySpaceRsv(Model model, String dateType, String dateRange, HttpServletRequest request) {
+
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			model.addAttribute("currentRsv", spaceService.getCurrentRsv(login));
+			model.addAttribute("pastRsv", spaceService.getPastRsv(login, dateType, dateRange));
+			model.addAttribute("today", new Date());
+			return "space/myspacersv";
+		}
+	}
+	
+	@RequestMapping(value = "rsvdetails.do")
+	public String resDetails(Model model, HttpServletRequest request, int resIdx) {
 
 		if (request.getSession().getAttribute("login") == null) {
 
@@ -631,9 +649,35 @@ public class SpaceController {
 			return "alert";
 		} else {
 			
-			model.addAttribute("currentRsv", spaceService.getCurrentRsv(((GeneralMembersVO) request.getSession().getAttribute("login"))));
-			return "space/myspacersv";
+			GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+
+			ReservationsVO rsvVO = new ReservationsVO();
+			rsvVO.setResIdx(resIdx);
+			rsvVO = spaceService.getRSV(rsvVO);
+			
+			SpacesVO spacesVO = new SpacesVO();
+			spacesVO.setIdx(rsvVO.getSpaceIdx());
+			spacesVO = spaceService.details(spacesVO);
+			HostMembersVO hostVO = new HostMembersVO();
+			hostVO.setmIdx(spacesVO.getHostIdx());
+			hostVO = memberService.getHostMember(hostVO);
+
+			request.getSession().setAttribute("login", gMemberVO);
+			
+			model.addAttribute("spacesVO", spacesVO);
+			model.addAttribute("hostVO", hostVO);
+			model.addAttribute("rsvVO", rsvVO);
+			
+			return "space/rsvdetails";
+			
 		}
+	}
+	
+	@RequestMapping(value = "review.do", method = RequestMethod.GET)
+	public String spaceReview(Model model, ReservationsVO vo, HttpServletRequest request) {
+		
+		model.addAttribute("rsvVO", spaceService.getRSV(vo));
+		return "space/review";
 	}
 	/*
 	@RequestMapping(value="setlist.do")

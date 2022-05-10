@@ -158,7 +158,23 @@ public class SpaceServiceImpl implements SpaceService {
 	public List<ReservationsVO> getCurrentRsv(GeneralMembersVO vo) {
 		return dao.getCurrentRsv(vo);
 	}
-	
+
+	@Override
+	public List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("mIdx", vo.getmIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.getPastRsv(params);
+	}
 	
 
 }
