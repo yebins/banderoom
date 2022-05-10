@@ -6,7 +6,8 @@
 	<select id="list" parameterType="map" resultType="ArticlesVO">
 		select * from 
 		(select row_number() over(order by aIdx desc) as rownum, s.* from articles s
-		where bIdx=#{bIdx}
+		where bIdx=#{bIdx} 
+		and status != 1
 		<if test="searchtitle != ''">
 		and title like concat('%',#{searchtitle},'%')
 		</if>
@@ -14,9 +15,14 @@
 		<![CDATA[where rownum >= #{start} and rownum <= #{end}]]>
 	</select>
 	
+	<update id="listDelete" parameterType="articlesVO">
+		update articles	set status = 1 where aidx=#{aIdx} and bidx=#{bIdx}
+	</update>
+	
 	<select id="pageCount" parameterType="map" resultType="ArticlesVO">
 		select * from articles
 		where bidx = #{bIdx}
+		and status != 1
 		<if test="searchtitle != ''">
 		and title like concat('%',#{searchtitle},'%')
 		</if>
@@ -135,4 +141,11 @@
 		and status=#{status}
 		</if>
 	</select>
+	
+	<select id="commentsList" parameterType="CommentsVO" resultType="CommentsVO">
+		select * from comments
+		where aIdx=#{aIdx}
+		and bIdx=#{bIdx}
+	</select>
+	
 </mapper>

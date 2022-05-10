@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.project.service.BoardService;
 import com.project.util.PagingUtil;
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.LikedArticlesVO;
 
@@ -44,15 +45,15 @@ public class BoardController {
 			boardService.insertArticlesVO(vo);
 			
 			return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();
-		}else if(session.getAttribute("login.getmIdx()") == null){
+		}else if(session.getAttribute("login") == null){
 			
 			request.setAttribute("msg", "로그인후 이용하세요.");
-			request.setAttribute("url", "/board/list.do?bIdx=" + vo.getbIdx());
+			request.setAttribute("url", "/board/list.do?page=1&bIdx=" + vo.getbIdx());
 			
 			return "/alert";
 		}else {
 			request.setAttribute("msg", "로그인후 이용하세요.");
-			request.setAttribute("url", "/board/list.do?bIdx=" + vo.getbIdx());
+			request.setAttribute("url", "/board/list.do?page=1&bIdx=" + vo.getbIdx());
 			
 			return "/alert";
 		}
@@ -67,7 +68,6 @@ public class BoardController {
 			likeList.put(list.get(i).getaIdx(), boardService.likeCount(list.get(i).getaIdx()));
 		}
 		List<ArticlesVO> pc= boardService.pageCount(bIdx, searchtitle);
-		System.out.println(pc.size());
 		PagingUtil pu = new PagingUtil(pc.size(), page, 10);
 		
 		model.addAttribute("pu", pu);
@@ -98,9 +98,9 @@ public class BoardController {
 		HttpSession session = request.getSession();
 		session.getAttribute("login");
 		
-		ArticlesVO vo2 = boardService.selectArticles(vo);
+		ArticlesVO revo = boardService.selectArticles(vo);
 		
-		model.addAttribute("vo",vo2);
+		model.addAttribute("vo",revo);
 		
 		return "board/update";
 	}
@@ -130,12 +130,12 @@ public class BoardController {
 		HttpSession session = request.getSession();
 		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 		if(login.getmIdx() == vo.getmIdx()) {
-			boardService.serlistDelete(vo);
-			return "redirect:/board/list.do?bIdx=" + vo.getbIdx();
+			boardService.listDelete(vo);
+			return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();
 		}else{
 			
 			request.setAttribute("msg", "삭제권한이 없습니다.");
-			request.setAttribute("url", "/board/list.do?bIdx=" + vo.getbIdx());
+			request.setAttribute("url", "/board/list.do?page=1&bIdx=" + vo.getbIdx());
 			
 			return "/alert";
 		}
@@ -165,6 +165,22 @@ public class BoardController {
 	public int likeCount(int aIdx) {
 		
 		return boardService.likeCount(aIdx);
+	}
+	
+	@RequestMapping(value="insertComments.do")
+	@ResponseBody
+	public int insertComments(CommentsVO vo) {
+		
+		return boardService.insertComments(vo);
+	}
+	
+	@RequestMapping(value="commentsList.do")
+	@ResponseBody
+	public String cList(Model model, CommentsVO vo) {
+		List<CommentsVO> cList = boardService.cList(vo);
+		model.addAttribute("cList", cList);
+		
+		return "";
 	}
 }
 

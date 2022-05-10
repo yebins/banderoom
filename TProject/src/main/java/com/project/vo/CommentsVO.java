@@ -11,7 +11,14 @@ public class CommentsVO {
 	private String content;
 	private String picSrc;
 	private Date regDate;
+	private int status;
 	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	public int getcIdx() {
 		return cIdx;
 	}
