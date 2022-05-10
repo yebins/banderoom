@@ -404,29 +404,57 @@ public class HomeController {
 		Map<String, Object> one = boardService.jlistOneArticle(params,request);
 		
 		GeneralMembersVO writer=new GeneralMembersVO();
-		int a=(int) one.get("midx");
-		
-		System.out.println(a);
+		int a=(int) one.get("mIdx");
 		writer.setmIdx(a);
 		
 		writer=memberService.oneMemberInfo(writer);
 		
 		
-		System.out.println("컨트롤러"+one.toString());
+		System.out.println("게시글정보"+one.toString());
 		
-		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));
-		model.addAttribute("vo",one);
-		model.addAttribute("profileSrc",writer.getProfileSrc());
+		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글총개수?
+		model.addAttribute("vo",one);//게시글정보 보내기
+		model.addAttribute("profileSrc",writer.getProfileSrc());//글 작성자 프로필 사진 
 		
 		return "/board/jlist/details";
 	}
 		
 		@RequestMapping(value="jlist/commentWrite.do")
 		@ResponseBody
-		public int commentWrite(@RequestParam Map<String, Object> params) {
+		public int commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+					
+			
+			if(vo.getContent() != null && vo.getContent() != "") {
+				
+				if(!file.isEmpty()) {
+					System.out.println(file);
+					
+					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+						
+					String fileName=file.getOriginalFilename();
+					
+					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+					
+					UUID uuid = UUID.randomUUID();
+					
+					String newFileName = uuid.toString() + extension;
 		
+					File target = new File(path, newFileName);
+					
+					System.out.println(target.toString());
+					
+					file.transferTo(target);//파일이생성됨
+					
+					vo.setPicSrc("/upload/"+newFileName);
+				}
+			
+			return boardService.commentWrite(vo);
+			
+			} else {
+				
+				return -1;
+			}
 		
-		return boardService.commentWrite(params);
 		}
 		
 		@RequestMapping(value="jlist/commentList.do")

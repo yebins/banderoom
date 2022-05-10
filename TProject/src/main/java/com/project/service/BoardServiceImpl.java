@@ -166,9 +166,9 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public int commentWrite(Map<String, Object> map) {
+	public int commentWrite(CommentsVO vo) {
 		
-		return dao.commentWrite(map);
+		return dao.commentWrite(vo);
 	}
 
 	@Override

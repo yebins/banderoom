@@ -287,7 +287,7 @@ header {
 				</div>
 				<div id="sm-profile-buttons">
 					<button class="normal-button" onclick = "">내정보</button>
-					<button class="normal-button" onclick = "">쪽지함</button>
+					<button class="normal-button" onclick = "location.href='/member/myMessage.do'">쪽지함</button>
 					<button class="normal-button" onclick = "location.href='/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>

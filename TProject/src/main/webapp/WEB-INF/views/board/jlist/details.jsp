@@ -119,6 +119,24 @@
 		border: 1px solid #ccbb;
 	    border-radius: 10px;
 	}
+	#uploaded-file img{
+		width:100px;
+		height:100px;
+	}
+	#uploaded-file {
+		align-items:center;
+		display:none;
+		border:3px solid #ccbb;
+		margin-top:20px;
+	}
+	
+	#uploaded-file span{
+	    margin: 20px;
+	    border-radius: 5px;
+	}
+	a:hover{
+		cursor:pointer;
+	}
 </style>
 <script>
 
@@ -252,7 +270,6 @@
 					htmls+="무플";
 				} else {
 					$.each(list,function(index,el){
-						console.log(el.mNickname);
 						htmls+='<li class="comment-area-ul-li">'
 						htmls+='<div class="comment-area-content">'
 						htmls+='<div class="comment-area-content-toparea">'
@@ -265,7 +282,7 @@
 						htmls+='</div>'
 						htmls+='</div>'
 						htmls+='<div class="comment-area-content-contentarea">'
-						htmls+='<div style="resize: none;border:none;width:100%;" readonly>'+el.content+'</div>'
+						htmls+='<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >'+el.content+'<br><img src="'+el.picSrc+'" style="width:200px; height:100%;"/></div>'
 						htmls+='</div>'
 						htmls+='</div>'
 						htmls+='</li>'
@@ -282,32 +299,40 @@
 		var i = ${cmtCount};
 		
 	function commentWrite(obj){
+		var formData = new FormData($('#commentfile')[0]);
+		
 		var mIdx=0;
-		var content=document.querySelector("#comment-write-content").value;
+		
 			if(obj != null){
 				mIdx=obj;
 			}
 			
-		var data={
+			console.log(formData);
+		/* var data={
 			bIdx:${param.bIdx},
 			mIdx:mIdx,
 			mNickname:"${login.nickname}",
 			content:content,
 			aIdx:${vo.aIdx},
 			picsrc:"${login.profileSrc}"	
-		}
+		} */
 		
 		$.ajax({
-			url:"commentWrite.do",
+			url:"/jlist/commentWrite.do",
 			type:"post",
-			data:data,
+			data:formData,
+			contentType: false,
+			processData: false,
 			success:function(result){
 				if(result > 0){
-					console.log(i);
 					$("#cmtTotal").text(" "+(i+1)+" ");
 					alert('댓글쓰기성공');
 					$("#comment-write-content").val('');
+					$("#uploaded-file").css('display','none');
 					i++;
+				} else {
+					console.log(result);
+					alert('내용을 적어주세요');	
 				}
 					commentList();
 			}
@@ -315,12 +340,21 @@
 		
 		
 	}
-	
-	
-	
-	
-	
+		
+		function bbbb(event){
+			var reader=new FileReader(); //파일리더 객체생성 
+			
+			reader.onload=function(event){ //onload 됐을 시 발생할 이벤트 추가
+				var img=document.createElement("img");//요소생성
+				img.setAttribute("src",event.target.result);//이 이벤트를 발생한 곳의 값을 따와서 설정
+				document.querySelector("div#uploaded-file").appendChild(img);
+				document.querySelector("div#uploaded-file").style.display='inline-flex';
+				
+			};
+			
+			reader.readAsDataURL(event.target.files[0]);
 
+		}
 </script>
 </head>
 <body>
@@ -334,18 +368,18 @@
 						<div class="board-area-toparea">
 							<h4>
 								<span>${vo.title }</span>
-		  						<span class="board-area-toparea-date"><fmt:formatDate value="${vo.regdate}" pattern="yyyy-MM-dd hh:mm"/></span>
+		  						<span class="board-area-toparea-date"><fmt:formatDate value="${vo.regDate}" pattern="yyyy-MM-dd hh:mm"/></span>
 							</h4>
 						</div>
 						<div class="board-area-btmarea">
 							<div class="board-area-btmarea-left">
-								<a href="">
+								<a class="miniprofile" onclick="profileOpen('${vo.mIdx}')">
 									<img src="${profileSrc}" style="width:22.5px; height:100%;"/>
-									${vo.mnickname}							
+									${vo.mNickname}							
 								</a>
 							</div>
 							<div class="board-area-btmarea-right">
-								<span>조회수: <b>${vo.readcount}</b></span>
+								<span>조회수: <b>${vo.readCount}</b></span>
 								<span>추천수: <b id="likeCount"></b></span>
 							</div>
 						</div>
@@ -399,22 +433,37 @@
 							</div>
 						</li> --%>
 					</ul>
+					<div id="uploaded-file">
+						<span><b>업로드된사진</b></span>
+					</div>
 					<div class="comment-area-write">
-						<label style="margin-bottom:10px">
-							<strong style="padding-left:5px;">댓글 쓰기</strong>
-						</label>
-						<div class="comment-area-write-content">
-							<c:choose>
-								<c:when test="${login.mIdx != null}">
-									<textarea id="comment-write-content" class="comment-area-write-content-area"></textarea>
-									<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${login.mIdx}')">
-								</c:when>
-								<c:otherwise>
-									<textarea id="comment-write-content" class="comment-area-write-content-area" placeholder="댓글은 로그인 후 작성 가능합니다" onclick="location.href='/member/glogin.do'"></textarea>
-									<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${login.mIdx}')" disabled>
-								</c:otherwise>
-							</c:choose>
-						</div>
+						<form id="commentfile">
+							<input type="hidden" name="aIdx" value="${param.aIdx}">
+							<input type="hidden" name="bIdx" value="${param.bIdx}">
+							<input type="hidden" name="mIdx" value="${login.mIdx}">
+							<input type="hidden" name="mNickname" value="${login.nickname}">
+							<label style="margin-bottom:10px">
+								<strong style="padding-left:5px;">댓글 쓰기</strong>
+							</label>
+							<label style="margin-bottom:10px">
+								<input type="file" id="file" name="commentSrc" style='display:none' onchange="bbbb(event)" accept="image/*">
+								<label for="file">
+									<a><strong>사진 올리기</strong></a>
+								</label>
+							</label>
+							<div class="comment-area-write-content">
+								<c:choose>
+									<c:when test="${login.mIdx != null}">
+										<textarea id="comment-write-content" name="content" class="comment-area-write-content-area"></textarea>
+										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${login.mIdx}')">
+									</c:when>
+									<c:otherwise>
+										<textarea id="comment-write-content"  class="comment-area-write-content-area" placeholder="댓글은 로그인 후 작성 가능합니다" onclick="location.href='/member/glogin.do'"></textarea>
+										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${login.mIdx}')" disabled>
+									</c:otherwise>
+								</c:choose>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
