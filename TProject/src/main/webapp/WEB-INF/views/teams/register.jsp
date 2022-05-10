@@ -114,13 +114,13 @@
 		var result = $("#result").text();
 		if(type == 'plus'){
 			$(".left-btn").attr("disabled", false);
-			result = parseInt(result)+1+"명";
+			result = parseInt(result)+1;
 		}else if(type == 'minus'){
-			if(result == "1명"){
+			if(result == 1){
 				$(".left-btn").attr("disabled", true);
 			}else{
 			$(".left-btn").attr("disabled", false);
-			result = parseInt(result)-1+"명";
+			result = parseInt(result)-1;
 			}
 		}$("#result").text(result);
 	}
@@ -133,27 +133,32 @@
 		
 		if(field == "band" && part != "장르를 선택하세요."){
 			if(part == null || part == "직접 입력"){
-				$(".select-parts").append("<span class='select-part' name='part'>"+$('#write-part').val()+" "+people+"</span>");
-				$(".select-parts").append("<button type='button' class='x' onclick='remove(this)'>x</button>");
+				var div = $("<div class='parts'>");
+				$(".select-parts").append(div);
+				$(div).append("<span class='select-part' name='part'>"+$('#write-part').val()+" "+people+"명</span>");
+				$(div).append("<button type='button' class='x' onclick='remove(this)'>x</button>");
+				$(div).append("<input type='hidden' name='name' value='"+$('#write-part').val()+"'>");
+				$(div).append("<input type='hidden' name='capacity' value='"+people+"'>");
 			}else{
-				$(".select-parts").append("<span class='select-part' name='part'>"+part+" "+people+"</span>");
-				$(".select-parts").append("<button type='button' class='x' onclick='remove(this)'>x</button>");
+				var div = $("<div class='parts'>");
+				$(".select-parts").append(div);
+				$(div).append("<span class='select-part' name='part'>"+part+" "+people+"명</span>");
+				$(div).append("<button type='button' class='x' onclick='remove(this)'>x</button>");
+				$(div).append("<input type='hidden' name='name' value='"+part+"'>");
+				$(div).append("<input type='hidden' name='capacity' value='"+people+"'>");
 			}
 		}else if(field == "dance"){
-			if($(".select-part")){
-				$(".select-parts").empty();
-				$(".select-parts").append("<span class='select-part' name='peoplenum'>"+people+"</span>");
-			}else{
-				$(".select-parts").append("<span class='select-part' name='peoplenum'>"+people+"</span>");
-			}
+			$(".select-parts").empty();
+			$(".select-parts").append("<span class='select-part' name='capacity'>"+people+"명</span>");
+			$(".select-parts").append("<input type='hidden' name='capacity' value='"+people+"'>");
+			
 		}
 		$("#write-part").val("");
 		
 	}
 	
 	function remove(obj){
-		$(obj).prev().remove();
-		$(obj).remove();
+		$(obj).parent().remove();
 	}
 	
 	
@@ -218,7 +223,9 @@
 	      }
 	   })
 	   
-	}	
+	}
+	
+	
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -302,6 +309,9 @@
     background: #FBE6B2;
     margin-right:5px;
 }
+.parts{
+	display:inline-block;
+}
 .x{
 	font-size: 5px;
     height: 20px;
@@ -311,7 +321,7 @@
 	margin-right: 15px;
 }
 </style>
-<title>Insert title here</title>
+<title>팀원구하기 글등록</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 </head>
 <body>
@@ -323,6 +333,8 @@
 		</div>
 		<div id="page-content">
 			<form action="register.do" method="post">
+			<input type="hidden" name="mIdx" value="${login.mIdx}">
+			<input type="hidden" name="mNickname" value="${login.nickname}">
 				<div class="form">
 					<div class="search-top">
 						<select class="form-select form-select-sm" name="addr1">
@@ -360,7 +372,7 @@
 						<input class="form-control form-control-sm" id="write-part" type="text" name="part" placeholder="파트 입력" disabled>
 						<div class="btn-group people-num">
 							<button type="button" class="btn btn-outline-secondary left-btn" onclick='count("minus")' disabled="disabled">-</button>
-							<button type="button" class="btn btn-outline-secondary" id="result">1명</button>
+							<button type="button" class="btn btn-outline-secondary"><span id="result">1</span>명</button>
 							<button type="button" class="btn btn-outline-secondary right-btn"onclick="count('plus')">+</button>
 						</div>
 						<button type="button" class="normal-button add-part" style="width:40px; margin-right:10px;" onclick="addPart()">추가</button>

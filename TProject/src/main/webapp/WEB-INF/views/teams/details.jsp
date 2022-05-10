@@ -8,15 +8,11 @@
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <style>
 .terms-list{
-    padding: 5px;
-    margin-bottom: 10px;
+    padding-left: 5px;
 }
 .terms{
-	border:1px solid #ced4da;
-    border-radius: 17.5px;
     padding: 6px;
     font-size: 12px;
-    background: white;
     margin-right:5px;
 }
 #title{
@@ -25,6 +21,7 @@
 }
 #writer{
     padding: 10px;
+    margin-bottom: 10px;
 }
 #deadline{
 	color: #303030;
@@ -39,7 +36,7 @@
 #content{
 	width:100%;
 	height:500px;
-	margin-bottom:10px;
+	margin:10px 0px;
 }
 .inner-box{
 	margin-bottom: 50px;
@@ -62,19 +59,19 @@
 		</div>
 		<div id="page-content">
 			<div class="inner-box" style="height:750px;">
-					<div id="title">제목</div>
+					<div id="title">안녕하세요 팀원 구합니다 감사합니다</div>
 					<div id="writer">작성자명
-						<span id="deadline">마감날짜 | 2022년 05월 12일</span>
+						
 					</div>
 					
 					<div class="terms-list">
-						<span class='terms'>전라북도</span>
-						<span class='terms'>전주시 덕진구</span>
-						<span class='terms'>초급</span>
-						<span class='terms'>밴드</span>
-						<span class='terms'>락</span>
-						<span class='terms'>일렉기타 1명</span>
-						<span class='terms'>보컬 1명</span>
+						<span class='terms'><b>지역</b> 전라북도 전주시 덕진구</span>
+						<span class='terms'><b>팀 레벨</b> 초급</span>
+						<span class='terms'><b>장르</b> 락</span>
+					</div>
+					<div class="terms-list">
+						<span class='terms'><b>파트</b> 일렉기타 1명, 보컬 1명, 베이스 1명</span>
+						<span class='terms'><b>마감날짜</b> 2022년 05월 12일</span>
 					</div>
 					<div class="inner-box-content">
 						<div id="content" class="form-control" style="width:100%; height:500px;">내용</div>
