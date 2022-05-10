@@ -8,10 +8,17 @@ public class CommentsVO {
 	private int aIdx;
 	private int mIdx;
 	private String mNickname;
+	private String mProfileSrc;
 	private String content;
 	private String picSrc;
 	private Date regDate;
 	
+	public String getmProfileSrc() {
+		return mProfileSrc;
+	}
+	public void setmProfileSrc(String mProfileSrc) {
+		this.mProfileSrc = mProfileSrc;
+	}
 	public int getcIdx() {
 		return cIdx;
 	}

@@ -28,6 +28,6 @@ public interface BoardService {
 	List<ArticlesVO> pageCount(int bIdx, String searchtitle);
 	List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request);
 	Map<String,Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request);
-	int commentWrite(Map<String, Object> map);
+	int commentWrite(CommentsVO vo);
 	List<CommentsVO> commentList(Map<String, Object> params);
 }

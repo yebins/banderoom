@@ -143,10 +143,10 @@
 			,a.bIdx
 			,a.title
 			,a.content
-			,a.midx
-			,a.mnickname
-			,a.regdate
-			,a.readcount
+			,a.mIdx
+			,a.mNickname
+			,a.regDate
+			,a.readCount
 			,a.status
 			,count(la.aidx) likeCount 
 		from
@@ -174,7 +174,7 @@
 			aidx = #{aIdx}
 	</select>
 	
-	<insert id="commentWrite" parameterType="map">
+	<insert id="commentWrite" parameterType="commentsVO">
 		insert into comments(
 			bidx
 			,aidx
@@ -189,7 +189,7 @@
 			,#{mIdx}
 			,#{mNickname}
 			,#{content}
-			,#{picsrc}
+			,#{picSrc}
 			,now()
 			)		
 	</insert>

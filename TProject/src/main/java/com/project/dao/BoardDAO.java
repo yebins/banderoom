@@ -103,9 +103,9 @@ public class BoardDAO {
 		return sqlSession.selectOne("com.project.mapper.boardMapper.jlistOneArticle", map);
 	}
 	
-	public int commentWrite(Map<String, Object> map) {
+	public int commentWrite(CommentsVO vo) {
 		
-		return sqlSession.insert("com.project.mapper.boardMapper.commentWrite", map);
+		return sqlSession.insert("com.project.mapper.boardMapper.commentWrite", vo);
 	}
 	
 	public List<CommentsVO> commentList(Map<String, Object> map){
