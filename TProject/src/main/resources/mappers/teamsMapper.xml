@@ -3,7 +3,7 @@
 
 <mapper namespace="com.project.mapper.teamsMapper">
 
-	<insert id="register" parameterType="teamsVO">
+	<insert id="register" parameterType="teamsVO" useGeneratedKeys="true" keyProperty="teamIdx">
 		INSERT INTO teams(
 			 midx
 			,mnickname
@@ -18,20 +18,72 @@
 			,status
 			,enddate
 		)VALUES(
-			 #{midx}
-			,#{mnickname}
+			 #{mIdx}
+			,#{mNickname}
 			,#{addr1}
 			,#{addr2}
-			,#{teamlevel}
+			,#{teamLevel}
 			,#{type}
 			,#{genre}
 			,#{title}
 			,#{content}
 			,now()
 			,0
-			,#{enddate}
+			,#{endDate}
 		)
-		
-		 
 	</insert>
+	
+	<insert id="insertPart" parameterType="java.util.List">
+		INSERT INTO parts(
+				 teamidx
+				,name
+				,capacity
+			)VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				 #{item.teamIdx}
+				,#{item.name}
+				,#{item.capacity}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="selectList" resultType="teamsVO">
+		SELECT
+			 teamidx
+			,addr1
+			,addr2
+			,teamlevel
+			,type
+			,genre
+			,title
+			,enddate
+		  FROM teams
+		 WHERE status=0
+		 ORDER BY teamidx DESC
+	</select>
+	
+	<select id="selectParts" resultType="partsVO" parameterType="int">
+		SELECT name, capacity
+		  FROM parts
+		 WHERE teamidx = #{teamIdx}
+	</select>
+	
+	<select id="details" resultType="teamsVO" parameterType="int">
+		SELECT
+			 teamidx
+			,mnickname
+			,addr1
+			,addr2
+			,teamlevel
+			,type
+			,genre
+			,title
+			,content
+			,regdate
+			,enddate
+		  FROM teams
+		 WHERE teamidx = #{teamIdx}
+	
+	</select>
 </mapper>

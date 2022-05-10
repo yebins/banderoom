@@ -106,6 +106,27 @@ td{
     right: 12px;
     width: 150px;
 }
+@font-face {
+    font-family: 'SuncheonB';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/SuncheonB.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'establishRoomNo703OTF';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/establishRoomNo703OTF.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'KOTRAHOPE';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+	font-family:'SuncheonB';
+}
 </style>
 </head>
 <body>
@@ -180,70 +201,70 @@ td{
 			
 			<div class="container">
 				<div class="row row-cols-1 row-cols-sm-3">
-					<div class="col team-col" onclick="location.href='details.do'">
-						<div class="team-list">
-							<div class="team-title">
-							코스모스 락밴드에서 함께할 팀원을 모집합니다.
-							</div>
-							<div class="team-content">
-								<table>
-									<tr>
-										<td style="width: 75px;">지역</td>
-										<td>전라북도 전주시 덕진구</td>
-									</tr>
-									<tr>
-										<td>수준</td>
-										<td>초급</td>
-									</tr>
-									<tr>
-										<td>장르</td>
-										<td>락</td>
-									</tr>
-									<tr>
-										<td>파트</td>
-										<td>보컬 1명, 드럼 1명, 베이스 1명, 키보드 1명</td>
-									</tr>
-									<tr>
-										<td>모집기간</td>
-										<td>2022년 04월 25일까지</td>
-									</tr>
-								</table>
-							</div>
-						</div>
-					</div>
-					<div class="col team-col">
-						<div class="team-list">
-							<div class="team-title">
-							제목
-							</div>
-							<div class="team-content">
-							내용
-							</div>
-						</div>
-					</div>
-					<div class="col team-col">
-						<div class="team-list">
-							<div class="team-title">
-							제목
-							</div>
-							<div class="team-content">
-							내용
-							</div>
-						</div>
-					</div>
-					<div class="col team-col">
-						<div class="team-list">
-							<div class="team-title">
-							제목
-							</div>
-							<div class="team-content">
-							내용
+					<c:if test="${teamsList.size()>0}">
+					<c:forEach var="item" items="${teamsList}">
+						<div class="col team-col" onclick="location.href='details.do?teamidx=${item.teamIdx}'">
+							<input type="hidden" name="teamIdx" value="${item.teamIdx}">
+							<div class="team-list">
+								<div class="team-title">
+									<c:if test="${item.type == 'band'}">[밴드]</c:if>
+									<c:if test="${item.type == 'dance'}">[댄스]</c:if>
+									${item.title}
+								</div>
+								<div class="team-content">
+									<table>
+										<tr>
+											<td style="width: 75px;">지역</td>
+											<td>${item.addr1} ${item.addr2}</td>
+										</tr>
+										<tr>
+											<td>수준</td>
+											<td>${item.teamLevel}</td>
+										</tr>
+										<tr>
+											<td>장르</td>
+											<td>${item.genre}</td>
+										</tr>
+										<tr>
+										<c:if test="${item.type == 'band'}">
+											<td>파트</td>
+											<td>
+												
+												<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}" varStatus="lastPart">
+													${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
+												</c:forEach>
+											</td>
+										</c:if>
+										<c:if test="${item.type == 'dance'}">
+											<td>인원</td>
+											<td>
+												<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}">
+													${parts.capacity}명
+												</c:forEach>
+											</td>
+										</c:if>
+										</tr>
+										<tr>
+											<td>모집기간</td>
+											<td>
+											<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
+											<fmt:formatDate value="${endDate}" pattern="yyyy년 MM월 dd일 마감"/>
+											</td>
+										</tr>
+									</table>
+								</div>
 							</div>
 						</div>
-					</div>
+						</c:forEach>
+					</c:if>
+					<c:if test="${list.size()==0}">
+					작성된 글이 존재하지 않습니다.
+					</c:if>
 				</div>
 			</div>
-		<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
+			<c:if test="${login.mIdx ne null}">
+				<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
+			</c:if>
 		</div>
 		
 		

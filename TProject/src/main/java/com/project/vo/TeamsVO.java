@@ -16,7 +16,7 @@ public class TeamsVO {
 	private String content;
 	private Date regDate;
 	private int status;
-	private Date endDate;
+	private String endDate;
 	
 	public int getTeamIdx() {
 		return teamIdx;
@@ -90,10 +90,10 @@ public class TeamsVO {
 	public void setStatus(int status) {
 		this.status = status;
 	}
-	public Date getEndDate() {
+	public String getEndDate() {
 		return endDate;
 	}
-	public void setEndDate(Date endDate) {
+	public void setEndDate(String endDate) {
 		this.endDate = endDate;
 	}
 }
