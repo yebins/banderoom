@@ -20,6 +20,7 @@ public interface BoardService {
 	void readCount(ArticlesVO vo);
 	int serlistModify(ArticlesVO vo);
 	int serlistDelete(ArticlesVO vo);
+	int listDelete(ArticlesVO vo);
 	int boardUpdate(ArticlesVO vo);
 	int likedStatus(LikedArticlesVO vo);
 	int likedAtricles(LikedArticlesVO vo);
@@ -30,4 +31,6 @@ public interface BoardService {
 	Map<String,Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request);
 	int commentWrite(CommentsVO vo);
 	List<CommentsVO> commentList(Map<String, Object> params);
+	int insertComments(CommentsVO vo);
+	List<CommentsVO> cList(CommentsVO vo);
 }

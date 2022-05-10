@@ -12,12 +12,19 @@ public class CommentsVO {
 	private String content;
 	private String picSrc;
 	private Date regDate;
+	private int status;
 	
 	public String getmProfileSrc() {
 		return mProfileSrc;
 	}
 	public void setmProfileSrc(String mProfileSrc) {
 		this.mProfileSrc = mProfileSrc;
+	}
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
 	}
 	public int getcIdx() {
 		return cIdx;

@@ -63,6 +63,11 @@ public class BoardDAO {
 		return sqlSession.update("com.project.mapper.boardMapper.serlistDelete", vo);
 	}
 	
+	public int listDelete(ArticlesVO vo) {
+		
+		return sqlSession.update("com.project.mapper.boardMapper.listDelete", vo);
+	}
+	
 	public int boardUpdate(ArticlesVO vo) {
 		
 		return sqlSession.update("com.project.mapper.boardMapper.boardUpdate", vo);
@@ -116,5 +121,15 @@ public class BoardDAO {
 	public int commentCount(Map<String, Object> map) {
 		
 		return sqlSession.selectOne("com.project.mapper.boardMapper.commentCount",map);
+	}
+	
+	public int insertComments(CommentsVO vo) {
+		
+		return sqlSession.insert("com.project.mapper.boardMapper.insertComments",vo);
+	}
+	
+	public List<CommentsVO> cList(CommentsVO vo) {
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.commentsList",vo);
 	}
 }

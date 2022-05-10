@@ -37,6 +37,8 @@ public class BoardServiceImpl implements BoardService {
 		
 		return dao.list(map);
 	}
+	
+	
 
 	@Override
 	public int insertArticlesVO(ArticlesVO vo) {
@@ -124,7 +126,6 @@ public class BoardServiceImpl implements BoardService {
 		map.put("searchtitle", searchtitle);
 		map.put("bIdx", bIdx);
 		
-		System.out.println(dao.pageCount(map).size());
 		return dao.pageCount(map);
 	}
 	
@@ -156,6 +157,27 @@ public class BoardServiceImpl implements BoardService {
 				
 		return dao.jlist(map);	
 	}
+
+
+
+	@Override
+	public int listDelete(ArticlesVO vo) {
+		
+		return dao.listDelete(vo);
+	}
+
+	@Override
+	public int insertComments(CommentsVO vo) {
+		
+		return dao.insertComments(vo);
+	}
+
+	@Override
+	public List<CommentsVO> cList(CommentsVO vo) {
+		
+		return dao.cList(vo);
+	}
+		
 	
 	public Map<String, Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request) {
 		
