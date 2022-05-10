@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentsVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
@@ -19,12 +20,17 @@ public class BoardDAO {
 	
 	public List<ArticlesVO> list(Map map){
 		
-		return sqlSession.selectList("com.project.mapper.boardMapper.list",map);
+		return sqlSession.selectList("com.project.mapper.boardMapper.list", map);
+	}
+	
+	public List<ArticlesVO> pageCount(Map map){
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.pageCount", map);
 	}
 	
 	public int insertArticlesVO(ArticlesVO vo) {
 		
-		return sqlSession.insert("com.project.mapper.boardMapper.insertArticles",vo);
+		return sqlSession.insert("com.project.mapper.boardMapper.insertArticles", vo);
 	}
 	
 	public ServiceInfoVO selectOneServiceInfoVO(int idx) {
@@ -57,6 +63,11 @@ public class BoardDAO {
 		return sqlSession.update("com.project.mapper.boardMapper.serlistDelete", vo);
 	}
 	
+	public int listDelete(ArticlesVO vo) {
+		
+		return sqlSession.update("com.project.mapper.boardMapper.listDelete", vo);
+	}
+	
 	public int boardUpdate(ArticlesVO vo) {
 		
 		return sqlSession.update("com.project.mapper.boardMapper.boardUpdate", vo);
@@ -82,4 +93,43 @@ public class BoardDAO {
 		return sqlSession.selectOne("com.project.mapper.boardMapper.likeCount", aIdx);
 	}
 	
+	public List<ArticlesVO> jlist(Map<String,Object> map){
+		System.out.println(map.toString());
+		return sqlSession.selectList("com.project.mapper.boardMapper.jlistArticle",map);
+	}
+	
+	public int jlistCount(Map<String,Object> map) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.jlistArticleCount", map);
+	
+	}
+	public Map<String, Object> jlistOneArticle(Map<String, Object> map) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.jlistOneArticle", map);
+	}
+	
+	public int commentWrite(CommentsVO vo) {
+		
+		return sqlSession.insert("com.project.mapper.boardMapper.commentWrite", vo);
+	}
+	
+	public List<CommentsVO> commentList(Map<String, Object> map){
+	
+		return sqlSession.selectList("com.project.mapper.boardMapper.commentList",map);
+	}
+	
+	public int commentCount(Map<String, Object> map) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.commentCount",map);
+	}
+	
+	public int insertComments(CommentsVO vo) {
+		
+		return sqlSession.insert("com.project.mapper.boardMapper.insertComments",vo);
+	}
+	
+	public List<CommentsVO> cList(CommentsVO vo) {
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.commentsList",vo);
+	}
 }

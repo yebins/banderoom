@@ -1,10 +1,17 @@
 package com.project.service;
 
+import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.ui.Model;
 
 import com.project.vo.EmailRegVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.HostMembersVO;
+import com.project.vo.MessagesVO;
+import com.project.vo.PointsVO;
 import com.project.vo.TelRegVO;
 
 public interface MemberService {
@@ -22,4 +29,7 @@ public interface MemberService {
 	HostMembersVO hLogin(HostMembersVO vo);
 	GeneralMembersVO oneMemberInfo(GeneralMembersVO vo);
 	int sendMessage(Map<String,Object> map);
+	HostMembersVO getHostMember(HostMembersVO vo);
+	int setPoint(PointsVO vo);
+	List<MessagesVO> MessagesList(HttpServletRequest request,Map<String, Object> map);
 }

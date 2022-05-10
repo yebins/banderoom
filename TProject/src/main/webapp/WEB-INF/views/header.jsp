@@ -287,7 +287,7 @@ header {
 				</div>
 				<div id="sm-profile-buttons">
 					<button class="normal-button" onclick = "">내정보</button>
-					<button class="normal-button" onclick = "">쪽지함</button>
+					<button class="normal-button" onclick = "location.href='/member/myMessage.do'">쪽지함</button>
 					<button class="normal-button" onclick = "location.href='/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>
@@ -318,7 +318,7 @@ header {
 				연습실 대여
 			</div>
 			<div class="sm-button-wrap" onclick="location.href='/teams/main.do'">
-				사람구하는그거
+				팀원 모집
 			</div>
 		</div>
 		</c:if>
@@ -332,8 +332,10 @@ header {
 			</div>
 		</div>
 		</c:if>
+		
 			<div class="sm-list-area">
 			
+		
 		<c:if test="${login.getAuth() == 3}">
 			<div class="accordion-item">
 		<h2 class="accordion-header" id="headingOne">
@@ -354,13 +356,33 @@ header {
     </div>
 		</c:if>
 			
+		<c:if test="${login != null}">
 			<div class="accordion-item">
-    <h2 class="accordion-header" id="headingOne">
+		<h2 class="accordion-header" id="headingOne">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c1" aria-expanded="true" aria-controls="collapseOne">
-        새소식
+        공간 이용 내역
       </button>
     </h2>
     <div id="c1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+       	<div class="sm-innerlist" onclick="location.href='/space/myspacersv.do'">
+       	공간 예약 내역
+       	</div>
+       	<div class="sm-innerlist" onclick="">
+       	포인트 획득 / 사용 내역
+       	</div>
+      </div>
+    </div>
+    </div>
+		</c:if>
+		
+			<div class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2" aria-expanded="true" aria-controls="collapseOne">
+        새소식
+      </button>
+    </h2>
+    <div id="c2" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
        	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=1&page=1'">
        	공지사항
@@ -377,11 +399,11 @@ header {
 			
 				<div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c2" aria-expanded="true" aria-controls="collapseOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3" aria-expanded="true" aria-controls="collapseOne">
         커뮤니티
       </button>
     </h2>
-    <div id="c2" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+    <div id="c3" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
        	<div class="sm-innerlist" onclick="location.href='/board/list.do?bIdx=2&page=1'">
        	자유게시판
@@ -400,11 +422,11 @@ header {
 		
 				<div class="accordion-item">
     <h2 class="accordion-header" id="headingOne">
-      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c3" aria-expanded="true" aria-controls="collapseOne">
+      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c4" aria-expanded="true" aria-controls="collapseOne">
         고객센터
       </button>
     </h2>
-    <div id="c3" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+    <div id="c4" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
        	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=5&page=1'">
        	자주 묻는 질문

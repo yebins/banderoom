@@ -20,6 +20,13 @@ public interface SpaceService {
 	int requestAccpet(SpacesVO vo);
 	List<SpacesVO> spaceList(Map<String, Object> params);
 	List<SpaceReviewVO> spaceReviewList(SpacesVO vo);
+	Map<String, Object> spaceReviewCntAvg(SpacesVO vo);
+	ReservationsVO insertRsv(ReservationsVO vo);
+	int insertPoint(PointsVO vo);
+	ReservationsVO getRSV(ReservationsVO vo);
+	List<String> getRsvFullDates(Map<String, String> params);
+	List<Map<String, String>> getRsvHours(Map<String, String> date);
+	List<ReservationsVO> getCurrentRsv(GeneralMembersVO vo);
 	
 
 	//테스트용

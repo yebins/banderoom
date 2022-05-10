@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
@@ -25,7 +26,7 @@
 		margin:13px;
 	}
 	.JArticle:hover{
-		border:3px solid #FB6544;
+		outline:3px solid #fb6544;
 	}
 	.JBoard{
 		display:flex;
@@ -74,12 +75,47 @@
 	}
 	
 	.inner-box-content-thumbnail img{
+		width:100%;
+		height:100%;
 		border-radius:10px;
 	}
 	[type="search"] + button{
 		height:50px;
 		border-radius:25px;
 	}
+	
+	.jlist-status{
+		border-radius:25px;
+		border: 1px solid #ced4da;
+		height:50px;
+		text-align:center;
+		margin-right:10px;
+		font-size:1rem;
+		
+	}
+	select option{
+		border-radius:5px;
+    }
+    .jListPageButton{
+    	width:70px;
+    	background-color:#f5f5f5;
+    }
+    .sold {
+    	opacity:0.6;
+    }
+    .sold::before{
+    	position:absolute;
+    	content:'거래완료';
+    	color:white;
+    	background-color: rgba(0,0,0,.7);
+    	font-size:1rem;
+    	font-weight:bold;
+    	border:3px solid black;
+    	border-radius:15px;
+    	transform:translate(90px,50px);
+    	padding:10px;
+    	
+    }
 </style>
 </head>
 <body>
@@ -87,43 +123,78 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			<a href="jlist.do">중고거래게시판</a>
+			<a href="jlist.do">중고거래 게시판</a>
 		</div>
 		<div>
-			<form action="jlist.do" class="d-flex notice-page" method="get">
+			<form action="/jlist.do" class="d-flex notice-page" method="get">
+				<select name="status" class="jlist-status">
+					<option <c:if test="${status eq '97'}">selected</c:if> value="97">판매</option>
+					<option <c:if test="${status eq '98'}">selected</c:if> value="98">구매</option>
+					<option <c:if test="${status eq '99'}">selected</c:if> value="99">거래완료</option>
+				</select>
+				<input type="hidden" name="page" value="1">
 				<input type="hidden" name="bIdx" value="3">
-       	 		<input class="form-control me-3 JlistSearch" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
+       	 		<input class="form-control me-3 JlistSearch" name="searchtitle" id="searchtitle" type="text" placeholder="Search" aria-label="Search" value="${searchtitle}">
         			<button class="accent-button normal-button search-button">검색</button>
      		 </form>
 		</div>
 		<div id="page-content" class="JBoard">
-			<c:forEach var="item" items="${list}" begin="0" varStatus="st">
-				<div class="inner-box JArticle">
-					<div class="inner-box-content-thumbnail">
-						<img style="width:100%;height:100%"src="https://images.unsplash.com/photo-1593642702909-dec73df255d7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80">
+			<c:if test="${fn:length(list) gt 0}">
+				<c:forEach var="item" begin="0" end="${fn:length(list) -1}" varStatus="st">
+					<div class="inner-box JArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='/jlist/detail.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}'">
+						<div class="inner-box-content-thumbnail ">
+							<c:choose>
+								<c:when test="${imgsrc.get(item) ne ''}">
+									<img src="${imgsrc.get(item)}"/>
+								</c:when>
+								<c:otherwise>
+									<img src="https://images.unsplash.com/photo-1651579293356-ec8c360a3bf8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8Q0R3dXdYSkFiRXd8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60">
+								</c:otherwise>
+							</c:choose>
+						</div>
+						<div class="inner-box-content-state-title">
+								<c:choose>
+									<c:when test="${list.get(item).status eq '97'}"><span>[판매]</span></c:when>
+									<c:when test="${list.get(item).status eq '98'}"><span>[구매]</span></c:when>
+									<c:when test="${list.get(item).status eq '99'}"><span>[거래완료]</span></c:when>
+									<c:otherwise>[status가 엄서요]</c:otherwise>
+								</c:choose>
+							<span>${list.get(item).title}</span>
+						</div>
+						<div class="inner-box-content-articleInfo">
+						<span><fmt:formatDate pattern="yyyy.MM.dd" value="${list.get(item).regDate}"/></span>&nbsp;<span> 조회수 ${list.get(item).readCount} </span><span class="miniprofile" style="margin-left:auto;" onclick="profileOpen('${list.get(item).mIdx}')">${list.get(item).mNickname}</span>
+						</div>
 					</div>
-					<div class="inner-box-content-state-title">
-					<span>[거래중] </span><span>${item.title}</span>
-					</div>
-					<div class="inner-box-content-articleInfo">
-					<span><fmt:formatDate pattern="yyyy.MM.dd" value="${item.regDate}"/></span>&nbsp;<span> 조회수 ${item.readCount} </span><span class="miniprofile" style="margin-left:auto;" onclick="profileOpen('${item.mIdx}')">${item.mNickname}</span>
-					</div>
-				</div>
-			</c:forEach>
+				</c:forEach>
+			</c:if>
 			<div class="content-write">
-				<button class="normal-button accent-button">글쓰기</button>
+				<button class="normal-button accent-button" onclick="location.href='/board/register.do?bIdx=3'">글쓰기</button>
 			</div>
-			<div class="pageNum">
-				<button class="normal-button accent-button">이전</button>
-				<a href="">1</a>
-				<a href="">2</a>
-				<a href="">3</a>
-				<a href="">4</a>
-				<a href="">5</a>
-				<button class="normal-button accent-button">다음</button>
+				<c:set var="articlesTotal" value="${articlesTotal}"/>
+				<c:set var="page" value="${(param.page == null)?1:param.page}"/>
+				<c:set var="startNum" value="${page-(page-1)%5}"/>	
+				<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(articlesTotal/6),'.')}"/>
+			검색된 게시물 수 : ${articlesTotal}
+			<div class="pageNum">	
+						<button class="normal-button accent-button jListPageButton" style="visibility:${(startNum<=1)?'hidden':'visible'};">
+							<a href="jlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">이전</a>
+						</button>
+						<c:forEach var="i" begin="0" end="4">
+							<c:if test="${(startNum+i)<= lastNum}">
+								<a href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}" style="color:${page==(startNum+i)?'lightgreen; border:1px solid lightgray; padding:5px; border-radius:10px;':''}">${startNum+i}</a>
+							</c:if>
+						</c:forEach>
+						<button class="normal-button accent-button jListPageButton" style="visibility:${(startNum+5<=lastNum)?'visible':'hidden'};">
+							<a href="jlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">다음</a>
+						</button>
 			</div>
 		</div>
 	</div>
+	<script>
+		(function(){
+			console.log(112);
+		})()
+	</script>
 	<c:import url="/footer.do" />
 </body>
 </html>

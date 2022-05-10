@@ -8,8 +8,11 @@
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
 <style>
 
 	.page-content {
@@ -223,9 +226,195 @@
 	.space-info-subject:not(.space-info-subject:first-child) {
 		margin-top: 40px;
 	}
+
+	.space-rsv .space-info-subject{
+		margin: 25px 10px 0px 10px;
+	}
+	
+	.rsv-info {
+		font-size: 14px;
+		margin: 10px 0px 0px 10px;
+	}
+
+	.space-rsv-subject {
+		font-size: 14px;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+
+	.space-rsv input[type=text] {
+		width: 100%;
+    flex: 1;
+    height: 40px;
+    border-radius: 20px;
+    padding: 0px 20px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+    border: none;
+		margin-top: 10px;
+	}
+	.day.current:hover {
+		cursor: pointer;
+	}
+	.day.current.selected {
+		background-color: #fb6544;
+		color: white !important;
+	}
+	.day.rsv-full {
+		background-color: darkgray;
+		color: white !important;
+	}
+	
+	.rsv-cal-info {
+		display: flex;
+		align-items: center;
+		margin-top: 20px;
+		padding-left: 10px;
+	}
+	.dayex {
+		width: 30px;
+		height: 30px;
+		border-radius: 15px;
+	}
+	.dayinfo {
+		margin: 0px 20px 0px 10px;
+	}
+
+	#timeselect {
+		display: none;
+		height: 341px;
+	}
+	#timetable {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		height: 300px;
+		overflow: auto;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border-radius: 10px;
+		margin-top: 20px;
+	}
+	.timeselector {
+		height: calc(100% / 8);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.timeselector:nth-child(8n) {
+		border: none;
+	}
+	.timeselector:hover {
+		cursor: pointer;
+	}
+	.time-selected {
+		background-color: #fb6544;
+		color: white;
+	}
+	.time-disabled {
+		background-color: darkgray;
+		color: white;
+	}
+
+	.loadingDiv {
+		height: 341px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 20px;
+	}
+	.spinner-border {
+		width: 100px;
+		height: 100px;
+		margin: 40px;
+		border-width: 10px;
+		color: #FB6544;
+	}
+	
+	#rsv-form-wrap {
+		display: none;
+    margin-top: 40px;
+	}
+	#rsv-date {
+    margin-left: 10px;
+    font-size: 28px;
+    font-weight: bold;
+	}
+	#rsv-time {
+		margin-left: 10px;
+		height: 20px;
+	}
+	#rsv-peopleNum {
+		margin-top: 40px;
+	}
+	
+	.peopleNum-buttons-wrap {
+	  display: flex;
+    justify-content: center;
+    align-items: center;
+	}
+	
+	.peopleNum-buttons {
+	  display: flex;
+    height: 36px;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+  }
+	.peopleNum-buttons * {
+		margin: 0px;
+	}
+	
+	.peopleNum-button {
+	  border: none;
+    background: white;
+    width: 36px;
+	}
+	.peopleNum-button:active {
+		filter: brightness(90%); 
+	}
+	
+	#rsv-input-peopleNum {
+    border: none;
+    border-left: 1px solid lightgray;
+    border-right: 1px solid lightgray;
+    text-align: center;
+	}
+	#rsv-input-peopleNum::-webkit-outer-spin-button,
+	#rsv-input-peopleNum::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+	}
+	
+	.rsv-costs-wrap {
+		margin-top: 40px;
+	}
 	
 	iframe {
 		max-width: 100%;
+	}
+	
+	.space-cost, .rsv-cost {
+		text-align: right;
+	}
+	.space-cost span {
+		font-size: 28px;
+	}
+	.rsv-cost span {
+		font-size: 28px;
+		font-weight: bold;
+	}
+	
+	.submit-button-wrap {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin-top: 40px;
+	}
+	
+	.rsv-submit {
+		width: 100%;
+		font-size: 20px;
+		height: 50px;
+		border-radius: 25px;
 	}
 	
 </style>
@@ -237,15 +426,77 @@
 	var liked;
 	var mIdx = 0;
 	
-	<c:if test="${login != null}">
+	<c:if test="${login != null}">	//로그인 안되어있으면 mIdx = 0 으로 초기화
 	mIdx = ${login.getmIdx()};
 	</c:if>
 	
 	$(function() {
 		
 		getLikedStatus();
+    calendarInit();
+    
+    for (i = 0; i < 16; i++) {
+    	if (i < 8) {
+    		$(".timeselector").eq(i).css("border-right", "1px solid lightgray");
+    	}
+    	if (i % 8 != 7) {
+    		$(".timeselector").eq(i).css("border-bottom", "1px solid lightgray");    		
+    	}
+    }
+    
+
+	});
+	
+	function getRsvFullDates() {
+
+	    // 다음 한 달간 예약정보 조회 (날짜별 총 예약 시간)
+	    var now = new Date();
+	    var nextDay = new Date(new Date().setMonth(new Date().getMonth() + 1));
+	    
+			var nowString="";
+			nowString += now.getFullYear() + "-";
+			if (now.getMonth() + 1 < 10) {
+				nowString += "0";
+			}
+			nowString += (now.getMonth() + 1) + "-";
+			if (now.getDate() < 10) {
+				nowString += "0";
+			}
+			nowString += now.getDate();
+
+			var nextDayString="";
+			nextDayString += nextDay.getFullYear() + "-";
+			if (nextDay.getMonth() + 1 < 10) {
+				nextDayString += "0";
+			}
+			nextDayString += (nextDay.getMonth() + 1) + "-";
+			if (nextDay.getDate() < 10) {
+				nextDayString += "0";
+			}
+			nextDayString += nextDay.getDate();
+			
+	    $.ajax({
+	    	type: "get",
+	    	url: "getrsvfulldates.do",
+	    	data: "spaceIdx=${spacesVO.idx}&nowDate=" + nowString + "&afterMonth=" + nextDayString,
+	    	success: function(data) {
+					disableFullDates(data);
+	    	}
+	    })
+	}
+	
+	function disableFullDates(dates) {
 		
-	})
+		for (idx in dates) {
+			var disableDate = new Date(dates[idx]);
+			
+			var disableYear = disableDate.getFullYear();
+			var disableMonth = disableDate.getMonth() + 1;
+			var disableDay = disableDate.getDate();
+			
+			$(".year-" + disableYear + ".month-" + disableMonth + ".day-" + disableDay).addClass("rsv-full");
+		}
+	}
 	
 	function getLikedStatus() {
 		$.ajax({
@@ -400,8 +651,6 @@
 		var divAspect = $(div).height() / $(div).width(); // div의 가로세로비는 알고 있는 값이다
 		var imgAspect = $(img).height() / $(img).width();
 		
-		console.log($(img).height() + ", " + $(img).width())
-		console.log(divAspect + ", " + imgAspect);
 	
 		if (imgAspect >= divAspect) {
 		    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
@@ -415,7 +664,350 @@
 			  $(div).css("height", $(img).height() + "px");
 		}
 	}
+
+
+	// 달력
 	
+	var selectedDate;
+	
+	/*
+	    달력 렌더링 할 때 필요한 정보 목록 
+	
+	    현재 월(초기값 : 현재 시간)
+	    금월 마지막일 날짜와 요일
+	    전월 마지막일 날짜와 요일
+	*/
+	
+
+	var rsvLoading = false;
+	
+	function calendarInit() {
+	
+	    // 날짜 정보 가져오기
+	    var date = new Date(); // 현재 날짜(로컬 기준) 가져오기
+	    var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+	    var kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+	    var today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+	  
+	    var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+	    // 달력에서 표기하는 날짜 객체
+	  
+	    
+	    var currentYear = thisMonth.getFullYear(); // 달력에서 표기하는 연
+	    var currentMonth = thisMonth.getMonth(); // 달력에서 표기하는 월
+	    var currentDate = thisMonth.getDate(); // 달력에서 표기하는 일
+	
+	    // kst 기준 현재시간
+	    // console.log(thisMonth);
+	
+	    // 캘린더 렌더링
+	    renderCalender(thisMonth);
+	
+	    function renderCalender(thisMonth) {
+	
+	        // 렌더링을 위한 데이터 정리
+	        currentYear = thisMonth.getFullYear();
+	        currentMonth = thisMonth.getMonth();
+	        currentDate = thisMonth.getDate();
+	
+	        // 이전 달의 마지막 날 날짜와 요일 구하기
+	        var startDay = new Date(currentYear, currentMonth, 0);
+	        var prevDate = startDay.getDate();
+	        var prevDay = startDay.getDay();
+	
+	        // 이번 달의 마지막날 날짜와 요일 구하기
+	        var endDay = new Date(currentYear, currentMonth + 1, 0);
+	        var nextDate = endDay.getDate();
+	        var nextDay = endDay.getDay();
+	
+	        // console.log(prevDate, prevDay, nextDate, nextDay);
+	
+	        // 현재 월 표기
+	        $('.year-month').text(currentYear + '년 ' + (currentMonth + 1) + '월');
+	
+	        // 렌더링 html 요소 생성
+	        calendar = document.querySelector('.dates');
+	        calendar.innerHTML = '';
+	        
+	        // 지난달
+	        for (var i = prevDate - prevDay; i <= (prevDay == 6 ? 0 : prevDate); i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div class="day prev disable">' + i + '</div>'
+	        }
+	        // 이번달
+	        for (var i = 1; i <= nextDate; i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div id="day-' + i 
+	            	+ '" class="day current year-' + currentYear + ' month-' + (currentMonth + 1) + ' day-' + i + '">' + i + '</div>';
+	        }
+	        // 다음달
+	        for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay - 1); i++) {
+	            calendar.innerHTML = calendar.innerHTML + '<div class="day next disable">' + i + '</div>'
+	        }
+					
+	        // 오늘 날짜 표기
+	        if (today.getMonth() == currentMonth) {
+	            todayDate = today.getDate();
+	            var currentMonthDate = document.querySelectorAll('.dates .current');
+	            currentMonthDate[todayDate -1].classList.add('today');
+	        }
+	        
+	        getRsvFullDates();
+	        
+	        $('.day.current').on('click', function() {
+	        	if ($(this).hasClass('rsv-full')) {
+	        		return;
+	        	}
+	        	
+		        if (!rsvLoading) {
+		        	selectedDate = new Date('' + currentYear + '-' + (currentMonth + 1) + '-' + $(this).attr('id').slice(4));
+		        	nextMonthDate = new Date().setMonth(new Date().getMonth() + 1);
+		        	
+		        	if (selectedDate >= new Date().setHours(0,0,0,0) && selectedDate < nextMonthDate) {
+			        	$('.day.current').removeClass('selected');
+			        	$("#rsv-date").text(selectedDate.getFullYear() + "년 " 
+			        			+ (selectedDate.getMonth() + 1) + "월 " + selectedDate.getDate() + "일");
+			        	$(this).addClass('selected');
+			        	
+			        	
+			        	
+			        	showTimeSelect(selectedDate);
+		        	}
+		        }
+	        })
+	    }
+	
+	    // 이전달로 이동
+	    $('.go-prev').on('click', function() {
+	        thisMonth = new Date(currentYear, currentMonth - 1, 1);
+	        renderCalender(thisMonth);
+	    });
+	
+	    // 다음달로 이동
+	    $('.go-next').on('click', function() {
+	        thisMonth = new Date(currentYear, currentMonth + 1, 1);
+	        renderCalender(thisMonth); 
+	    });
+	    
+	    
+	}
+
+	var startSelected = false;
+	var startTime;
+	var endTime;
+	var startDate;
+	var endDate;
+	var timeCount = 0;
+	var cost = 0;
+	
+	function showTimeSelect() {
+		
+		var today = new Date();
+
+		rsvLoading = true;
+		
+		// 시간 초기화
+		$("#timeselect").css("display", "none");
+		$(".timeselector").removeClass("time-selected");
+		$(".timeselector").removeClass("time-disabled");
+		startSelected = false;
+		startTime = null;
+		endTime = null;
+		startDate = null;
+		endDate = null;
+		timeCount = 0;
+		cost = 0;
+		$("#rsv-time").text("");
+		$(".rsv-cost span").text((${spacesVO.cost} * timeCount).toLocaleString());
+		
+		// 오늘을 선택했을 경우 지난 시간은 선택 불가
+   	if ("" + selectedDate.getFullYear() + selectedDate.getMonth() + selectedDate.getDate()
+   			== "" + today.getFullYear() + today.getMonth() + today.getDate()) {
+   		
+   		for (var i = 9; i <= new Date().getHours(); i++) {   			
+   			$(".timeselector[data-starttime=" + i + "]").addClass("time-disabled");   			
+   		}
+   	}
+		
+		var loadingDiv = $('<div class="loadingDiv"><div class="spinner-border" role="status"></div></div>');
+		$()
+		
+		$(".calendar").append(loadingDiv);
+		
+		
+		//예약 시간 정보 받아오기
+		var date = {
+				spaceIdx: '${spacesVO.idx}',
+				date: "" + selectedDate.getFullYear() + "-" + (selectedDate.getMonth() + 1) + "-" + selectedDate.getDate()
+		}
+		
+		$.ajax({
+			type: "get",
+			url: "getrsvhours.do",
+			data: date,
+			success: function(data) {
+				
+				for (i in data) {
+					if (data[i].end == 0) {
+						data[i].end = '24';						
+					}
+					
+					for (var j = +data[i].start; j < +data[i].end; j++) {
+						if (j)
+						console.log(j);
+						$(".timeselector[data-starttime=" + j + "]").addClass("time-disabled");
+					}
+				}
+				
+				$(loadingDiv).remove();
+				$("#timeselect").css("display", "block");
+				rsvLoading = false;
+
+				$("#rsv-form-wrap").css("display", "block");
+			}
+		})
+
+		
+	}
+	
+	
+	function selectTime(time) {
+		
+		if ($(time).hasClass("time-disabled")) {
+			return;
+		}
+
+		
+		if (!startSelected) {
+			timeCount = 1;
+			
+			$(".timeselector").removeClass("time-selected");
+			startTime = +$(time).attr("data-starttime");
+			endTime = +$(time).attr("data-endtime");
+			startDate = new Date(selectedDate).setHours(startTime, 0, 0, 0);
+			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
+			$(time).addClass("time-selected");
+			startSelected = true;
+		} else {
+			var timeChanged = false;
+			
+			endTime = +$(time).attr("data-endtime");
+			
+			if (endTime <= startTime) {
+				var temp = startTime;
+				startTime = endTime - 1;
+				endTime = temp + 1;
+				
+				timeChanged = true;
+			}
+			
+			for (var i = startTime; i < endTime; i++) {
+				if ($(".timeselector[data-starttime=" + i + "]").hasClass("time-disabled")) {
+					if (timeChanged) {
+						startTime = endTime - 1;
+					}
+					return;
+				}
+			}
+
+			startDate = new Date(selectedDate).setHours(startTime, 0, 0, 0);
+			endDate = new Date(selectedDate).setHours(endTime, 0, 0, 0);
+			timeCount = 0;
+			
+			for (var i = startTime; i < endTime; i++) {
+				$(".timeselector[data-starttime=" + i + "]").addClass("time-selected");
+				timeCount++;
+			}
+
+			startSelected = false;
+		}
+		
+		$("#rsv-time").text(startTime + "시 ~ " + endTime + "시, " + timeCount + "시간");
+		$(".rsv-cost span").text((${spacesVO.cost} * timeCount).toLocaleString());
+		cost = ${spacesVO.cost} * timeCount;
+		
+	}
+	
+	function changePeopleNum(num) {
+		
+		var currentNum = +$("#rsv-input-peopleNum").val();
+		currentNum += num;
+		
+		if (currentNum > ${spacesVO.capacity}) {
+			currentNum = ${spacesVO.capacity};
+		} else if (currentNum < 1) {
+			currentNum = 1;
+		}
+		
+		$("#rsv-input-peopleNum").val(currentNum);
+		
+	}
+	
+	function rsvSubmit() {
+		if (
+			startTime == null ||
+			endTime == null ||
+			timeCount == 0 ||
+			cost == 0
+		) {
+			alert('결제 정보를 입력해 주세요.');
+			return;
+		}
+		
+		
+		var startDateObj = new Date(startDate);
+		var startDateString = "";
+		startDateString += startDateObj.getFullYear() + "-";
+		if (startDateObj.getMonth() + 1 < 10) {
+			startDateString += "0";
+		}
+		startDateString += (startDateObj.getMonth() + 1) + "-";
+		if (startDateObj.getDate() < 10) {
+			startDateString += "0";
+		}
+		startDateString += startDateObj.getDate() + "-";
+		if (startDateObj.getHours() < 10) {
+			startDateString += "0";
+		}
+		startDateString += startDateObj.getHours();
+		
+
+		var endDateObj = new Date(endDate);
+		var endDateString = "";
+		endDateString += endDateObj.getFullYear() + "-";
+		if (endDateObj.getMonth() + 1 < 10) {
+			endDateString += "0";
+		}
+		endDateString += (endDateObj.getMonth() + 1) + "-";
+		if (endDateObj.getDate() < 10) {
+			endDateString += "0";
+		}
+		endDateString += endDateObj.getDate() + "-";
+		if (endDateObj.getHours() < 10) {
+			endDateString += "0";
+		}
+		endDateString += endDateObj.getHours();
+		
+		
+		var rsvForm = $("<form action='payment.do' method='post' display='none'></form>");
+		var spaceIdxInput = $("<input type='text' name='spaceIdx' value='" + ${spacesVO.idx} + "'>");
+		var peopleNumInput = $("<input type='text' name='peopleNum' value='" + $("#rsv-input-peopleNum").val() + "'>");
+		var startDateInput = $("<input type='text' name='startDate' value='" + startDateString + "'>");
+		var endDateInput = $("<input type='text' name='endDate' value='" + endDateString + "'>");
+		var rsvHoursInput = $("<input type='text' name='rsvHours' value='" + timeCount + "'>");
+		var costInput = $("<input type='text' name='cost' value='" + cost + "'>");
+		
+		$("body").append(rsvForm);
+		
+		$(rsvForm).append(spaceIdxInput);
+		$(rsvForm).append(peopleNumInput);
+		$(rsvForm).append(startDateInput);
+		$(rsvForm).append(endDateInput);
+		$(rsvForm).append(rsvHoursInput);
+		$(rsvForm).append(costInput);
+		
+		$(rsvForm).submit();
+		
+		
+	}
 	</script>
 	
 </head>
@@ -541,8 +1133,101 @@
 					<div class="col-sm colright">
 						<div class="inner-box space-rsv">
 							<div class="inner-box-content">
-								여기는 예약 정보가 들어갈 공간입니다.
-								<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+								<div class="space-info-subject">예약</div>
+								<div class="rsv-info">
+									예약은 오늘 날짜부터 한 달간 가능합니다.
+								</div>
+								<div class="rsv-cal-info">
+									<div class="day current today dayex"></div>
+									<div class="dayinfo">오늘</div>
+									<div class="day current rsv-full dayex"></div>
+									<div class="dayinfo">예약 불가</div>
+								</div>
+								
+								<div class="calendar">
+									<div class="sec_cal">
+									  <div class="cal_nav">
+									    <a href="javascript:;" class="nav-btn go-prev">prev</a>
+									    <div class="year-month"></div>
+									    <a href="javascript:;" class="nav-btn go-next">next</a>
+									  </div>
+									  <div class="cal_wrap">
+									    <div class="days">
+									      <div class="day">일</div>
+									      <div class="day">월</div>
+									      <div class="day">화</div>
+									      <div class="day">수</div>
+									      <div class="day">목</div>
+									      <div class="day">금</div>
+									      <div class="day">토</div>
+									    </div>
+									    <div class="dates"></div>
+									  </div>
+									</div>
+									
+									<div id="timeselect">
+										<div class="space-rsv-subject">
+										시간 선택
+										</div>
+										<div id="timetable">
+											<c:forEach var="i" begin="9" end="23">
+											<div class="timeselector" data-starttime="${i}" data-endtime="${i + 1}"
+													onclick="selectTime(this)">
+												<c:if test="${i == 9}">0</c:if>${i}시 ~ ${i + 1}시
+											</div>
+											</c:forEach>
+											<div class="timeselector-blank"></div>
+										</div>
+									</div>
+								</div>
+								
+								<div id="rsv-form-wrap">
+									<div class="space-rsv-subject">
+										예약 날짜와 시간
+									</div> 
+									<div id="rsv-date">
+									
+									</div>
+									<div id="rsv-time">
+										
+									</div>
+									<div id="rsv-peopleNum">
+										<div class="space-rsv-subject">
+											예약 인원
+										</div>
+										<div class="peopleNum-buttons-wrap">
+											총&nbsp;&nbsp;
+											<div class="peopleNum-buttons">
+												<button class="peopleNum-button" onclick="changePeopleNum(-1)">-</button>
+												<input id="rsv-input-peopleNum" type="number" name="peopleNum" min="1" max="${spacesVO.capacity}" value="1">
+												<button class="peopleNum-button" onclick="changePeopleNum(1)">+</button>
+											</div>
+											&nbsp;&nbsp;명
+										</div>
+									</div>
+								</div>
+							
+								<div class="rsv-costs-wrap">
+									<div class="space-rsv-subject">
+										시간당 이용료
+									</div>					
+									<div class="space-cost">
+										<span><fmt:formatNumber value="${spacesVO.cost}" pattern="#,###"/></span>
+										 원 / 시간
+									</div>
+									<div class="space-rsv-subject">
+										총 이용료
+									</div>
+									<div class="rsv-cost">
+										<span>0</span>
+										 원 / 시간
+									</div>
+									
+								</div>
+								
+								<div class="submit-button-wrap">
+									<button class="normal-button accent-button rsv-submit" onclick="rsvSubmit()">결제하기</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -563,29 +1248,6 @@
 		</c:if>
 		</div>
 		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button class="normal-button">버튼</button> 
-			일반 버튼 (button class="normal-button") (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="normal-button accent-button">버튼</button> 강조 버튼 (button class="normal-button accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button class="normal-button">일반버튼</button>
-					<button class="normal-button accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
-			</div>
-			<br><br>
-		</div>
-		<!-- 여기까지 -->
 		
 	<div id="imgBackOveray">
 		<div id="imgBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>

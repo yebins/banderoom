@@ -9,7 +9,7 @@
 
 <style>
 .sec_cal {
-    width: 360px;
+    width: 284px;
     margin: 0 auto;
     font-family: "NotoSansR";
 }
@@ -19,8 +19,12 @@
     justify-content: center;
     align-items: center;
     font-weight: 700;
-    font-size: 48px;
+    font-size: 36px;
     line-height: 78px;
+}
+
+.year-month {
+	font-size: 24px;
 }
 
 .sec_cal .cal_nav .year-month {
@@ -38,7 +42,7 @@
 .sec_cal .cal_nav .go-prev,
 .sec_cal .cal_nav .go-next {
     display: block;
-    width: 50px;
+    width: 100px;
     height: 78px;
     font-size: 0;
     display: flex;
@@ -71,7 +75,6 @@
 }
 
 .sec_cal .cal_wrap {
-    padding-top: 40px;
     position: relative;
     margin: 0 auto;
 }
@@ -94,9 +97,10 @@
     width: calc(100% / 7);
     text-align: left;
     color: #999;
-    font-size: 12px;
+    font-size: 16px;
     text-align: center;
-    border-radius:5px
+    border-radius:5px;
+    height: 44px;
 }
 
 .current.today {background: rgb(242 242 242);}
@@ -104,7 +108,7 @@
 .sec_cal .cal_wrap .dates {
     display: flex;
     flex-flow: wrap;
-    height: 290px;
+    height: 240px;
 }
 
 .sec_cal .cal_wrap .day:nth-child(7n) {
@@ -178,7 +182,7 @@ function calendarInit() {
         // console.log(prevDate, prevDay, nextDate, nextDay);
 
         // 현재 월 표기
-        $('.year-month').text(currentYear + '.' + (currentMonth + 1));
+        $('.year-month').text(currentYear + '년 ' + (currentMonth + 1) + '월');
 
         // 렌더링 html 요소 생성
         calendar = document.querySelector('.dates')

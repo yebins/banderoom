@@ -8,12 +8,18 @@
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
 	#wrapper {
-		padding: 0px;
+		height: 100vh;
+		width: 100%;
+		max-width: unset;
+		box-shadow: none;
+		background-color: transparent;
 		justify-content: center;
+		padding: 0px;
 	}
 	div#login-wrap {
 		width: 480px;

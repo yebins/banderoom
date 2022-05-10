@@ -2,11 +2,13 @@ package com.project.service;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -229,6 +231,22 @@ public class MemberServiceImpl implements MemberService {
 	public int sendMessage(Map<String, Object> map) {
 		
 		return dao.sendMessage(map);
+	}
+
+	@Override
+	public HostMembersVO getHostMember(HostMembersVO vo) {
+		return dao.getHostMember(vo);
+	}
+
+	@Override
+	public int setPoint(PointsVO vo) {
+		return dao.setPoint(vo);
+	}
+
+	@Override
+	public List<MessagesVO> MessagesList(HttpServletRequest request, Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	

@@ -3,13 +3,29 @@
 
 <mapper namespace="com.project.mapper.boardMapper">
 	
-	<select id="list" parameterType="map" resultType="articlesVO">
-		select * from articles
-		where bidx=#{bIdx}
+	<select id="list" parameterType="map" resultType="ArticlesVO">
+		select * from 
+		(select row_number() over(order by aIdx desc) as rownum, s.* from articles s
+		where bIdx=#{bIdx} 
+		and status != 1
 		<if test="searchtitle != ''">
-		and title like '%'||#{searchtitle}||'%'
+		and title like concat('%',#{searchtitle},'%')
 		</if>
-		order by aidx desc
+		order by aIdx desc) a
+		<![CDATA[where rownum >= #{start} and rownum <= #{end}]]>
+	</select>
+	
+	<update id="listDelete" parameterType="articlesVO">
+		update articles	set status = 1 where aidx=#{aIdx} and bidx=#{bIdx}
+	</update>
+	
+	<select id="pageCount" parameterType="map" resultType="ArticlesVO">
+		select * from articles
+		where bidx = #{bIdx}
+		and status != 1
+		<if test="searchtitle != ''">
+		and title like concat('%',#{searchtitle},'%')
+		</if>
 	</select>
 	
 	<insert id="insertArticles" parameterType="articlesVO">
@@ -91,6 +107,128 @@
 	<select id="likeCount" parameterType="LikedArticlesVO" resultType="int">
 		select count(*) from liked_articles
 		where aidx = #{aIdx}
+	</select>
+	
+	<select id="jlistArticle" parameterType="map" resultType="articlesVO">
+			select * from
+			(SELECT
+		<![CDATA[
+			  @rownum:=@rownum+1 as rownum, 
+			  art.*
+			FROM articles art,(select @rownum:=0) rn_art
+		]]>
+			where bIdx=3
+			<if test='searchtitle != null and !"".equals(searchtitle)'>
+			and title like CONCAT('%',#{searchtitle},'%')
+			</if>
+			<if test="status != 0 and status != null">
+			and status=#{status}
+			</if>
+			order by aidx desc) list
+		<![CDATA[
+			where rownum>=#{start} and rownum <=#{end}
+			]]>
+	</select>
+	
+	<select id="jlistArticleCount" parameterType="Map" resultType="int">
+		select count(aIdx)
+		from articles
+		where bidx=3
+		<if test='searchtitle != null and !"".equals(searchtitle)'>
+		and title like CONCAT('%',#{searchtitle},'%')
+		</if>
+		<if test="status != 0 and status != null">
+		and status=#{status}
+		</if>
+	</select>
+	
+	<select id="jlistOneArticle" parameterType="map" resultType="map">
+		select * from(
+		select 
+			a.aIdx
+			,a.bIdx
+			,a.title
+			,a.content
+			,a.mIdx
+			,a.mNickname
+			,a.regDate
+			,a.readCount
+			,a.status
+			,count(la.aidx) likeCount 
+		from
+			articles a
+		left join 
+			liked_articles la 
+		on 
+			a.bidx = la.bidx 
+		and 
+			a.aidx =la.aidx
+		group by 
+			a.aIdx
+			,a.bIdx
+			,a.title
+			,a.content
+			,a.midx
+			,a.mnickname
+			,a.regdate
+			,a.readcount
+			,a.status
+			) one
+		where
+			bidx = #{bIdx}
+		and
+			aidx = #{aIdx}
+	</select>
+	
+	<insert id="commentWrite" parameterType="commentsVO">
+		insert into comments(
+			bidx
+			,aidx
+			,midx
+			,mnickname
+			,content
+			,picsrc
+			,regdate
+			) values(
+			#{bIdx}
+			,#{aIdx}
+			,#{mIdx}
+			,#{mNickname}
+			,#{content}
+			,#{picSrc}
+			,now()
+			)		
+	</insert>
+	
+	<select id="commentList" parameterType="map" resultType="commentsVO">
+		<![CDATA[
+		select * from
+			(SELECT
+			  @rownum:=@rownum+1 as rownum, 
+			  cmt.*
+			FROM 
+				comments cmt,(select @rownum:=0) rn_cmt
+		]]>
+			where 
+				bIdx=#{bIdx}
+			and 
+				aIdx=#{aIdx}
+			order by 
+				cidx ) list
+		<![CDATA[
+			where 
+				rownum>=${start} and rownum <=#{end}
+		]]>
+	</select>
+	
+	<select id="commentCount" parameterType="map" resultType="int">
+		select count(cIdx) from comments where aIdx=#{aIdx}
+	</select>
+
+	<select id="commentsList" parameterType="CommentsVO" resultType="CommentsVO">
+		select * from comments
+		where aIdx=#{aIdx}
+		and bIdx=#{bIdx}
 	</select>
 	
 </mapper>

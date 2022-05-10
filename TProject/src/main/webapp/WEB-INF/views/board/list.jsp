@@ -49,13 +49,14 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-		<c:if test="${param.bIdx==2 }">
+		<c:if test="${param.bIdx==2}">
 			자유게시판
 		</c:if>
 		</div>
 		<div>
 			<form action="list.do" class="d-flex notice-page" method="get">
 				<input type="hidden" name="bIdx" value="${param.bIdx}">
+				<input type="hidden" name="page" value="${param.page}">
        	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
         			<button class="normal-button accent-button">검색</button>
      		 </form>
@@ -91,7 +92,45 @@
 				</c:if>
 			</table>
 		</div>
+		
+		<div id="pageNav"><!-- 페이징 -->
+		<c:if test="${pu.getLastPage() < 11}">
+			<c:forEach var="i" begin="${pu.getStartPage()}" end="${pu.getLastPage()}">
+				<c:choose>
+					<c:when test="${i == param.page}">
+						<b>[${i}]</b>&nbsp;
+					</c:when>
+					<c:otherwise>
+						<a href="list.do?bIdx=${param.bIdx}&page=${i}">[${i}]&nbsp;</a>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+		</c:if>
+		<c:if test="${pu.getLastPage() > 10}">
+			<c:if test="${pu.getStartPage() > 10 }">
+				<a href="list.do?bIdx=2&page=1">[1]</a>&nbsp;
+				<a href="list.do?bIdx=2&page=${pu.getStartPage() - 1}">◀</a>&nbsp;
+			</c:if>
+			
+			<c:forEach var="i" begin="${pu.getStartPage()}" end="${pu.getEndPage()}">
+				<c:choose>
+					<c:when test="${i == param.page}">
+						<b>[${i}]</b>&nbsp;
+					</c:when>
+					<c:otherwise>
+						<a href="list.do?bIdx=${param.bIdx}&page=${i}">[${i}]&nbsp;</a>
+					</c:otherwise>
+				</c:choose>
+			</c:forEach>
+			
+			<c:if test="${pu.getEndPage() < pu.getLastPage()}">
+				<a href="list.do?bIdx=${param.bIdx}&page=${pu.getEndPage() + 1}">▶</a>&nbsp;
+				<a href="list.do?bIdx=${param.bIdx}&page=${pu.getLastPage()}">[${pu.getLastPage()}]</a>&nbsp;
+			</c:if>
+		</c:if>
+	</div>
 		<form action="register.do" method="get">
+		<input type="hidden" name="page" value="${param.page}">
 		<input type="hidden" name="bIdx" value="${param.bIdx}">
 			<button class="normal-button accent-button" id="register" style="margin-left: 15px;">글쓰기</button>
 		</form>

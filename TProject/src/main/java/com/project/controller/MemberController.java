@@ -1,7 +1,7 @@
 package com.project.controller;
 
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -12,11 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.MemberService;
-import com.project.vo.*;
+import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
+import com.project.vo.HostMembersVO;
+import com.project.vo.TelRegVO;
 
 @RequestMapping(value = "/member")
 @Controller
@@ -77,7 +84,7 @@ public class MemberController {
 		
 		file.transferTo(target);
 		
-    makeThumbnail(target.getAbsolutePath(), uuid.toString(), extension.substring(1), path);
+		makeThumbnail(target.getAbsolutePath(), uuid.toString(), extension.substring(1), path);
 		
 		return "/upload/THUMB_" + newFileName;
 	}
@@ -240,5 +247,24 @@ public class MemberController {
 		GeneralMembersVO vo1=(GeneralMembersVO)memberService.oneMemberInfo(vo);
 		
 		return vo1;
+	}
+	
+	@RequestMapping(value="myMessage.do")
+	public String myMessage(Model model,HttpServletRequest request,@RequestParam Map<String, Object> params) {
+		GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");//현재 세션 로그인정보
+		System.out.println("쪽지함 로그인정보"+login.getmIdx());
+		
+		if( login != null) {
+			
+			
+			return "myMessage";
+		} 
+		
+			request.setAttribute("msg", "로그인하세요.");
+			request.setAttribute("url", "/member/glogin.do");
+				
+			return "alert";
+		
+
 	}
 }

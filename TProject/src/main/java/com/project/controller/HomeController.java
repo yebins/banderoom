@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.service.BoardService;
 import com.project.service.MemberService;
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.ServiceInfoVO;
 
@@ -45,21 +46,12 @@ public class HomeController {
 	private MemberService memberService;
 	
 	
-	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
-		logger.info("Welcome home! The client locale is {}.", locale);
-		
-		Date date = new Date();
-		DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-		
-		String formattedDate = dateFormat.format(date);
-		
-		model.addAttribute("serverTime", formattedDate );
 		
 		return "home";
 	}
@@ -238,7 +230,7 @@ public class HomeController {
 			bIdx=1;
 		}
 		
-		List<ArticlesVO> list=boardService.list(bIdx,searchtitle);
+		List<ArticlesVO> list=boardService.list(bIdx,searchtitle, 1);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
 		model.addAttribute("bIdx",bIdx);
@@ -358,16 +350,118 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/jlist.do",method=RequestMethod.GET)
-	public String jList(Model model,Integer bIdx,String searchtitle) {
-		if(bIdx == null) {
-			bIdx=3;
+	public String jList(@RequestParam Map<String, Object> params, Model model,HttpServletRequest request) {
+		if(params.get("bIdx") == null) {
+			params.put("bIdx", 3);
+		}
+		System.out.println(params.toString());
+		List<ArticlesVO> list = boardService.Jlist(params,request);
+		
+		if( list.size() >0) {
+			
+		Map<Integer,String> map=new HashMap<Integer, String>();
+			for(int i=0;i<list.size();i++) {
+				String co=list.get(i).getContent().replaceAll(" ", "");
+				
+				
+				if(co.indexOf("<img") > -1) {					
+				int startIndex=co.indexOf("<img");
+				startIndex=co.indexOf("src", startIndex);
+				String co2=co.substring(startIndex+5);
+				String[] co3=co2.split("\"");
+				String url=co3[0];				
+				map.put(i, url);
+				} else {
+					map.put(i, "");
+				}
+				model.addAttribute("imgsrc", map);
+				
+				System.out.println(map.toString());
+			}
 		}
 		
-		List<ArticlesVO> list=(List<ArticlesVO>)boardService.list(bIdx, searchtitle);
-		System.out.println(list.size());
+		int articlesTotal=(Integer)request.getAttribute("count");
+		System.out.println("총게시물"+articlesTotal);
 		
-		model.addAttribute("list",list);
+		//카멜?기법
+		model.addAttribute("list", list);
+		model.addAttribute("status", params.get("status"));
+		model.addAttribute("searchtitle", params.get("searchtitle"));
+		model.addAttribute("articlesTotal",articlesTotal);
 		
 		return "/board/jlist";
+		
+		
 	}
+	
+		@RequestMapping(value="jlist/detail.do", method=RequestMethod.GET)
+		public String jlistView(Model model,ArticlesVO vo,@RequestParam Map<String, Object> params,HttpServletRequest request) {
+		System.out.println(params.get("bIdx"));
+		System.out.println(params.get("aIdx"));
+			
+		boardService.readCount(vo);
+		
+		Map<String, Object> one = boardService.jlistOneArticle(params,request);
+		
+		GeneralMembersVO writer=new GeneralMembersVO();
+		int a=(int) one.get("mIdx");
+		writer.setmIdx(a);
+		
+		writer=memberService.oneMemberInfo(writer);
+		
+		
+		System.out.println("게시글정보"+one.toString());
+		
+		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글총개수?
+		model.addAttribute("vo",one);//게시글정보 보내기
+		model.addAttribute("profileSrc",writer.getProfileSrc());//글 작성자 프로필 사진 
+		
+		return "/board/jlist/details";
+	}
+		
+		@RequestMapping(value="jlist/commentWrite.do")
+		@ResponseBody
+		public int commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+					
+			
+			if(vo.getContent() != null && vo.getContent() != "") {
+				
+				if(!file.isEmpty()) {
+					System.out.println(file);
+					
+					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+						
+					String fileName=file.getOriginalFilename();
+					
+					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+					
+					UUID uuid = UUID.randomUUID();
+					
+					String newFileName = uuid.toString() + extension;
+		
+					File target = new File(path, newFileName);
+					
+					System.out.println(target.toString());
+					
+					file.transferTo(target);//파일이생성됨
+					
+					vo.setPicSrc("/upload/"+newFileName);
+				}
+			
+			return boardService.commentWrite(vo);
+			
+			} else {
+				
+				return -1;
+			}
+		
+		}
+		
+		@RequestMapping(value="jlist/commentList.do")
+		@ResponseBody
+		public List<CommentsVO> commentsList(@RequestParam Map<String, Object> params){
+			
+			
+			return boardService.commentList(params);
+		}
 }

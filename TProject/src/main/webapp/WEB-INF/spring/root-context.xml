@@ -11,7 +11,7 @@
         class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"></property>
         <property name="url"
-            value="jdbc:mysql://jjezen.cafe24.com:3307/oneTeam?serverTimezone=UTC&amp;characterEncoding=utf8&amp;useSSL=false&amp;autoReconnection=true">
+            value="jdbc:mysql://jjezen.cafe24.com:3307/oneTeam?serverTimezone=Asia/Seoul&amp;characterEncoding=utf8&amp;useSSL=false&amp;autoReconnection=true">
         </property>
         <property name="username" value="oneTeam"></property>
         <property name="password" value="oneTeam1234!"></property>

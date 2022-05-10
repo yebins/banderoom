@@ -33,16 +33,17 @@
 		display:flex;
 	}
 	div.inner-box{
-		height:500px;
+		height:auto;
 	}
 	.board-content{
-		height:300px;
+		overflow:hidden;
+		heigt:auto;
 	}
 	.board-content-like{
-		height:290px;
 		display:flex;
 		justify-content: center;
 		align-items: flex-end;
+		margin-bottom:5px;
 	}
 	.details-button{
 		display:flex;
@@ -65,7 +66,38 @@
 		
 		likedStatus();
 		likeCount();
-	})
+		commentsList();
+	});
+	
+	function commentsList(){
+		$.ajax({
+			type:"post",
+			url:"commentsList.do",
+			data:{
+				aIdx:aIdx,
+				bIdx:bIdx
+			},
+			success : function(result){
+				//li에 댓글 출력하는 부분
+			}
+		});
+	}
+	
+	function comments(){
+		$.ajax({
+			type:"post",
+			url:"insertComments.do",
+			data:{
+				aIdx:aIdx,
+				bIdx:bIdx,
+				content:content
+			},
+			success : function(result){
+				commentsList();
+			}
+		});
+		
+	}
 	
 	function likeCount(){
 		$.ajax({
@@ -75,7 +107,6 @@
 				aIdx:${vo.getaIdx()}
 			},
 			success : function(result){
-				console.log(result);
 				document.querySelector('#likeCount').innerText=result;
 			}
 		});
@@ -191,10 +222,16 @@
 			</div>
 		</div>
 		</div>
+		<div class=comments-list>
+			<li>
+			</li>
+		</div>
 		<div class="board-recommand">
-			<input class="normal-button" value="프사" style="width:50px;" readonly>
-			<input type="text" class="normal-button" style="width:500px;" placeholder="댓글을 입력하세요.">
-			<button class="normal-button accent-button" id="update">등록</button>
+			<input type="hidden" name="aIdx" value="${param.aIdx}">
+			<input type="hidden" name="bIdx" value="${param.bIdx}">
+			<input class="normal-button" value="${login.getNickname}" style="width:50px;" readonly>
+			<input type="text" class="normal-button" name="content" style="width:500px;" placeholder="댓글을 입력하세요.">
+			<button class="normal-button accent-button" id="update" onclick="comments()">등록</button>
 		</div>
 	</div>
 	

@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.service.MemberService;
 import com.project.service.SpaceService;
 import com.project.vo.*;
 
@@ -21,6 +22,8 @@ import com.project.vo.*;
 @RequestMapping(value = "/space")
 public class SpaceController {
 
+	@Autowired
+	private MemberService memberService;
 	@Autowired
 	private SpaceService spaceService;
 	
@@ -491,6 +494,147 @@ public class SpaceController {
 		return map;
 	}
 	
+	@RequestMapping(value = "/payment.do", method = RequestMethod.POST)
+	public String payment(Model model, HttpServletRequest request, ReservationsVO rsvVO) {
+
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			
+			SpacesVO spacesVO = new SpacesVO();
+			spacesVO.setIdx(rsvVO.getSpaceIdx());
+			spacesVO = spaceService.details(spacesVO);
+			HostMembersVO hostVO = new HostMembersVO();
+			hostVO.setmIdx(spacesVO.getHostIdx());
+			hostVO = memberService.getHostMember(hostVO);
+			rsvVO.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+			
+			request.getSession().setAttribute("login", memberService.gLogin(
+					(GeneralMembersVO) request.getSession().getAttribute("login")));
+			
+			model.addAttribute("spacesVO", spacesVO);
+			model.addAttribute("hostVO", hostVO);
+			model.addAttribute("rsvVO", rsvVO);
+			
+			return "space/payment";
+		}		
+	}
+	
+	@RequestMapping(value = "paysuccess.do", method = RequestMethod.POST)
+	public String paySuccess(Model model, HttpServletRequest request, ReservationsVO rsvVO) {
+		GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+		
+		rsvVO = spaceService.insertRsv(rsvVO);
+
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(rsvVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		HostMembersVO hostVO = new HostMembersVO();
+		hostVO.setmIdx(spacesVO.getHostIdx());
+		hostVO = memberService.getHostMember(hostVO);
+
+
+		// 포인트 사용 내역
+		PointsVO pointsVO = new PointsVO();
+		pointsVO.setAmount(-rsvVO.getUsedPoint());
+		if (pointsVO.getAmount() != 0) {
+			pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
+			pointsVO.setContent("공간 예약 사용_" + spacesVO.getName());
+			pointsVO.setmIdx(gMemberVO.getmIdx());
+			pointsVO.setResIdx(rsvVO.getResIdx());
+			spaceService.insertPoint(pointsVO);
+			memberService.setPoint(pointsVO);
+			gMemberVO = memberService.gLogin(gMemberVO);
+		}
+		
+		// 포인트 적립 내역
+		pointsVO = new PointsVO();
+		pointsVO.setAmount((int) Math.round(rsvVO.getTotalCost() * 0.01));
+		if (pointsVO.getAmount() != 0) {
+			pointsVO.setBalance(gMemberVO.getPoint() + pointsVO.getAmount());
+			pointsVO.setContent("공간 예약 적립_" + spacesVO.getName());
+			pointsVO.setmIdx(gMemberVO.getmIdx());
+			pointsVO.setResIdx(rsvVO.getResIdx());
+			spaceService.insertPoint(pointsVO);
+			memberService.setPoint(pointsVO);
+			gMemberVO = memberService.gLogin(gMemberVO);
+		}
+				
+		return "redirect:/space/paysuccess.do?resIdx=" + rsvVO.getResIdx();
+	}
+	
+	@RequestMapping(value = "paysuccess.do", method = RequestMethod.GET)
+	public String paySuccess(Model model, HttpServletRequest request, int resIdx) {
+		GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+
+		ReservationsVO rsvVO = new ReservationsVO();
+		rsvVO.setResIdx(resIdx);
+		rsvVO = spaceService.getRSV(rsvVO);
+		
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(rsvVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		HostMembersVO hostVO = new HostMembersVO();
+		hostVO.setmIdx(spacesVO.getHostIdx());
+		hostVO = memberService.getHostMember(hostVO);
+
+		request.getSession().setAttribute("login", gMemberVO);
+		
+		model.addAttribute("spacesVO", spacesVO);
+		model.addAttribute("hostVO", hostVO);
+		model.addAttribute("rsvVO", rsvVO);
+		
+		return "space/paysuccess";
+	}
+	
+	@RequestMapping(value = "test.do")
+	public String test(Model model, ReservationsVO vo) {
+		
+		vo = spaceService.getRSV(vo);
+		
+		model.addAttribute("rsvVO", vo);
+		
+		return "space/test";
+	}
+	
+	@RequestMapping(value="getrsvfulldates.do")
+	@ResponseBody
+	public List<String> getRsvFullDates(String spaceIdx, String nowDate, String afterMonth) {
+		
+		Map<String, String> params = new HashMap<String, String>();
+		params.put("spaceIdx", spaceIdx);
+		params.put("nowDate", nowDate);
+		params.put("afterMonth", afterMonth);
+		
+		return spaceService.getRsvFullDates(params);
+	}
+	
+	@RequestMapping(value = "getrsvhours.do")
+	@ResponseBody
+	public List<Map<String, String>> getRsvHours(@RequestParam Map<String, String> date) {
+		
+		return spaceService.getRsvHours(date);
+	}
+	
+	@RequestMapping(value = "myspacersv.do")
+	public String mySpaceRsv(Model model, HttpServletRequest request) {
+
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			
+			model.addAttribute("currentRsv", spaceService.getCurrentRsv(((GeneralMembersVO) request.getSession().getAttribute("login"))));
+			return "space/myspacersv";
+		}
+	}
 	/*
 	@RequestMapping(value="setlist.do")
 	public String setListData() {
