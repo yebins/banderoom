@@ -11,6 +11,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<!-- Air datepicker css -->
+<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+
 <style>
 
 	#page-content {
@@ -116,6 +121,12 @@
 	.map-popup:hover {
 		cursor: pointer;
 	}
+	.filters-wrap {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin-top: 20px;
+	}
 </style>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 <script>
@@ -183,7 +194,17 @@
 	// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 	}
 	
-	
+	$(function() {
+
+	 	$("#startDateInput").datepicker({
+			language: 'ko'
+		}); 
+
+	 	$("#endDateInput").datepicker({
+			language: 'ko'
+		}); 
+		   
+	})
 
 </script>	
 </head>
@@ -220,6 +241,15 @@
 					</div>
 				</div>
 			</c:forEach>
+			
+			<div class="big-title" style="margin-top: 60px;">
+				과거 예약 내역
+			</div>
+			<div class="filters-wrap">
+				<input class="datepicker" type="text" id="startDateInput" readonly><span> ~ </span><input class="datepicker" type="text" id="endDateInput" readonly>
+			</div>
+			
+			
 		</div>
 		
 		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
