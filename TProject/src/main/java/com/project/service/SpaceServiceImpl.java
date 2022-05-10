@@ -175,6 +175,11 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 		return dao.getPastRsv(params);
 	}
+
+	@Override
+	public int isReviewExist(ReservationsVO vo) {
+		return dao.isReviewExist(vo);
+	}
 	
 
 }

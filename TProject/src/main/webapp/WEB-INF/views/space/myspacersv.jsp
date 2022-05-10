@@ -252,12 +252,13 @@
 	})
 	
 	function review(resIdx) {
-		
-
 		window.open('review.do?resIdx=' + resIdx, '_blank', 
         'top=140, left=200, width=800, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
 	}
 	
+	function reload() {
+		location.reload();
+	}
 
 </script>	
 </head>
@@ -348,7 +349,7 @@
 								</div>
 							</div>
 							<div class="past-rsv-buttons">
-								<c:if test="${rsvVO.endDate < today}">
+								<c:if test="${rsvVO.endDate < today and reviewed.get(rsvVO.resIdx) == 0}">
 									<button class="normal-button accent-button" onclick="review(${rsvVO.resIdx})">후기 작성</button>&nbsp;
 								</c:if>
 								<button class="normal-button" onclick="location.href='rsvdetails.do?resIdx=${rsvVO.resIdx}'">예약 상세</button>

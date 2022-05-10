@@ -60,6 +60,7 @@
 		border-radius: 10px;
 		overflow: hidden;
 		margin-right: 20px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
 	}
 	.rsv-thumb img {
 		width: 100%;
@@ -175,26 +176,46 @@
 	        reader.readAsDataURL(input.files[0]);
 	    }
         
+		setTimeout(() => {
 
-		var divAspect = 1; // div의 가로세로비는 알고 있는 값이다
-		var imgAspect = $(img).height() / $(img).width();
+			var divAspect = 1; // div의 가로세로비는 알고 있는 값이다
+			var imgAspect = $(img).height() / $(img).width();
+			
 		
-	
-		if (imgAspect >= divAspect) {
-		    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
-		    $(img).css("width", "100%");
-		    $(img).css("height", "auto");
-		} else {
-		    // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
-		    $(img).css("width", "auto");
-		    $(img).css("height", "100%");
-		}
+			if (imgAspect <= divAspect) {
+			    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
+			    $(img).css("width", "auto");
+			    $(img).css("height", "100%");
+			} else {
+			    // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
+			    $(img).css("width", "100%");
+			    $(img).css("height", "auto");
+			}
+		}, 100);
 	}
 	
 	function imgReset() {
 		$("#file").val("");
 		$(".upload-img-box").css("display", "none");
 		$(".review-textarea").css("padding-left", "15px");
+	}
+	
+	function reviewSubmit() {
+		
+		if ($("input[name=score]").val() == '') {
+			alert('별점을 입력하세요.');
+			return;
+		}
+		
+		if ($(".review-textarea").val() == '') {
+			alert('내용을 입력하세요.');
+			return;
+		}
+		
+		alert('작성이 완료되었습니다.');
+		window.opener.reload();
+		window.close();
+		
 	}
 </script>
 </head>
@@ -261,10 +282,11 @@
 								<img src="/images/score-star.png" onclick="setScore(4)">
 								<img src="/images/score-star.png" onclick="setScore(5)">
 							</div>
-							<label for="file" class="normal-button upload-pic"><img src="/images/picture-button.png"></label>
+							<label for="file" class="normal-button upload-pic">
+							<img src="/images/picture-button.png"></label>
 							<input id="file" type="file" name="picture" onchange="showImg(this)" accept="image/*">
 						</div>
-						<button type="button" class="normal-button accent-button">등록</button>
+						<button type="button" class="normal-button accent-button" onclick="reviewSubmit()">등록</button>
 					</div>
 					<div class="review-content-wrap">
 						<textarea class="review-textarea" placeholder="내용을 입력하세요."></textarea>

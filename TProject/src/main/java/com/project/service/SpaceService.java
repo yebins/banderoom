@@ -28,7 +28,7 @@ public interface SpaceService {
 	List<Map<String, String>> getRsvHours(Map<String, String> date);
 	List<ReservationsVO> getCurrentRsv(GeneralMembersVO vo);
 	List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange);
-	
+	int isReviewExist(ReservationsVO vo);
 
 	//테스트용
 	public List<String> getAddr1();

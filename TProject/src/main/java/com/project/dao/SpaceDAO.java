@@ -155,4 +155,8 @@ public class SpaceDAO {
 	public List<ReservationsVO> getPastRsv(Map<String, Object> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getPastRsv", params);
 	}
+	
+	public int isReviewExist(ReservationsVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.isReviewExist", vo);
+	}
 }

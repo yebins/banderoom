@@ -632,7 +632,15 @@ public class SpaceController {
 		} else {
 			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
 			model.addAttribute("currentRsv", spaceService.getCurrentRsv(login));
-			model.addAttribute("pastRsv", spaceService.getPastRsv(login, dateType, dateRange));
+			List<ReservationsVO> pastRsv = spaceService.getPastRsv(login, dateType, dateRange);
+			Map<Integer, Integer> reviewed = new HashMap<Integer, Integer>();
+			Iterator<ReservationsVO> iterator = pastRsv.iterator();
+			while(iterator.hasNext()) {
+				ReservationsVO rsvVO = iterator.next();
+				reviewed.put(rsvVO.getResIdx(), spaceService.isReviewExist(rsvVO));
+			}
+			model.addAttribute("pastRsv", pastRsv);
+			model.addAttribute("reviewed", reviewed);
 			model.addAttribute("today", new Date());
 			return "space/myspacersv";
 		}

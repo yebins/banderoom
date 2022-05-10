@@ -396,4 +396,9 @@
 			</if>
 		</if>
 	</select>
+	
+	<select id="isReviewExist" parameterType="reservationsVO" resultType="int">
+		select count(*) from space_review
+		where residx = #{resIdx}
+	</select>
 </mapper>
