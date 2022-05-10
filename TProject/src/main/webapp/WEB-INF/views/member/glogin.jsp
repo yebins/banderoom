@@ -13,8 +13,13 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
 	#wrapper {
-		padding: 0px;
+		height: 100vh;
+		width: 100%;
+		max-width: unset;
+		box-shadow: none;
+		background-color: transparent;
 		justify-content: center;
+		padding: 0px;
 	}
 	div#login-wrap {
 		width: 480px;

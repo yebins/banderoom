@@ -110,6 +110,10 @@ public class SpaceDAO {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceList", params);
 	}
 	
+	public Map<String, Object> spaceReviewCntAvg(SpacesVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.spaceReviewCntAvg", vo);
+	}
+	
 	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceReviewList", vo);
 	}

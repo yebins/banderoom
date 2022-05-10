@@ -98,6 +98,11 @@ public class SpaceServiceImpl implements SpaceService {
 		return dao.spaceReviewList(vo);
 	}
 	
+	@Override
+	public Map<String, Object> spaceReviewCntAvg(SpacesVO vo) {
+		return dao.spaceReviewCntAvg(vo);
+	}
+	
 	//테스트용
 	public List<String> getAddr1() {
 		return dao.getAddr1();
