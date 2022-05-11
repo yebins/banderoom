@@ -532,6 +532,9 @@
 		align-items: center;
 		font-weight: bold;
 	}
+	.review-nickname:hover {
+		cursor: pointer;
+	}
 	
 	.review-score-wrap {
 		display: flex;
@@ -826,28 +829,29 @@
 		$(div).append(img);
 		
 		$(img).attr("src", src);
-		
+
+		setTimeout(() => {
 		var divAspect = $(div).height() / $(div).width(); // div의 가로세로비는 알고 있는 값이다
 		var imgAspect = $(img).height() / $(img).width();
 		
-		setTimeout(() => {
-			
 			if (imgAspect >= divAspect) {
-			    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
 			    $(img).css("width", "auto");
-			    $(img).css("height", "100%");
-			    $(div).css("width", $(img).width() + "px");
+			    $(img).css("height", $(div).height());
 			} else {
-			    // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
 			    $(img).css("width", "100%");
 			    $(img).css("height", "auto");
+			}
+
+			if (imgAspect >= divAspect) {
+			    $(div).css("width", $(img).width() + "px");
+			} else {
 				  $(div).css("height", $(img).height() + "px");
 			}
-			
+
 			$("#imgBackOveray").css("visibility", "visible");
-			
-		}, 100);
-	
+		}, 200);
+
+		
 	}
 
 
@@ -1442,7 +1446,7 @@
 												<div class="review-profile-img">
 													<img src="${review.profileSrc}">
 												</div>
-												<div class="review-nickname">
+												<div class="review-nickname" onclick="profileOpen(${review.mIdx})">
 													${review.mNickname}
 												</div>
 											</div>

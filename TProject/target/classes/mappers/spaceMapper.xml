@@ -360,6 +360,37 @@
 		order by startdate;
 	</select>
 	
+	<select id="countPastRsv" parameterType="hashmap" resultType="int">
+		select count(*)
+		from reservations a, spaces b
+		where a.spaceidx = b.idx
+		and a.midx = #{mIdx}
+		<if test="start != null and start != ''">
+			<if test="dateType == 'resDate'">
+				<if test="end == null or end == ''">
+					and date(a.resdate) = #{start}
+					order by resdate
+				</if>
+				<if test="end != null and end != ''">
+					and date(a.resdate) <![CDATA[>=]]> #{start}
+					and date(a.resdate) <![CDATA[<=]]> #{end}
+					order by resdate
+				</if>
+			</if>
+			<if test="dateType == 'startDate'">
+				<if test="end == null or end == ''">
+					and date(a.startdate) = #{start}
+					order by startdate
+				</if>
+				<if test="end != null and end != ''">
+					and date(a.startdate) <![CDATA[>=]]> #{start}
+					and date(a.startdate) <![CDATA[<=]]> #{end}
+					order by startdate
+				</if>
+			</if>
+		</if>
+	</select>
+	
 	<select id="getPastRsv" parameterType="hashmap" resultType="reservationsVO">
 		select
 			a.residx,
@@ -408,6 +439,7 @@
 				</if>
 			</if>
 		</if>
+		limit #{startRow}, 10;
 	</select>
 	
 	<select id="isReviewExist" parameterType="reservationsVO" resultType="int">

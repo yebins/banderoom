@@ -172,9 +172,27 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange) {
+	public int countPastRsv(GeneralMembersVO vo, String dateType, String dateRange) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		
+		params.put("mIdx", vo.getmIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.countPastRsv(params);
+	}
+
+	@Override
+	public List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange, int start) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("startRow", start);
 		params.put("mIdx", vo.getmIdx());
 		
 		try {

@@ -75,7 +75,7 @@ public class BoardController {
 			likeList.put(list.get(i).getaIdx(), boardService.likeCount(list.get(i).getaIdx()));
 		}
 		List<ArticlesVO> pc= boardService.pageCount(bIdx, searchtitle);
-		PagingUtil pu = new PagingUtil(pc.size(), page, 10);
+		PagingUtil pu = new PagingUtil(pc.size(), page, 10, 10);
 		
 		model.addAttribute("pu", pu);
 		

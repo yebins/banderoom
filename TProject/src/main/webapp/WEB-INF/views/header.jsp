@@ -230,6 +230,10 @@ header {
 .miniprofile:hover{
 	cursor:pointer;
 }
+.profile-close:focus {
+	box-shadow: none;
+	outline: none;
+}
 
 </style>
 
@@ -447,9 +451,9 @@ header {
 	</div>
 	
 	
-	<div class="inner-box mini-profile" style="width: 300px; height: 200px; display: flex; position: fixed; visibility: hidden; top: 10px; left: 0px; 	 ">
+	<div class="inner-box mini-profile" style="width: 300px; height: 200px; display: flex; position: fixed; visibility: hidden; top: 10px; left: 0px; background-color: rgb(245, 245, 245);">
 		<div class="inner-box-content " style="padding: 15px 20px;position:relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
-	        <button type="button" class="btn-close" style="position: absolute; top: 0px; right: 0px;" onclick="$(this).parent().parent().css('visibility', 'hidden')"></button>
+	        <button type="button" class="btn-close profile-close" style="position: absolute; top: 0px; right: 0px;" onclick="$(this).parent().parent().css('visibility', 'hidden')"></button>
 				<div class="mini-profile-wrap" style="width: 100%; display: flex; align-items: center; ">
 			        <div id="sm-profile-picture-wrap-modal">
 							<img src="" width="100%">

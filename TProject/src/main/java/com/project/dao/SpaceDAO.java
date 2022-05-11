@@ -152,6 +152,10 @@ public class SpaceDAO {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getCurrentRsv", vo);
 	}
 	
+	public int countPastRsv(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countPastRsv", params);
+	}
+	
 	public List<ReservationsVO> getPastRsv(Map<String, Object> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getPastRsv", params);
 	}

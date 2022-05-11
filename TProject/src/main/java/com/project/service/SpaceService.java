@@ -27,7 +27,8 @@ public interface SpaceService {
 	List<String> getRsvFullDates(Map<String, String> params);
 	List<Map<String, String>> getRsvHours(Map<String, String> date);
 	List<ReservationsVO> getCurrentRsv(GeneralMembersVO vo);
-	List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange);
+	int countPastRsv(GeneralMembersVO vo, String dateType, String dateRange);
+	List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange, int start);
 	int isReviewExist(ReservationsVO vo);
 	int insertReview(SpaceReviewVO vo);
 

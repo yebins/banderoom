@@ -198,7 +198,7 @@ public class SpaceController {
 						String.valueOf(
 								spaceService.spaceReviewCntAvg(
 										(SpacesVO) params.get("spacesVO")).get("count")))
-				, reviewPage, 5);
+				, reviewPage, 5, 10);
 		
 		params.put("start", reviewPu.getStart() - 1);
 		
@@ -207,8 +207,6 @@ public class SpaceController {
 		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
 		model.addAttribute("reviewList", spaceService.spaceReviewList(params));
 		model.addAttribute("reviewCntAvg", spaceService.spaceReviewCntAvg(vo));
-		
-		System.out.println(spaceService.spaceReviewList(params).toString());
 		
 		return "space/details";
 	}
@@ -226,7 +224,7 @@ public class SpaceController {
 						String.valueOf(
 								spaceService.spaceReviewCntAvg(
 										(SpacesVO) params.get("spacesVO")).get("count")))
-				, reviewPage, 5);
+				, reviewPage, 5, 10);
 		
 		params.put("start", reviewPu.getStart() - 1);
 		
@@ -643,7 +641,10 @@ public class SpaceController {
 		} else {
 			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
 			model.addAttribute("currentRsv", spaceService.getCurrentRsv(login));
-			List<ReservationsVO> pastRsv = spaceService.getPastRsv(login, dateType, dateRange);
+			
+			PagingUtil pastRsvPu = new PagingUtil(spaceService.countPastRsv(login, dateType, dateRange), 1, 10, 5);
+			
+			List<ReservationsVO> pastRsv = spaceService.getPastRsv(login, dateType, dateRange, pastRsvPu.getStart() - 1);
 			Map<Integer, Integer> reviewed = new HashMap<Integer, Integer>();
 			Iterator<ReservationsVO> iterator = pastRsv.iterator();
 			while(iterator.hasNext()) {
@@ -652,9 +653,45 @@ public class SpaceController {
 			}
 			model.addAttribute("pastRsv", pastRsv);
 			model.addAttribute("reviewed", reviewed);
+			model.addAttribute("startPage", pastRsvPu.getStartPage());
+			model.addAttribute("endPage", pastRsvPu.getEndPage());
+			model.addAttribute("lastPage", pastRsvPu.getLastPage());
 			model.addAttribute("today", new Date());
 			return "space/myspacersv";
 		}
+	}
+	
+	@RequestMapping(value = "loadMySpaceRsv.do")
+	@ResponseBody
+	public Map<String, Object> loadMySpaceRsv(int page, String dateType, String dateRange, HttpServletRequest request) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return null;
+			
+		} else {
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+
+			PagingUtil pastRsvPu = new PagingUtil(spaceService.countPastRsv(login, dateType, dateRange), page, 10, 5);
+			
+			List<ReservationsVO> pastRsv = spaceService.getPastRsv(login, dateType, dateRange, pastRsvPu.getStart() - 1);
+			Map<Integer, Integer> reviewed = new HashMap<Integer, Integer>();
+			Iterator<ReservationsVO> iterator = pastRsv.iterator();
+			while(iterator.hasNext()) {
+				ReservationsVO rsvVO = iterator.next();
+				reviewed.put(rsvVO.getResIdx(), spaceService.isReviewExist(rsvVO));
+			}
+			result.put("pastRsv", pastRsv);
+			result.put("reviewed", reviewed);
+			result.put("startPage", pastRsvPu.getStartPage());
+			result.put("endPage", pastRsvPu.getEndPage());
+			result.put("lastPage", pastRsvPu.getLastPage());
+			result.put("today", new Date());
+
+			return result;
+		}
+		
 	}
 	
 	@RequestMapping(value = "rsvdetails.do")

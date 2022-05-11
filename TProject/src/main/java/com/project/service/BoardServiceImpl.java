@@ -29,7 +29,7 @@ public class BoardServiceImpl implements BoardService {
 		map.put("searchtitle", searchtitle);
 		map.put("bIdx", bIdx);
 		
-		PagingUtil pu = new PagingUtil(dao.pageCount(map).size(), page, 10);
+		PagingUtil pu = new PagingUtil(dao.pageCount(map).size(), page, 10, 10);
 		
 		map.put("start", pu.getStart());
 		map.put("end", pu.getEnd());

@@ -211,8 +211,8 @@
 			alert('내용을 입력하세요.');
 			return;
 		}
-		
-		var formData = new FormData($('#reviewForm')[0]);
+	
+		formData = new FormData($('#reviewForm')[0]);
 		
 		$.ajax({
 			type: "post",
