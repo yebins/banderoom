@@ -10,13 +10,15 @@
 <meta charset="UTF-8">
 <title>팀원 모집 main</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+
+<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<!-- Air datepicker css -->
+<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+
 <style>
-#page-content{
-	position: relative;
-}
 .form-select{
 	margin-right:10px;
-	width: 130px;
 	height: 35px;
 	border-radius:17.5px;
 }
@@ -29,15 +31,11 @@
 	height: 35px;
 	border-radius:17.5px;
 }
-.search{
-	width:580px;
-	margin-right:10px;
-}
 .form{
     width: 100%;
     text-align: center;
     margin: auto;
-    padding: 30px 50px 14px;
+    padding: 30px 40px 14px 50px;
     border-radius: 15px;
     background: white;
     box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
@@ -51,7 +49,7 @@
     width: 100%;
 }
 .container{
-	margin-top:80px;
+	margin-top:20px;
 }
 .team-col{
 	width:33.3%;
@@ -100,34 +98,88 @@ tr:last-of-type{
 td{
 	padding:3px;
 }
+.reg-btn{
+	text-align: right;
+	margin-bottom: 20px;
+}
 .team-btn{
-	position: absolute;
-    top: 170px;
-    right: 12px;
     width: 150px;
 }
-@font-face {
+button.col-1{
+	margin-right: 10px;
+}
+/*@font-face {
     font-family: 'SuncheonB';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/SuncheonB.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
-@font-face {
-    font-family: 'establishRoomNo703OTF';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2112@1.0/establishRoomNo703OTF.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-@font-face {
-    font-family: 'KOTRAHOPE';
-    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-}
 *{
 	font-family:'SuncheonB';
-}
+}*/
 </style>
+<script type="text/javascript">
+	$(function(){
+		$("#datepicker").datepicker({
+			language: 'ko'
+		});
+		
+		$("select[name=addr1]").val("${param.addr1}");
+		$("select[name=addr2]").val("${param.addr2}");
+		$("select[name=teamLevel]").val("${param.teamLevel}");
+		$("select[name=type]").val("${param.type}");
+		$("input[name=searchWord]").val("${param.searchWord}");
+		$("input[name=endDate]").val("${param.endDate}");
+		
+		
+		$.ajax({
+			type: "get",
+			url: "/space/getlocations.do",
+			success: function(data) {
+				locations = data;
+				var addr1 = [];
+				
+				for (var i = 0; i < data.length ; i++) {
+					addr1[i] = data[i].addr1;
+				}
+				
+				addr1 = addr1.filter((v, i) => addr1.indexOf(v) === i);
+				
+				for (var i = 0; i < addr1.length ; i++) {
+					var html = "<option>" + addr1[i] + "</option>"
+					$("#addr1").append(html);
+				}
+
+				$("select[name=addr1]").val("${param.addr1}");
+				
+				if ($("select[name=addr1]").val() != '') {
+					showAddr2();
+				}
+			}
+		})
+	});
+	
+	function showAddr2() {
+		
+		if ($("#addr1").val() == "") {
+			$("#addr2").val("");
+			return;
+		}
+		
+		$("#addr2").children().each(function() {
+			$(this).remove();
+		});
+		
+		$("#addr2").append("<option value=''>지역 소분류</option>")	;
+		
+		for (var i = 0; i < locations.length; i++) {
+			if (locations[i].addr1 == $("#addr1").val()) {
+				var html = "<option>" + locations[i].addr2 + "</option>";
+				$("#addr2").append(html);
+			}
+		}
+	}	
+</script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -138,78 +190,52 @@ td{
 			팀원 모집
 		</div>
 		<div id="page-content">
-			<form action="#">
+			<form action="main.do">
 				<div class="form">
+					<input type="hidden" name="search" value="1">
 					<div class="mb-3 d-inline-flex search-top">
-						<select class="form-select form-select-sm col">
-							<option>지역</option>
-							<option>서울특별시</option>
-							<option>전라북도</option>
+						<select class="form-select form-select-sm col" name="addr1" id="addr1" onchange="showAddr2()">
+							<option value="" selected hidden>지역</option>
 						</select>
-						<select class="form-select form-select-sm col">
-							<option>세부지역</option>
-							<option>전주시 덕진구</option>
-							<option>전주시 완산구</option>
-							<option>군산시</option>
+						<select class="form-select form-select-sm col" name="addr2" id="addr2">
+							<option value="" selected hidden>지역을 선택하세요.</option>
 						</select>
-						<select class="form-select form-select-sm col">
-							<option>팀 레벨</option>
+						<select class="form-select form-select-sm col" name="teamLevel">
+							<option value="" selected hidden>팀 레벨</option>
 							<option>초급</option>
 							<option>중급</option>
 							<option>고급</option>
 						</select>
-						<select class="form-select form-select-sm col">
-							<option>분야</option>
+						<select class="form-select form-select-sm col" name="type">
+							<option value="" selected hidden>분야</option>
 							<option>밴드</option>
 							<option>댄스</option>
 						</select>
-						<select class="form-select form-select-sm col"><!-- 밴드 -->
-							<option>장르</option>
-							<option>락</option>
-							<option>팝</option>
-							<option>재즈</option>
-							<option>그 외 장르</option>
-						</select>
-						<!--select class="form-select form-select-sm col"> 댄스
-							<option>장르</option>
-							<option>힙합</option>
-							<option>팝핑</option>
-							<option>락킹</option>
-							<option>K-Pop 댄스</option>
-							<option>그 외 장르</option>
-						</select -->
-						<select class="form-select form-select-sm col part"><!-- 밴드-락 -->
-							<option>파트</option>
-							<option>보컬</option>
-							<option>일렉기타</option>
-							<option>드럼</option>
-							<option>베이스</option>
-							<option>키보드</option>
-							<option>그 외</option>
-						</select>
 					</div>
 					<br>
-					<div class="mb-3 search-bottom">
-						<input class="form-control form-control-sm" type="text" value="모집 기간 선택">
-						<div class="search-btn d-inline-flex">
-							<input class="form-control form-control-sm search" type="text" placeholder="검색어를 입력하세요.">
-							<button type="submit" class="accent-button normal-button">검색하기</button>
-						</div>
+					<div class="mb-3 d-inline-flex search-bottom row">
+						<input class="form-control form-control-sm col-4" type="text" placeholder="모집 기간 선택" id="datepicker" name="endDate">
+						<input class="form-control form-control-sm col" type="text" placeholder="검색어를 입력하세요." name="searchWord">
+						<button type="submit" class="accent-button normal-button col-1">검색하기</button>
+						<button type="button" class="normal-button col-1" onclick="location.href='main.do'">초기화</button>
 					</div>
 				</div>
 			</form>
 			
 			<div class="container">
+				<div class="reg-btn">
+					<c:if test="${login.mIdx ne null}">
+						<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
+					</c:if>
+				</div>
 				<div class="row row-cols-1 row-cols-sm-3">
 					<c:if test="${teamsList.size()>0}">
 					<c:forEach var="item" items="${teamsList}">
-						<div class="col team-col" onclick="location.href='details.do?teamidx=${item.teamIdx}'">
+						<div class="col team-col" onclick="location.href='details.do?teamIdx=${item.teamIdx}'">
 							<input type="hidden" name="teamIdx" value="${item.teamIdx}">
 							<div class="team-list">
 								<div class="team-title">
-									<c:if test="${item.type == 'band'}">[밴드]</c:if>
-									<c:if test="${item.type == 'dance'}">[댄스]</c:if>
-									${item.title}
+									[${item.type}] ${item.title}
 								</div>
 								<div class="team-content">
 									<table>
@@ -226,7 +252,7 @@ td{
 											<td>${item.genre}</td>
 										</tr>
 										<tr>
-										<c:if test="${item.type == 'band'}">
+										<c:if test="${item.type == '밴드'}">
 											<td>파트</td>
 											<td>
 												
@@ -235,7 +261,7 @@ td{
 												</c:forEach>
 											</td>
 										</c:if>
-										<c:if test="${item.type == 'dance'}">
+										<c:if test="${item.type == '댄스'}">
 											<td>인원</td>
 											<td>
 												<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}">
@@ -247,8 +273,8 @@ td{
 										<tr>
 											<td>모집기간</td>
 											<td>
-											<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
-											<fmt:formatDate value="${endDate}" pattern="yyyy년 MM월 dd일 마감"/>
+												<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
+												<fmt:formatDate value="${endDate}" pattern="yyyy년 MM월 dd일 마감"/>
 											</td>
 										</tr>
 									</table>
@@ -257,14 +283,11 @@ td{
 						</div>
 						</c:forEach>
 					</c:if>
-					<c:if test="${list.size()==0}">
+					<c:if test="${teamsList.size()==0}">
 					작성된 글이 존재하지 않습니다.
 					</c:if>
 				</div>
 			</div>
-			<c:if test="${login.mIdx ne null}">
-				<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
-			</c:if>
 		</div>
 		
 		

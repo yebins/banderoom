@@ -27,41 +27,62 @@ textarea{
     resize: none;
 }
 </style>
+<script>
+	function apply(){
+		$.ajax({
+			url:"application.do",
+			type:"post",
+			data:$("#application").serialize(),
+			success:function(data){
+				if(data == 1){
+					window.close();
+				}
+			}
+			
+		});
+		
+		
+	}
+</script>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<form id="application">
+<input type="hidden" name="teamIdx" value="${details.teamIdx}">
+<input type="hidden" name="mIdx" value="${login.mIdx}">
+<input type="hidden" name="mNickname" value="${login.nickname}">
 	<div id="wrapper" style="width:580px; height:500px;">
 		<div id="title">
 			지원하기
 		</div>
 		<div id="page-content">
-			<div class="inner-box" style="height: 110px; margin-bottom: 10px;">
-				<div class="inner-box-content">
-					<div class="app-title">지원 파트</div><br>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="part" value="보컬">보컬
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="part" value="베이스">베이스
-					</div>
-					<div class="form-check form-check-inline">
-						<input class="form-check-input" type="radio" name="part" value="드럼">드럼
+			<c:if test="${details.type == '밴드'}">
+				<div class="inner-box" style="height: 110px; margin-bottom: 10px;">
+					<div class="inner-box-content">
+						<div class="app-title">지원 파트</div><br>
+						<c:forEach var="parts" items="${parts}">
+							<div class="form-check form-check-inline">
+								<input class="form-check-input" type="radio" name="partIdx" value="${parts.partIdx}">${parts.name}
+							</div>
+						</c:forEach>
 					</div>
 				</div>
-			</div>
+			</c:if>
+			<c:if test="${details.type == '댄스'}">
+				<c:forEach var="parts" items="${parts}">
+					<input type="hidden" name="partIdx" value="${parts.partIdx}">
+				</c:forEach>
+			</c:if>
 			<div class="inner-box" style="height: 330px; margin-bottom: 20px;">
 				<div class="app-title">지원 내용</div><br>
-				<textarea class="form-control" rows="10" cols="77"></textarea>
+				<textarea class="form-control" rows="10" cols="77" name="content"></textarea>
 			</div>
 			<div class="inner-box-button-wrap">
-					<button class="normal-button accent-button" style="margin-bottom: 15px;">지원하기</button>
-				</div>
+				<button type="button" class="normal-button accent-button" style="margin-bottom: 15px;" onclick="apply()">지원하기</button>
+			</div>
 		</div>
-		
-		
-		
 	</div>
-	
+</form>
 </body>
 </html>

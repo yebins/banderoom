@@ -11,10 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.service.TeamsService;
+import com.project.vo.ApplicationsVO;
 import com.project.vo.PartsVO;
 import com.project.vo.TeamsVO;
+import com.sun.java.swing.plaf.windows.resources.windows;
 
 @RequestMapping(value="/teams")
 @Controller
@@ -24,24 +27,26 @@ public class TeamsController {
 	private TeamsService teamsService;
 
 	@RequestMapping(value="/main.do")
-	public String teamsMain(Model model) {
-		List<TeamsVO> teamsList = teamsService.selectList();
+	public String teamsMain(Model model, TeamsVO vo, String searchWord, Integer search) {
+		
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		
+		if(search != null) {
+			searchMap.put("vo", vo);
+			searchMap.put("searchWord", searchWord);
+		}
+		
+		List<TeamsVO> teamsList = teamsService.selectList(searchMap);
+		
 		Map<Integer, List<PartsVO>> partsMap = new HashMap<Integer, List<PartsVO>>();
 		
-		for (int i = 0; i < teamsList.size(); i++) {
-			
-			
+		for (int i=0; i<teamsList.size(); i++) {
 			List<PartsVO> partsList = teamsService.selectParts(teamsList.get(i).getTeamIdx());
-			
 			partsMap.put(teamsList.get(i).getTeamIdx(), partsList);
 		}
 		
-		
-		
 		model.addAttribute("teamsList", teamsList);
 		model.addAttribute("partsMap", partsMap);
-		
-		System.out.println(partsMap.toString());
 		
 		return "teams/main";
 	}
@@ -60,9 +65,7 @@ public class TeamsController {
 			PartsVO partsVO = new PartsVO();
 			partsVO.setCapacity(capacity[i]);
 			if(name == null) {
-				partsVO.setName("파트 없음");
-				
-				
+				partsVO.setName("");
 			}else {
 				partsVO.setName(name[i]);
 			}
@@ -79,12 +82,43 @@ public class TeamsController {
 	}
 	
 	@RequestMapping(value="/details.do")
-	public String details() {
+	public String details(Model model, int teamIdx) {
+		TeamsVO teamsVO = teamsService.details(teamIdx);
+		List<PartsVO> partsVO = teamsService.selectParts(teamIdx);
+		
+		model.addAttribute("details", teamsVO);
+		model.addAttribute("parts", partsVO);
+		
 		return "teams/details";
 	}
 	
-	@RequestMapping(value="/application.do")
-	public String application() {
+	@RequestMapping(value="/application.do", method=RequestMethod.GET)
+	public String application(Model model, int teamIdx) {
+		List<PartsVO> partsVO = teamsService.selectParts(teamIdx);
+		TeamsVO teamsVO = teamsService.details(teamIdx);
+		
+		model.addAttribute("parts", partsVO);
+		model.addAttribute("details", teamsVO);
+		
 		return "teams/application";
+	}
+	
+	@RequestMapping(value="/application.do", method=RequestMethod.POST)
+	@ResponseBody
+	public int application(ApplicationsVO vo) {
+		int result = teamsService.apply(vo);
+		return result;
+	}
+	
+	@RequestMapping(value="/delete.do", method=RequestMethod.POST)
+	@ResponseBody
+	public int delete(int teamIdx) {
+		int result = teamsService.delete(teamIdx);
+		return result;
+	}
+	
+	@RequestMapping(value="/update.do", method=RequestMethod.GET)
+	public String update(Model model, int teamIdx) {
+		return "teams/update";
 	}
 }

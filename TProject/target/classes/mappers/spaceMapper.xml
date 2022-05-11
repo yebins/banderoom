@@ -233,7 +233,7 @@
 	</select>
 	
 	<select id="spaceReviewList" parameterType="spacesVO" resultType="spaceReviewVO">
-		select reviewidx,
+		select residx,
 					 spaceidx,
 					 picturesrc,
 					 score,
