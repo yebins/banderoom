@@ -123,13 +123,4 @@ public class BoardDAO {
 		return sqlSession.selectOne("com.project.mapper.boardMapper.commentCount",map);
 	}
 	
-	public int insertComments(CommentsVO vo) {
-		
-		return sqlSession.insert("com.project.mapper.boardMapper.insertComments",vo);
-	}
-	
-	public List<CommentsVO> cList(CommentsVO vo) {
-		
-		return sqlSession.selectList("com.project.mapper.boardMapper.commentsList",vo);
-	}
 }

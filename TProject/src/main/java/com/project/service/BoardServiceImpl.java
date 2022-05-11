@@ -165,19 +165,6 @@ public class BoardServiceImpl implements BoardService {
 		
 		return dao.listDelete(vo);
 	}
-
-	@Override
-	public int insertComments(CommentsVO vo) {
-		
-		return dao.insertComments(vo);
-	}
-
-	@Override
-	public List<CommentsVO> cList(CommentsVO vo) {
-		
-		return dao.cList(vo);
-	}
-		
 	
 	public Map<String, Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request) {
 		
