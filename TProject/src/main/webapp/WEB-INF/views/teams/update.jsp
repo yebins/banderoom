@@ -380,7 +380,7 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			팀원 모집하기
+			팀원 모집글 수정
 		</div>
 		<div id="page-content">
 			<form action="register.do" method="post">

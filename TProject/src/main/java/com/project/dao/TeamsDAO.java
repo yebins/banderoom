@@ -1,11 +1,13 @@
 package com.project.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.project.vo.ApplicationsVO;
 import com.project.vo.PartsVO;
 import com.project.vo.TeamsVO;
 
@@ -15,8 +17,8 @@ public class TeamsDAO {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<TeamsVO> selectList(){
-		return sqlSession.selectList("com.project.mapper.teamsMapper.selectList");
+	public List<TeamsVO> selectList(Map<String, Object> searchMap){
+		return sqlSession.selectList("com.project.mapper.teamsMapper.selectList", searchMap);
 	}
 	
 	public List<PartsVO> selectParts(int teamIdx){
@@ -37,5 +39,17 @@ public class TeamsDAO {
 		}
 		
 		return result; 
+	}
+	
+	public TeamsVO details(int teamIdx) {
+		return sqlSession.selectOne("com.project.mapper.teamsMapper.details", teamIdx);
+	}
+	
+	public int apply(ApplicationsVO vo) {
+		return sqlSession.insert("com.project.mapper.teamsMapper.apply", vo);
+	}
+	
+	public int delete(int teamIdx) {
+		return sqlSession.update("com.project.mapper.teamsMapper.delete", teamIdx);
 	}
 }
