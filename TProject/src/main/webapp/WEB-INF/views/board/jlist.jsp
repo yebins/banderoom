@@ -3,7 +3,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,6 +43,10 @@
 	.inner-box-content-state-title{
 		border-bottom:2px solid lightgray;
 		font-weight:600;
+		max-width: 270px;
+   	 	overflow: hidden;
+    	text-overflow: ellipsis;
+   		white-space: nowrap;
 	}
 	.inner-box-content-state-title:hover{
 		cursor:pointer;
@@ -157,7 +160,7 @@
 									<c:when test="${list.get(item).status eq '97'}"><span>[판매]</span></c:when>
 									<c:when test="${list.get(item).status eq '98'}"><span>[구매]</span></c:when>
 									<c:when test="${list.get(item).status eq '99'}"><span>[거래완료]</span></c:when>
-									<c:otherwise>[status가 엄서요]</c:otherwise>
+									<c:otherwise>[거래상태 등록해주세요]</c:otherwise>
 								</c:choose>
 							<span>${list.get(item).title}</span>
 						</div>

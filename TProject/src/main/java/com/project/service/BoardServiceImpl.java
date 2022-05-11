@@ -13,7 +13,6 @@ import com.project.dao.BoardDAO;
 import com.project.util.PagingUtil;
 import com.project.vo.ArticlesVO;
 import com.project.vo.CommentsVO;
-import com.project.vo.GeneralMembersVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
@@ -169,6 +168,7 @@ public class BoardServiceImpl implements BoardService {
 	public Map<String, Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request) {
 		
 		int count=dao.commentCount(map); // 댓글총개수
+		System.out.println("게시물안에 있는 댓글의 총 개수 "+count);
 		request.setAttribute("cmtCount", count);
 		
 		return dao.jlistOneArticle(map);
@@ -181,17 +181,22 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<CommentsVO> commentList(Map<String, Object> map) {
-		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
+	public List<CommentsVO> commentList(Map<String, Object> map,HttpServletRequest request) {
+		int count=dao.commentCount(map);
+		System.out.println("댓글개수"+count);
+		int a=(int) Math.ceil((double)count/10);
+		System.out.println("올림페이지"+a);
+		
+		int page = map.get("page") == null ? a : Integer.parseInt(map.get("page").toString());
+		
+		request.setAttribute("count", count);
+		
 		int start = page+(page-1)*9;
 		int end=page*10;
-		
-		
 		
 		map.put("start", start);
 		map.put("end", end);
 
-		
 		System.out.println(map.toString());
 		System.out.println("댓글개수"+dao.commentList(map).size());
 		

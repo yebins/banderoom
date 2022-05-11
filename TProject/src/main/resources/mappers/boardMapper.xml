@@ -200,7 +200,7 @@
 			)		
 	</insert>
 	
-	<select id="commentList" parameterType="map" resultType="commentsVO">
+<!-- 	<select id="commentList" parameterType="map" resultType="commentsVO">
 		<![CDATA[
 		select * from
 			(SELECT
@@ -219,7 +219,7 @@
 			where 
 				rownum>=${start} and rownum <=#{end}
 		]]>
-	</select>
+	</select> -->
 	
 	<select id="commentCount" parameterType="map" resultType="int">
 		select count(cIdx) from comments where aIdx=#{aIdx}
@@ -230,5 +230,46 @@
 		where aIdx=#{aIdx}
 		and bIdx=#{bIdx}
 	</select>
-	
+	<select id="commentList" parameterType="map" resultType="commentsVO">
+		select 	list.rownum
+				,list.cidx
+				,list.bidx
+				,list.aidx
+				,list.midx
+				,list.mnickname
+				,list.content
+				,list.picsrc
+				,list.regdate
+				,list.status
+				,list.mprofilesrc
+		from 
+			(select
+			<![CDATA[ 
+				@rownum:=@rownum+1 as rownum
+				,cmt.cidx as cidx
+				,cmt.midx as midx
+				,cmt.bidx as bidx
+				,cmt.aidx as aidx
+				,cmt.mnickname as mnickname
+				,cmt.content as content
+				,cmt.picsrc as picsrc
+				,cmt.regdate as regdate
+				,cmt.status as status
+				,gm.profilesrc as mProfileSrc
+			from 
+				comments cmt
+			inner join 
+				general_members gm,(select @rownum:=0) rn
+			where
+				cmt.midx = gm.midx
+			and
+				cmt.aidx=#{aIdx}
+			and
+				cmt.bidx=#{bIdx}
+			order by 
+				cidx) list
+			where 
+				rownum>=#{start} and rownum <=#{end}
+				]]>
+	</select>
 </mapper>

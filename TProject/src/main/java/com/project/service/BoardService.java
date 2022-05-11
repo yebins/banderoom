@@ -30,5 +30,7 @@ public interface BoardService {
 	List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request);
 	Map<String,Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request);
 	int commentWrite(CommentsVO vo);
-	List<CommentsVO> commentList(Map<String, Object> params);
+	List<CommentsVO> commentList(Map<String, Object> params,HttpServletRequest request);
+	int insertComments(CommentsVO vo);
+	List<CommentsVO> cList(CommentsVO vo);
 }

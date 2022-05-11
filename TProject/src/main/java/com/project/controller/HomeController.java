@@ -3,7 +3,8 @@ package com.project.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -15,8 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -350,4 +349,95 @@ public class HomeController {
 	}
 	
 	
+		@RequestMapping(value="jlist/detail.do", method=RequestMethod.GET)
+		public String jlistView(Model model,ArticlesVO vo,@RequestParam Map<String, Object> params,HttpServletRequest request) {
+			
+		boardService.readCount(vo);
+		
+		System.out.println(params);
+		
+		Map<String, Object> one = boardService.jlistOneArticle(params,request);//게시글정보
+		List<CommentsVO> cmtList=boardService.commentList(params,request);//댓글리스트
+		
+		GeneralMembersVO writer=new GeneralMembersVO();
+		int a=(int) one.get("mIdx");//게시글 작성자 midx
+		writer.setmIdx(a);//게시글 작성자의 midx 삽입
+		
+		writer=memberService.oneMemberInfo(writer); // midx 넣은 멤버의 정보 가져오기
+		
+		
+		System.out.println("게시글정보"+one.toString());
+		
+		model.addAttribute("page", request.getAttribute("page"));
+		model.addAttribute("cmtList",cmtList);//댓글 리스트
+		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글 총개수?
+		model.addAttribute("vo",one);//게시글정보 보내기
+		model.addAttribute("profileSrc",writer.getProfileSrc());//글 작성자 프로필 사진 
+		
+		
+		
+		return "/board/jlist/details";
+	}
+		
+		@RequestMapping(value="jlist/commentWrite.do")
+		@ResponseBody
+		public int commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+					
+			
+			if(vo.getContent() != null && vo.getContent() != "") {
+				
+				if(!file.isEmpty()) {
+					System.out.println(file);
+					
+					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+						
+					String fileName=file.getOriginalFilename();
+					
+					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+					
+					UUID uuid = UUID.randomUUID();
+					
+					String newFileName = uuid.toString() + extension;
+		
+					File target = new File(path, newFileName);
+					
+					System.out.println(target.toString());
+					
+					file.transferTo(target);//파일이생성됨
+					
+					vo.setPicSrc("/upload/"+newFileName);
+				}
+			
+			return boardService.commentWrite(vo);
+			
+			} else {
+				
+				return -1;
+			}	
+		
+		}
+		
+		@RequestMapping(value="jlist/commentList.do")
+		@ResponseBody
+		public List<Object> commentsList(@RequestParam Map<String, Object> params,HttpServletRequest request){
+			Date nowDate = new Date();
+			
+			List<CommentsVO> list= boardService.commentList(params,request);
+			
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss"); 
+			System.out.println(simpleDateFormat.format(list.get(0).getRegDate()));
+			
+			for(int i=0;i<list.size();i++) {
+				String date=simpleDateFormat.format(list.get(i).getRegDate());
+			}
+			
+			
+			List<Object> data=new ArrayList<Object>();
+			data.add(request.getAttribute("count"));
+			data.add(list);
+			
+			
+			
+			return data;
+		}
 }
