@@ -93,7 +93,7 @@ public class SpaceController {
 
 	@RequestMapping(value = "/uploadPicture.do", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> profileUpload(HttpServletRequest request, @RequestParam("picture") MultipartFile file) throws Exception {
+	public Map<String, String> uploadPicture(HttpServletRequest request, @RequestParam("picture") MultipartFile file) throws Exception {
 		
 		Map<String, String> pictures = new HashMap<String, String>();
 		
@@ -686,6 +686,15 @@ public class SpaceController {
 		
 		model.addAttribute("rsvVO", spaceService.getRSV(vo));
 		return "space/review";
+	}
+	
+	@RequestMapping(value = "review.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int spaceReview(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, HttpServletRequest request) {
+		
+		
+		
+		return 0;
 	}
 	/*
 	@RequestMapping(value="setlist.do")
