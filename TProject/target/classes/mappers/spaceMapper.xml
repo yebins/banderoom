@@ -232,17 +232,30 @@
 		select spaceidx, count(score) as count, avg(score) as avg from space_review where spaceidx = #{idx} group by spaceidx 
 	</select>
 	
-	<select id="spaceReviewList" parameterType="spacesVO" resultType="spaceReviewVO">
-		select residx,
-					 spaceidx,
-					 picturesrc,
-					 score,
-					 midx,
-					 mnickname,
-					 content,
-					 regdate
-		from space_review
-		where spaceidx = #{idx}
+	<select id="spaceReviewList" parameterType="hashmap" resultType="spaceReviewVO">
+		select gm.profilesrc,
+					 sr.residx,
+					 sr.spaceidx,
+					 sr.picturesrc,
+					 sr.thumbsrc,
+					 sr.score,
+					 sr.midx,
+					 sr.mnickname,
+					 sr.content,
+					 sr.regdate
+		from general_members gm, space_review sr
+		where spaceidx = #{spacesVO.idx}
+		and gm.midx = sr.midx
+		<if test="orderType == 'regDateDesc'">
+			order by regdate desc
+		</if>
+		<if test="orderType == 'scoreAsc'">
+			order by score
+		</if>
+		<if test="orderType == 'scoreDesc'">
+			order by score desc
+		</if>
+		limit #{start}, 5
 	</select>
 	
 	<!-- 테스트용 -->
@@ -401,4 +414,30 @@
 		select count(*) from space_review
 		where residx = #{resIdx}
 	</select>
+	
+	<insert id="insertReview" parameterType="spaceReviewVO">
+		insert into space_review (
+			residx,
+			spaceidx,
+			<if test="pictureSrc != null">
+				picturesrc,
+				thumbsrc,
+			</if>
+			score,
+			midx,
+			mnickname,
+			content
+		) values (
+			#{resIdx},
+			#{spaceIdx},
+			<if test="pictureSrc != null">
+				#{pictureSrc},
+				#{thumbSrc},
+			</if>
+			#{score},
+			#{mIdx},
+			#{mNickname},
+			#{content}
+		)
+	</insert>
 </mapper>

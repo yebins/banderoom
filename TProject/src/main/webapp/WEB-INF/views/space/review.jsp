@@ -212,10 +212,29 @@
 			return;
 		}
 		
-		alert('작성이 완료되었습니다.');
-		window.opener.reload();
-		window.close();
+		var formData = new FormData($('#reviewForm')[0]);
 		
+		$.ajax({
+			type: "post",
+			url: "review.do",
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function(result) {
+				
+				if (result == 0) {
+					alert('작성이 완료되었습니다.');
+					window.opener.reload();
+					window.close();					
+				} else if (result == 1) {
+					alert('로그인이 필요합니다.');
+					window.opener.gotoLogin();
+					window.close();
+				} else if (result == 2) {
+					alert('작성에 실패했습니다.');
+				}
+			}
+		})
 	}
 </script>
 </head>
@@ -268,7 +287,7 @@
 					</div>
 				</div>
 				
-				<form action="review.do" method="post" enctype="multipart/form-data">
+				<form id="reviewForm" action="review.do" method="post" enctype="multipart/form-data">
 					<input type="hidden" name="resIdx" value="${rsvVO.resIdx}">
 					<input type="hidden" name="spaceIdx" value="${rsvVO.spaceIdx}">
 					<div class="review-buttons-wrap">
@@ -289,7 +308,7 @@
 						<button type="button" class="normal-button accent-button" onclick="reviewSubmit()">등록</button>
 					</div>
 					<div class="review-content-wrap">
-						<textarea class="review-textarea" placeholder="내용을 입력하세요."></textarea>
+						<textarea class="review-textarea" name="content" placeholder="내용을 입력하세요."></textarea>
 						<div class="upload-img-box">
 							<img id="uploaded-image" onclick="imgReset()">
 						</div>

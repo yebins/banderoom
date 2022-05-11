@@ -15,7 +15,7 @@ public class TeamsVO {
 	private String title;
 	private String content;
 	private Date regDate;
-	private int status;
+	private int status;	// 0: 모집중 1: 삭제됨 2: 마감
 	private String endDate;
 	
 	public int getTeamIdx() {

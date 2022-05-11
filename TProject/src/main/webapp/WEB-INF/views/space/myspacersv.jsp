@@ -256,8 +256,11 @@
         'top=140, left=200, width=800, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
 	}
 	
-	function reload() {
+	function reload() {	    // 팝업 창에서 호출할 함수
 		location.reload();
+	}
+	function gotoLogin() {
+		location.href="/member/glogin.do";
 	}
 
 </script>	

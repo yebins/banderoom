@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.MemberService;
 import com.project.service.SpaceService;
+import com.project.util.PagingUtil;
 import com.project.vo.*;
 
 @Controller
@@ -93,7 +94,7 @@ public class SpaceController {
 
 	@RequestMapping(value = "/uploadPicture.do", method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, String> uploadPicture(HttpServletRequest request, @RequestParam("picture") MultipartFile file) throws Exception {
+	public Map<String, String> uploadPicture(HttpServletRequest request, @RequestParam("picture") MultipartFile file, int thumbWidth, int thumbHeight) throws Exception {
 		
 		Map<String, String> pictures = new HashMap<String, String>();
 		
@@ -114,7 +115,7 @@ public class SpaceController {
 		
 		file.transferTo(target);
 
-    makeThumbnail(target.getAbsolutePath(), uuid.toString(), extension.substring(1), path, 200, 150);
+    makeThumbnail(target.getAbsolutePath(), uuid.toString(), extension.substring(1), path, thumbWidth, thumbHeight);
     
     String original = "/upload/" + newFileName;
     String thumb = "/upload/THUMB_" + newFileName;
@@ -184,10 +185,52 @@ public class SpaceController {
 
 	@RequestMapping(value = "/details.do")
 	public String details(Model model, SpacesVO vo) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("spacesVO", vo);
+		
+		int reviewPage = 1;
+		String orderType = "regDateDesc";
+		
+		params.put("orderType", orderType);
+		
+		PagingUtil reviewPu = new PagingUtil(
+				Integer.parseInt(
+						String.valueOf(
+								spaceService.spaceReviewCntAvg(
+										(SpacesVO) params.get("spacesVO")).get("count")))
+				, reviewPage, 5);
+		
+		params.put("start", reviewPu.getStart() - 1);
+		
+		model.addAttribute("reviewLastPage", reviewPu.getLastPage());
 		model.addAttribute("spacesVO", spaceService.details(vo));
 		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
+		model.addAttribute("reviewList", spaceService.spaceReviewList(params));
+		model.addAttribute("reviewCntAvg", spaceService.spaceReviewCntAvg(vo));
+		
+		System.out.println(spaceService.spaceReviewList(params).toString());
 		
 		return "space/details";
+	}
+	
+	@RequestMapping(value = "loadReview.do")
+	@ResponseBody
+	public List<SpaceReviewVO> loadReview(Integer reviewPage, String orderType, SpacesVO vo) {
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("spacesVO", vo);
+		params.put("orderType", orderType);
+		
+		PagingUtil reviewPu = new PagingUtil(
+				Integer.parseInt(
+						String.valueOf(
+								spaceService.spaceReviewCntAvg(
+										(SpacesVO) params.get("spacesVO")).get("count")))
+				, reviewPage, 5);
+		
+		params.put("start", reviewPu.getStart() - 1);
+		
+		return spaceService.spaceReviewList(params);
 	}
 
 	@RequestMapping(value = "/delete.do")
@@ -374,33 +417,17 @@ public class SpaceController {
 		
 		Iterator<SpacesVO> iterator = spaceList.iterator();
 		Map<Integer, Double> reviewAvg = new HashMap<>();
-		List<SpaceReviewVO> reviewList = new ArrayList<SpaceReviewVO>();
 		
 		Map<Integer, Integer> likedStatus = new HashMap<>();
 		
 		while (iterator.hasNext()) {
 			
 			SpacesVO spacesVO = iterator.next(); 
-			reviewList = spaceService.spaceReviewList(spacesVO);
-			reviewCount.put(spacesVO.getIdx(), reviewList.size());
 			
-			double sum = 0;
-			double avg = 0;
+			Map<String, Object> reviewCntAvg = spaceService.spaceReviewCntAvg(spacesVO);
 			
-			Iterator<SpaceReviewVO> reviewIterator = reviewList.iterator();
-			
-			if (reviewList.size() != 0) {
-				while (iterator.hasNext()) {
-					
-					sum += reviewIterator.next().getScore();
-				}
-				
-				avg = sum / reviewList.size();
-			} else {
-				avg = 0;
-			}
-
-			reviewAvg.put(spacesVO.getIdx(), avg);
+			reviewCount.put(spacesVO.getIdx(), Integer.parseInt(String.valueOf(reviewCntAvg.get("count"))));
+			reviewAvg.put(spacesVO.getIdx(), Double.parseDouble(String.valueOf(reviewCntAvg.get("avg"))));
 			
 			LikedSpacesVO liked = new LikedSpacesVO();
 			
@@ -448,33 +475,17 @@ public class SpaceController {
 		
 		Iterator<SpacesVO> iterator = spaceList.iterator();
 		Map<Integer, Double> reviewAvg = new HashMap<>();
-		List<SpaceReviewVO> reviewList = new ArrayList<SpaceReviewVO>();
 		
 		Map<Integer, Integer> likedStatus = new HashMap<>();
 		
 		while (iterator.hasNext()) {
 			
 			SpacesVO spacesVO = iterator.next(); 
-			reviewList = spaceService.spaceReviewList(spacesVO);
-			reviewCount.put(spacesVO.getIdx(), reviewList.size());
 			
-			double sum = 0;
-			double avg = 0;
+			Map<String, Object> reviewCntAvg = spaceService.spaceReviewCntAvg(spacesVO);
 			
-			Iterator<SpaceReviewVO> reviewIterator = reviewList.iterator();
-			
-			if (reviewList.size() != 0) {
-				while (iterator.hasNext()) {
-					
-					sum += reviewIterator.next().getScore();
-				}
-				
-				avg = sum / reviewList.size();
-			} else {
-				avg = 0;
-			}
-
-			reviewAvg.put(spacesVO.getIdx(), avg);
+			reviewCount.put(spacesVO.getIdx(), Integer.parseInt(String.valueOf(reviewCntAvg.get("count"))));
+			reviewAvg.put(spacesVO.getIdx(), Double.parseDouble(String.valueOf(reviewCntAvg.get("avg"))));
 			
 			LikedSpacesVO liked = new LikedSpacesVO();
 			
@@ -692,16 +703,32 @@ public class SpaceController {
 	@ResponseBody
 	public int spaceReview(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, HttpServletRequest request) throws Exception {
 		
-		Map<String, String> pictureSrc = uploadPicture(request, picture);
-		
-	  vo.setPictureSrc(pictureSrc.get("original"));
-	  vo.setThumbSrc(pictureSrc.get("thumb"));
-		
-		System.out.println(vo.toString());
-		
-		
-		
-		return 0;
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+			
+			if (picture.getSize() != 0) {
+
+				Map<String, String> pictureSrc = uploadPicture(request, picture, 200, 200);
+				
+			  vo.setPictureSrc(pictureSrc.get("original"));
+			  vo.setThumbSrc(pictureSrc.get("thumb"));
+			  
+			}
+			
+		  GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		  
+		  vo.setmIdx(login.getmIdx());
+		  vo.setmNickname(login.getNickname());
+
+		  int result = spaceService.insertReview(vo);
+		  
+		  if (result > 0) {
+		  	return 0; // 정상 입력		  	
+		  } else {
+		  	return 2; // 입력 오류
+		  }
+		}
 	}
 	/*
 	@RequestMapping(value="setlist.do")

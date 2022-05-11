@@ -2,9 +2,9 @@ package com.project.vo;
 
 import java.util.Date;
 
-public class SpaceReviewVO {
+public class SpaceReviewVO extends GeneralMembersVO {
 	
-	private int reviewIdx;
+	private int resIdx;
 	private int spaceIdx;
 	private String pictureSrc;
 	private String thumbSrc;
@@ -13,12 +13,12 @@ public class SpaceReviewVO {
 	private String mNickname;
 	private String content;
 	private Date regDate;
-	
-	public int getReviewIdx() {
-		return reviewIdx;
+
+	public int getResIdx() {
+		return resIdx;
 	}
-	public void setReviewIdx(int reviewIdx) {
-		this.reviewIdx = reviewIdx;
+	public void setResIdx(int resIdx) {
+		this.resIdx = resIdx;
 	}
 	public int getSpaceIdx() {
 		return spaceIdx;
@@ -70,8 +70,9 @@ public class SpaceReviewVO {
 	}
 	@Override
 	public String toString() {
-		return "SpaceReviewVO [reviewIdx=" + reviewIdx + ", spaceIdx=" + spaceIdx + ", pictureSrc=" + pictureSrc
-				+ ", thumbSrc=" + thumbSrc + ", score=" + score + ", mIdx=" + mIdx + ", mNickname=" + mNickname + ", content="
-				+ content + ", regDate=" + regDate + "]";
+		return "SpaceReviewVO [resIdx=" + resIdx + ", spaceIdx=" + spaceIdx + ", pictureSrc=" + pictureSrc + ", thumbSrc="
+				+ thumbSrc + ", score=" + score + ", mIdx=" + mIdx + ", mNickname=" + mNickname + ", content=" + content
+				+ ", regDate=" + regDate + "]";
 	}
+
 }
