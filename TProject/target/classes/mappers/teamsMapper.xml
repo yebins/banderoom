@@ -48,7 +48,7 @@
 		</foreach>
 	</insert>
 	
-	<select id="selectList" resultType="teamsVO">
+	<select id="selectList" resultType="teamsVO" parameterType="hashMap">
 		SELECT
 			 teamidx
 			,addr1
@@ -60,11 +60,38 @@
 			,enddate
 		  FROM teams
 		 WHERE status=0
+		 <if test="vo != null">
+			 <if test="vo.addr1 != null and vo.addr1 != ''">
+			   AND addr1=#{vo.addr1}
+			 </if>
+			 <if test="vo.addr2 != null and vo.addr2 != ''">
+			   AND addr2=#{vo.addr2}
+			 </if>
+			 <if test="vo.teamLevel != null and vo.teamLevel != ''">
+			   AND teamLevel=#{vo.teamLevel}
+			 </if>
+			 <if test="vo.type != null and vo.type != ''">
+			   AND type=#{vo.type}
+			 </if>
+			 <if test="vo.endDate != null and vo.endDate != ''">
+			   AND date(endDate) <![CDATA[<=]]> #{vo.endDate}
+			 </if>
+			 <if test="searchWord != null and searchWord != ''">
+			   AND (
+			   		mnickname like concat('%',#{searchWord},'%')
+			     or addr1 like concat('%',#{searchWord},'%')
+			     or addr2 like concat('%',#{searchWord},'%')
+			     or genre like concat('%',#{searchWord},'%')
+			     or title like concat('%',#{searchWord},'%')
+			     or content like concat('%',#{searchWord},'%')
+			   )
+			 </if>
+		 </if>
 		 ORDER BY teamidx DESC
 	</select>
 	
 	<select id="selectParts" resultType="partsVO" parameterType="int">
-		SELECT name, capacity
+		SELECT partidx, name, capacity
 		  FROM parts
 		 WHERE teamidx = #{teamIdx}
 	</select>
@@ -72,6 +99,7 @@
 	<select id="details" resultType="teamsVO" parameterType="int">
 		SELECT
 			 teamidx
+			,midx
 			,mnickname
 			,addr1
 			,addr2
@@ -84,6 +112,27 @@
 			,enddate
 		  FROM teams
 		 WHERE teamidx = #{teamIdx}
-	
 	</select>
+	
+	<insert id="apply" parameterType="ApplicationsVO">
+		INSERT INTO applications(
+			 teamidx
+			,midx
+			,mnickname
+			,partidx
+			,content
+		)VALUES(
+			 #{teamIdx}
+			,#{mIdx}
+			,#{mNickname}
+			,#{partIdx}
+			,#{content}
+		)
+	</insert>
+	
+	<update id="delete" parameterType="int">
+		UPDATE teams
+		   SET status = 1
+		 WHERE teamidx = #{teamIdx}
+	</update>
 </mapper>
