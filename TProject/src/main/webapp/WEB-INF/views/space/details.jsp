@@ -574,7 +574,7 @@
 	}
 	.review-nav {
 		border-top: 1px solid lightgray;
-		margin-top: 10px;
+		margin-top: 15px;
 		padding-top: 35px;
 		display: flex;
 		justify-content: center;
@@ -1223,7 +1223,7 @@
 					html += '<div class="review-profile-img">';
 					html += '<img src="' + data[i].profileSrc + '">';
 					html += '</div>';
-					html += '<div class="review-nickname">';
+					html += '<div class="review-nickname" onclick="profileOpen(' + data[i].mIdx + ')">';
 					html += data[i].mNickname;
 					html += '</div></div>';
 					html += '<div class="review-score-wrap">';
