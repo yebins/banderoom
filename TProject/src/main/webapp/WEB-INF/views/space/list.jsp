@@ -544,7 +544,7 @@
 											<div class="space-restinfo-restinfo">
 												<div class="space-addr">${spaceList[i].getAddr1()} ${spaceList[i].getAddr2()}</div>
 												<div class="space-score">
-													⭐ <fmt:formatNumber value="${reviewAvg.get(spaceList[i].getIdx())}" pattern="#.0" /> (${reviewCount.get(spaceList[i].getIdx())})
+													⭐ <fmt:formatNumber value="${reviewAvg.get(spaceList[i].getIdx())}" pattern="0.0" /> (${reviewCount.get(spaceList[i].getIdx())})
 												</div>
 											</div>
 										</div>
