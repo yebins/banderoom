@@ -7,6 +7,7 @@ public class SpaceReviewVO {
 	private int reviewIdx;
 	private int spaceIdx;
 	private String pictureSrc;
+	private String thumbSrc;
 	private double score;
 	private int mIdx;
 	private String mNickname;
@@ -30,6 +31,12 @@ public class SpaceReviewVO {
 	}
 	public void setPictureSrc(String pictureSrc) {
 		this.pictureSrc = pictureSrc;
+	}
+	public String getThumbSrc() {
+		return thumbSrc;
+	}
+	public void setThumbSrc(String thumbSrc) {
+		this.thumbSrc = thumbSrc;
 	}
 	public double getScore() {
 		return score;
@@ -60,5 +67,11 @@ public class SpaceReviewVO {
 	}
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
+	}
+	@Override
+	public String toString() {
+		return "SpaceReviewVO [reviewIdx=" + reviewIdx + ", spaceIdx=" + spaceIdx + ", pictureSrc=" + pictureSrc
+				+ ", thumbSrc=" + thumbSrc + ", score=" + score + ", mIdx=" + mIdx + ", mNickname=" + mNickname + ", content="
+				+ content + ", regDate=" + regDate + "]";
 	}
 }

@@ -690,7 +690,14 @@ public class SpaceController {
 	
 	@RequestMapping(value = "review.do", method = RequestMethod.POST)
 	@ResponseBody
-	public int spaceReview(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, HttpServletRequest request) {
+	public int spaceReview(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, HttpServletRequest request) throws Exception {
+		
+		Map<String, String> pictureSrc = uploadPicture(request, picture);
+		
+	  vo.setPictureSrc(pictureSrc.get("original"));
+	  vo.setThumbSrc(pictureSrc.get("thumb"));
+		
+		System.out.println(vo.toString());
 		
 		
 		
