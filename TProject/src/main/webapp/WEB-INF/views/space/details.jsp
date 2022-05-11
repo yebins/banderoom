@@ -577,17 +577,23 @@
 		justify-content: center;
 		align-items: center;
 	}
+	.review-nav div {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	.review-nav img {
-		margin: 0px 10px;
 		height: 15px;
 	}
-	.review-nav img:hover {
+	.review-nav div:hover {
 		cursor: pointer;
 	}
-	.review-nav img.nav-disabled {
+	.review-nav div.nav-disabled {
 		filter: opacity(20%);
 	}
-	.review-nav img.nav-disabled:hover {
+	.review-nav div.nav-disabled:hover {
 		cursor: default;
 	}
 	
@@ -1465,10 +1471,18 @@
 								</div>
 								
 								<div class="review-nav">
-									<img class="review-page-prev" src="/images/page-first.png" onclick="loadReview(1, orderType, this)">
-									<img class="review-page-prev" src="/images/page-prev.png" onclick="loadReview((reviewPage - 1), orderType, this)">
-									<img class="review-page-next" src="/images/page-next.png" onclick="loadReview((reviewPage + 1), orderType, this)">
-									<img class="review-page-next" src="/images/page-last.png" onclick="loadReview(reviewLastPage, orderType, this)">
+									<div class="review-page-prev" onclick="loadReview(1, orderType, this)">
+										<img src="/images/page-first.png">
+									</div>
+									<div class="review-page-prev" onclick="loadReview((reviewPage - 1), orderType, this)">
+										<img src="/images/page-prev.png">
+									</div>
+									<div class="review-page-next" onclick="loadReview((reviewPage + 1), orderType, this)">
+										<img src="/images/page-next.png">
+									</div>
+									<div class="review-page-next" onclick="loadReview(reviewLastPage, orderType, this)">
+										<img src="/images/page-last.png">
+									</div>
 								</div>
 								
 								
