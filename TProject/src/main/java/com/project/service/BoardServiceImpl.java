@@ -168,16 +168,27 @@ public class BoardServiceImpl implements BoardService {
 	public Map<String, Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request) {
 		
 		int count=dao.commentCount(map); // 댓글총개수
-		System.out.println("게시물안에 있는 댓글의 총 개수 "+count);
 		request.setAttribute("cmtCount", count);
 		
 		return dao.jlistOneArticle(map);
 	}
 
 	@Override
-	public int commentWrite(CommentsVO vo) {
+	public Map<String, Object> commentWrite(CommentsVO vo) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("bIdx", vo.getbIdx());
+		map.put("aIdx", vo.getaIdx());
 		
-		return dao.commentWrite(vo);
+		int count=dao.commentCount(map);
+		int page=(int) Math.ceil((double)count/10);
+		System.out.println("write"+page);
+		
+		Map<String, Object> map2 = new HashMap<>();
+		
+		map2.put("result",dao.commentWrite(vo));
+		map2.put("lastPage", page);
+		
+		return map2;
 	}
 
 	@Override
@@ -190,6 +201,7 @@ public class BoardServiceImpl implements BoardService {
 		int page = map.get("page") == null ? a : Integer.parseInt(map.get("page").toString());
 		
 		request.setAttribute("count", count);
+		request.setAttribute("page", page);
 		
 		int start = page+(page-1)*9;
 		int end=page*10;

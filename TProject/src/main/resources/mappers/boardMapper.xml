@@ -117,9 +117,9 @@
 			  art.*
 			FROM articles art,(select @rownum:=0) rn_art
 		]]>
-			where bIdx=3
-			<if test='searchtitle != null and !"".equals(searchtitle)'>
-			and title like CONCAT('%',#{searchtitle},'%')
+			where bIdx=#{bIdx}
+			<if test='searchValue != null and !"".equals(searchValue)'>
+			and ${searchType} like CONCAT('%',#{searchValue},'%')
 			</if>
 			<if test="status != 0 and status != null">
 			and status=#{status}
@@ -133,9 +133,9 @@
 	<select id="jlistArticleCount" parameterType="Map" resultType="int">
 		select count(aIdx)
 		from articles
-		where bidx=3
-		<if test='searchtitle != null and !"".equals(searchtitle)'>
-		and title like CONCAT('%',#{searchtitle},'%')
+		where bidx=#{bIdx}
+		<if test='searchValue != null and !"".equals(searchValue)'>
+		and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>
 		<if test="status != 0 and status != null">
 		and status=#{status}

@@ -100,8 +100,10 @@ public class BoardDAO {
 	
 	public int jlistCount(Map<String,Object> map) {
 		
-		return sqlSession.selectOne("com.project.mapper.boardMapper.jlistArticleCount", map);
-	
+		int a=sqlSession.selectOne("com.project.mapper.boardMapper.jlistArticleCount", map);
+		System.out.println("검색필터"+map.toString());
+		System.out.println("검색한갯수"+a);
+		return a;
 	}
 	public Map<String, Object> jlistOneArticle(Map<String, Object> map) {
 		
