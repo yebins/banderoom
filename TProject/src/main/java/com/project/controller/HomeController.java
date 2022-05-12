@@ -66,42 +66,6 @@ public class HomeController {
 		
 		return "footer";
 	}
-	
-	@RequestMapping(value = "/newfile.do")
-	public String newfile () {
-		
-		return "NewFile";
-	}
-
-	@RequestMapping(value = "/newfile1.do")
-	public String newfile1 () {
-		
-		return "NewFile1";
-	}
-	
-	@RequestMapping(value = "/payProcess.do", method = RequestMethod.POST)
-	public void payProcess(String imp_uid, String merchant_uid) {
-		System.out.println(imp_uid + merchant_uid);
-		
-	}
-	
-	@RequestMapping(value = "/newfile2.do")
-	public String newfile2() {
-		return "NewFile2";
-	}
-
-	@RequestMapping(value = "/newfile3.do")
-	public String newfile3() {
-		return "NewFile3";
-	}
-
-	@RequestMapping(value = "/formtest.do")
-	public String formtest(String no, String yes) {
-		System.out.println(no);
-		System.out.println(yes);
-		return "NewFile3";
-	}
-	
 
 	@RequestMapping(value = "/frame.do")
 	public String frame() {

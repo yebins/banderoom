@@ -2,7 +2,7 @@ package com.project.vo;
 
 import java.util.Date;
 
-public class SpaceQnaVO {
+public class SpaceQnaVO extends GeneralMembersVO {
 	
 	private int qnaIdx;
 	private int spaceIdx;

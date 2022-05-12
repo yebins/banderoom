@@ -184,7 +184,9 @@ public class SpaceController {
 	}
 
 	@RequestMapping(value = "/details.do")
-	public String details(Model model, SpacesVO vo) {
+	public String details(Model model, SpacesVO vo, HttpServletRequest request) {
+		
+		// 리뷰 목록 불러오기
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("spacesVO", vo);
 		
@@ -207,6 +209,53 @@ public class SpaceController {
 		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
 		model.addAttribute("reviewList", spaceService.spaceReviewList(params));
 		model.addAttribute("reviewCntAvg", spaceService.spaceReviewCntAvg(vo));
+		
+		// qna 목록 불러오기
+		params = new HashMap<String, Object>();
+
+		PagingUtil qnaPu = new PagingUtil(spaceService.countQna(vo), 1, 5, 5);
+		
+		params.put("start", qnaPu.getStart() - 1);
+		params.put("spacesVO", vo);
+		
+		List<SpaceQnaVO> qnaList = spaceService.qnaList(params);
+		
+		// 비공개 처리: 로그인 안 된 경우에는 비공개 글 모두 비공개
+		// 로그인 된 경우에는 자신 글 빼고 비공개
+		if (request.getSession().getAttribute("login") == null) {
+			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+			
+			while(qnaIterator.hasNext()) {
+				SpaceQnaVO qnaVO = qnaIterator.next();
+				
+				if (qnaVO.getPublicYN().equals("N")) {
+					qnaVO.setContent("비공개 질문입니다.");
+					if (qnaVO.getAnswer() != null) {
+						qnaVO.setAnswer("비공개 답변입니다.");
+					}
+				}
+			}
+		} else {
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			
+			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+			
+			while(qnaIterator.hasNext()) {
+				SpaceQnaVO qnaVO = qnaIterator.next();
+				
+				if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
+					qnaVO.setContent("비공개 질문입니다.");
+					if (qnaVO.getAnswer() != null) {
+						qnaVO.setAnswer("비공개 답변입니다.");
+					}
+				}
+			}
+		}
+		
+		model.addAttribute("qnaList", qnaList);
+		model.addAttribute("qnaStartPage", qnaPu.getStartPage());
+		model.addAttribute("qnaEndPage", qnaPu.getEndPage());
+		model.addAttribute("qnaLastPage", qnaPu.getLastPage());
 		
 		return "space/details";
 	}
@@ -766,6 +815,90 @@ public class SpaceController {
 		  	return 2; // 입력 오류
 		  }
 		}
+	}
+	
+	@RequestMapping(value="insertqnaq.do")
+	@ResponseBody
+	public int insertQnaQ(SpaceQnaVO vo, Integer privateChecked, HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+			
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			
+			vo.setmIdx(login.getmIdx());
+			vo.setmNickname(login.getNickname());
+			
+			if (privateChecked != null) {
+				vo.setPublicYN("N");
+			} else {
+				vo.setPublicYN("Y");
+			}
+			
+			int result = spaceService.insertQnaQ(vo);
+			
+			if (result > 0) {
+				return 0; // 정상 입력
+			} else {
+				return 2; // 입력 오류
+			}
+			
+		}
+	}
+	
+	@RequestMapping(value = "qnalist.do")
+	@ResponseBody
+	public Map<String, Object> qnaList(HttpServletRequest request, Integer page, SpacesVO spacesVO) {
+		
+		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		PagingUtil qnaPu = new PagingUtil(spaceService.countQna(spacesVO), page, 5, 5);
+		
+		params.put("start", qnaPu.getStart() - 1);
+		params.put("spacesVO", spacesVO);
+		
+		List<SpaceQnaVO> qnaList = spaceService.qnaList(params);
+		
+		// 비공개 처리: 로그인 안 된 경우에는 비공개 글 모두 비공개
+		// 로그인 된 경우에는 자신 글 빼고 비공개
+		if (request.getSession().getAttribute("login") == null) {
+			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+			
+			while(qnaIterator.hasNext()) {
+				SpaceQnaVO qnaVO = qnaIterator.next();
+				
+				if (qnaVO.getPublicYN().equals("N")) {
+					qnaVO.setContent("비공개 질문입니다.");
+					if (qnaVO.getAnswer() != null) {
+						qnaVO.setAnswer("비공개 답변입니다.");
+					}
+				}
+			}
+		} else {
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			
+			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+			
+			while(qnaIterator.hasNext()) {
+				SpaceQnaVO qnaVO = qnaIterator.next();
+				
+				if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
+					qnaVO.setContent("비공개 질문입니다.");
+					if (qnaVO.getAnswer() != null) {
+						qnaVO.setAnswer("비공개 답변입니다.");
+					}
+				}
+			}
+		}
+		
+		data.put("qnaList", qnaList);
+		data.put("qnaStartPage", qnaPu.getStartPage());
+		data.put("qnaEndPage", qnaPu.getEndPage());
+		data.put("qnaLastPage", qnaPu.getLastPage());
+		
+		return data;
 	}
 	/*
 	@RequestMapping(value="setlist.do")

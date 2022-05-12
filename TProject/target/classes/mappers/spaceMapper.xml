@@ -207,9 +207,22 @@
 	<select id="spaceList" resultType="spacesVO" parameterType="HashMap">
 		select * from (
 			select row_number() over(order by idx) as rownum, s.*
-			from spaces s where s.status = 1
+			from spaces s
 			
 			<if test="vo != null">
+				<if test="liked != null and liked != ''">
+				, liked_spaces ls
+				</if>
+			</if>
+			
+			where s.status = 1
+			
+			<if test="vo != null">
+				
+				<if test="liked != null and liked != ''">
+				and s.idx = ls.spaceidx
+				and ls.midx = #{liked.mIdx}
+				</if>
 				<if test="vo.addr1 != null and vo.addr1 != ''">
 				and addr1 = #{vo.addr1}
 				</if>
@@ -472,4 +485,33 @@
 			#{content}
 		)
 	</insert>
+	
+	<insert id="insertQnaQ" parameterType="spaceQnaVO">
+		insert into space_qna (
+			spaceidx,
+			midx,
+			mnickname,
+			content,
+			publicyn
+		) values (
+			#{spaceIdx},
+			#{mIdx},
+			#{mNickname},
+			#{content},
+			#{publicYN}
+		)
+	</insert>
+	
+	<select id="countQna" parameterType="spacesVO" resultType="int">
+		select count(*) from space_qna
+		where spaceidx = #{idx}
+	</select>
+	
+	<select id="qnaList" parameterType="hashMap" resultType="spaceQnaVO">
+		select gm.profileSrc, sq.* from general_members gm, space_qna sq
+		where gm.midx = sq.midx
+		and spaceidx = #{spacesVO.idx}
+		order by regDate desc
+		limit #{start}, 5
+	</select>
 </mapper>

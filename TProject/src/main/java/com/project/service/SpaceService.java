@@ -31,6 +31,9 @@ public interface SpaceService {
 	List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange, int start);
 	int isReviewExist(ReservationsVO vo);
 	int insertReview(SpaceReviewVO vo);
+	int insertQnaQ(SpaceQnaVO vo);
+	int countQna(SpacesVO vo);
+	List<SpaceQnaVO> qnaList(Map<String, Object> params);
 
 	//테스트용
 	public List<String> getAddr1();

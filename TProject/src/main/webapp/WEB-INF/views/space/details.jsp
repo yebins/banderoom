@@ -209,18 +209,6 @@
 		padding-right: 0px;		
 	}
 	
-	@media screen and (max-width: 576px) {
-		.carousel-inner {
-			height: 50vh;
-		}
-		.space-info {
-			padding: 15px !important;
-		}
-		.colleft, .colright {
-			padding: 10px 0px;
-		}
-	}
-	
 	.space-info-subject {
 		font-size: 24px;
 		font-weight: bold;
@@ -598,6 +586,87 @@
 	}
 	.review-nav div.nav-disabled:hover {
 		cursor: default;
+	}
+	
+	.qna-textarea {
+		margin-top: 15px;
+		border: 1px solid lightgray;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border-radius: 10px;
+		height: 100px;
+		width: 100%;
+		resize: none;
+		padding: 15px;
+		font-family: '맑은 고딕';
+	}
+
+	.qna-input-button-wrap {
+		margin-top: 10px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.form-check-input {
+		margin-right: 15px;
+	}
+	
+	.form-check-input:checked {
+    background-color: #fb6544;
+    border-color: #fb6544;
+	}
+	.form-check-input:focus {
+		box-shadow: none;
+		outline: none;
+	}
+	
+	#qna-page-nav {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-top: 1px solid lightgray;
+		margin-top: 15px;
+		padding-top: 15px;
+		height: 70px;
+	}
+	
+	.qna-page-nav-button:hover {
+		cursor: pointer;
+	}
+	.qna-current-page {
+		font-weight: bold;
+	}
+	.qna-current-page:hover {
+		cursor: default;
+	}
+	
+	
+	
+	
+	@media screen and (max-width: 576px) {
+		#wrapper {
+			padding: 60px 10px 100px;
+		}
+		.carousel-inner {
+			height: 50vh;
+		}
+		.space-info {
+			padding: 15px !important;
+		}
+		.colleft, .colright {
+			padding: 10px 0px;
+		}
+		.menu {
+			top: 60px;
+		}
+		
+		.score-wrap {
+			top: 18px;
+			right: 15px;
+		}
+		
+		
 	}
 	
 </style>
@@ -1290,6 +1359,101 @@
 		}
 	})
 	
+	
+	function qnaQSubmit() {
+		
+		if ($("#qna-textarea").val() == '') {
+			alert('내용을 입력해 주세요.');
+			return;
+		}
+		
+		var formData = $("#qna-form").serialize();
+
+		$.ajax({
+			type: "post",
+			url: "insertqnaq.do",
+			data: formData,
+			success: function(data) {
+				
+				if (data == 0) {
+					alert('입력이 완료되었습니다.');
+					$("#qna-textarea").val('');
+				} else if (data == 1) {
+					alert('로그인이 필요합니다.');
+					location.href='/member/glogin.do';
+				} else if (data == 2) {
+					alert('작성에 실패했습니다.');
+				}
+				
+			}
+		})
+	}
+	
+	var qnaCurrentPage = 1;
+	var qnaStartPage = ${qnaStartPage};
+	var qnaEndPage = ${qnaEndPage};
+	var qnaLastPage = ${qnaLastPage};
+	
+	function qnaList(page) {
+		
+		$.ajax({
+			type: "get",
+			url: "qnalist.do",
+			data: "idx=" + ${param.idx} + "&page=" + page,
+			success: function(data) {
+				
+				qnaCurrentPage = page;
+				qnaStartPage = data.qnaStartPage;
+				qnaEndPage = data.qnaEndPage;
+				qnaLastPage = data.qnaLastPage;
+				
+				var qnaList = data.qnaList;
+				var html = '';
+				
+				for (var i = 0; i < qnaList.length; i++) {
+				
+					html += '<div class="review-wrap">';
+					html += '<div class="review-header">';
+					html += '<div class="review-profile-img">';
+					html += '<img src="' + qnaList[i].profileSrc + '">';
+					html += '</div>';
+					html += '<div class="review-nickname" onclick="profileOpen(' + qnaList[i].mIdx + ')">';
+					html += qnaList[i].mNickname;
+					html += '</div></div>';
+					html += '<div class="review-score-wrap">';
+
+					var regDate = new Date(qnaList[i].regDate);
+					var regDateString = "";
+					
+					regDateString += regDate.getFullYear() + ".";
+					if ((regDate.getMonth() + 1) < 10) {
+						regDateString += "0";
+					}
+					regDateString += (regDate.getMonth() + 1) + ".";
+					if (regDate.getDate() < 10) {
+						regDateString += "0";
+					}
+					regDateString += regDate.getDate();
+
+					html += '작성일 ' + regDateString;
+					html += '</div></div>';
+					html += '<div class="review-body">';
+					html += '<div class="review-content">';
+					
+					if (qnaList[i].publicYN == 'N') {
+						html + '<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;"> ';
+					}
+					html += qnaList[i].content;
+					html += '</div></div></div>';
+					
+					$("#qna-elements").html(html);
+				
+				}
+			}
+		})
+		
+	}
+	
 	</script>
 	
 </head>
@@ -1498,6 +1662,97 @@
 							<div class="inner-box-content">
 								<div class="space-info-subject">Q&amp;A</div>
 								<div id="scroll-to-qna"></div>
+								
+								<div id="qna-list">
+									<c:if test="${qnaList.size() == 0}">
+									<div>등록된 Q&amp;A가 없습니다.</div>
+									</c:if>
+									<div id="qna-elements">
+									<c:forEach var="qnaVO" items="${qnaList}">
+									<div class="review-wrap">
+										<div class="review-header">
+											<div class="review-member">
+												<div class="review-profile-img">
+													<img src="${qnaVO.profileSrc}">
+												</div>
+												<div class="review-nickname" onclick="profileOpen(${qnaVO.mIdx})">
+													${qnaVO.mNickname}
+												</div>
+											</div>
+											<div class="review-score-wrap">
+												작성일 <fmt:formatDate value="${qnaVO.regDate}" pattern="yyyy.MM.dd" />
+											</div>
+										</div>
+										<div class="review-body">
+											<div class="review-content">
+												<c:if test="${qnaVO.publicYN == 'N'}">
+												<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">
+												</c:if>${qnaVO.content}
+											</div>
+										</div>
+									</div>
+									</c:forEach>
+									</div>
+								</div>
+								
+								
+								<div id="qna-page-nav">					
+									<c:if test="${qnaLastPage < 6}">
+										<c:forEach var="i" begin="${qnaStartPage}" end="${qnaEndPage}">
+											<c:choose>
+												<c:when test="${i == 1}">
+													<div class="qna-page-nav-button qna-current-page">[${i}]</div>&nbsp;
+												</c:when>
+												<c:otherwise>
+													<div class="qna-page-nav-button" onclick="qnaList(${i})">[${i}]&nbsp;</div>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</c:if>
+									<c:if test="${qnaLastPage > 5}">
+										<c:if test="${qnaStartPage > 5}">
+											<div class="qna-page-nav-button" onclick="qnaList(1)">[1]</div>&nbsp;
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaStartPage - 1})">◀</div>&nbsp;
+										</c:if>
+										
+										<c:forEach var="i" begin="${qnaStartPage}" end="${qnaEndPage}">
+											<c:choose>
+												<c:when test="${i == 1}">
+													<div class="qna-page-nav-button qna-current-page">[${i}]</div>&nbsp;
+												</c:when>
+												<c:otherwise>
+													<div class="qna-page-nav-button" onclick="qnaList(${i})">[${i}]&nbsp;</div>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										
+										<c:if test="${qnaEndPage < qnaLastPage}">
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaEndPage + 1})">▶</div>&nbsp;
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaLastPage})">[${qnaLastPage}]</div>&nbsp;
+										</c:if>
+									</c:if>
+								</div>
+								
+								
+								<c:if test="${login != null}">
+									<form id="qna-form">
+										<input type="hidden" name="spaceIdx" value="${param.idx}">
+										
+										<div class="qna-input-wrap">
+											<textarea id="qna-textarea" class="qna-textarea" name="content" placeholder="호스트에게 질문이 있으신가요?"></textarea>
+											<div class="qna-input-button-wrap">
+												<div class="form-check">
+												  <input class="form-check-input" name="privateChecked" type="checkbox" value="1" id="public_check">
+												  <label class="form-check-label" for="public_check">
+												  	비공개  
+												  </label>
+												</div>
+												<button type="button" class="normal-button accent-button" onclick="qnaQSubmit()">등록</button>
+											</div>
+										</div>
+									</form>
+								</c:if>
+								
 							</div>
 						</div>
 						

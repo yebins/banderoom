@@ -215,6 +215,21 @@ public class SpaceServiceImpl implements SpaceService {
 	public int insertReview(SpaceReviewVO vo) {
 		return dao.insertReview(vo);
 	}
+
+	@Override
+	public int countQna(SpacesVO vo) {
+		return dao.countQna(vo);
+	}
+
+	@Override
+	public int insertQnaQ(SpaceQnaVO vo) {
+		return dao.insertQnaQ(vo);
+	}
+
+	@Override
+	public List<SpaceQnaVO> qnaList(Map<String, Object> params) {
+		return dao.qnaList(params);
+	}
 	
 
 }

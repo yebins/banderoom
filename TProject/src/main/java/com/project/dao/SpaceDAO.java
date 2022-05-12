@@ -167,4 +167,16 @@ public class SpaceDAO {
 	public int insertReview(SpaceReviewVO vo) {
 		return sqlSession.insert("com.project.mapper.spaceMapper.insertReview", vo);
 	}
+	
+	public int insertQnaQ(SpaceQnaVO vo) {
+		return sqlSession.insert("com.project.mapper.spaceMapper.insertQnaQ", vo);
+	}
+	
+	public int countQna(SpacesVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countQna", vo);
+	}
+	
+	public List<SpaceQnaVO> qnaList(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.qnaList", params);
+	}
 }
