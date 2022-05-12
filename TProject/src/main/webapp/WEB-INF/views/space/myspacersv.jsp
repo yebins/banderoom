@@ -154,9 +154,7 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-	}
-	.past-rsv-wrap:not(.past-rsv-wrap:first-child) {
-		border-top: 1px solid lightgray;
+		border-bottom: 1px solid lightgray;
 	}
 	
 	.past-rsv-name {
@@ -175,6 +173,22 @@
 	.small-content {
 		font-size: 14px;
 		margin-left: 5px;
+	}
+	#page-nav {
+		width: 100%;
+		height: 50px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.page-nav-button {
+	
+	}
+	.page-nav-button:not(.current-page) {
+		cursor: pointer;
+	}
+	.page-nav-button.current-page {
+		font-weight: bold;
 	}
 </style>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
@@ -256,8 +270,163 @@
         'top=140, left=200, width=800, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
 	}
 	
-	function reload() {
+	function reload() {	    // 팝업 창에서 호출할 함수
 		location.reload();
+	}
+	function gotoLogin() {
+		location.href="/member/glogin.do";
+	}
+	
+	var currentPage = 1;
+	var startPage = ${startPage};
+	var endPage = ${endPage};
+	var lastPage = ${lastPage};
+	var dateType = "";
+	var dateRange = "";
+	
+	if (${param.dateType != null}) {
+		dateType = "${param.dateType}";
+	}
+	if (${param.dateRange != null}) {
+		dateRange = "${param.dateRange}";
+	}
+	
+	function loadMySpaceRsv(page) {
+		$.ajax({
+			type: "get",
+			url: "loadMySpaceRsv.do",
+			data: "page=" + page + "&dateType=" + dateType + "&dateRange=" + dateRange,
+			success: function(result) {
+				
+				var pastRsv = result.pastRsv;
+				
+				$("#past-rsv").children().each(function() {
+					$(this).remove();
+				})
+				
+				var html = "";
+				
+				for (var i = 0; i < pastRsv.length; i++) {
+					
+					html += '<div class="past-rsv-wrap">';
+					html += '<div class="past-rsv-info-wrap">';
+					html += '<div class="past-rsv-name"><a href="details.do?idx=' + pastRsv[i].idx + '">' + pastRsv[i].name + '</a></div>';
+					html += '<div class="past-rsv-info">';
+					html += '<div class="past-rsv-info-items">';
+					html += '<div class="small-title">공간 사용일</div>';
+					html += '<div class="small-content">';
+					
+					var date = new Date(pastRsv[i].startDate);
+					var dateString = "" + date.getFullYear() + "/";
+					if ((date.getMonth() + 1) < 10) {
+						dateString += "0";
+					}
+					dateString += (date.getMonth() + 1) + "/";
+					if (date.getDate() < 10) {
+						dateString += "0";
+					}
+					dateString += date.getDate() + " ";
+					dateString += date.getHours() + "시~";
+					
+					date = new Date(pastRsv[i].endDate);
+					dateString += date.getHours() + "시, ";
+					
+					dateString += pastRsv[i].rsvHours + "시간";
+					
+					html += dateString;
+					html += '</div></div>&nbsp;&nbsp;';
+					html += '<div class="past-rsv-info-items">';
+					html += '<div class="small-title">예약일</div>';
+					html += '<div class="small-content">';
+					
+					date = new Date(pastRsv[i].resDate);
+					dateString = "" + date.getFullYear() + "/";
+					if ((date.getMonth() + 1) < 10) {
+						dateString += "0";
+					}
+					dateString += (date.getMonth() + 1) + "/";
+					if (date.getDate() < 10) {
+						dateString += "0";
+					}
+					dateString += date.getDate();
+					
+					html += dateString;
+					html += '</div></div></div>';
+					html += '<div class="past-rsv-info">';
+					html += '<div class="past-rsv-info-items">';
+					html += '<div class="small-title">이용료</div>';
+					html += '<div class="small-content">';
+					
+					var cost = pastRsv[i].cost.toLocaleString();
+					
+					html += cost + "원";
+					html += '</div></div>&nbsp;&nbsp;';
+					html += '<div class="past-rsv-info-items">';
+					html += '<div class="small-title">결제 금액</div>';
+					html += '<div class="small-content">';
+					
+					cost = pastRsv[i].totalCost.toLocaleString();
+
+					html += cost + "원";
+					html += '</div></div>&nbsp;&nbsp;</div></div>';
+					html += '<div class="past-rsv-buttons">';
+					
+					if (pastRsv[i].endDate < result.today && result.reviewed[pastRsv[i].resIdx] == 0) {
+						html += '<button class="normal-button accent-button" onclick="review(' + pastRsv[i].resIdx + ')">후기 작성</button>&nbsp;&nbsp;';
+					}
+					
+					html += '<button class="normal-button" onclick="location.href=\'rsvdetails.do?resIdx=' + pastRsv[i].resIdx + '\'">예약 상세</button>';
+					html += '</div></div>';
+				}
+				
+				$("#past-rsv").html(html);
+				
+				
+				$("#page-nav").children().each(function() {
+					$(this).remove();
+				})
+				
+				currentPage = page;
+				startPage = result.startPage;
+				endPage = result.endPage;
+				lastPage = result.lastPage;
+				
+				html = "";
+				
+				if (lastPage < 6) {
+					for (var i = startPage; i <= endPage; i++) {
+						if (i == currentPage) {
+							html += '<div class="page-nav-button current-page">[' + i + ']</div>&nbsp;';
+						} else {
+							html += '<div class="page-nav-button" onclick="loadMySpaceRsv(' + i + ')">[' + i + ']&nbsp;</div>';
+						}
+					}
+				}
+				
+				if (lastPage > 5) {
+					if (startPage > 5) {
+						html += '<div class="page-nav-button" onclick="loadMySpaceRsv(1)">[1]</div>&nbsp;';
+						html += '<div class="page-nav-button" onclick="loadMySpaceRsv(startPage - 1)">◀</div>&nbsp;';
+					}
+
+					for (var i = startPage; i <= endPage; i++) {
+						if (i == currentPage) {
+							html += '<div class="page-nav-button current-page">[' + i + ']</div>&nbsp;';
+						} else {
+							html += '<div class="page-nav-button" onclick="loadMySpaceRsv(' + i + ')">[' + i + ']&nbsp;</div>';
+						}
+					}
+					
+					if (endPage < lastPage) {
+						html += '<div class="page-nav-button" onclick="loadMySpaceRsv(endPage + 1)">▶</div>&nbsp;';
+						html += '<div class="page-nav-button" onclick="loadMySpaceRsv(lastPage)">[' + lastPage + ']</div>&nbsp;';
+					}
+				}
+				
+				$("#page-nav").html(html);
+				
+			}
+		})
 	}
 
 </script>	
@@ -314,6 +483,7 @@
 			</div>
 			<div>
 				<div class="inner-box past-rsv-box">
+					<div id="past-rsv">
 					<c:forEach var="rsvVO" items="${pastRsv}">
 						<div class="past-rsv-wrap">
 							<div class="past-rsv-info-wrap">
@@ -356,6 +526,44 @@
 							</div>
 						</div>
 					</c:forEach>
+					</div>
+					
+					<div id="page-nav">					
+						<c:if test="${lastPage < 6}">
+							<c:forEach var="i" begin="${startPage}" end="${endPage}">
+								<c:choose>
+									<c:when test="${i == 1}">
+										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+									</c:when>
+									<c:otherwise>
+										<div class="page-nav-button" onclick="loadMySpaceRsv(${i})">[${i}]&nbsp;</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</c:if>
+						<c:if test="${lastPage > 5}">
+							<c:if test="${startPage > 5}">
+								<div class="page-nav-button" onclick="loadMySpaceRsv(1)">[1]</div>&nbsp;
+								<div class="page-nav-button" onclick="loadMySpaceRsv(${startPage - 1})">◀</div>&nbsp;
+							</c:if>
+							
+							<c:forEach var="i" begin="${startPage}" end="${endPage}">
+								<c:choose>
+									<c:when test="${i == param.page}">
+										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+									</c:when>
+									<c:otherwise>
+										<div class="page-nav-button" onclick="loadMySpaceRsv(${i})">[${i}]&nbsp;</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							
+							<c:if test="${endPage < lastPage}">
+								<div class="page-nav-button" onclick="loadMySpaceRsv(${endPage + 1})">▶</div>&nbsp;
+								<div class="page-nav-button" onclick="loadMySpaceRsv(${lastPage})">[${lastPage}]</div>&nbsp;
+							</c:if>
+						</c:if>
+					</div>
 				</div>
 			</div>
 			

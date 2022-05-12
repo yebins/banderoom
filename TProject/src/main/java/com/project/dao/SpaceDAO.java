@@ -114,8 +114,8 @@ public class SpaceDAO {
 		return sqlSession.selectOne("com.project.mapper.spaceMapper.spaceReviewCntAvg", vo);
 	}
 	
-	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
-		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceReviewList", vo);
+	public List<SpaceReviewVO> spaceReviewList(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceReviewList", params);
 	}
 	
 	// 테스트용
@@ -152,11 +152,19 @@ public class SpaceDAO {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getCurrentRsv", vo);
 	}
 	
+	public int countPastRsv(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countPastRsv", params);
+	}
+	
 	public List<ReservationsVO> getPastRsv(Map<String, Object> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getPastRsv", params);
 	}
 	
 	public int isReviewExist(ReservationsVO vo) {
 		return sqlSession.selectOne("com.project.mapper.spaceMapper.isReviewExist", vo);
+	}
+	
+	public int insertReview(SpaceReviewVO vo) {
+		return sqlSession.insert("com.project.mapper.spaceMapper.insertReview", vo);
 	}
 }

@@ -10,17 +10,18 @@ public class PagingUtil {
 	private int lastPage; //최종페이지
 	private int start; //쿼리에서 사용할 화면당 글 시작번호
 	private int end; // 쿼리에서 사용할 화면당 글 종료번호
-	private int cntPage=10; //화면에서 보여질 페이징 갯수
+	private int cntPage; //화면에서 보여질 페이징 갯수
 	
 	public PagingUtil() {
 		
 	}
 	
-	public PagingUtil(int total,int nowPage, int perPage) {
+	public PagingUtil(int total,int nowPage, int perPage, int cntPage) {
 		//현재페이지,게시글 갯수,화면당 게시글 갯수 초기화
 		setNowPage(nowPage);
 		setPerPage(perPage);
 		setTotal(total);
+		setCntPage(cntPage);
 		
 		//전체의 최종 페이지번호 계산 lastpage 계산
 		calcLastPage(total,perPage);
@@ -134,5 +135,13 @@ public class PagingUtil {
 
 	public void setEnd(int end) {
 		this.end = end;
+	}
+
+	public int getCntPage() {
+		return cntPage;
+	}
+
+	public void setCntPage(int cntPage) {
+		this.cntPage = cntPage;
 	}
 }

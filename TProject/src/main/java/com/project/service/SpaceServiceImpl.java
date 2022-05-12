@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.dao.SpaceDAO;
+import com.project.util.PagingUtil;
 import com.project.vo.*;
 
 @Service
@@ -94,13 +95,24 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
-		return dao.spaceReviewList(vo);
+	public List<SpaceReviewVO> spaceReviewList(Map<String, Object> params) {
+		return dao.spaceReviewList(params);
 	}
 	
 	@Override
 	public Map<String, Object> spaceReviewCntAvg(SpacesVO vo) {
-		return dao.spaceReviewCntAvg(vo);
+		Map<String, Object> result = dao.spaceReviewCntAvg(vo);
+
+		if (result == null) {
+			result = new HashMap<String, Object>();
+			
+			result.put("count", 0);
+			result.put("avg", 0.0);
+			result.put("spaceidx", vo.getIdx());
+			
+		}
+		
+		return result;
 	}
 	
 	//테스트용
@@ -160,9 +172,27 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange) {
+	public int countPastRsv(GeneralMembersVO vo, String dateType, String dateRange) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		
+		params.put("mIdx", vo.getmIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.countPastRsv(params);
+	}
+
+	@Override
+	public List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange, int start) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("startRow", start);
 		params.put("mIdx", vo.getmIdx());
 		
 		try {
@@ -179,6 +209,11 @@ public class SpaceServiceImpl implements SpaceService {
 	@Override
 	public int isReviewExist(ReservationsVO vo) {
 		return dao.isReviewExist(vo);
+	}
+
+	@Override
+	public int insertReview(SpaceReviewVO vo) {
+		return dao.insertReview(vo);
 	}
 	
 

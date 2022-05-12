@@ -95,6 +95,8 @@
 	
 	.title {
 		margin-top: 40px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid lightgray;
 	}
 	
 	.outter-buttons {
@@ -186,11 +188,13 @@
 	}
 	
 	.space-content {
+		margin-top: 40px;
 		width: 100%;
 	}
 	
 	.space-info {
 		padding: 40px !important;
+		position: relative;
 	}
 	
 	.space-info li {
@@ -417,6 +421,185 @@
 		border-radius: 25px;
 	}
 	
+	.menu {
+		height: 60px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: sticky;
+		top: 0px;
+		margin: 20px auto 0px auto;
+		width: 100%;
+		background: transparent !important;
+		z-index: 99990;
+	}
+	.menu button {
+		margin: 0px 10px;
+	}
+	.space-info:not(.space-info:first-child) {
+		margin-top: 40px;
+	}
+	
+	.score-wrap {
+		display: flex;
+		align-items: center;
+		position: absolute;
+		top: 43px;
+		right: 40px;
+	}
+	.score-avg {
+		font-size: 20px;
+	}
+	.score-stars {
+		display: flex;
+		width: calc(30 * 5)px;
+		height: 30px;
+		background-color: lightgray;
+		position: relative;
+		margin-right: 10px;
+	}
+	.score-color {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: ${reviewCntAvg.get("avg") * 30}px;
+		height: 100%;
+		background-color: #fb6544;
+		z-index: 8;
+	}
+	.score-stars img {
+		width: 30px;
+		z-index: 9;
+	}
+	
+	.review-wrap {
+		border-top: 1px solid lightgray;
+		padding-top: 15px;
+		margin-top: 15px;
+	}
+	
+	.review-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.review-score-stars {
+		display: flex;
+		width: calc(24 * 5)px;
+		height: 24px;
+		background-color: lightgray;
+		position: relative;
+		margin-left: 10px;
+	}
+	.review-score-color {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		background-color: #fb6544;
+		z-index: 8;
+	}
+	.review-score-stars img {
+		width: 24px;
+		z-index: 9;
+	}
+	
+	.review-member {
+		display: flex;
+		align-itmes: center;
+	}
+	
+	.review-profile-img {
+		width: 24px;
+		height: 24px;
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		margin-right: 10px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.review-profile-img img {
+		height: 24px;
+	}
+	
+	.review-nickname {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-weight: bold;
+	}
+	.review-nickname:hover {
+		cursor: pointer;
+	}
+	
+	.review-score-wrap {
+		display: flex;
+		align-items: center;
+	}
+	
+	.review-body {
+		display: flex;
+		margin-top: 15px;
+	}
+	
+	.review-content {
+		flex: 1;
+		padding-right: 15px;
+		word-break: break-all; 
+	}
+	
+	.review-thumb {
+		width: 100px;
+		border-radius: 10px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+	}
+	
+	.review-thumb:hover {
+		cursor: pointer;
+	}
+	.review-thumb:active {
+		filetr: brightness(90%);
+	}
+	
+	.review-orders {
+		margin-top: 30px;
+	}
+	.review-order-button {
+		margin-right: 10px;
+		width: 120px;
+	}
+	.review-nav {
+		border-top: 1px solid lightgray;
+		margin-top: 15px;
+		padding-top: 35px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.review-nav div {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.review-nav img {
+		height: 15px;
+	}
+	.review-nav div:hover {
+		cursor: pointer;
+	}
+	.review-nav div.nav-disabled {
+		filter: opacity(20%);
+	}
+	.review-nav div.nav-disabled:hover {
+		cursor: default;
+	}
+	
 </style>
 
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
@@ -633,7 +816,7 @@
 		}
 	}
 	
-	function drawImage(obj) {
+	function drawImage(src) {
 
 		var div = $("#img"); // 이미지를 감싸는 div
 		var img = $("<img>"); // 이미지
@@ -642,27 +825,33 @@
 	  $(div).css("height", "80vh");
 	    
 		$("#img").children().remove();
-		$("#imgBackOveray").css("visibility", "visible");
 		
 		$(div).append(img);
 		
-		$(img).attr("src", $(obj).attr("src"));
-		
+		$(img).attr("src", src);
+
+		setTimeout(() => {
 		var divAspect = $(div).height() / $(div).width(); // div의 가로세로비는 알고 있는 값이다
 		var imgAspect = $(img).height() / $(img).width();
 		
-	
-		if (imgAspect >= divAspect) {
-		    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
-		    $(img).css("width", "auto");
-		    $(img).css("height", "100%");
-		    $(div).css("width", $(img).width() + "px");
-		} else {
-		    // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
-		    $(img).css("width", "100%");
-		    $(img).css("height", "auto");
-			  $(div).css("height", $(img).height() + "px");
-		}
+			if (imgAspect >= divAspect) {
+			    $(img).css("width", "auto");
+			    $(img).css("height", $(div).height());
+			} else {
+			    $(img).css("width", "100%");
+			    $(img).css("height", "auto");
+			}
+
+			if (imgAspect >= divAspect) {
+			    $(div).css("width", $(img).width() + "px");
+			} else {
+				  $(div).css("height", $(img).height() + "px");
+			}
+
+			$("#imgBackOveray").css("visibility", "visible");
+		}, 200);
+
+		
 	}
 
 
@@ -1008,6 +1197,99 @@
 		
 		
 	}
+	
+	var reviewPage = 1;
+	var reviewLastPage = ${reviewLastPage};
+	var orderType = "regDateDesc";
+	
+	function loadReview(page, order, buttonObj) {
+		
+		if ($(buttonObj).hasClass("nav-disabled")) {
+			return;
+		}
+		
+		$.ajax({
+			type: "get",
+			data: "reviewPage=" + page + "&orderType=" + order + "&idx=" + ${param.idx},
+			url: "loadReview.do",
+			success: function(data) {
+				
+				var html = "";
+
+				for (var i = 0; i < data.length; i++) {
+					html += '<div class="review-wrap">';
+					html += '<div class="review-header">';
+					html += '<div class="review-member">';
+					html += '<div class="review-profile-img">';
+					html += '<img src="' + data[i].profileSrc + '">';
+					html += '</div>';
+					html += '<div class="review-nickname" onclick="profileOpen(' + data[i].mIdx + ')">';
+					html += data[i].mNickname;
+					html += '</div></div>';
+					html += '<div class="review-score-wrap">';
+					
+					var regDate = new Date(data[i].regDate);
+					var regDateString = "";
+					
+					regDateString += regDate.getFullYear() + ".";
+					if ((regDate.getMonth() + 1) < 10) {
+						regDateString += "0";
+					}
+					regDateString += (regDate.getMonth() + 1) + ".";
+					if (regDate.getDate() < 10) {
+						regDateString += "0";
+					}
+					regDateString += regDate.getDate();
+					
+					html += '작성일 ' + regDateString;
+					html += '<div class="review-score-stars">';
+					html += '<div class="review-score-color" style="width: ' + (data[i].score * 24) + 'px"></div>';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '</div></div></div>';
+					html += '<div class="review-body">';
+					html += '<div class="review-content">';
+					html += data[i].content;
+					html += '</div>';
+					
+					if (data[i].pictureSrc != null) {
+						html += '<img class="review-thumb" src="' + data[i].thumbSrc + '" onclick="drawImage(\'' + data[i].pictureSrc + '\')">';
+					}
+					html += '</div></div>';
+					
+					$("#reviewList").html(html);
+					
+					reviewPage = page;
+					orderType = order;
+					
+					$(".review-order-button").removeClass("accent-button");
+					$("#" + orderType).addClass("accent-button");
+					
+					$(".nav-disabled").removeClass("nav-disabled");
+					
+					if (page == 1) {
+						$(".review-page-prev").addClass("nav-disabled");
+					}
+					if (page == reviewLastPage) {
+						$(".review-page-next").addClass("nav-disabled");
+					}
+					
+				}
+				
+			}
+		})
+	}
+	
+	$(function() {
+		$(".review-page-prev").addClass("nav-disabled");
+		if (reviewLastPage == 1) {
+			$(".review-page-next").addClass("nav-disabled");
+		}
+	})
+	
 	</script>
 	
 </head>
@@ -1067,12 +1349,12 @@
 				  	<c:forEach var="i" begin="0" end="${spacePicturesVOs.size() - 1}" varStatus="status">
 				  		<c:if test="${status.first}">
 						    <div class="carousel-item active">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage(this)">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				  		<c:if test="${!status.first}">
 				  			<div class="carousel-item">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage(this)">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				    </c:forEach>
@@ -1107,16 +1389,23 @@
 				</div>
 			</div>
 			
-			<br>
-			
+			<div class="menu">
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-info').scrollIntoView({behavior: 'smooth', block: 'center'});">정보</button>
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-review').scrollIntoView({behavior: 'smooth', block: 'center'});">후기</button>
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-qna').scrollIntoView({behavior: 'smooth', block: 'center'});">Q&amp;A</button>
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-rsv').scrollIntoView({behavior: 'smooth', block: 'center'});">예약</button>
+			</div>
 			<div class="container space-content">
 				<div class="row">
 					<div class="col-sm-8 colleft">
 						<div class="inner-box space-info">
 							<div class="inner-box-content">
 									<div class="space-info-subject">기본정보</div>
-									${spacesVO.getInfo()}
+					
+									<div id="scroll-to-info"></div>
+			
 								
+									${spacesVO.getInfo()}
 									<div class="space-info-subject">보유 장비 / 시설</div>
 									${spacesVO.getFacility()}
 								
@@ -1125,6 +1414,93 @@
 								
 							</div>
 						</div>
+						
+						<div class="inner-box space-info">
+							<div class="inner-box-content">
+								<div class="space-info-subject">후기 ${reviewCntAvg.get("count")}개</div>
+								<div id="scroll-to-review"></div>
+								
+								<c:if test="${reviewCntAvg.get('count') != 0}">
+								
+								<div class="score-wrap">
+									<div class="score-stars">
+										<div class="score-color"></div>
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+									</div>
+									<div class="score-avg"><fmt:formatNumber value="${reviewCntAvg.get('avg')}" pattern="#.0" /> </div>
+								</div>
+								<div class="review-orders">
+									<button id="regDateDesc" class="normal-button accent-button review-order-button" onclick="loadReview(1, 'regDateDesc')">최근 작성 순</button>
+									<button id="scoreDesc" class="normal-button review-order-button" onclick="loadReview(1, 'scoreDesc')">별점 높은 순</button>
+									<button id="scoreAsc" class="normal-button review-order-button" onclick="loadReview(1, 'scoreAsc')">별점 낮은 순</button>
+								</div>
+								<div id="reviewList">
+								<c:forEach var="review" items="${reviewList}">
+									<div class="review-wrap">
+										<div class="review-header">
+											<div class="review-member">
+												<div class="review-profile-img">
+													<img src="${review.profileSrc}">
+												</div>
+												<div class="review-nickname" onclick="profileOpen(${review.mIdx})">
+													${review.mNickname}
+												</div>
+											</div>
+											<div class="review-score-wrap">
+												작성일 <fmt:formatDate value="${review.regDate}" pattern="yyyy.MM.dd" />
+												<div class="review-score-stars">
+													<div class="review-score-color" style="width: ${review.score * 24}px"></div>
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+												</div>
+											</div>
+										</div>
+										<div class="review-body">
+											<div class="review-content">
+												${review.content}
+											</div>
+											<c:if test="${review.pictureSrc != null}">
+												<img class="review-thumb" src="${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
+											</c:if>
+										</div>
+									</div>
+								</c:forEach>
+								</div>
+								
+								<div class="review-nav">
+									<div class="review-page-prev" onclick="loadReview(1, orderType, this)">
+										<img src="/images/page-first.png">
+									</div>
+									<div class="review-page-prev" onclick="loadReview((reviewPage - 1), orderType, this)">
+										<img src="/images/page-prev.png">
+									</div>
+									<div class="review-page-next" onclick="loadReview((reviewPage + 1), orderType, this)">
+										<img src="/images/page-next.png">
+									</div>
+									<div class="review-page-next" onclick="loadReview(reviewLastPage, orderType, this)">
+										<img src="/images/page-last.png">
+									</div>
+								</div>
+								
+								
+								</c:if>
+							</div>
+						</div>
+						
+						<div class="inner-box space-info">
+							<div class="inner-box-content">
+								<div class="space-info-subject">Q&amp;A</div>
+								<div id="scroll-to-qna"></div>
+							</div>
+						</div>
+						
 					</div>
 					
 					<c:if test="${login != null}">
@@ -1134,6 +1510,7 @@
 						<div class="inner-box space-rsv">
 							<div class="inner-box-content">
 								<div class="space-info-subject">예약</div>
+								<div id="scroll-to-rsv"></div>
 								<div class="rsv-info">
 									예약은 오늘 날짜부터 한 달간 가능합니다.
 								</div>
@@ -1234,6 +1611,7 @@
 					
 					
 					</c:if>
+				
 				</div>
 			</div>
 		</div>
