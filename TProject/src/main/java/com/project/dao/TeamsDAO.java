@@ -52,4 +52,8 @@ public class TeamsDAO {
 	public int delete(int teamIdx) {
 		return sqlSession.update("com.project.mapper.teamsMapper.delete", teamIdx);
 	}
+	
+	public int update(TeamsVO vo) {
+		return sqlSession.update("com.project.mapper.teamsMapper.update", vo);
+	}
 }

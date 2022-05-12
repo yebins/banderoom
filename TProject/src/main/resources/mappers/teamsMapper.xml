@@ -135,4 +135,13 @@
 		   SET status = 1
 		 WHERE teamidx = #{teamIdx}
 	</update>
+	
+	<update id="update" parameterType="teamsVO">
+		UPDATE teams
+		   SET mnickname = #{mNickname},
+		   	   title = #{title},
+			   content = #{content},
+			   endDate = #{endDate}
+		 WHERE teamidx = #{teamIdx}
+	</update>
 </mapper>

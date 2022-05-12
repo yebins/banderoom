@@ -190,6 +190,7 @@ button.col-1{
 			팀원 모집
 		</div>
 		<div id="page-content">
+		<button type="button" class="normal-button" onclick="location.href='myteams.do'">내 팀 목록</button>
 			<form action="main.do">
 				<div class="form">
 					<input type="hidden" name="search" value="1">

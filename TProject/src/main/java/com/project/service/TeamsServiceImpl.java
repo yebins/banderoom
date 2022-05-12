@@ -47,6 +47,11 @@ public class TeamsServiceImpl implements TeamsService{
 		return dao.delete(teamIdx);
 	}
 
+	@Override
+	public int update(TeamsVO vo) {
+		return dao.update(vo);
+	}
+
 	
 	
 }

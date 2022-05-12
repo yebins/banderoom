@@ -15,4 +15,5 @@ public interface TeamsService {
 	TeamsVO details(int teamIdx);
 	int apply(ApplicationsVO vo);
 	int delete(int teamIdx);
+	int update(TeamsVO vo);
 }
