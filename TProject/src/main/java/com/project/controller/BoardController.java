@@ -2,6 +2,9 @@ package com.project.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +54,19 @@ public class BoardController {
 		if(session.getAttribute("login") != null) {
 			boardService.insertArticlesVO(vo);
 			
-			return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();
+			if(vo.getbIdx() == 2) {
+				
+				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();		
+				
+			} else if(vo.getbIdx() == 4) {
+			
+				return "redirect:/board/hlist.do";
+			
+			} else {
+			
+				return "redirect:/board/jlist.do";
+			}
+			
 		}else if(session.getAttribute("login") == null){
 			
 			request.setAttribute("msg", "로그인후 이용하세요.");
@@ -214,39 +229,89 @@ public class BoardController {
 		model.addAttribute("searchtitle", params.get("searchtitle"));
 		model.addAttribute("articlesTotal",articlesTotal);
 		
-		return "board/jlist";
+		return "/board/jlist";
+		
+		
+	}
+	
+	@RequestMapping(value="/hlist.do",method=RequestMethod.GET)
+	public String HList(@RequestParam Map<String, Object> params, Model model,HttpServletRequest request) {
+		if(params.get("bIdx") == null) {
+			params.put("bIdx", 4);
+		}
+		System.out.println(params.toString());
+		List<ArticlesVO> list = boardService.Jlist(params,request);
+		
+		if( list.size() >0) {
+			
+			Map<Integer,String> map=new HashMap<Integer, String>();
+			for(int i=0;i<list.size();i++) {
+				String co=list.get(i).getContent().replaceAll(" ", "");
+				
+				
+				if(co.indexOf("<img") > -1) {					
+					int startIndex=co.indexOf("<img");
+					startIndex=co.indexOf("src", startIndex);
+					String co2=co.substring(startIndex+5);
+					String[] co3=co2.split("\"");
+					String url=co3[0];				
+					map.put(i, url);
+				} else {
+					map.put(i, "");
+				}
+				model.addAttribute("imgsrc", map);
+				
+				System.out.println(map.toString());
+			}
+		}
+		
+		int articlesTotal=(Integer)request.getAttribute("count");
+		System.out.println("총게시물"+articlesTotal);
+		
+		//카멜?기법
+		model.addAttribute("list", list);
+		model.addAttribute("status", params.get("status"));
+		model.addAttribute("searchtitle", params.get("searchtitle"));
+		model.addAttribute("articlesTotal",articlesTotal);
+		
+		return "/board/hlist";
 		
 		
 	}
 	
 		@RequestMapping(value="/details.do", method=RequestMethod.GET)
 		public String jlistView(Model model,ArticlesVO vo,@RequestParam Map<String, Object> params,HttpServletRequest request) {
-		System.out.println(params.get("bIdx"));
-		System.out.println(params.get("aIdx"));
 			
 		boardService.readCount(vo);
 		
-		Map<String, Object> one = boardService.jlistOneArticle(params,request);
+		System.out.println(params);
+		
+		Map<String, Object> one = boardService.jlistOneArticle(params,request);//게시글정보
+		List<CommentsVO> cmtList=boardService.commentList(params,request);//댓글리스트
 		
 		GeneralMembersVO writer=new GeneralMembersVO();
-		int a=(int) one.get("mIdx");
-		writer.setmIdx(a);
+		int a=(int) one.get("mIdx");//게시글 작성자 midx
+		writer.setmIdx(a);//게시글 작성자의 midx 삽입
 		
-		writer=memberService.oneMemberInfo(writer);
+		writer=memberService.oneMemberInfo(writer); // midx 넣은 멤버의 정보 가져오기
 		
 		
 		System.out.println("게시글정보"+one.toString());
 		
-		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글총개수?
+		model.addAttribute("page", request.getAttribute("page"));
+		model.addAttribute("cmtList",cmtList);//댓글 리스트
+		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글 총개수?
 		model.addAttribute("vo",one);//게시글정보 보내기
 		model.addAttribute("profileSrc",writer.getProfileSrc());//글 작성자 프로필 사진 
 		
-		return "board/details";
+		
+		
+		return "/board/details";
 	}
 		
 		@RequestMapping(value="/commentWrite.do")
 		@ResponseBody
-		public int commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+		public Map<String, Object> commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
 					
 			
 			if(vo.getContent() != null && vo.getContent() != "") {
@@ -277,18 +342,36 @@ public class BoardController {
 			
 			} else {
 				
-				return -1;
+				return null;
 			}
 		
 		}
 		
 		@RequestMapping(value="/commentList.do")
 		@ResponseBody
-		public List<CommentsVO> commentsList(@RequestParam Map<String, Object> params){
+		public List<Object> commentsList(@RequestParam Map<String, Object> params,HttpServletRequest request){
+			Date nowDate = new Date();
+			
+			List<CommentsVO> list= boardService.commentList(params,request);
+			
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss"); 
+			System.out.println(simpleDateFormat.format(list.get(0).getRegDate()));
+			
+			for(int i=0;i<list.size();i++) {
+				String date=simpleDateFormat.format(list.get(i).getRegDate());
+			}
 			
 			
-			return boardService.commentList(params);
+			List<Object> data=new ArrayList<Object>();
+			data.add(request.getAttribute("count"));
+			data.add(list);
+			data.add(request.getAttribute("page"));
+			
+			
+			
+			return data;
 		}
+		
 }
 
 

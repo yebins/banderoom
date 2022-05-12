@@ -408,10 +408,10 @@ header {
        	<div class="sm-innerlist" onclick="location.href='/board/list.do?bIdx=2&page=1'">
        	자유게시판
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bIdx=4&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/board/hlist.do?page=1'">
        	홍보게시판
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/board/jlist.do?bIdx=3&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='/board/jlist.do?page=1'">
        	중고거래
        	</div>
       </div>

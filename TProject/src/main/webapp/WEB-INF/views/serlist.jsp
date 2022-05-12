@@ -235,7 +235,7 @@
 					'aIdx':aIdx,
 					'bIdx':bIdx
 					}
-			if(confirm('리얼삭제')){
+			if(confirm('삭제하시겠습니까?')){
 				$.ajax({
 					url:"serlistDelete.do",
 					type:"post",
