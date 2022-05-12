@@ -20,146 +20,6 @@
 <script>
 
 
-	function selectType(obj){ //obj:분야
-		var band = ["장르 선택", "락", "팝", "재즈", "직접 입력"];
-		var dance = ["장르 선택", "힙합", "브레이킹", "팝핑", "왁킹", "락킹", "K-POP", "직접 입력"];
-		var target = document.getElementById("genre");
-	
-		if(obj.value == "밴드") {
-			var type = band;
-			$("#part").prop('disabled',false);
-		}
-		else if(obj.value == "댄스") {
-			var type = dance;
-			$("#part").prop('disabled',true);
-			$("#write-part").prop('disabled',true);
-		}
-	
-		target.options.length = 0;
-	
-		for (x in type) {
-			var opt = document.createElement("option");
-			opt.value = type[x];
-			opt.innerHTML = type[x];
-			target.appendChild(opt);
-		}	
-	
-	}
-
-	function selectGenre(obj){ //obj:장르
-		var rock = ["보컬", "일렉 기타", "드럼", "베이스", "키보드", "직접 입력"];
-		var pop = ["보컬", "일렉 기타", "드럼", "베이스", "키보드", "어쿠스틱 기타", "피아노", "신디사이저", "직접 입력"];
-		var jazz = ["보컬", "어쿠스틱 기타", "드럼", "피아노", "베이스", "더블베이스", "콘트라베이스", "트럼펫", "색소폰", "직접 입력"];
-		var target = document.getElementById("part");
-		
-		if($("#type").val() == "밴드"){
-			if(obj.value != "직접 입력"){
-				$("#write-genre").prop('disabled',true);
-				$("#write-part").prop('disabled',true);
-				$("#part").prop('disabled',false);
-				
-				if(obj.value == "락") {
-					var genre = rock;
-				}else if(obj.value == "팝") {
-					var genre = pop;
-				}else if(obj.value == "재즈") {
-					var genre = jazz;
-				}
-			}
-			else if(obj.value == "직접 입력") {
-				$("#write-genre").prop('disabled',false);
-				$("#write-part").prop('disabled',false);
-				$("#part").prop('disabled',true);
-				
-			}
-			
-		}else if($("#type").val() == "댄스"){
-			
-			if(obj.value == "직접 입력") {
-				$("#write-genre").prop('disabled',false);
-				$("#write-part").prop('disabled',true);
-				$("#part").prop('disabled',true);
-				
-			}else{
-				$("#write-genre").prop('disabled',true);
-				$("#write-part").prop('disabled',true);
-			}
-		}
-		
-		target.options.length = 0;
-	
-		for (x in genre) {
-			var opt = document.createElement("option");
-			opt.value = genre[x];
-			opt.innerHTML = genre[x];
-			target.appendChild(opt);
-		}	
-
-	}
-	
-	function selectPart(obj){ //obj:파트
-		
-		if(obj.value == "직접 입력"){
-			$("#write-part").prop('disabled',false);
-		}
-		else if(obj.value != "직접 입력") {
-			$("#write-part").prop('disabled',true);
-			
-		}
-		
-	}
-	
-	
-	function count(type)  {
-		var result = $("#result").text();
-		if(type == 'plus'){
-			$(".left-btn").attr("disabled", false);
-			result = parseInt(result)+1;
-		}else if(type == 'minus'){
-			if(result == 1){
-				$(".left-btn").attr("disabled", true);
-			}else{
-			$(".left-btn").attr("disabled", false);
-			result = parseInt(result)-1;
-			}
-		}$("#result").text(result);
-	}
-	
-	function addPart(){
-		var type = $("#type").val();
-		var part = $("#part").val();
-		var people = $("#result").text();
-		
-		
-		if(type == "밴드" && part != "장르를 선택하세요."){
-			if(part == null || part == "직접 입력"){
-				var div = $("<div class='parts'>");
-				$(".select-parts").append(div);
-				$(div).append("<span class='select-part' name='part'>"+$('#write-part').val()+" "+people+"명</span>");
-				$(div).append("<button type='button' class='x' onclick='remove(this)'>x</button>");
-				$(div).append("<input type='hidden' name='name' value='"+$('#write-part').val()+"'>");
-				$(div).append("<input type='hidden' name='capacity' value='"+people+"'>");
-			}else{
-				var div = $("<div class='parts'>");
-				$(".select-parts").append(div);
-				$(div).append("<span class='select-part' name='part'>"+part+" "+people+"명</span>");
-				$(div).append("<button type='button' class='x' onclick='remove(this)'>x</button>");
-				$(div).append("<input type='hidden' name='name' value='"+part+"'>");
-				$(div).append("<input type='hidden' name='capacity' value='"+people+"'>");
-			}
-		}else if(type == "댄스"){
-			$(".select-parts").empty();
-			$(".select-parts").append("<span class='select-part' name='capacity'>"+people+"명</span>");
-			$(".select-parts").append("<input type='hidden' name='capacity' value='"+people+"'>");
-			
-		}
-		$("#write-part").val("");
-		
-	}
-	
-	function remove(obj){
-		$(obj).parent().remove();
-	}
 	
 	
 	
@@ -225,112 +85,27 @@
 	   
 	}
 	
-	$(function() {
-		
-		$.ajax({
-			type: "get",
-			url: "/space/getlocations.do",
-			success: function(data) {
-				locations = data;
-				var addr1 = [];
-				
-				for (var i = 0; i < data.length ; i++) {
-					addr1[i] = data[i].addr1;
-				}
-				
-				addr1 = addr1.filter((v, i) => addr1.indexOf(v) === i);
-				
-				
-				for (var i = 0; i < addr1.length ; i++) {
-					var html = "<option>" + addr1[i] + "</option>"
-					$("#addr1").append(html);
-				}
-				
+	
 
-				$("select[name=addr1]").val("${param.addr1}");
-				
-				if ($("select[name=addr1]").val() != '') {
-					showAddr2();
-				}
-			}
-		})
-	})
 	
-	function showAddr2() {
-		
-		if ($("#addr1").val() == "") {
-			$("#addr2").val("");
-			return;
-		}
-		
-		$("#addr2").children().each(function() {
-			$(this).remove();
-		});
-	
-		
-		$("#addr2").append("<option value=''>지역 소분류</option>")	;
-		
-		for (var i = 0; i < locations.length; i++) {
-			if (locations[i].addr1 == $("#addr1").val()) {
-				var html = "<option>" + locations[i].addr2 + "</option>";
-				$("#addr2").append(html);
-			}
-		}
-	}	
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <style>
-.form-select{
-	margin-right:10px;
-	width: 170px;
-	height: 35px;
-	border-radius:17.5px;
-}
-.form-control{
-	margin-right:10px;
-	width:200px;
-	height: 35px;
-	border-radius:17.5px;
-}
-.search{
-	width:600px;
-	margin-right:10px;
-}
 .form{
-    width: 100%;
-    text-align: center;
-    margin: auto;
-    margin-bottom:5px;
-    padding: 30px 50px 14px;
+    margin-bottom:10px;
+    padding: 15px;
     border-radius: 15px;
     background: white;
     box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
 }
-.search-top{
-	display:flex;
+.terms-list{
+    padding-left: 5px;
 }
-.people-num{
-	height:35px;
-	margin-right:10px;
-}
-.people-num>button{
-	background: #fff;
-	border: 1px solid #ced4da;
-}
-.left-btn{
-	border-top-left-radius: 17.5px;
-    border-bottom-left-radius: 17.5px;
-}
-.right-btn{
-	border-top-right-radius: 17.5px;
-    border-bottom-right-radius: 17.5px;
-}
-.person{
-	line-height: 35px;
-}
-.add-part{
-    font-size: 13px;
+.terms{
+    padding: 6px;
+    font-size: 14px;
+    margin-right:5px;
 }
 .inner-box{
 	margin-bottom: 100px;
@@ -338,38 +113,8 @@
 .inner-box-content{
 	margin:10px 0px;
 }
-.list-content{
-	width:100%;
-	height:470px;
-}
-.list-title{
-	width:100%;
-}
 .dropdown-toggle::after {
 	display:none;
-}
-.select-parts{
-	text-align: left;
-	margin-bottom: 15px;
-}
-.select-part{
-	border:1px solid #ced4da;
-    border-radius: 17.5px;
-    padding: 6px;
-    font-size: 12px;
-    background: #FBE6B2;
-    margin-right:5px;
-}
-.parts{
-	display:inline-block;
-}
-.x{
-	font-size: 5px;
-    height: 20px;
-    width: 20px;
-    border: 1px solid lightgray;
-    border-radius: 10px;
-	margin-right: 15px;
 }
 </style>
 <title>팀원구하기 글등록</title>
@@ -383,59 +128,40 @@
 			팀원 모집글 수정
 		</div>
 		<div id="page-content">
-			<form action="register.do" method="post">
-			<input type="hidden" name="mIdx" value="${login.mIdx}">
+			<form action="update.do" method="post" name="updateForm">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
-				<div class="form">
-					<div class="search-top">
-						<select class="form-select form-select-sm" name="addr1" id="addr1" onchange="showAddr2()">
-							<option value="" selected hidden>지역</option>
-						</select>
-						<select class="form-select form-select-sm" name="addr2" id="addr2">
-							<option value="" selected hidden>세부지역</option>
-						</select>
-						<select class="form-select form-select-sm" name="teamLevel">
-							<option selected hidden>팀 레벨</option>
-							<option>초급</option>
-							<option>중급</option>
-							<option>고급</option>
-						</select>
-						<select class="form-select form-select-sm" name="type" id="type" onchange="selectType(this)">
-							<option selected hidden>분야 선택</option>
-							<option>밴드</option>
-							<option>댄스</option>
-						</select>
-						<select class="form-select form-select-sm" name="genre" id="genre" onchange="selectGenre(this)">
-							<option>분야를 선택하세요.</option>
-						</select>
-						<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" disabled>
-					</div><br>
-					
-					<div class="mb-3 d-flex search-bottom">
-						<select class="form-select form-select-sm part" id="part" onchange="selectPart(this)">
-							<option>장르를 선택하세요.</option>
-						</select>
-						<input class="form-control form-control-sm" id="write-part" type="text" name="part" placeholder="파트 입력" disabled>
-						<div class="btn-group people-num">
-							<button type="button" class="btn btn-outline-secondary left-btn" onclick='count("minus")' disabled="disabled">-</button>
-							<button type="button" class="btn btn-outline-secondary"><span id="result">1</span>명</button>
-							<button type="button" class="btn btn-outline-secondary right-btn"onclick="count('plus')">+</button>
-						</div>
-						<button type="button" class="normal-button add-part" style="width:40px; margin-right:10px;" onclick="addPart()">추가</button>
-						<input class="form-control form-control-sm" placeholder="마감 날짜 선택" name="endDate" id="datepicker">
+			<input type="hidden" name="teamIdx" value="${details.teamIdx}">
+				
+				<div class="form" style="text-align: left;">
+				
+					<div class="terms-list">
+						<span class='terms'><b>지역</b> ${details.addr1} ${details.addr2}</span>
+						<span class='terms'><b>팀 레벨</b> ${details.teamLevel}</span>
+						<span class='terms'><b>분야</b> ${details.type}</span>
+						<span class='terms'><b>장르</b> ${details.genre}</span>
 					</div>
-						<div class="select-parts">
+					<div class="terms-list">
+						<span class='terms'><b>파트/인원</b> 
+							<c:forEach var="parts" items="${parts}" varStatus="lastPart">
+							${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
+							</c:forEach>
+						</span>
+						<span class='terms'><b>마감날짜</b>
+						
+							<input type="text" id="datepicker" name="endDate" 
+							value='<fmt:parseDate value="${details.endDate}" var="endDate" pattern="yyyy-MM-dd"/><fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>'>
+							
+						</span>
 					</div>
 				</div>
 			
-			
 				<div class="inner-box" style="height:700px;">
 					<div>
-						<input type="text" name="title" class="form-control list-title" placeholder="제목을 입력하세요.">
+						<input type="text" name="title" class="form-control list-title" value="${details.title}">
 					</div>
 					<div class="inner-box-content">
 						<form method="post">
-							<textarea name="content" class="form-control" id="summernote" style="width:100%;"></textarea>
+							<textarea name="content" class="form-control" id="summernote" style="width:100%;">${details.content}</textarea>
 						</form>
 					</div>
 					<div class="inner-box-button-wrap">

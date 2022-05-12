@@ -204,7 +204,8 @@
 	   $('#summernote').summernote('fontName', '맑은 고딕');
 	   
 	   $("#datepicker").datepicker({
-			language: 'ko'
+		   minDate: new Date(),
+		   language: 'ko'
 		}); 
 	   
 	});
@@ -276,7 +277,76 @@
 				$("#addr2").append(html);
 			}
 		}
-	}	
+	}
+	
+	function regFormCheck(){
+		
+		var addr1 = document.getElementById("addr1");
+		var addr2 = document.getElementById("addr2");
+		var teamLevel = document.getElementById("teamLevel");
+		var type = document.getElementById("type");
+		var genre = document.getElementById("genre");
+		var writeGenre = document.getElementById("write-genre");
+		var part = document.getElementsByClassName("select-part");
+		var endDate = document.getElementById("datepicker");
+		var title = document.getElementById("title");
+		var content = document.getElementById("summernote");
+		
+		if(addr1.value == ""){
+			alert("지역을 선택해주세요.");
+			return false;
+		}
+		
+		if(addr2.value == ""){
+			alert("세부지역을 선택해주세요.");
+			return false;
+		}
+		
+		if(teamLevel.value == ""){
+			alert("팀 레벨을 선택해주세요.");
+			return false;
+		}
+		
+		if(type.value == ""){
+			alert("분야를 선택해주세요.");
+			return false;
+		}
+		
+		if(genre.value == "장르 선택"){
+			alert("장르를 선택해주세요.");
+			return false;
+		}else if(genre.value == "직접 입력"){
+			if(writeGenre.value == ""){
+				alert("장르를 직접 입력해주세요.");
+				return false;
+			}
+		}
+		
+		if(part.value == undefined && part.length == 0){
+			alert("파트 및 인원을 선택해주세요.");
+			console.log(part);
+			console.log(part.value);
+			return false;
+		}
+		
+		if(endDate.value == ""){
+			alert("마감날짜를 선택해주세요.");
+			return false;
+		}
+		
+		if(title.value == ""){
+			alert("제목을 입력해주세요.");
+			return false;
+		}
+		
+		if(content.value == ""){
+			alert("내용을 입력해주세요.");
+			return false;
+		}
+		
+		document.regForm.submit();
+	}
+	
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -383,7 +453,7 @@
 			팀원 모집하기
 		</div>
 		<div id="page-content">
-			<form action="register.do" method="post">
+			<form action="register.do" method="post" name="regForm">
 			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
 				<div class="form">
@@ -394,26 +464,26 @@
 						<select class="form-select form-select-sm" name="addr2" id="addr2">
 							<option value="" selected hidden>세부지역</option>
 						</select>
-						<select class="form-select form-select-sm" name="teamLevel">
-							<option selected hidden>팀 레벨</option>
+						<select class="form-select form-select-sm" name="teamLevel" id="teamLevel">
+							<option value="" selected hidden>팀 레벨</option>
 							<option>초급</option>
 							<option>중급</option>
 							<option>고급</option>
 						</select>
 						<select class="form-select form-select-sm" name="type" id="type" onchange="selectType(this)">
-							<option selected hidden>분야 선택</option>
+							<option value="" selected hidden>분야 선택</option>
 							<option>밴드</option>
 							<option>댄스</option>
 						</select>
 						<select class="form-select form-select-sm" name="genre" id="genre" onchange="selectGenre(this)">
-							<option>분야를 선택하세요.</option>
+							<option value="">분야를 선택하세요.</option>
 						</select>
 						<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" disabled>
 					</div><br>
 					
 					<div class="mb-3 d-flex search-bottom">
 						<select class="form-select form-select-sm part" id="part" onchange="selectPart(this)">
-							<option>장르를 선택하세요.</option>
+							<option value="">장르를 선택하세요.</option>
 						</select>
 						<input class="form-control form-control-sm" id="write-part" type="text" name="part" placeholder="파트 입력" disabled>
 						<div class="btn-group people-num">
@@ -431,7 +501,7 @@
 			
 				<div class="inner-box" style="height:700px;">
 					<div>
-						<input type="text" name="title" class="form-control list-title" placeholder="제목을 입력하세요.">
+						<input type="text" id="title" name="title" class="form-control list-title" placeholder="제목을 입력하세요.">
 					</div>
 					<div class="inner-box-content">
 						<form method="post">
@@ -439,7 +509,7 @@
 						</form>
 					</div>
 					<div class="inner-box-button-wrap">
-						<button type="submit" class="normal-button accent-button" style="margin-right: 8px;">등록하기</button> 
+						<button type="button" class="normal-button accent-button" style="margin-right: 8px;" onclick="regFormCheck()">등록하기</button> 
 						<button type="button" class="normal-button" onclick="location.href='/teams/main.do'">취소하기</button>
 					</div>
 				</div>
