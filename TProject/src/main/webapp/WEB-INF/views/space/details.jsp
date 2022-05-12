@@ -1414,6 +1414,7 @@
 				
 					html += '<div class="review-wrap">';
 					html += '<div class="review-header">';
+					html += '<div class="review-member">'
 					html += '<div class="review-profile-img">';
 					html += '<img src="' + qnaList[i].profileSrc + '">';
 					html += '</div>';
@@ -1441,14 +1442,50 @@
 					html += '<div class="review-content">';
 					
 					if (qnaList[i].publicYN == 'N') {
-						html + '<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;"> ';
+						html += '<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;"> ';
 					}
 					html += qnaList[i].content;
 					html += '</div></div></div>';
 					
 					$("#qna-elements").html(html);
-				
+					
 				}
+
+
+				html = "";
+				
+				if (qnaLastPage < 6) {
+					for (var i = qnaStartPage; i <= qnaEndPage; i++) {
+						if (i == qnaCurrentPage) {
+							html += '<div class="qna-page-nav-button qna-current-page">[' + i + ']</div>&nbsp;';
+						} else {
+							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">[' + i + ']&nbsp;</div>';
+						}
+					}
+				}
+				
+				if (qnaLastPage > 5) {
+					if (qnaStartPage > 5) {
+						html += '<div class="qna-page-nav-button" onclick="qnaList(1)">[1]</div>&nbsp;';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaStartPage - 1)">◀</div>&nbsp;';
+					}
+
+					for (var i = qnaStartPage; i <= qnaEndPage; i++) {
+						if (i == currentPage) {
+							html += '<div class="qna-page-nav-button qna-current-page">[' + i + ']</div>&nbsp;';
+						} else {
+							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">[' + i + ']&nbsp;</div>';
+						}
+					}
+					
+					if (qnaEndPage < qnaLastPage) {
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaEndPage + 1)">▶</div>&nbsp;';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaLastPage)">[' + qnaLastPage + ']</div>&nbsp;';
+					}
+				}
+				
+				$("#qna-page-nav").html(html);
+			
 			}
 		})
 		
