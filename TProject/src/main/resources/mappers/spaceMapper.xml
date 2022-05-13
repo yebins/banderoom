@@ -514,4 +514,35 @@
 		order by regDate desc
 		limit #{start}, 5
 	</select>
+	
+	<update id="updateQnaA" parameterType="spaceQnaVO">
+	 	update space_qna set
+	 		answer = #{answer},
+	 		answerdate = now()
+	 	where qnaidx = #{qnaIdx}
+	</update>
+	
+	<update id="deleteQnaA" parameterType="spaceQnaVO">
+	 	update space_qna set
+	 		answer = null,
+	 		answerdate = null
+	 	where qnaidx = #{qnaIdx}
+	</update>
+	
+	<select id="qnaInfo" parameterType="spaceQnaVO" resultType="spaceQnaVO">
+		select * from space_qna
+		where qnaIdx = #{qnaIdx}
+	</select>
+	
+	<delete id="deleteQna" parameterType="spaceQnaVO">
+		delete from space_qna
+		where qnaIdx = #{qnaIdx}
+	</delete>
+	
+	<update id="updateQnaQ" parameterType="spaceQnaVO">
+		update space_qna set
+			content = #{content},
+			publicyn = #{publicYN}
+		where qnaidx = #{qnaIdx}
+	</update>
 </mapper>

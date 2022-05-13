@@ -68,4 +68,10 @@ public class SpaceQnaVO extends GeneralMembersVO {
 	public void setAnswerDate(Date answerDate) {
 		this.answerDate = answerDate;
 	}
+	@Override
+	public String toString() {
+		return "SpaceQnaVO [qnaIdx=" + qnaIdx + ", spaceIdx=" + spaceIdx + ", mIdx=" + mIdx + ", mNickname=" + mNickname
+				+ ", content=" + content + ", publicYN=" + publicYN + ", regDate=" + regDate + ", answer=" + answer
+				+ ", answerDate=" + answerDate + "]";
+	}
 }

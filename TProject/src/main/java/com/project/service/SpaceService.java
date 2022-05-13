@@ -34,6 +34,11 @@ public interface SpaceService {
 	int insertQnaQ(SpaceQnaVO vo);
 	int countQna(SpacesVO vo);
 	List<SpaceQnaVO> qnaList(Map<String, Object> params);
+	int insertQnaA(SpaceQnaVO vo);
+	int deleteQnaA(SpaceQnaVO vo);
+	SpaceQnaVO qnaInfo(SpaceQnaVO vo);
+	int deleteQna(SpaceQnaVO vo);
+	int updateQnaQ(SpaceQnaVO vo);
 
 	//테스트용
 	public List<String> getAddr1();

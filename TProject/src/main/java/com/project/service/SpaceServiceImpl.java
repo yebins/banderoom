@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.dao.SpaceDAO;
-import com.project.util.PagingUtil;
 import com.project.vo.*;
 
 @Service
@@ -229,6 +228,31 @@ public class SpaceServiceImpl implements SpaceService {
 	@Override
 	public List<SpaceQnaVO> qnaList(Map<String, Object> params) {
 		return dao.qnaList(params);
+	}
+
+	@Override
+	public int insertQnaA(SpaceQnaVO vo) {
+		return dao.insertQnaA(vo);
+	}
+
+	@Override
+	public int deleteQnaA(SpaceQnaVO vo) {
+		return dao.deleteQnaA(vo);
+	}
+
+	@Override
+	public SpaceQnaVO qnaInfo(SpaceQnaVO vo) {
+		return dao.qnaInfo(vo);
+	}
+
+	@Override
+	public int deleteQna(SpaceQnaVO vo) {
+		return dao.deleteQna(vo);
+	}
+	
+	@Override
+	public int updateQnaQ(SpaceQnaVO vo) {
+		return dao.updateQnaQ(vo);
 	}
 	
 

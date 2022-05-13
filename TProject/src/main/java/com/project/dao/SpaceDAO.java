@@ -179,4 +179,24 @@ public class SpaceDAO {
 	public List<SpaceQnaVO> qnaList(Map<String, Object> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.qnaList", params);
 	}
+	
+	public int insertQnaA(SpaceQnaVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.updateQnaA", vo);
+	}
+
+	public int deleteQnaA(SpaceQnaVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.deleteQnaA", vo);
+	}
+	
+	public SpaceQnaVO qnaInfo(SpaceQnaVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.qnaInfo", vo);
+	}
+	
+	public int deleteQna(SpaceQnaVO vo) {
+		return sqlSession.delete("com.project.mapper.spaceMapper.deleteQna", vo);
+	}
+	
+	public int updateQnaQ(SpaceQnaVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.updateQnaQ", vo);
+	}
 }
