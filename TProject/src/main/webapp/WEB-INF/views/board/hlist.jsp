@@ -165,7 +165,9 @@
 				</c:forEach>
 			</c:if>
 			<div class="content-write">
+			<c:if test="${login != null}">>
 				<button class="normal-button accent-button" onclick="location.href='/board/register.do?bIdx=4'">글쓰기</button>
+			</c:if>
 			</div>
 				<c:set var="articlesTotal" value="${articlesTotal}"/>
 				<c:set var="page" value="${(param.page == null)?1:param.page}"/>

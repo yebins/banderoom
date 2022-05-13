@@ -120,18 +120,18 @@
 		border: 1px solid #ccbb;
 	    border-radius: 10px;
 	}
-	#uploaded-file img{
+	.uploaded-file img{
 		width:100px;
 		height:100px;
 	}
-	#uploaded-file {
+	.uploaded-file {
 		align-items:center;
 		display:none;
 		border:3px solid #ccbb;
 		margin-top:20px;
 	}
 	
-	#uploaded-file span{
+	.uploaded-file span{
 	    margin: 20px;
 	    border-radius: 5px;
 	}
@@ -152,6 +152,18 @@
     	width:70px;
     	background-color:#f5f5f5;
     }
+    .details-button{
+    	display:flex;
+    	justify-content:end;
+    	padding-right:20px;
+    }
+   	
+   	.commentModify{
+   		display:block;
+   	}
+   	.commentHidden{
+   		display:none;
+   	}
 </style>
 <script>
 
@@ -281,6 +293,7 @@
 			success:function(list){
 				console.log(list[0]);
 				console.log(list[1]);
+				console.log(list[2]);
 				var htmls="";
 				
 				if(list[1].length <1){
@@ -293,6 +306,9 @@
 						htmls+='<div class="comment-area-content-toparea-left">'
 						htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="'+el.mProfileSrc+'" style="width:22.5px; height:100%;"/>'+el.mNickname+ " "+'</a>'
 						htmls+='<a>'+el.regDate+" "+'</a><a onclick="commentReply('+el.cIdx+')">답글달기</a>';
+						if(el.mIdx == list[3]){
+						htmls+='<a onclick="commentModify('+el.cIdx+')"> 수정하기 </a>';							
+						}
 						htmls+='</div>'
 						htmls+='<div class="comment-area-content-toparea-right">'
 						htmls+='<span></b></span>'
@@ -308,7 +324,11 @@
 						htmls+='</div>'
 						htmls+='</div>'
 						htmls+='</li>'
-						htmls+=''
+						/* 수정하기 , 답글달기 */					
+						htmls+='<div id="commentModify('+el.cIdx+')" class="commentHidden">'
+						htmls+='123123123123123123123'
+						htmls+='</div>'
+						
 					})
 					var htmlss="";
 					
@@ -346,35 +366,7 @@
 					htmlss+='<button onclick="commentList('+(startNum+5)+')" style="border-radius:10px;display:'+next+'";>다음</button>'
 					htmlss+='<button onclick="commentList('+lastNum+')" style="border-radius:10px;">끝페이지</button>'
 					
-						/* <div>
-							<form id="commentfile">
-							<input type="hidden" name="aIdx" value="${param.aIdx}">
-							<input type="hidden" name="bIdx" value="${param.bIdx}">
-							<input type="hidden" name="mIdx" value="${login.mIdx}">
-							<input type="hidden" name="mNickname" value="${login.nickname}">
-							<label style="margin-bottom:10px">
-								<strong style="padding-left:5px;">댓글 쓰기</strong>
-							</label>
-							<label style="margin-bottom:10px">
-								<input type="file" id="file" name="commentSrc" style='display:none' onchange="bbbb(event)" accept="image/*">
-								<label for="file">
-									<a><strong>사진 올리기</strong></a>
-								</label>
-							</label>
-							<div class="comment-area-write-content">
-								<c:choose>
-									<c:when test="${login.mIdx != null}">
-										<textarea id="comment-write-content" name="content" class="comment-area-write-content-area"></textarea>
-										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${login.mIdx}')">
-									</c:when>
-									<c:otherwise>
-										<textarea id="comment-write-content"  class="comment-area-write-content-area" placeholder="댓글은 로그인 후 작성 가능합니다" onclick="location.href='/member/glogin.do'"></textarea>
-										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" disabled>
-									</c:otherwise>
-								</c:choose>
-							</div>
-							</form>
-						</div> */
+						
 				}
 	
 				$("#commentUl").html(htmls);
@@ -417,8 +409,9 @@
 				if(result.result > 0){
 					alert('댓글쓰기성공');
 					$("#comment-write-content").val('');
-					$("#uploaded-file").css('display','none');
-					$("#uploaded-file>img").remove();
+					$("#uploaded-file-write").css('display','none');
+					$("#uploaded-file-write>img").remove();
+					$("#file").val('');
 					commentList(result.lastPage);
 				} else {
 					console.log(result);
@@ -434,10 +427,27 @@
 			var reader=new FileReader(); //파일리더 객체생성 
 			
 			reader.onload=function(event){ //onload 됐을 시 발생할 이벤트 추가
+				
 				var img=document.createElement("img");//요소생성
 				img.setAttribute("src",event.target.result);//이 이벤트를 발생한 곳의 값을 따와서 설정
-				document.querySelector("div#uploaded-file").appendChild(img);
-				document.querySelector("div#uploaded-file").style.display='inline-flex';
+				$("div#uploaded-file-write>img").remove();
+				document.querySelector("div#uploaded-file-write").appendChild(img);
+				document.querySelector("div#uploaded-file-write").style.display='inline-flex';
+				
+			};
+			
+			reader.readAsDataURL(event.target.files[0]);
+
+		}
+		
+		function cccc(event,index){
+			var reader=new FileReader(); //파일리더 객체생성 
+			
+			reader.onload=function(event){ //onload 됐을 시 발생할 이벤트 추가
+				var img=document.createElement("img");//요소생성
+				img.setAttribute("src",event.target.result);//이 이벤트를 발생한 곳의 값을 따와서 설정
+				document.querySelector("div#uploaded-file"+index).appendChild(img);
+				document.querySelector("div#uploaded-file"+index).style.display='inline-flex';
 				
 			};
 			
@@ -447,6 +457,15 @@
 		
 		function commentReply(obj){
 			console.log(obj);
+		}
+		
+		function commentModify(obj){
+			console.log(obj);
+			let aa=document.querySelector('#commentModify'+obj+');
+			console.log(aa);
+			aa.addEventListener('click',function(){
+				aa.classList.toggle('commentModify');
+			})
 		}
 </script>
 </head>
@@ -485,21 +504,21 @@
 					</div>
 				</div>
 				<div class="details-button">
-					<%-- <form action="delete.do">
+					 <form action="delete.do">
 						<input type="hidden" name="aIdx" value="${param.aIdx}">
 						<input type="hidden" name="bIdx" value="${param.bIdx}">
 						<input type="hidden" name="mIdx" value="${vo.mIdx}">
-						<c:if test="${login.mIdx != vo.mIdx}">
-							<button class="normal-button" id="delete" style="margin-left: 15px;">삭제</button>
+						<c:if test="${login.mIdx eq vo.mIdx}">
+							<button class="normal-button" id="delete" style="margin-left: 15px;" onclick="confirm('삭제하시겠습니까?')">삭제</button>
 						</c:if>	
 					</form>
 					<form action="update.do" method="get">
 						<input type="hidden" name="aIdx" value="${param.aIdx}">
 						<input type="hidden" name="bIdx" value="${param.bIdx}">
-						<c:if test="${login.mIdx == vo.mIdx}">
+						<c:if test="${login.mIdx eq vo.mIdx}">
 							<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
 						</c:if>	
-					</form> --%>
+					</form> 
 				</div>
 				<!-- 댓글영역 -->
 				<div class="comment-area">
@@ -513,7 +532,7 @@
 						<c:set var="startNum" value="${page-(page-1)%5}"/>	
 						<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(cmtTotal/10),'.')}"/>
 						<c:if test="${fn:length(cmtList) gt 0}">
-							<c:forEach var="item" items="${cmtList}">
+							<c:forEach var="item" items="${cmtList}" varStatus="st">
 							<li class="comment-area-ul-li">
 								<div class="comment-area-content">
 									<div class="comment-area-content-toparea">
@@ -521,6 +540,9 @@
 							 				<a class="miniprofile" onclick="profileOpen('${item.mIdx}')"><img src="${item.mProfileSrc}" style="width:22.5px; height:100%;"/>${item.mNickname}</a>
 							 				<a><fmt:formatDate value="${item.regDate}" pattern="YY-MM-dd HH:mm:ss"/></a>
 							 				<a onclick="commentReply()">답글달기</a>
+								 		<c:if test="${item.mIdx == login.mIdx}">
+							 				<a onclick="commentModify('${item.cIdx}')">수정하기</a>								 				
+								 		</c:if>
 							 			</div>
 										<div class="comment-area-content-toparea-right">
 										</div>
@@ -534,6 +556,36 @@
 									</div>
 								</div>
 							 </li>
+							 <!-- 수정하기 -->
+							  <div id="commentModify${item.cIdx}" style="display:none;">
+							 	<div class="comment-area-write" id="comment-area-write_id">
+							 		<div id="uploaded-file${st.index}" class="uploaded-file">
+										<span><b>업로드된사진</b></span>
+										<c:if test="${item.picSrc ne null}">
+									 			<img src="${item.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
+										</c:if>
+									</div>
+									<form id="commentfile">
+										<input type="hidden" name="aIdx" value="${param.aIdx}">
+										<input type="hidden" name="bIdx" value="${param.bIdx}">
+										<input type="hidden" name="mIdx" value="${login.mIdx}">
+										<input type="hidden" name="mNickname" value="${login.nickname}">
+										<label style="margin-bottom:10px">
+											<strong style="padding-left:5px;">댓글 쓰기</strong>
+										</label>
+										<label style="margin-bottom:10px">
+											<input type="file" id="file" name="commentSrcaaa" style='display:none' onchange="cccc(event,'${st.index}')" accept="image/*">
+											<label for="file">
+												<a><strong>사진 올리기</strong></a>
+											</label>
+										</label>
+										<div class="comment-area-write-content">
+												<textarea id="comment-write-content" name="content" class="comment-area-write-content-area"></textarea>
+												<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${login.mIdx}')">
+										</div>
+									</form>
+								</div>
+							 </div>
 							</c:forEach>
 						</c:if>
 					</ul>
@@ -552,10 +604,10 @@
 					</div>
 					</c:if>
 					<!-- 댓글 등록 -->
-					<div id="uploaded-file">
+					<div id="uploaded-file-write" class="uploaded-file">
 						<span><b>업로드된사진</b></span>
 					</div>
-					<div class="comment-area-write">
+					<div class="comment-area-write" id="comment-area-write_id">
 						<form id="commentfile">
 							<input type="hidden" name="aIdx" value="${param.aIdx}">
 							<input type="hidden" name="bIdx" value="${param.bIdx}">
@@ -565,7 +617,7 @@
 								<strong style="padding-left:5px;">댓글 쓰기</strong>
 							</label>
 							<label style="margin-bottom:10px">
-								<input type="file" id="file" name="commentSrc" style='display:none' onchange="bbbb(event)" accept="image/*">
+								<input type="file" id="file" name="commentSrc" style="display:none" onchange="bbbb(event)" accept="image/*">
 								<label for="file">
 									<a><strong>사진 올리기</strong></a>
 								</label>

@@ -137,12 +137,12 @@
 					<option <c:if test="${status eq '99'}">selected</c:if> value="99">거래완료</option>
 				</select>
 				<select name="searchType" class="jlist-status">
-					<option <c:if test="${searchType eq 'title'}">selected</c:if> value="title">제목</option>
-					<option <c:if test="${searchType eq 'mNickname'}">selected</c:if> value="mNickname">작성자</option>
+					<option <c:if test="${param.searchType eq 'title'}">selected</c:if> value="title">제목</option>
+					<option <c:if test="${param.searchType eq 'mNickname'}">selected</c:if> value="mNickname">작성자</option>
 				</select>
 				<input type="hidden" name="page" value="1">
 				<input type="hidden" name="bIdx" value="3">
-       	 		<input class="form-control me-3 JlistSearch" name="searchValue" id="searchtitle" type="text" placeholder="Search" aria-label="Search" value="${searchValue}">
+       	 		<input class="form-control me-3 JlistSearch" name="searchValue" id="searchtitle" type="text" placeholder="Search" aria-label="Search" value="${param.searchValue}">
         			<button class="accent-button normal-button search-button">검색</button>
      		 </form>
 		</div>
@@ -176,7 +176,9 @@
 				</c:forEach>
 			</c:if>
 			<div class="content-write">
+				<c:if test="${login != null}">
 				<button class="normal-button accent-button" onclick="location.href='/board/register.do?bIdx=3'">글쓰기</button>
+				</c:if>
 			</div>
 				<c:set var="articlesTotal" value="${articlesTotal}"/>
 				<c:set var="page" value="${(param.page == null)?1:param.page}"/>
