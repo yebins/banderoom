@@ -641,6 +641,29 @@
 		cursor: default;
 	}
 	
+	.qna-buttons {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 15px;
+	}
+
+	.qna-modify-buttons {
+		display: flex;
+		align-items: center;
+	}
+
+	.qna-buttons button {
+		height: 30px;
+		border-radius: 15px;
+		width: 80px;
+		font-size: 14px;
+	}
+
+	.qna-modify-buttons button {
+		margin-left: 10px;
+	}
 	
 	
 	
@@ -1377,6 +1400,7 @@
 				
 				if (data == 0) {
 					alert('입력이 완료되었습니다.');
+					qnaList(1);
 					$("#qna-textarea").val('');
 				} else if (data == 1) {
 					alert('로그인이 필요합니다.');
@@ -1445,6 +1469,28 @@
 						html += '<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;"> ';
 					}
 					html += qnaList[i].content;
+					html += '</div></div>';
+					
+					html += '<div class="qna-buttons">';
+					html += '<div class="qna-answer-button">';
+					
+					if (${hlogin.mIdx == spacesVO.hostIdx}) {
+						html += '<button class="normal-button" onclick="qnaAnswer(' + qnaList[i].qnaIdx + ', this)">답변하기</button>';
+					}
+					
+					html += '</div>';
+					html += '<div class="qna-modify-buttons">';
+					
+					var loginMidx = 0;
+					<c:if test="${login != null}">
+					loginMidx = ${login.mIdx};
+					</c:if>
+					
+					if (qnaList[i].mIdx == loginMidx) {
+						html += '<button class="normal-button" onclick="qnaDelete(' + qnaList[i].qnaIdx + ')">삭제</button>';
+						html += '<button class="normal-button" onclick="qnaUpdate(' + qnaList[i].qnaIdx + ', this)">수정</button>';
+					}
+
 					html += '</div></div></div>';
 					
 					$("#qna-elements").html(html);
@@ -1488,6 +1534,17 @@
 			
 			}
 		})
+		
+	}
+	
+	function qnaAnswer(qnaIdx, buttonObj) {
+		$(".answer-form").each(function() {
+			$(this).remove();
+		})
+		var answerForm = $("<div id='answer-form'>");
+		$(answerForm).append("<div id='answer-textarea-wrap'");
+		$(answerForm).append("<div id='answer-buttons'");
+		$('#answer-textarea-wrap').append('<textarea id="answer-textarea" name="answer">');
 		
 	}
 	
@@ -1727,13 +1784,26 @@
 												</c:if>${qnaVO.content}
 											</div>
 										</div>
+										<div class="qna-buttons">
+											<div class="qna-answer-button">
+												<c:if test="${hlogin.mIdx == spacesVO.hostIdx}">
+												<button class="normal-button" onclick="qnaAnswer(${qnaVO.qnaIdx}, this)">답변하기</button>
+												</c:if>
+											</div>
+											<div class="qna-modify-buttons">
+												<c:if test="${qnaVO.mIdx == login.mIdx}">
+												<button class="normal-button" onclick="qnaDelete(${qnaVO.qnaIdx})">삭제</button>
+												<button class="normal-button" onclick="qnaUpdate(${qnaVO.qnaIdx}, this)">수정</button>
+												</c:if>
+											</div>
+										</div>
 									</div>
 									</c:forEach>
 									</div>
 								</div>
 								
 								
-								<div id="qna-page-nav">					
+								<div id="qna-page-nav">
 									<c:if test="${qnaLastPage < 6}">
 										<c:forEach var="i" begin="${qnaStartPage}" end="${qnaEndPage}">
 											<c:choose>

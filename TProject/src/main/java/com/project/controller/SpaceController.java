@@ -186,6 +186,8 @@ public class SpaceController {
 	@RequestMapping(value = "/details.do")
 	public String details(Model model, SpacesVO vo, HttpServletRequest request) {
 		
+		vo = spaceService.details(vo);
+		
 		// 리뷰 목록 불러오기
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("spacesVO", vo);
@@ -205,7 +207,7 @@ public class SpaceController {
 		params.put("start", reviewPu.getStart() - 1);
 		
 		model.addAttribute("reviewLastPage", reviewPu.getLastPage());
-		model.addAttribute("spacesVO", spaceService.details(vo));
+		model.addAttribute("spacesVO", vo);
 		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
 		model.addAttribute("reviewList", spaceService.spaceReviewList(params));
 		model.addAttribute("reviewCntAvg", spaceService.spaceReviewCntAvg(vo));
@@ -219,34 +221,42 @@ public class SpaceController {
 		params.put("spacesVO", vo);
 		
 		List<SpaceQnaVO> qnaList = spaceService.qnaList(params);
+
+		// 비공개 처리: 자신이 등록한 공간일 경우 모두 공개
+		// 로그인 안 된 경우에는 비공개 글 모두 비공개
+		// 일반 회원 로그인 된 경우에는 자신 글 빼고 비공개
+		HostMembersVO hlogin = new HostMembersVO();
+		if (request.getSession().getAttribute("hlogin") != null)  {
+			hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+		}
 		
-		// 비공개 처리: 로그인 안 된 경우에는 비공개 글 모두 비공개
-		// 로그인 된 경우에는 자신 글 빼고 비공개
-		if (request.getSession().getAttribute("login") == null) {
-			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
-			
-			while(qnaIterator.hasNext()) {
-				SpaceQnaVO qnaVO = qnaIterator.next();
+		if (vo.getHostIdx() != hlogin.getmIdx()) {
+			if (request.getSession().getAttribute("login") == null) {
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
 				
-				if (qnaVO.getPublicYN().equals("N")) {
-					qnaVO.setContent("비공개 질문입니다.");
-					if (qnaVO.getAnswer() != null) {
-						qnaVO.setAnswer("비공개 답변입니다.");
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N")) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
 					}
 				}
-			}
-		} else {
-			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
-			
-			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
-			
-			while(qnaIterator.hasNext()) {
-				SpaceQnaVO qnaVO = qnaIterator.next();
+			} else {
+				GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
 				
-				if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
-					qnaVO.setContent("비공개 질문입니다.");
-					if (qnaVO.getAnswer() != null) {
-						qnaVO.setAnswer("비공개 답변입니다.");
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+				
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
 					}
 				}
 			}
@@ -851,6 +861,7 @@ public class SpaceController {
 	@ResponseBody
 	public Map<String, Object> qnaList(HttpServletRequest request, Integer page, SpacesVO spacesVO) {
 		
+		spacesVO = spaceService.details(spacesVO);
 		Map<String, Object> data = new HashMap<String, Object>();
 		Map<String, Object> params = new HashMap<String, Object>();
 
@@ -861,33 +872,43 @@ public class SpaceController {
 		
 		List<SpaceQnaVO> qnaList = spaceService.qnaList(params);
 		
-		// 비공개 처리: 로그인 안 된 경우에는 비공개 글 모두 비공개
-		// 로그인 된 경우에는 자신 글 빼고 비공개
-		if (request.getSession().getAttribute("login") == null) {
-			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
-			
-			while(qnaIterator.hasNext()) {
-				SpaceQnaVO qnaVO = qnaIterator.next();
+		
+		
+		// 비공개 처리: 자신이 등록한 공간일 경우 모두 공개
+		// 로그인 안 된 경우에는 비공개 글 모두 비공개
+		// 일반 회원 로그인 된 경우에는 자신 글 빼고 비공개
+		HostMembersVO hlogin = new HostMembersVO();
+		if (request.getSession().getAttribute("hlogin") != null)  {
+			hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+		}
+		
+		if (spacesVO.getHostIdx() != hlogin.getmIdx()) {
+			if (request.getSession().getAttribute("login") == null) {
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
 				
-				if (qnaVO.getPublicYN().equals("N")) {
-					qnaVO.setContent("비공개 질문입니다.");
-					if (qnaVO.getAnswer() != null) {
-						qnaVO.setAnswer("비공개 답변입니다.");
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N")) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
 					}
 				}
-			}
-		} else {
-			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
-			
-			Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
-			
-			while(qnaIterator.hasNext()) {
-				SpaceQnaVO qnaVO = qnaIterator.next();
+			} else {
+				GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
 				
-				if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
-					qnaVO.setContent("비공개 질문입니다.");
-					if (qnaVO.getAnswer() != null) {
-						qnaVO.setAnswer("비공개 답변입니다.");
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+				
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
 					}
 				}
 			}
