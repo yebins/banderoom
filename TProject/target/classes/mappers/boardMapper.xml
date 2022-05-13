@@ -118,6 +118,7 @@
 			FROM articles art,(select @rownum:=0) rn_art
 		]]>
 			where bIdx=#{bIdx}
+			and status!=1
 			<if test='searchValue != null and !"".equals(searchValue)'>
 			and ${searchType} like CONCAT('%',#{searchValue},'%')
 			</if>
@@ -134,6 +135,7 @@
 		select count(aIdx)
 		from articles
 		where bidx=#{bIdx}
+		and status!=1
 		<if test='searchValue != null and !"".equals(searchValue)'>
 		and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>

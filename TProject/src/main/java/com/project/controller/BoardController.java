@@ -135,7 +135,16 @@ public class BoardController {
 		
 		if(login.getmIdx() == vo.getmIdx()) {
 			boardService.boardUpdate(vo);
-			return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();
+			if(vo.getbIdx() == 4) {
+				return "redirect:/board/hlist.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else if (vo.getbIdx() == 2) {
+				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else {
+				return "redirect:/board/jlist.do?page=1&bIdx=" + vo.getbIdx();				
+			}
+			
 		}else {
 			
 			request.setAttribute("msg", "수정할 수 없습니다.");
@@ -153,7 +162,16 @@ public class BoardController {
 		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 		if(login.getmIdx() == vo.getmIdx()) {
 			boardService.listDelete(vo);
-			return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();
+			
+			if(vo.getbIdx() == 4) {
+				return "redirect:/board/hlist.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else if (vo.getbIdx() == 2) {
+				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else {
+				return "redirect:/board/jlist.do?page=1&bIdx=" + vo.getbIdx();				
+			}
 		}else{
 			
 			request.setAttribute("msg", "삭제권한이 없습니다.");
@@ -361,11 +379,18 @@ public class BoardController {
 				String date=simpleDateFormat.format(list.get(i).getRegDate());
 			}
 			
+			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
+			
+			if(request.getSession().getAttribute("login") != null) {
+				System.out.println("현재로그인한사람의 midx"+login.getmIdx());				
+			}
+			
 			
 			List<Object> data=new ArrayList<Object>();
 			data.add(request.getAttribute("count"));
 			data.add(list);
 			data.add(request.getAttribute("page"));
+			data.add(login.getmIdx());
 			
 			
 			
