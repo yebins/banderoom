@@ -486,6 +486,25 @@
 		)
 	</insert>
 	
+	<select id="getReviewInfo" parameterType="spaceReviewVO" resultType="spaceReviewVO">
+		select * from space_review
+		where resIdx = #{resIdx}
+	</select>
+	
+	<delete id="deleteReview" parameterType="spaceReviewVO">
+		delete from space_review
+		where resIdx = #{resIdx}
+	</delete>
+	
+	<update id="updateReview" parameterType="spaceReviewVO">
+		update space_review set
+			picturesrc = #{pictureSrc},
+			thumbsrc = #{thumbSrc},
+			score = #{score},
+			content = #{content}
+		where residx = #{resIdx}
+	</update>
+	
 	<insert id="insertQnaQ" parameterType="spaceQnaVO">
 		insert into space_qna (
 			spaceidx,

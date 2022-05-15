@@ -214,6 +214,21 @@ public class SpaceServiceImpl implements SpaceService {
 	public int insertReview(SpaceReviewVO vo) {
 		return dao.insertReview(vo);
 	}
+	
+	@Override
+	public SpaceReviewVO getReviewInfo(SpaceReviewVO vo) {
+		return dao.getReviewInfo(vo);
+	}
+	
+	@Override
+	public int deleteReview(SpaceReviewVO vo) {
+		return dao.deleteReview(vo);
+	}
+	
+	@Override
+	public int updateReview(SpaceReviewVO vo) {
+		return dao.updateReview(vo);
+	}
 
 	@Override
 	public int countQna(SpacesVO vo) {

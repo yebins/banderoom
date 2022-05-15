@@ -563,6 +563,13 @@
 		margin-right: 10px;
 		width: 120px;
 	}
+	
+	.review-footer {
+		margin-top: 15px;
+		display: flex;
+		justify-content: flex-end;
+	}
+	
 	.review-nav {
 		border-top: 1px solid lightgray;
 		margin-top: 15px;
@@ -657,14 +664,14 @@
 		align-items: center;
 	}
 
-	.qna-buttons button {
+	.qna-buttons button, .review-footer button, .qna-update-button {
 		height: 30px;
 		border-radius: 15px;
 		width: 80px;
 		font-size: 14px;
 	}
 
-	.qna-modify-buttons button {
+	.qna-modify-buttons button, .review-footer button, .qna-update-button {
 		margin-left: 10px;
 	}
 	
@@ -721,7 +728,7 @@
 		display: flex;
 		margin-top: 15px;
 	}
-	.qna-answer-modify-button, .qna-update-button {
+	.qna-answer-modify-button, {
 		height: 30px;
 		border-radius: 15px;
 		width: 80px;
@@ -1400,7 +1407,16 @@
 					if (data[i].pictureSrc != null) {
 						html += '<img class="review-thumb" src="' + data[i].thumbSrc + '" onclick="drawImage(\'' + data[i].pictureSrc + '\')">';
 					}
-					html += '</div></div>';
+					html += '</div>';
+					
+					if (data[i].mIdx == mIdx) {
+						html += '<div class="review-footer">';
+						html += '<button class="normal-button" onclick="updateReview(' + data[i].resIdx + ')">수정</button>';
+						html += '<button class="normal-button" onclick="deleteReview(' + data[i].resIdx + ')">삭제</button>';
+						html += '</div>';
+					}
+					
+					html += '</div>';
 					
 					$("#reviewList").html(html);
 					
@@ -1836,6 +1852,42 @@
 		})
 	}
 	
+	function reload() {
+		location.reload();
+	}
+	
+	function updateReview(resIdx) {
+		window.open('reviewupdate.do?resIdx=' + resIdx, '_blank', 
+        'top=140, left=200, width=800, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
+	}
+	
+	function deleteReview(resIdx) {
+		if (!confirm('정말 삭제하시겠습니까?')) {
+			return;
+		}
+		
+		$.ajax({
+			type: "post",
+			url: "deletereview.do",
+			data: "resIdx=" + resIdx,
+			success: function(data) {
+				
+				if (data == 0) {
+					alert('삭제가 완료되었습니다.');
+					reload();
+					$("#qna-update-textarea").val('');
+				} else if (data == 1) {
+					alert('로그인이 필요합니다.');
+					location.href='/member/glogin.do';
+				} else if (data == 2) {
+					alert('삭제 권한이 없습니다.');
+				} else if (data == 3) {
+					alert('삭제에 실패했습니다.');
+				}
+			}
+		})
+	}
+	
 	</script>
 	
 </head>
@@ -2016,6 +2068,12 @@
 												<img class="review-thumb" src="${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
 											</c:if>
 										</div>
+										<c:if test="${review.mIdx == login.mIdx}">
+										<div class="review-footer">
+											<button class="normal-button" onclick="updateReview(${review.resIdx})">수정</button>
+											<button class="normal-button" onclick="deleteReview(${review.resIdx})">삭제</button>
+										</div>
+										</c:if>
 									</div>
 								</c:forEach>
 								</div>

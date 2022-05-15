@@ -168,6 +168,18 @@ public class SpaceDAO {
 		return sqlSession.insert("com.project.mapper.spaceMapper.insertReview", vo);
 	}
 	
+	public SpaceReviewVO getReviewInfo(SpaceReviewVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.getReviewInfo", vo);
+	}
+	
+	public int deleteReview(SpaceReviewVO vo) {
+		return sqlSession.delete("com.project.mapper.spaceMapper.deleteReview", vo);
+	}
+	
+	public int updateReview(SpaceReviewVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.updateReview", vo);
+	}
+	
 	public int insertQnaQ(SpaceQnaVO vo) {
 		return sqlSession.insert("com.project.mapper.spaceMapper.insertQnaQ", vo);
 	}

@@ -26,6 +26,9 @@
 		font-size: 28px;
 		font-weight: bold;
 	}
+	.big-title:not(.big-title:first-child) {
+		margin-top: 60px;
+	}
 	
 	.inner-box.current-rsv {
 		background-color: #FBE6B2;
@@ -439,6 +442,7 @@
 			공간 예약 내역
 		</div>
 		<div id="page-content">
+			<c:if test="${currentRsv.size() > 0}">
 			<div class="big-title">
 				현재 예약중인 공간
 			</div>
@@ -464,8 +468,9 @@
 					</div>
 				</div>
 			</c:forEach>
+			</c:if>
+			<div class="big-title">
 			<div id="scroll-here"></div>
-			<div class="big-title" style="margin-top: 60px;">
 				예약 내역
 			</div>
 			<div class="filters-wrap">

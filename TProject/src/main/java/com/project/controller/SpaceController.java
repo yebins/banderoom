@@ -1062,6 +1062,89 @@ public class SpaceController {
 			
 		}
 	}
+	
+	@RequestMapping(value = "deletereview.do")
+	@ResponseBody
+	public int deleteReview(SpaceReviewVO vo, HttpServletRequest request) {
+		
+		vo = spaceService.getReviewInfo(vo);
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+
+			int loginIdx = ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx();
+			
+			if (vo.getmIdx() != loginIdx) {
+				return 2; // 권한 없음
+			}
+			
+			int result = spaceService.deleteReview(vo);
+			
+			if (result > 0) {
+				return 0; // 정상 입력
+			} else {
+				return 3; // 삭제 오류
+			}
+		}
+	}
+	
+	@RequestMapping(value = "reviewupdate.do", method = RequestMethod.GET)
+	public String reviewUpdate(Model model, ReservationsVO vo, HttpServletRequest request) {
+		SpaceReviewVO reviewVO = new SpaceReviewVO();
+		reviewVO.setResIdx(vo.getResIdx());
+		model.addAttribute("reviewVO", spaceService.getReviewInfo(reviewVO));
+		model.addAttribute("rsvVO", spaceService.getRSV(vo));
+		return "space/reviewupdate";
+	}
+	
+	@RequestMapping(value = "reviewupdate.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int reviewUpdate(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, int fileChanged, HttpServletRequest request) throws Exception {
+		
+		SpaceReviewVO original = spaceService.getReviewInfo(vo);
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+
+			int loginIdx = ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx();
+			
+			if (original.getmIdx() != loginIdx) {
+				return 2; // 권한 없음
+			}
+			
+			if (fileChanged == 1) {
+				
+				if (picture.getSize() != 0) {
+	
+					Map<String, String> pictureSrc = uploadPicture(request, picture, 200, 200);
+					
+				  vo.setPictureSrc(pictureSrc.get("original"));
+				  vo.setThumbSrc(pictureSrc.get("thumb"));
+				  
+				} else {
+				  vo.setPictureSrc(null);
+				  vo.setThumbSrc(null);
+				}
+			
+			}
+			
+		  GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		  
+		  vo.setmIdx(login.getmIdx());
+		  vo.setmNickname(login.getNickname());
+
+		  int result = spaceService.updateReview(vo);
+		  
+		  if (result > 0) {
+		  	return 0; // 정상 입력		  	
+		  } else {
+		  	return 3; // 입력 오류
+		  }
+		}
+	}
+	
 	/*
 	@RequestMapping(value="setlist.do")
 	public String setListData() {
