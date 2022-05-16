@@ -168,6 +168,9 @@
 									<c:otherwise>[거래상태 등록해주세요]</c:otherwise>
 								</c:choose>
 							<span>${list.get(item).title}</span>
+							<c:if test="${fn:length(cmt) gt 0}">
+							<span>[${cmt.get(item)}]</span>
+							</c:if>
 						</div>
 						<div class="inner-box-content-articleInfo">
 						<span><fmt:formatDate pattern="yyyy.MM.dd" value="${list.get(item).regDate}"/></span>&nbsp;<span> 조회수 ${list.get(item).readCount} </span><span class="miniprofile" style="margin-left:auto;" onclick="profileOpen('${list.get(item).mIdx}')">${list.get(item).mNickname}</span>

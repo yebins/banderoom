@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentRepliesVO;
 import com.project.vo.CommentsVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
@@ -32,4 +33,9 @@ public interface BoardService {
 	List<ArticlesVO> bestArticles();
 	List<ArticlesVO> pageCount(Map<String, Object> map);
 	List<ArticlesVO> list(Map<String, Object> map, HttpServletRequest request);
+	int commentUpdate(CommentsVO vo);
+	int commentDelete(CommentsVO vo);
+	int commentCount(int aIdx);
+	int replyWrite(CommentRepliesVO vo);
+	List<CommentRepliesVO> replylist(int cIdx);
 }
