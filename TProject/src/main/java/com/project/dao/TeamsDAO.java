@@ -56,4 +56,32 @@ public class TeamsDAO {
 	public int update(TeamsVO vo) {
 		return sqlSession.update("com.project.mapper.teamsMapper.update", vo);
 	}
+	
+	public List<TeamsVO> reglist(int mIdx) {
+		return sqlSession.selectList("com.project.mapper.teamsMapper.reglist", mIdx);
+	}
+	
+	public List<ApplicationsVO> applist(int mIdx) {
+		return sqlSession.selectList("com.project.mapper.teamsMapper.applist", mIdx);
+	}
+	
+	public int finish(int teamIdx) {
+		return sqlSession.update("com.project.mapper.teamsMapper.finish", teamIdx);
+	}
+	
+	public List<ApplicationsVO> myapp(int teamIdx) {
+		return sqlSession.selectList("com.project.mapper.teamsMapper.myapp", teamIdx);
+	}
+	
+	public void updateStatus() {
+		sqlSession.update("com.project.mapper.teamsMapper.updateStatus");
+	}
+	
+	public int updateApp(ApplicationsVO vo) {
+		return sqlSession.update("com.project.mapper.teamsMapper.updateApp", vo);
+	}
+	
+	public int deleteApp(int appIdx) {
+		return sqlSession.delete("com.project.mapper.teamsMapper.deleteApp", appIdx);
+	}
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.service.TeamsService;
 import com.project.vo.ApplicationsVO;
+import com.project.vo.GeneralMembersVO;
 import com.project.vo.PartsVO;
 import com.project.vo.TeamsVO;
 import com.sun.java.swing.plaf.windows.resources.windows;
@@ -148,7 +149,6 @@ public class TeamsController {
 			model.addAttribute("url", "/member/glogin.do");
 			
 			return "alert";
-			
 		}
 		
 		int result = teamsService.delete(teamIdx);
@@ -203,8 +203,109 @@ public class TeamsController {
 	@RequestMapping(value="/myteams.do")
 	public String myteams(Model model, HttpServletRequest request) {
 		
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		}else {
+			GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+			
+			int mIdx = login.getmIdx();
+			List<TeamsVO> teamsList = teamsService.reglist(mIdx);
+			
+			Map<Integer, List<PartsVO>> partsMap = new HashMap<Integer, List<PartsVO>>();
+			
+			for (int i=0; i<teamsList.size(); i++) {
+				List<PartsVO> partsList = teamsService.selectParts(teamsList.get(i).getTeamIdx());
+				partsMap.put(teamsList.get(i).getTeamIdx(), partsList);
+			}
+			
+			model.addAttribute("reglist", teamsList);
+			model.addAttribute("partsMap", partsMap);
+			
+			
+			List<ApplicationsVO> appList = teamsService.applist(mIdx); 
+			
+			model.addAttribute("applist", appList);
+			
+			return "teams/myteams";
+		}
+	}
+	
+	@RequestMapping(value="/finish.do")
+	@ResponseBody
+	public String finish(HttpServletRequest request, Model model, int teamIdx) {
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		}
 		
+		if(teamsService.finish(teamIdx) > 0) {
+			return "ok";
+		}
+		return "";
+	}
+	
+	@RequestMapping(value="/myapp.do")
+	public String myapp(HttpServletRequest request, Model model, int teamIdx, int mIdx) {
+		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+		if (login == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		}else if(login.getmIdx() != mIdx) {
+			
+			model.addAttribute("msg", "본인이 작성한 글만 볼 수 있습니다.");
+			model.addAttribute("url", "/member/main.do");
+			
+			return "alert";
+		}else {
+			
+			List<ApplicationsVO> vo = teamsService.myapp(teamIdx);
+			
+			model.addAttribute("applist", vo);
+			
+			return "teams/myapp";
+		}
 		
-		return "teams/myteams";
+	}
+	
+	@RequestMapping(value="/updateStatus.do")
+	@ResponseBody
+	public void updateStatus() {
+		teamsService.updateStatus();
+	}
+	
+	@RequestMapping(value="/updateApp.do")
+	@ResponseBody
+	public int updateApp(String content, int appIdx) {
+		ApplicationsVO vo = new ApplicationsVO();
+		
+		vo.setContent(content);
+		vo.setAppIdx(appIdx);
+		
+		int result = teamsService.updateApp(vo);
+		if(result > 0) {
+			return 1;
+		}
+		return 0;
+	}
+	
+	@RequestMapping(value="/deleteApp.do")
+	@ResponseBody
+	public int deleteApp(int appIdx) {
+		
+		int result = teamsService.deleteApp(appIdx);
+		if(result > 0) {
+			return 1;
+		}
+		return 0;
 	}
 }

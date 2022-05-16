@@ -52,6 +52,39 @@ public class TeamsServiceImpl implements TeamsService{
 		return dao.update(vo);
 	}
 
-	
+	@Override
+	public List<TeamsVO> reglist(int mIdx) {
+		return dao.reglist(mIdx);
+	}
+
+	@Override
+	public List<ApplicationsVO> applist(int mIdx) {
+		return dao.applist(mIdx);
+	}
+
+	@Override
+	public int finish(int teamIdx) {
+		return dao.finish(teamIdx);
+	}
+
+	@Override
+	public List<ApplicationsVO> myapp(int teamIdx) {
+		return dao.myapp(teamIdx);
+	}
+
+	@Override
+	public void updateStatus() {
+		dao.updateStatus();
+	}
+
+	@Override
+	public int updateApp(ApplicationsVO vo) {
+		return dao.updateApp(vo);
+	}
+
+	@Override
+	public int deleteApp(int appIdx) {
+		return dao.deleteApp(appIdx);
+	}
 	
 }
