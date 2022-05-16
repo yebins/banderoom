@@ -18,12 +18,12 @@ public class BoardDAO {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<ArticlesVO> list(Map map){
+	public List<ArticlesVO> list(Map<String, Object> map){
 		
 		return sqlSession.selectList("com.project.mapper.boardMapper.list", map);
 	}
 	
-	public List<ArticlesVO> pageCount(Map map){
+	public List<ArticlesVO> pageCount(Map<String, Object> map){
 		
 		return sqlSession.selectList("com.project.mapper.boardMapper.pageCount", map);
 	}
@@ -123,6 +123,11 @@ public class BoardDAO {
 	public int commentCount(Map<String, Object> map) {
 		
 		return sqlSession.selectOne("com.project.mapper.boardMapper.commentCount",map);
+	}
+	
+	public List<ArticlesVO> bestArticles(){
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.bestArticles");
 	}
 	
 }

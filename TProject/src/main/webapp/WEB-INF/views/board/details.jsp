@@ -152,6 +152,10 @@
     	width:70px;
     	background-color:#f5f5f5;
     }
+    .details-button{
+    	display: felx;
+    	flex-direction: row-reverse;
+    }
 </style>
 <script>
 
@@ -374,7 +378,7 @@
 								</c:choose>
 							</div>
 							</form>
-						</div> */
+						</div>*/
 				}
 	
 				$("#commentUl").html(htmls);
@@ -485,11 +489,11 @@
 					</div>
 				</div>
 				<div class="details-button">
-					<%-- <form action="delete.do">
+					<form action="delete.do">
 						<input type="hidden" name="aIdx" value="${param.aIdx}">
 						<input type="hidden" name="bIdx" value="${param.bIdx}">
 						<input type="hidden" name="mIdx" value="${vo.mIdx}">
-						<c:if test="${login.mIdx != vo.mIdx}">
+						<c:if test="${login.mIdx == vo.mIdx}">
 							<button class="normal-button" id="delete" style="margin-left: 15px;">삭제</button>
 						</c:if>	
 					</form>
@@ -499,7 +503,7 @@
 						<c:if test="${login.mIdx == vo.mIdx}">
 							<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
 						</c:if>	
-					</form> --%>
+					</form>
 				</div>
 				<!-- 댓글영역 -->
 				<div class="comment-area">

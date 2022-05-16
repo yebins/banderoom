@@ -23,12 +23,9 @@ public class BoardServiceImpl implements BoardService {
 	private BoardDAO dao;
 	
 	@Override
-	public List<ArticlesVO> list(int bIdx, String searchtitle, int page) {
-		if(searchtitle == null) searchtitle="";
-		Map<String,Object> map=new HashMap<String, Object>();
-		map.put("searchtitle", searchtitle);
-		map.put("bIdx", bIdx);
+	public List<ArticlesVO> list(Map<String, Object> map, HttpServletRequest request) {
 		
+		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
 		PagingUtil pu = new PagingUtil(dao.pageCount(map).size(), page, 10, 10);
 		
 		map.put("start", pu.getStart());
@@ -119,11 +116,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<ArticlesVO> pageCount(int bIdx, String searchtitle) {
-		if(searchtitle == null) searchtitle="";
-		Map<String,Object> map=new HashMap<String, Object>();
-		map.put("searchtitle", searchtitle);
-		map.put("bIdx", bIdx);
+	public List<ArticlesVO> pageCount(Map<String, Object> map) {
 		
 		return dao.pageCount(map);
 	}
@@ -213,6 +206,13 @@ public class BoardServiceImpl implements BoardService {
 		System.out.println("댓글개수"+dao.commentList(map).size());
 		
 		return dao.commentList(map);
+	}
+
+
+
+	@Override
+	public List<ArticlesVO> bestArticles() {
+		return dao.bestArticles();
 	}
 	
 	

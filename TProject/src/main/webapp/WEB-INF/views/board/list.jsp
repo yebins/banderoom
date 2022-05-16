@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
 	.freeBoard-list{
-		width:80%;
+		width:95%;
 		align:center;
 	}
 	.freeBoard-list-table{
@@ -28,6 +28,7 @@
 		border-top: 1px solid #444444;
 		background-color:white;
 	}
+	
 	th{
 		background-color: #FFDAC4;
 		color: black;
@@ -35,12 +36,24 @@
 	}
 	td{
 		height:30px;
-		font-size:12px;
+		font-size:13px;
 	}
 	#register{
 		position:relative;
 		left:350px;
 		top:10px;
+	}
+	.bestArticles{
+		color: #FB6544;
+		font-weight:bold;
+	}
+	.title-area{
+		display:flex;
+		justfy-content:center;
+		
+	}
+	img{
+		margin-left: 5px;
 	}
 </style>
 </head>
@@ -55,9 +68,14 @@
 		</div>
 		<div>
 			<form action="list.do" class="d-flex notice-page" method="get">
-				<input type="hidden" name="bIdx" value="${param.bIdx}">
-				<input type="hidden" name="page" value="${param.page}">
-       	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
+				<select name="searchType" class="list-status">
+					<option <c:if test="${searchType eq 'title'}">selected</c:if> value="title">제목</option>
+					<option <c:if test="${searchType eq 'mNickname'}">selected</c:if> value="mNickname">작성자</option>
+					<option <c:if test="${searchType eq 'content'}">selected</c:if> value="content">내용</option>
+				</select>
+				<input type="hidden" name="bIdx" value="2">
+				<input type="hidden" name="page" value="1">
+       	 		<input class="form-control me-3" name="searchValue" id="searchtitle" type="search" placeholder="Search" aria-label="Search" value="${searchValue}">
         			<button class="normal-button accent-button">검색</button>
      		 </form>
 		</div>
@@ -71,11 +89,25 @@
 					<th width="8%">조회수</th>
 					<th width="8%">추천수</th>
 				</tr>
+				<c:if test="${bestArticles.size()>0}">
+					<c:forEach var="i" begin="0" end="${bestArticles.size()-1}">
+						<tr>
+							<td class="bestArticles">${bestArticles.get(i).aIdx }</td>
+							<td class="title-area"><a style="color: #FB6544; font-weight:bold;" href="details.do?bIdx=${param.bIdx}&aIdx=${bestArticles.get(i).aIdx}">${bestArticles.get(i).title }</a></td>
+							<td class="bestArticles" onclick="profileOpen(${bestArticles.get(i).mIdx})">${bestArticles.get(i).mNickname }</td>
+							<td class="bestArticles">
+								<fmt:formatDate value="${bestArticles.get(i).regDate }" pattern="yyyy-MM-dd"/>
+							</td>
+							<td class="bestArticles">${bestArticles.get(i).readCount }</td>
+							<td class="bestArticles">${bestArticles.get(i).likeCount }</td>
+						</tr>
+					</c:forEach>
+				</c:if>
 				<c:if test="${list.size() > 0 }">
 					<c:forEach var="i" begin="0" end="${list.size()-1}">
 						<tr>
 							<td>${list.get(i).aIdx }</td>
-							<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}">${list.get(i).title }</a></td>
+							<td class="title-area"><a href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}">${list.get(i).title }</a></td>
 							<td onclick="profileOpen(${list.get(i).mIdx})">${list.get(i).mNickname }</td>
 							<td>
 								<fmt:formatDate value="${list.get(i).regDate }" pattern="yyyy-MM-dd"/>
@@ -132,6 +164,7 @@
 		<form action="register.do" method="get">
 		<input type="hidden" name="page" value="${param.page}">
 		<input type="hidden" name="bIdx" value="${param.bIdx}">
+		<input type="hidden" name="aIdx" value="${param.aIdx}">
 			<button class="normal-button accent-button" id="register" style="margin-left: 15px;">글쓰기</button>
 		</form>
 	</div>
