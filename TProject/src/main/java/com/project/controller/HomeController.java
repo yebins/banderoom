@@ -199,6 +199,7 @@ public class HomeController {
 		model.addAttribute("bIdx",bIdx);
 		
 		return "serlist";
+		
 	}
 	
 	@RequestMapping(value="/serlistDelete.do")
