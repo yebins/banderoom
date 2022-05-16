@@ -178,10 +178,20 @@ button.col-1{
 				$("#addr2").append(html);
 			}
 		}
-	}	
+	}
+	
+	function updateStatus(){
+		$.ajax({
+			url:"updateStatus.do",
+			type:"post",
+			error:function(){
+				alert('status 변경 실패');
+			}
+		})
+	}
 </script>
 </head>
-<body>
+<body<c:if test="${login.mIdx==4}"> onload='updateStatus()'</c:if>>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 	<c:import url="/header.do" />
@@ -234,8 +244,9 @@ button.col-1{
 					<c:forEach var="item" items="${teamsList}">
 						<div class="col team-col" onclick="location.href='details.do?teamIdx=${item.teamIdx}'">
 							<input type="hidden" name="teamIdx" value="${item.teamIdx}">
-							<div class="team-list">
+							<div class="team-list"<c:if test="${item.status==2}">style='filter: brightness(50%);'</c:if>>
 								<div class="team-title">
+									<c:if test="${item.status==2}">[마감]</c:if>
 									[${item.type}] ${item.title}
 								</div>
 								<div class="team-content">
@@ -245,7 +256,7 @@ button.col-1{
 											<td>${item.addr1} ${item.addr2}</td>
 										</tr>
 										<tr>
-											<td>수준</td>
+											<td>팀 레벨</td>
 											<td>${item.teamLevel}</td>
 										</tr>
 										<tr>
