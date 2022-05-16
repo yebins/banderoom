@@ -284,6 +284,8 @@
 	<select id="bestArticles" resultType="ArticlesVO">
 		select a.*, count(*) as likeCount from articles a inner join liked_articles la
 		on a.aidx = la.aidx group by a.aidx order by likeCount desc limit 3;
+	</select>
+	
 	<update id="commentUpdate" parameterType="commentsVO">
 		update comments set
 			<if test='content != null and !"".equals(content)'>

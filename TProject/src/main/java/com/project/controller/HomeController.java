@@ -186,17 +186,14 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/serlist.do",method=RequestMethod.GET)
-	public String serlist(Model model,Integer bIdx,String searchtitle) {
-		System.out.println(bIdx);//bIdx값 확인
-		System.out.println(searchtitle);//검색어 확인
-		if(bIdx == null) {
-			bIdx=1;
+	public String serlist(Model model, @RequestParam Map<String, Object> map, HttpServletRequest request) {
+		if(map.get("bIdx") == null) {
+			map.put("bIdx", 1);
 		}
 		
-		List<ArticlesVO> list=boardService.list(bIdx,searchtitle, 1);
+		List<ArticlesVO> list=boardService.list(map, request);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
-		model.addAttribute("bIdx",bIdx);
 		
 		return "serlist";
 	}
