@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentRepliesVO;
 import com.project.vo.CommentsVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
@@ -125,4 +126,29 @@ public class BoardDAO {
 		return sqlSession.selectOne("com.project.mapper.boardMapper.commentCount",map);
 	}
 	
+	public int commentUpdate(CommentsVO vo) {
+		
+		return sqlSession.update("com.project.mapper.boardMapper.commentUpdate",vo);
+	}
+	
+	public int commentDelete(CommentsVO vo) {
+		
+		return sqlSession.update("com.project.mapper.boardMapper.commentDelete",vo);
+	}
+	
+	public int onlyCommentTotal(Map<String, Object> map) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.onlyCommentTotal",map);
+	}
+	
+	public int replyWrite(CommentRepliesVO vo) {
+		
+		return sqlSession.update("com.project.mapper.boardMapper.replyWrite",vo);
+		
+	}
+	
+	public List<CommentRepliesVO> replyList(int cIdx){
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.replyList",cIdx);
+	}
 }
