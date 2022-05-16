@@ -66,42 +66,6 @@ public class HomeController {
 		
 		return "footer";
 	}
-	
-	@RequestMapping(value = "/newfile.do")
-	public String newfile () {
-		
-		return "NewFile";
-	}
-
-	@RequestMapping(value = "/newfile1.do")
-	public String newfile1 () {
-		
-		return "NewFile1";
-	}
-	
-	@RequestMapping(value = "/payProcess.do", method = RequestMethod.POST)
-	public void payProcess(String imp_uid, String merchant_uid) {
-		System.out.println(imp_uid + merchant_uid);
-		
-	}
-	
-	@RequestMapping(value = "/newfile2.do")
-	public String newfile2() {
-		return "NewFile2";
-	}
-
-	@RequestMapping(value = "/newfile3.do")
-	public String newfile3() {
-		return "NewFile3";
-	}
-
-	@RequestMapping(value = "/formtest.do")
-	public String formtest(String no, String yes) {
-		System.out.println(no);
-		System.out.println(yes);
-		return "NewFile3";
-	}
-	
 
 	@RequestMapping(value = "/frame.do")
 	public String frame() {
@@ -137,13 +101,13 @@ public class HomeController {
 			if(login.getAuth() == 3) {
 				result=boardService.updateServiceInfo(vo);
 				System.out.println(result);
-				request.setAttribute("msg", "수정이 됏다리");
+				request.setAttribute("msg", "수정완료");
 				request.setAttribute("url", "/serinfo.do");
 				
 				return "alert";
 			} else {
 				
-				request.setAttribute("msg", "권한도 없는놈이 어딜 감히");
+				request.setAttribute("msg", "권한이 없습니다");
 				request.setAttribute("url", "/serinfo.do");
 				
 				return "alert";
@@ -151,7 +115,7 @@ public class HomeController {
 			
 		}
 		//로그인안했을때
-		request.setAttribute("msg", "로그인하세유");
+		request.setAttribute("msg", "로그인하세요");
 		request.setAttribute("url", "/member/glogin.do");
 		
 		return "alert";
@@ -171,7 +135,7 @@ public class HomeController {
 				return "serlistModify";
 			} else {
 				
-				request.setAttribute("msg", "권한도 없는놈이 어딜 감히");
+				request.setAttribute("msg", "권한이 없습니다");
 				request.setAttribute("url", "/serlist.do");
 				
 				return "alert";
@@ -179,7 +143,7 @@ public class HomeController {
 		}
 		System.out.println(vo.getaIdx()+","+vo.getbIdx());
 		
-		request.setAttribute("msg", "로그인부터하려무나");
+		request.setAttribute("msg", "로그인하세요");
 		request.setAttribute("url", "/member/glogin.do");
 		
 		return "alert";
@@ -208,14 +172,14 @@ public class HomeController {
 						
 			} else {
 				
-				request.setAttribute("msg", "권한도 없는놈이 어딜 감히");
+				request.setAttribute("msg", "권한이 없습니다");
 				request.setAttribute("url", "/serlist.do"+vo.getbIdx());
 				
 				return "alert";
 			}
 		}
 		
-		request.setAttribute("msg", "로그인부터하려무나");
+		request.setAttribute("msg", "로그인하세요");
 		request.setAttribute("url", "/member/glogin.do");
 		
 		return "alert";
@@ -235,6 +199,7 @@ public class HomeController {
 		model.addAttribute("bIdx",bIdx);
 		
 		return "serlist";
+		
 	}
 	
 	@RequestMapping(value="/serlistDelete.do")
@@ -347,97 +312,5 @@ public class HomeController {
 		
 		return "/upload/" + newFileName;
 	}
-	
-	
-		@RequestMapping(value="jlist/detail.do", method=RequestMethod.GET)
-		public String jlistView(Model model,ArticlesVO vo,@RequestParam Map<String, Object> params,HttpServletRequest request) {
-			
-		boardService.readCount(vo);
 		
-		System.out.println(params);
-		
-		Map<String, Object> one = boardService.jlistOneArticle(params,request);//게시글정보
-		List<CommentsVO> cmtList=boardService.commentList(params,request);//댓글리스트
-		
-		GeneralMembersVO writer=new GeneralMembersVO();
-		int a=(int) one.get("mIdx");//게시글 작성자 midx
-		writer.setmIdx(a);//게시글 작성자의 midx 삽입
-		
-		writer=memberService.oneMemberInfo(writer); // midx 넣은 멤버의 정보 가져오기
-		
-		
-		System.out.println("게시글정보"+one.toString());
-		
-		model.addAttribute("page", request.getAttribute("page"));
-		model.addAttribute("cmtList",cmtList);//댓글 리스트
-		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글 총개수?
-		model.addAttribute("vo",one);//게시글정보 보내기
-		model.addAttribute("profileSrc",writer.getProfileSrc());//글 작성자 프로필 사진 
-		
-		
-		
-		return "/board/jlist/details";
-	}
-		
-		@RequestMapping(value="jlist/commentWrite.do")
-		@ResponseBody
-		public int commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
-					
-			
-			if(vo.getContent() != null && vo.getContent() != "") {
-				
-				if(!file.isEmpty()) {
-					System.out.println(file);
-					
-					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
-						
-					String fileName=file.getOriginalFilename();
-					
-					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
-					
-					UUID uuid = UUID.randomUUID();
-					
-					String newFileName = uuid.toString() + extension;
-		
-					File target = new File(path, newFileName);
-					
-					System.out.println(target.toString());
-					
-					file.transferTo(target);//파일이생성됨
-					
-					vo.setPicSrc("/upload/"+newFileName);
-				}
-			
-			return boardService.commentWrite(vo);
-			
-			} else {
-				
-				return -1;
-			}	
-		
-		}
-		
-		@RequestMapping(value="jlist/commentList.do")
-		@ResponseBody
-		public List<Object> commentsList(@RequestParam Map<String, Object> params,HttpServletRequest request){
-			Date nowDate = new Date();
-			
-			List<CommentsVO> list= boardService.commentList(params,request);
-			
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss"); 
-			System.out.println(simpleDateFormat.format(list.get(0).getRegDate()));
-			
-			for(int i=0;i<list.size();i++) {
-				String date=simpleDateFormat.format(list.get(i).getRegDate());
-			}
-			
-			
-			List<Object> data=new ArrayList<Object>();
-			data.add(request.getAttribute("count"));
-			data.add(list);
-			
-			
-			
-			return data;
-		}
 }

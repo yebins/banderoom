@@ -16,18 +16,18 @@
 		width:600px;
 		height:50px;
 	}
-	.JlistSearch{
+	.HlistSearch{
 		border-radius:25px;
 	}
-	div.JArticle{
+	div.HArticle{
 		width:300px;
 		height:200px;
 		margin:13px;
 	}
-	.JArticle:hover{
+	.HArticle:hover{
 		outline:3px solid #fb6544;
 	}
-	.JBoard{
+	.HBoard{
 		display:flex;
 		flex-flow:row wrap;
 		margin-top:20px;
@@ -87,17 +87,7 @@
 		border-radius:25px;
 	}
 	
-	.jlist-status{
-		border-radius:25px;
-		border: 1px solid #ced4da;
-		height:50px;
-		text-align:center;
-		margin-right:10px;
-		font-size:1rem;
-		width:90px;
-		
-	}
-    .jListPageButton{
+    .HListPageButton{
     	width:70px;
     	background-color:#f5f5f5;
     }
@@ -117,7 +107,16 @@
     	padding:10px;
     	
     }
-    .search-button{
+    .Hlist-status{
+		border-radius:25px;
+		border: 1px solid #ced4da;
+		height:50px;
+		text-align:center;
+		margin-right:10px;
+		font-size:1rem;
+		
+	}
+	   .search-button{
     	align-self:center;
     }
 </style>
@@ -127,29 +126,25 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			<a href="jlist.do">중고거래 게시판</a>
+			<a href="hlist.do">홍보 게시판</a>
 		</div>
 		<div>
-			<form action="/board/jlist.do" class="d-flex notice-page" method="get">
-				<select name="status" class="jlist-status">
-					<option <c:if test="${status eq '97'}">selected</c:if> value="97">판매</option>
-					<option <c:if test="${status eq '98'}">selected</c:if> value="98">구매</option>
-					<option <c:if test="${status eq '99'}">selected</c:if> value="99">거래완료</option>
-				</select>
-				<select name="searchType" class="jlist-status">
-					<option <c:if test="${param.searchType eq 'title'}">selected</c:if> value="title">제목</option>
-					<option <c:if test="${param.searchType eq 'mNickname'}">selected</c:if> value="mNickname">작성자</option>
+			<form action="/board/hlist.do" class="d-flex notice-page" method="get">
+				<select name="searchType" class="Hlist-status">
+					<option <c:if test="${searchType eq 'title'}">selected</c:if> value="title">제목</option>
+					<option <c:if test="${searchType eq 'mNickname'}">selected</c:if> value="mNickname">작성자</option>
 				</select>
 				<input type="hidden" name="page" value="1">
-				<input type="hidden" name="bIdx" value="3">
-       	 		<input class="form-control me-3 JlistSearch" name="searchValue" id="searchtitle" type="text" placeholder="Search" aria-label="Search" value="${param.searchValue}">
+				<input type="hidden" name="bIdx" value="4">
+				<input type="hidden" name="status" value="0">
+       	 		<input class="form-control me-3 HlistSearch" name="searchValue" id="searchtitle" type="text" placeholder="Search" aria-label="Search" value="${searchValue}">
         			<button class="accent-button normal-button search-button">검색</button>
      		 </form>
 		</div>
-		<div id="page-content" class="JBoard">
+		<div id="page-content" class="HBoard">
 			<c:if test="${fn:length(list) gt 0}">
 				<c:forEach var="item" begin="0" end="${fn:length(list) -1}" varStatus="st">
-					<div class="inner-box JArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='/board/details.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}'">
+					<div class="inner-box HArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='/board/details.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}'">
 						<div class="inner-box-content-thumbnail ">
 							<c:choose>
 								<c:when test="${imgsrc.get(item) ne ''}">
@@ -161,14 +156,8 @@
 							</c:choose>
 						</div>
 						<div class="inner-box-content-state-title">
-								<c:choose>
-									<c:when test="${list.get(item).status eq '97'}"><span>[판매]</span></c:when>
-									<c:when test="${list.get(item).status eq '98'}"><span>[구매]</span></c:when>
-									<c:when test="${list.get(item).status eq '99'}"><span>[거래완료]</span></c:when>
-									<c:otherwise>[거래상태 등록해주세요]</c:otherwise>
-								</c:choose>
 							<span>${list.get(item).title}</span>
-							<c:if test="${fn:length(cmt) gt 0}">
+							<c:if test="${fn:length(cmt) gt 0 }">
 							<span>[${cmt.get(item)}]</span>
 							</c:if>
 						</div>
@@ -179,9 +168,9 @@
 				</c:forEach>
 			</c:if>
 			<div class="content-write">
-				<c:if test="${login != null}">
-				<button class="normal-button accent-button" onclick="location.href='/board/register.do?bIdx=3'">글쓰기</button>
-				</c:if>
+			<c:if test="${login != null}">>
+				<button class="normal-button accent-button" onclick="location.href='/board/register.do?bIdx=4'">글쓰기</button>
+			</c:if>
 			</div>
 				<c:set var="articlesTotal" value="${articlesTotal}"/>
 				<c:set var="page" value="${(param.page == null)?1:param.page}"/>
@@ -189,20 +178,25 @@
 				<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(articlesTotal/6),'.')}"/>
 			검색된 게시물 수 : ${articlesTotal}
 			<div class="pageNum">	
-						<button class="normal-button accent-button jListPageButton" style="visibility:${(startNum<=1)?'hidden':'visible'};">
-							<a href="jlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">이전</a>
+						<button class="normal-button accent-button hListPageButton" style="visibility:${(startNum<=1)?'hidden':'visible'};">
+							<a href="hlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">이전</a>
 						</button>
 						<c:forEach var="i" begin="0" end="4">
 							<c:if test="${(startNum+i)<= lastNum}">
-								<a href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}" style="color:${page==(startNum+i)?'lightgreen; border:1px solid lightgray; padding:5px; border-radius:10px;':''}">${startNum+i}</a>
+								<a href="hlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}" style="color:${page==(startNum+i)?'lightgreen; border:1px solid lightgray; padding:5px; border-radius:10px;':''}">${startNum+i}</a>
 							</c:if>
 						</c:forEach>
-						<button class="normal-button accent-button jListPageButton" style="visibility:${(startNum+5<=lastNum)?'visible':'hidden'};">
-							<a href="jlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">다음</a>
+						<button class="normal-button accent-button hListPageButton" style="visibility:${(startNum+5<=lastNum)?'visible':'hidden'};">
+							<a href="hlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">다음</a>
 						</button>
 			</div>
 		</div>
 	</div>
+	<script>
+		(function(){
+			console.log(112);
+		})()
+	</script>
 	<c:import url="/footer.do" />
 </body>
 </html>

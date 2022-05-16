@@ -13,6 +13,8 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
 <style>
 
 	.page-content {
@@ -95,6 +97,8 @@
 	
 	.title {
 		margin-top: 40px;
+		padding-bottom: 20px;
+		border-bottom: 1px solid lightgray;
 	}
 	
 	.outter-buttons {
@@ -186,11 +190,13 @@
 	}
 	
 	.space-content {
+		margin-top: 40px;
 		width: 100%;
 	}
 	
 	.space-info {
 		padding: 40px !important;
+		position: relative;
 	}
 	
 	.space-info li {
@@ -203,18 +209,6 @@
 	
 	.colright {
 		padding-right: 0px;		
-	}
-	
-	@media screen and (max-width: 576px) {
-		.carousel-inner {
-			height: 50vh;
-		}
-		.space-info {
-			padding: 15px !important;
-		}
-		.colleft, .colright {
-			padding: 10px 0px;
-		}
 	}
 	
 	.space-info-subject {
@@ -415,6 +409,354 @@
 		font-size: 20px;
 		height: 50px;
 		border-radius: 25px;
+	}
+	
+	.menu {
+		height: 60px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: sticky;
+		top: 0px;
+		margin: 20px auto 0px auto;
+		width: 100%;
+		background: transparent !important;
+		z-index: 99990;
+	}
+	.menu button {
+		margin: 0px 10px;
+	}
+	.space-info:not(.space-info:first-child) {
+		margin-top: 40px;
+	}
+	
+	.score-wrap {
+		display: flex;
+		align-items: center;
+		position: absolute;
+		top: 43px;
+		right: 40px;
+	}
+	.score-avg {
+		font-size: 20px;
+	}
+	.score-stars {
+		display: flex;
+		width: calc(30 * 5)px;
+		height: 30px;
+		background-color: lightgray;
+		position: relative;
+		margin-right: 10px;
+	}
+	.score-color {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		width: ${reviewCntAvg.get("avg") * 30}px;
+		height: 100%;
+		background-color: #fb6544;
+		z-index: 8;
+	}
+	.score-stars img {
+		width: 30px;
+		z-index: 9;
+	}
+	
+	.review-wrap {
+		border-top: 1px solid lightgray;
+		padding-top: 15px;
+		margin-top: 15px;
+	}
+	
+	.review-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.review-score-stars {
+		display: flex;
+		width: calc(24 * 5)px;
+		height: 24px;
+		background-color: lightgray;
+		position: relative;
+		margin-left: 10px;
+	}
+	.review-score-color {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		background-color: #fb6544;
+		z-index: 8;
+	}
+	.review-score-stars img {
+		width: 24px;
+		z-index: 9;
+	}
+	
+	.review-member {
+		display: flex;
+		align-itmes: center;
+	}
+	
+	.review-profile-img {
+		width: 24px;
+		height: 24px;
+		border-radius: 12px;
+		overflow: hidden;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		margin-right: 10px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.review-profile-img img {
+		height: 24px;
+	}
+	
+	.review-nickname {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-weight: bold;
+	}
+	.review-nickname:hover {
+		cursor: pointer;
+	}
+	
+	.review-score-wrap {
+		display: flex;
+		align-items: center;
+		font-size: 14px;
+	}
+	
+	.review-body {
+		display: flex;
+		margin-top: 15px;
+	}
+	
+	.review-content {
+		flex: 1;
+		padding-right: 15px;
+		word-break: break-all; 
+	}
+	
+	.review-thumb {
+		width: 100px;
+		border-radius: 10px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+	}
+	
+	.review-thumb:hover {
+		cursor: pointer;
+	}
+	.review-thumb:active {
+		filetr: brightness(90%);
+	}
+	
+	.review-orders {
+		margin-top: 30px;
+	}
+	.review-order-button {
+		margin-right: 10px;
+		width: 120px;
+	}
+	
+	.review-footer {
+		margin-top: 15px;
+		display: flex;
+		justify-content: flex-end;
+	}
+	
+	.review-nav {
+		border-top: 1px solid lightgray;
+		margin-top: 15px;
+		padding-top: 35px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.review-nav div {
+		width: 30px;
+		height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.review-nav img {
+		height: 15px;
+	}
+	.review-nav div:hover {
+		cursor: pointer;
+	}
+	.review-nav div.nav-disabled {
+		filter: opacity(20%);
+	}
+	.review-nav div.nav-disabled:hover {
+		cursor: default;
+	}
+	
+	.qna-textarea {
+		margin-top: 15px;
+		border: 1px solid lightgray;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border-radius: 10px;
+		height: 100px;
+		width: 100%;
+		resize: none;
+		padding: 15px;
+		font-family: '맑은 고딕';
+	}
+
+	.qna-input-button-wrap {
+		margin-top: 10px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.form-check-input {
+		margin-right: 15px;
+	}
+	
+	.form-check-input:checked {
+    background-color: #fb6544;
+    border-color: #fb6544;
+	}
+	.form-check-input:focus {
+		box-shadow: none;
+		outline: none;
+	}
+	
+	#qna-page-nav {
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-top: 1px solid lightgray;
+		margin-top: 15px;
+		padding-top: 15px;
+		height: 70px;
+	}
+	
+	.qna-page-nav-button:hover {
+		cursor: pointer;
+	}
+	.qna-current-page {
+		font-weight: bold;
+	}
+	.qna-current-page:hover {
+		cursor: default;
+	}
+	
+	.qna-buttons {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: 15px;
+	}
+
+	.qna-modify-buttons {
+		display: flex;
+		align-items: center;
+	}
+
+	.qna-buttons button, .review-footer button, .qna-update-button {
+		height: 30px;
+		border-radius: 15px;
+		width: 80px;
+		font-size: 14px;
+	}
+
+	.qna-modify-buttons button, .review-footer button, .qna-update-button {
+		margin-left: 10px;
+	}
+	
+	#answer-form-wrap, #answer-modify-form-wrap {
+		margin-top: 15px;
+	}
+	
+	#answer-buttons, #answer-modify-buttons {
+		width: 100%;
+		margin-top: 15px;
+		display: flex;
+		justify-content: flex-end;
+	}
+	
+	#answer-textarea, #answer-modify-textarea {
+		border: 1px solid lightgray;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border-radius: 10px;
+		height: 100px;
+		width: 100%;
+		resize: none;
+		padding: 15px;
+		font-family: '맑은 고딕';
+	}
+	
+	.answer-button, .answer-modify-button {
+		height: 30px;
+		border-radius: 15px;
+		width: 80px;
+		font-size: 14px;
+		margin-left: 10px;
+	}
+	
+	.qna-answer-wrap {
+		margin-top: 15px;
+	}
+	
+	.qna-answer-title-wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.qna-answer-title {
+		font-weight: bold;
+		color: #fb6544;
+	}
+	
+	.qna-answer-date {
+		font-size: 14px;
+	}
+	
+	.qna-answer-buttons {
+		display: flex;
+		margin-top: 15px;
+	}
+	.qna-answer-modify-button, {
+		height: 30px;
+		border-radius: 15px;
+		width: 80px;
+		font-size: 14px;
+		margin-right: 10px;
+	}
+	
+	@media screen and (max-width: 576px) {
+		#wrapper {
+			padding: 60px 10px 100px;
+		}
+		.carousel-inner {
+			height: 50vh;
+		}
+		.space-info {
+			padding: 15px !important;
+		}
+		.colleft, .colright {
+			padding: 10px 0px;
+		}
+		.menu {
+			top: 60px;
+		}
+		
+		.score-wrap {
+			top: 18px;
+			right: 15px;
+		}
 	}
 	
 </style>
@@ -633,7 +975,7 @@
 		}
 	}
 	
-	function drawImage(obj) {
+	function drawImage(src) {
 
 		var div = $("#img"); // 이미지를 감싸는 div
 		var img = $("<img>"); // 이미지
@@ -642,27 +984,33 @@
 	  $(div).css("height", "80vh");
 	    
 		$("#img").children().remove();
-		$("#imgBackOveray").css("visibility", "visible");
 		
 		$(div).append(img);
 		
-		$(img).attr("src", $(obj).attr("src"));
-		
+		$(img).attr("src", src);
+
+		setTimeout(() => {
 		var divAspect = $(div).height() / $(div).width(); // div의 가로세로비는 알고 있는 값이다
 		var imgAspect = $(img).height() / $(img).width();
 		
-	
-		if (imgAspect >= divAspect) {
-		    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
-		    $(img).css("width", "auto");
-		    $(img).css("height", "100%");
-		    $(div).css("width", $(img).width() + "px");
-		} else {
-		    // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
-		    $(img).css("width", "100%");
-		    $(img).css("height", "auto");
-			  $(div).css("height", $(img).height() + "px");
-		}
+			if (imgAspect >= divAspect) {
+			    $(img).css("width", "auto");
+			    $(img).css("height", $(div).height());
+			} else {
+			    $(img).css("width", "100%");
+			    $(img).css("height", "auto");
+			}
+
+			if (imgAspect >= divAspect) {
+			    $(div).css("width", $(img).width() + "px");
+			} else {
+				  $(div).css("height", $(img).height() + "px");
+			}
+
+			$("#imgBackOveray").css("visibility", "visible");
+		}, 200);
+
+		
 	}
 
 
@@ -1008,6 +1356,538 @@
 		
 		
 	}
+	
+	var reviewPage = 1;
+	var reviewLastPage = ${reviewLastPage};
+	var orderType = "regDateDesc";
+	
+	function loadReview(page, order, buttonObj) {
+		
+		if ($(buttonObj).hasClass("nav-disabled")) {
+			return;
+		}
+		
+		$.ajax({
+			type: "get",
+			data: "reviewPage=" + page + "&orderType=" + order + "&idx=" + ${param.idx},
+			url: "loadReview.do",
+			success: function(data) {
+				
+				var html = "";
+
+				for (var i = 0; i < data.length; i++) {
+					html += '<div class="review-wrap">';
+					html += '<div class="review-header">';
+					html += '<div class="review-member">';
+					html += '<div class="review-profile-img">';
+					html += '<img src="' + data[i].profileSrc + '">';
+					html += '</div>';
+					html += '<div class="review-nickname" onclick="profileOpen(' + data[i].mIdx + ')">';
+					html += data[i].mNickname;
+					html += '</div></div>';
+					html += '<div class="review-score-wrap">';
+					
+					var regDate = new Date(data[i].regDate);
+					var regDateString = moment(regDate).format("YYYY.MM.DD HH:mm");
+					
+					html += regDateString;
+					html += '<div class="review-score-stars">';
+					html += '<div class="review-score-color" style="width: ' + (data[i].score * 24) + 'px"></div>';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '<img src="/images/score-star.png">';
+					html += '</div></div></div>';
+					html += '<div class="review-body">';
+					html += '<div class="review-content">';
+					html += data[i].content;
+					html += '</div>';
+					
+					if (data[i].pictureSrc != null) {
+						html += '<img class="review-thumb" src="' + data[i].thumbSrc + '" onclick="drawImage(\'' + data[i].pictureSrc + '\')">';
+					}
+					html += '</div>';
+					
+					if (data[i].mIdx == mIdx) {
+						html += '<div class="review-footer">';
+						html += '<button class="normal-button" onclick="updateReview(' + data[i].resIdx + ')">수정</button>';
+						html += '<button class="normal-button" onclick="deleteReview(' + data[i].resIdx + ')">삭제</button>';
+						html += '</div>';
+					}
+					
+					html += '</div>';
+					
+					$("#reviewList").html(html);
+					
+					reviewPage = page;
+					orderType = order;
+					
+					$(".review-order-button").removeClass("accent-button");
+					$("#" + orderType).addClass("accent-button");
+					
+					$(".nav-disabled").removeClass("nav-disabled");
+					
+					if (page == 1) {
+						$(".review-page-prev").addClass("nav-disabled");
+					}
+					if (page == reviewLastPage) {
+						$(".review-page-next").addClass("nav-disabled");
+					}
+					
+				}
+				
+			}
+		})
+	}
+	
+	$(function() {
+		$(".review-page-prev").addClass("nav-disabled");
+		if (reviewLastPage == 1) {
+			$(".review-page-next").addClass("nav-disabled");
+		}
+	})
+	
+	
+	function qnaQSubmit() {
+		
+		if ($("#qna-textarea").val() == '') {
+			alert('내용을 입력해 주세요.');
+			return;
+		}
+		
+		var formData = $("#qna-form").serialize();
+
+		$.ajax({
+			type: "post",
+			url: "insertqnaq.do",
+			data: formData,
+			success: function(data) {
+				
+				if (data == 0) {
+					alert('입력이 완료되었습니다.');
+					qnaList(1);
+					$("#qna-textarea").val('');
+				} else if (data == 1) {
+					alert('로그인이 필요합니다.');
+					location.href='/member/glogin.do';
+				} else if (data == 2) {
+					alert('작성에 실패했습니다.');
+				}
+				
+			}
+		})
+	}
+	
+	var qnaCurrentPage = 1;
+	var qnaStartPage = ${qnaStartPage};
+	var qnaEndPage = ${qnaEndPage};
+	var qnaLastPage = ${qnaLastPage};
+	
+	function qnaList(page) {
+		
+		$.ajax({
+			type: "get",
+			url: "qnalist.do",
+			data: "idx=" + ${param.idx} + "&page=" + page,
+			success: function(data) {
+				
+				qnaCurrentPage = page;
+				qnaStartPage = data.qnaStartPage;
+				qnaEndPage = data.qnaEndPage;
+				qnaLastPage = data.qnaLastPage;
+				
+				var qnaList = data.qnaList;
+				var html = '';
+				
+				for (var i = 0; i < qnaList.length; i++) {
+				
+					html += '<div class="review-wrap">';
+					html += '<div class="review-header">';
+					html += '<div class="review-member">'
+					html += '<div class="review-profile-img">';
+					html += '<img src="' + qnaList[i].profileSrc + '">';
+					html += '</div>';
+					html += '<div class="review-nickname" onclick="profileOpen(' + qnaList[i].mIdx + ')">';
+					html += qnaList[i].mNickname;
+					html += '</div></div>';
+					html += '<div class="review-score-wrap">';
+
+					var regDate = new Date(qnaList[i].regDate);
+					var regDateString = moment(regDate).format("YYYY.MM.DD HH:mm");
+
+					html += regDateString;
+					html += '</div></div>';
+					html += '<div class="review-body">';
+					html += '<div class="review-content">';
+					
+					if (qnaList[i].publicYN == 'N') {
+						html += '<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;"> ';
+					}
+					html += qnaList[i].content;
+					html += '</div></div>';
+					
+					html += '<div class="qna-buttons">';
+					html += '<div class="qna-answer-button">';
+					
+					if (${hlogin.mIdx == spacesVO.hostIdx} && qnaList[i].answer == null) {
+						html += '<button class="normal-button show-answer-button" onclick="qnaAnswer(' + qnaList[i].qnaIdx + ', ${param.idx}, this)">답변하기</button>';
+					}
+					
+					html += '</div>';
+					html += '<div class="qna-modify-buttons">';
+					
+					var loginMidx = 0;
+					<c:if test="${login != null}">
+					loginMidx = ${login.mIdx};
+					</c:if>
+					
+					if (qnaList[i].mIdx == loginMidx) {
+						html += '<button class="normal-button qna-update-button" onclick="qnaUpdate(' + qnaList[i].qnaIdx + ', this)">수정</button>';
+						html += '<button class="normal-button qna-update-button" onclick="qnaDelete(' + qnaList[i].qnaIdx + ')">삭제</button>';
+					}
+
+					html += '</div></div>';
+					
+					if (qnaList[i].answer != null) {
+						
+						html += '<div class="qna-answer-wrap">';
+						html += '<div class="qna-answer-title-wrap">';
+						html += '<div class="qna-answer-title">';
+						html += '호스트의 답변';
+						html += '</div>';
+						html += '<div class="qna-answer-date">';
+						
+						var answerDate = new Date(qnaList[i].answerDate);
+						answerDateString = moment(answerDate).format("YYYY.MM.DD HH:mm");
+						
+						html += answerDateString;
+						html += '</div></div>';
+						html += '<div class="qna-answer-content">';
+						
+						if (qnaList[i].publicYN == 'N') {
+							html += '<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;"> ';
+						}
+						
+						html += qnaList[i].answer;
+						html += '</div>';
+						
+						if (${hlogin.mIdx == spacesVO.hostIdx}) {
+							html += '<div class="qna-answer-buttons">';
+							html += '<button class="normal-button qna-answer-modify-button" onclick="qnaAnswerModify(' + qnaList[i].qnaIdx + ', ${param.idx}, this)">수정</button>';
+							html += '<button class="normal-button qna-answer-modify-button" onclick="qnaAnswerDelete(' + qnaList[i].qnaIdx + ', ${param.idx})">삭제</button>';
+							html += '</div>';
+						}
+						html += '</div>';
+					}
+					
+					html += '</div>';
+					
+					$("#qna-elements").html(html);
+					
+				}
+
+
+				html = "";
+				
+				if (qnaLastPage < 6) {
+					for (var i = qnaStartPage; i <= qnaEndPage; i++) {
+						if (i == qnaCurrentPage) {
+							html += '<div class="qna-page-nav-button qna-current-page">[' + i + ']</div>&nbsp;';
+						} else {
+							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">[' + i + ']&nbsp;</div>';
+						}
+					}
+				}
+				
+				if (qnaLastPage > 5) {
+					if (qnaStartPage > 5) {
+						html += '<div class="qna-page-nav-button" onclick="qnaList(1)">[1]</div>&nbsp;';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaStartPage - 1)">◀</div>&nbsp;';
+					}
+
+					for (var i = qnaStartPage; i <= qnaEndPage; i++) {
+						if (i == currentPage) {
+							html += '<div class="qna-page-nav-button qna-current-page">[' + i + ']</div>&nbsp;';
+						} else {
+							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">[' + i + ']&nbsp;</div>';
+						}
+					}
+					
+					if (qnaEndPage < qnaLastPage) {
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaEndPage + 1)">▶</div>&nbsp;';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaLastPage)">[' + qnaLastPage + ']</div>&nbsp;';
+					}
+				}
+				
+				$("#qna-page-nav").html(html);
+			
+			}
+		})
+		
+	}
+	
+	function qnaAnswer(qnaIdx, spaceIdx, buttonObj) {
+		$("#answer-form-wrap").remove();
+		
+		if ($(buttonObj).hasClass("accent-button")) {
+			$(".show-answer-button").removeClass('accent-button');
+			return;
+		}
+
+		$(".show-answer-button").removeClass('accent-button');
+		
+		var answerForm = $("<div id='answer-form-wrap'>");
+		$(answerForm).append("<form id='answer-form'>");
+		$(buttonObj).parent().parent().parent().append(answerForm);
+		$("#answer-form").append("<input type='hidden' name='qnaIdx' value='" + qnaIdx + "'>");
+		$("#answer-form").append("<input type='hidden' name='spaceIdx' value='" + spaceIdx + "'>");
+		$("#answer-form").append("<div id='answer-textarea-wrap'>");
+		$("#answer-form").append("<div id='answer-buttons'>");
+		$('#answer-textarea-wrap').append('<textarea id="answer-textarea" name="answer" placeholder="답변을 입력하세요.">');
+		$("#answer-buttons").append('<input type="reset" class="normal-button answer-button" value="초기화">');
+		$("#answer-buttons").append('<button type="button" class="normal-button accent-button answer-button" onclick="submitAnswer()">등록</button>');
+		
+		$(buttonObj).addClass('accent-button');
+	}
+	
+	function submitAnswer() {
+		if ($("#answer-textarea").val() == '') {
+			alert('답변을 입력해 주세요.');
+			return;
+		}
+		
+		var formData = $("#answer-form").serialize();
+
+		$.ajax({
+			type: "post",
+			url: "insertqnaanswer.do",
+			data: formData,
+			success: function(result) {
+				if (result == 0) {
+					alert('답변이 정상적으로 등록되었습니다.');
+					qnaList(qnaCurrentPage);
+				} else if (result == 1) {
+					alert('호스트 로그인이 필요합니다.');
+					location.href = '/member/hlogin.do';
+				} else if (result == 2) {
+					alert('등록 권한이 없습니다.');
+				} else if (result == 3) {
+					alert('등록에 실패했습니다.');
+				}
+			}
+		})
+	}
+	
+	function qnaAnswerModify(qnaIdx, spaceIdx, buttonObj) {
+		$("#answer-modify-form-wrap").remove();
+		
+		if ($(buttonObj).hasClass("accent-button")) {
+			$(".qna-answer-modify-button").removeClass('accent-button');
+			return;
+		}
+
+		$(".qna-answer-modify-button").removeClass('accent-button');
+		
+		var answerForm = $("<div id='answer-modify-form-wrap'>");
+		$(answerForm).append("<form id='answer-modify-form'>");
+		$(buttonObj).parent().parent().parent().append(answerForm);
+		$("#answer-modify-form").append("<input type='hidden' name='qnaIdx' value='" + qnaIdx + "'>");
+		$("#answer-modify-form").append("<input type='hidden' name='spaceIdx' value='" + spaceIdx + "'>");
+		$("#answer-modify-form").append("<div id='answer-modify-textarea-wrap'>");
+		$("#answer-modify-form").append("<div id='answer-modify-buttons'>");
+		$('#answer-modify-textarea-wrap').append('<textarea id="answer-modify-textarea" name="answer" placeholder="답변을 입력하세요.">');
+		$('#answer-modify-textarea').val($(buttonObj).parent().prev().text().trim());
+		$("#answer-modify-buttons").append('<input type="reset" class="normal-button answer-button" value="초기화">');
+		$("#answer-modify-buttons").append('<button type="button" class="normal-button accent-button answer-button" onclick="updateAnswer()">등록</button>');
+		
+		$(buttonObj).addClass('accent-button');
+	}
+	
+	function updateAnswer() {
+		if ($("#answer-modify-textarea").val() == '') {
+			alert('답변을 입력해 주세요.');
+			return;
+		}
+		
+		var formData = $("#answer-modify-form").serialize();
+
+		$.ajax({
+			type: "post",
+			url: "insertqnaanswer.do",
+			data: formData,
+			success: function(result) {
+				if (result == 0) {
+					alert('답변이 정상적으로 수정되었습니다.');
+					qnaList(qnaCurrentPage);
+				} else if (result == 1) {
+					alert('호스트 로그인이 필요합니다.');
+					location.href = '/member/hlogin.do';
+				} else if (result == 2) {
+					alert('수정 권한이 없습니다.');
+				} else if (result == 3) {
+					alert('수정에 실패했습니다.');
+				}
+			}
+		})
+	}
+	
+	function qnaAnswerDelete(qnaIdx, spaceIdx) {
+		
+		if (!confirm("정말 답변을 삭제하시겠습니까?")) {
+			return;
+		}
+
+		$.ajax({
+			type: "post",
+			url: "deleteqnaanswer.do",
+			data: "qnaIdx=" + qnaIdx + "&spaceIdx=" + spaceIdx,
+			success: function(result) {
+				if (result == 0) {
+					alert('답변이 삭제되었습니다.');
+					qnaList(qnaCurrentPage);
+				} else if (result == 1) {
+					alert('호스트 로그인이 필요합니다.');
+					location.href = '/member/hlogin.do';
+				} else if (result == 2) {
+					alert('삭제 권한이 없습니다.');
+				} else if (result == 3) {
+					alert('삭제에 실패했습니다.');
+				}
+			}
+		})
+		
+	}
+	
+	function qnaDelete(qnaIdx) {
+		if (!confirm('정말 삭제하시겠습니까?')) {
+			return;
+		}
+		
+		$.ajax({
+			type: "post",
+			url: "deleteqna.do",
+			data: "qnaIdx=" + qnaIdx,
+			success: function(result) {
+				if (result == 0) {
+					alert('답변이 삭제되었습니다.');
+					qnaList(qnaCurrentPage);
+				} else if (result == 1) {
+					alert('로그인이 필요합니다.');
+					location.href = '/member/glogin.do';
+				} else if (result == 2) {
+					alert('삭제 권한이 없습니다.');
+				} else if (result == 3) {
+					alert('삭제에 실패했습니다.');
+				}
+			}
+		})
+		
+	}
+	
+	function qnaUpdate(qnaIdx, buttonObj) {
+		$("#qna-update-form").remove();
+		
+		if ($(buttonObj).hasClass("accent-button")) {
+			$(".qna-update-button").removeClass('accent-button');
+			return;
+		}
+
+		$(".qna-update-button").removeClass('accent-button');
+
+		var updateForm = $('<form id="qna-update-form">');
+		$(buttonObj).parent().parent().parent().append(updateForm);	
+		$(updateForm).append('<input type="hidden" name="qnaIdx" value="' + qnaIdx + '">');
+		$(updateForm).append('<div id="qna-update-input-wrap" class="qna-input-wrap">');
+		$("#qna-update-input-wrap").append('<textarea id="qna-update-textarea" class="qna-textarea" name="content" placeholder="질문을 입력하세요.">');
+		$("#qna-update-textarea").val(
+				$(buttonObj).parent().parent().prev().find(".review-content").html().replaceAll(
+						"<br>", "\r\n").replace(
+								'<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">', '').trim());
+		$("#qna-update-input-wrap").append('<div id="qna-update-input-button-wrap" class="qna-input-button-wrap">');
+		$("#qna-update-input-button-wrap").append('<div id="update-form-check" class="form-check">');
+		$("#update-form-check").append('<input class="form-check-input" name="privateChecked" type="checkbox" value="1" id="update-public-check">');
+		$("#update-form-check").append('<label class="form-check-label" for="update-public-check"> 비공개</label>');
+		$("#qna-update-input-button-wrap").append('<button type="button" class="normal-button accent-button qna-update-button" onclick="qnaQUpdateSubmit()">등록</button>');
+
+		if ($(buttonObj).parent().parent().prev().find(".review-content img").length == 1) {
+			$("#update-public-check").prop("checked", true);
+		}
+		
+		
+		$(buttonObj).addClass('accent-button');
+	}
+	
+
+	function qnaQUpdateSubmit() {
+		
+		if ($("#qna-update-textarea").val() == '') {
+			alert('내용을 입력해 주세요.');
+			return;
+		}
+		
+		var formData = $("#qna-update-form").serialize();
+		console.log(formData)
+
+		$.ajax({
+			type: "post",
+			url: "updateqnaq.do",
+			data: formData,
+			success: function(data) {
+				
+				if (data == 0) {
+					alert('수정이 완료되었습니다.');
+					qnaList(1);
+					$("#qna-update-textarea").val('');
+				} else if (data == 1) {
+					alert('로그인이 필요합니다.');
+					location.href='/member/glogin.do';
+				} else if (data == 2) {
+					alert('수정 권한이 없습니다.');
+				} else if (data == 3) {
+					alert('수정에 실패했습니다.');
+				}
+				
+			}
+		})
+	}
+	
+	function reload() {
+		location.reload();
+	}
+	
+	function updateReview(resIdx) {
+		window.open('reviewupdate.do?resIdx=' + resIdx, '_blank', 
+        'top=140, left=200, width=800, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
+	}
+	
+	function deleteReview(resIdx) {
+		if (!confirm('정말 삭제하시겠습니까?')) {
+			return;
+		}
+		
+		$.ajax({
+			type: "post",
+			url: "deletereview.do",
+			data: "resIdx=" + resIdx,
+			success: function(data) {
+				
+				if (data == 0) {
+					alert('삭제가 완료되었습니다.');
+					reload();
+					$("#qna-update-textarea").val('');
+				} else if (data == 1) {
+					alert('로그인이 필요합니다.');
+					location.href='/member/glogin.do';
+				} else if (data == 2) {
+					alert('삭제 권한이 없습니다.');
+				} else if (data == 3) {
+					alert('삭제에 실패했습니다.');
+				}
+			}
+		})
+	}
+	
 	</script>
 	
 </head>
@@ -1067,12 +1947,12 @@
 				  	<c:forEach var="i" begin="0" end="${spacePicturesVOs.size() - 1}" varStatus="status">
 				  		<c:if test="${status.first}">
 						    <div class="carousel-item active">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage(this)">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				  		<c:if test="${!status.first}">
 				  			<div class="carousel-item">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage(this)">
+						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				    </c:forEach>
@@ -1107,16 +1987,23 @@
 				</div>
 			</div>
 			
-			<br>
-			
+			<div class="menu">
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-info').scrollIntoView({behavior: 'smooth', block: 'center'});">정보</button>
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-review').scrollIntoView({behavior: 'smooth', block: 'center'});">후기</button>
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-qna').scrollIntoView({behavior: 'smooth', block: 'center'});">Q&amp;A</button>
+				<button class="normal-button" onclick="document.querySelector('#scroll-to-rsv').scrollIntoView({behavior: 'smooth', block: 'center'});">예약</button>
+			</div>
 			<div class="container space-content">
 				<div class="row">
 					<div class="col-sm-8 colleft">
 						<div class="inner-box space-info">
 							<div class="inner-box-content">
 									<div class="space-info-subject">기본정보</div>
-									${spacesVO.getInfo()}
+					
+									<div id="scroll-to-info"></div>
+			
 								
+									${spacesVO.getInfo()}
 									<div class="space-info-subject">보유 장비 / 시설</div>
 									${spacesVO.getFacility()}
 								
@@ -1125,6 +2012,226 @@
 								
 							</div>
 						</div>
+						
+						<div class="inner-box space-info">
+							<div class="inner-box-content">
+								<div class="space-info-subject">후기 ${reviewCntAvg.get("count")}개</div>
+								<div id="scroll-to-review"></div>
+								
+								<c:if test="${reviewCntAvg.get('count') != 0}">
+								
+								<div class="score-wrap">
+									<div class="score-stars">
+										<div class="score-color"></div>
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+										<img src="/images/score-star.png">
+									</div>
+									<div class="score-avg"><fmt:formatNumber value="${reviewCntAvg.get('avg')}" pattern="#.0" /> </div>
+								</div>
+								<div class="review-orders">
+									<button id="regDateDesc" class="normal-button accent-button review-order-button" onclick="loadReview(1, 'regDateDesc')">최근 작성 순</button>
+									<button id="scoreDesc" class="normal-button review-order-button" onclick="loadReview(1, 'scoreDesc')">별점 높은 순</button>
+									<button id="scoreAsc" class="normal-button review-order-button" onclick="loadReview(1, 'scoreAsc')">별점 낮은 순</button>
+								</div>
+								<div id="reviewList">
+								<c:forEach var="review" items="${reviewList}">
+									<div class="review-wrap">
+										<div class="review-header">
+											<div class="review-member">
+												<div class="review-profile-img">
+													<img src="${review.profileSrc}">
+												</div>
+												<div class="review-nickname" onclick="profileOpen(${review.mIdx})">
+													${review.mNickname}
+												</div>
+											</div>
+											<div class="review-score-wrap">
+												<fmt:formatDate value="${review.regDate}" pattern="yyyy.MM.dd HH:mm" />
+												<div class="review-score-stars">
+													<div class="review-score-color" style="width: ${review.score * 24}px"></div>
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+													<img src="/images/score-star.png">
+												</div>
+											</div>
+										</div>
+										<div class="review-body">
+											<div class="review-content">
+												${review.content}
+											</div>
+											<c:if test="${review.pictureSrc != null}">
+												<img class="review-thumb" src="${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
+											</c:if>
+										</div>
+										<c:if test="${review.mIdx == login.mIdx}">
+										<div class="review-footer">
+											<button class="normal-button" onclick="updateReview(${review.resIdx})">수정</button>
+											<button class="normal-button" onclick="deleteReview(${review.resIdx})">삭제</button>
+										</div>
+										</c:if>
+									</div>
+								</c:forEach>
+								</div>
+								
+								<div class="review-nav">
+									<div class="review-page-prev" onclick="loadReview(1, orderType, this)">
+										<img src="/images/page-first.png">
+									</div>
+									<div class="review-page-prev" onclick="loadReview((reviewPage - 1), orderType, this)">
+										<img src="/images/page-prev.png">
+									</div>
+									<div class="review-page-next" onclick="loadReview((reviewPage + 1), orderType, this)">
+										<img src="/images/page-next.png">
+									</div>
+									<div class="review-page-next" onclick="loadReview(reviewLastPage, orderType, this)">
+										<img src="/images/page-last.png">
+									</div>
+								</div>
+								
+								
+								</c:if>
+							</div>
+						</div>
+						
+						<div class="inner-box space-info">
+							<div class="inner-box-content">
+								<div class="space-info-subject">Q&amp;A</div>
+								<div id="scroll-to-qna"></div>
+								
+								<div id="qna-list">
+									<c:if test="${qnaList.size() == 0}">
+									<div>등록된 Q&amp;A가 없습니다.</div>
+									</c:if>
+									<div id="qna-elements">
+									<c:forEach var="qnaVO" items="${qnaList}">
+									<div class="review-wrap">
+										<div class="review-header">
+											<div class="review-member">
+												<div class="review-profile-img">
+													<img src="${qnaVO.profileSrc}">
+												</div>
+												<div class="review-nickname" onclick="profileOpen(${qnaVO.mIdx})">
+													${qnaVO.mNickname}
+												</div>
+											</div>
+											<div class="review-score-wrap">
+												<fmt:formatDate value="${qnaVO.regDate}" pattern="yyyy.MM.dd HH:mm" />
+											</div>
+										</div>
+										<div class="review-body">
+											<div class="review-content">
+												<c:if test="${qnaVO.publicYN == 'N'}">
+												<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">
+												</c:if>${qnaVO.content}
+											</div>
+										</div>
+										<div class="qna-buttons">
+											<div class="qna-answer-button">
+												<c:if test="${hlogin.mIdx == spacesVO.hostIdx && qnaVO.answer == null}">
+												<button class="normal-button show-answer-button" onclick="qnaAnswer(${qnaVO.qnaIdx}, ${param.idx}, this)">답변하기</button>
+												</c:if>
+											</div>
+											<div class="qna-modify-buttons">
+												<c:if test="${qnaVO.mIdx == login.mIdx}">
+												<button class="normal-button qna-update-button" onclick="qnaUpdate(${qnaVO.qnaIdx}, this)">수정</button>
+												<button class="normal-button" onclick="qnaDelete(${qnaVO.qnaIdx})">삭제</button>
+												</c:if>
+											</div>
+										</div>
+										<c:if test="${qnaVO.answer != null}">
+										<div class="qna-answer-wrap">
+											<div class="qna-answer-title-wrap">
+												<div class="qna-answer-title">
+													호스트의 답변
+												</div>
+												<div class="qna-answer-date">
+													<fmt:formatDate value="${qnaVO.answerDate}" pattern="yyyy.MM.dd HH:mm"/>
+												</div>
+											</div>
+											<div class="qna-answer-content">
+												<c:if test="${qnaVO.publicYN == 'N'}">
+												<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">
+												</c:if>${qnaVO.answer}
+											</div>
+											<c:if test="${hlogin.mIdx == spacesVO.hostIdx}">
+											<div class="qna-answer-buttons">
+												<button class="normal-button qna-answer-modify-button" onclick="qnaAnswerModify(${qnaVO.qnaIdx}, ${param.idx}, this)">수정</button>
+												<button class="normal-button qna-answer-modify-button" onclick="qnaAnswerDelete(${qnaVO.qnaIdx}, ${param.idx})">삭제</button>
+											</div>
+											</c:if>
+										</div>
+										</c:if>
+									</div>
+									</c:forEach>
+									</div>
+								</div>
+								
+								
+								<div id="qna-page-nav">
+									<c:if test="${qnaLastPage < 6}">
+										<c:forEach var="i" begin="${qnaStartPage}" end="${qnaEndPage}">
+											<c:choose>
+												<c:when test="${i == 1}">
+													<div class="qna-page-nav-button qna-current-page">[${i}]</div>&nbsp;
+												</c:when>
+												<c:otherwise>
+													<div class="qna-page-nav-button" onclick="qnaList(${i})">[${i}]&nbsp;</div>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</c:if>
+									<c:if test="${qnaLastPage > 5}">
+										<c:if test="${qnaStartPage > 5}">
+											<div class="qna-page-nav-button" onclick="qnaList(1)">[1]</div>&nbsp;
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaStartPage - 1})">◀</div>&nbsp;
+										</c:if>
+										
+										<c:forEach var="i" begin="${qnaStartPage}" end="${qnaEndPage}">
+											<c:choose>
+												<c:when test="${i == 1}">
+													<div class="qna-page-nav-button qna-current-page">[${i}]</div>&nbsp;
+												</c:when>
+												<c:otherwise>
+													<div class="qna-page-nav-button" onclick="qnaList(${i})">[${i}]&nbsp;</div>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										
+										<c:if test="${qnaEndPage < qnaLastPage}">
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaEndPage + 1})">▶</div>&nbsp;
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaLastPage})">[${qnaLastPage}]</div>&nbsp;
+										</c:if>
+									</c:if>
+								</div>
+								
+								
+								<c:if test="${login != null}">
+									<form id="qna-form">
+										<input type="hidden" name="spaceIdx" value="${param.idx}">
+										
+										<div class="qna-input-wrap">
+											<textarea id="qna-textarea" class="qna-textarea" name="content" placeholder="호스트에게 질문이 있으신가요?"></textarea>
+											<div class="qna-input-button-wrap">
+												<div class="form-check">
+												  <input class="form-check-input" name="privateChecked" type="checkbox" value="1" id="public_check">
+												  <label class="form-check-label" for="public_check">
+												  	비공개  
+												  </label>
+												</div>
+												<button type="button" class="normal-button accent-button" onclick="qnaQSubmit()">등록</button>
+											</div>
+										</div>
+									</form>
+								</c:if>
+								
+							</div>
+						</div>
+						
 					</div>
 					
 					<c:if test="${login != null}">
@@ -1134,6 +2241,7 @@
 						<div class="inner-box space-rsv">
 							<div class="inner-box-content">
 								<div class="space-info-subject">예약</div>
+								<div id="scroll-to-rsv"></div>
 								<div class="rsv-info">
 									예약은 오늘 날짜부터 한 달간 가능합니다.
 								</div>
@@ -1234,6 +2342,7 @@
 					
 					
 					</c:if>
+				
 				</div>
 			</div>
 		</div>

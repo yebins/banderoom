@@ -114,8 +114,8 @@ public class SpaceDAO {
 		return sqlSession.selectOne("com.project.mapper.spaceMapper.spaceReviewCntAvg", vo);
 	}
 	
-	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
-		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceReviewList", vo);
+	public List<SpaceReviewVO> spaceReviewList(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.spaceReviewList", params);
 	}
 	
 	// 테스트용
@@ -152,11 +152,79 @@ public class SpaceDAO {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getCurrentRsv", vo);
 	}
 	
+	public int countPastRsv(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countPastRsv", params);
+	}
+	
 	public List<ReservationsVO> getPastRsv(Map<String, Object> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getPastRsv", params);
 	}
 	
 	public int isReviewExist(ReservationsVO vo) {
 		return sqlSession.selectOne("com.project.mapper.spaceMapper.isReviewExist", vo);
+	}
+	
+	public int insertReview(SpaceReviewVO vo) {
+		return sqlSession.insert("com.project.mapper.spaceMapper.insertReview", vo);
+	}
+	
+	public SpaceReviewVO getReviewInfo(SpaceReviewVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.getReviewInfo", vo);
+	}
+	
+	public int deleteReview(SpaceReviewVO vo) {
+		return sqlSession.delete("com.project.mapper.spaceMapper.deleteReview", vo);
+	}
+	
+	public int updateReview(SpaceReviewVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.updateReview", vo);
+	}
+	
+	public int insertQnaQ(SpaceQnaVO vo) {
+		return sqlSession.insert("com.project.mapper.spaceMapper.insertQnaQ", vo);
+	}
+	
+	public int countQna(SpacesVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countQna", vo);
+	}
+	
+	public List<SpaceQnaVO> qnaList(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.qnaList", params);
+	}
+	
+	public int insertQnaA(SpaceQnaVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.updateQnaA", vo);
+	}
+
+	public int deleteQnaA(SpaceQnaVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.deleteQnaA", vo);
+	}
+	
+	public SpaceQnaVO qnaInfo(SpaceQnaVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.qnaInfo", vo);
+	}
+	
+	public int deleteQna(SpaceQnaVO vo) {
+		return sqlSession.delete("com.project.mapper.spaceMapper.deleteQna", vo);
+	}
+	
+	public int updateQnaQ(SpaceQnaVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.updateQnaQ", vo);
+	}
+	
+	public int countRsvBySpace(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countRsvBySpace", params);
+	}
+	
+	public List<ReservationsVO> getRsvBySpace(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.getRsvBySpace", params);
+	}
+	
+	public int countPointHistory(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countPointHistory", params);
+	}
+	
+	public List<PointsVO> pointHistory(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.pointHistory", params);
 	}
 }

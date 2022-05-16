@@ -35,7 +35,10 @@ textarea{
 			data:$("#application").serialize(),
 			success:function(data){
 				if(data == 1){
+					alert('지원서 작성이 완료되었습니다.');
 					window.close();
+				}else{
+					alert('지원서 작성이 완료되지 않았습니다.');
 				}
 			}
 			

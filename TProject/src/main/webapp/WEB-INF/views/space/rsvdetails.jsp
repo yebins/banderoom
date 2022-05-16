@@ -314,7 +314,7 @@
 			
 			<div class="inner-box">
 				<div class="inner-box-content pay-content">
-					<div class="small-title">
+					<div class="small-title" style="margin-top: 0px;">
 						포인트 사용
 					</div>
 					<div class="content">

@@ -15,4 +15,12 @@ public interface TeamsService {
 	TeamsVO details(int teamIdx);
 	int apply(ApplicationsVO vo);
 	int delete(int teamIdx);
+	int update(TeamsVO vo);
+	List<TeamsVO> reglist(int mIdx);
+	List<ApplicationsVO> applist(int mIdx);
+	int finish(int teamIdx);
+	List<ApplicationsVO> myapp(int teamIdx);
+	void updateStatus();
+	int updateApp(ApplicationsVO vo);
+	int deleteApp(int appIdx);
 }

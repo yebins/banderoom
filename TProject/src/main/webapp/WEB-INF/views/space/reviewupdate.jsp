@@ -157,6 +157,36 @@
 	
 </style>
 <script>
+
+	$(function() {
+		setScore(${reviewVO.score});
+		
+		if (${reviewVO.pictureSrc != null}) {
+			var img = $("#uploaded-image");
+      $(img).attr('src', '${reviewVO.thumbSrc}');
+      $(img).parent().css("display", "flex");
+      $(".review-textarea").css("padding-left", "130px");
+		}
+		
+		setTimeout(() => {
+
+			var divAspect = 1; // div의 가로세로비는 알고 있는 값이다
+			var imgAspect = $(img).height() / $(img).width();
+			
+		
+			if (imgAspect <= divAspect) {
+			    // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
+			    $(img).css("width", "auto");
+			    $(img).css("height", "100%");
+			} else {
+			    // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
+			    $(img).css("width", "100%");
+			    $(img).css("height", "auto");
+			}
+			
+		}, 100);
+	})
+
 	function setScore(score) {
 		$('.score-color').css("width", (30 * score) + "px");
 		$("input[name=score]").val(score);
@@ -191,6 +221,8 @@
 			    $(img).css("width", "100%");
 			    $(img).css("height", "auto");
 			}
+			
+			$('#fileChanged').val("1");
 		}, 100);
 	}
 	
@@ -198,6 +230,8 @@
 		$("#file").val("");
 		$(".upload-img-box").css("display", "none");
 		$(".review-textarea").css("padding-left", "15px");
+
+		$('#fileChanged').val("1");
 	}
 	
 	function reviewSubmit() {
@@ -216,7 +250,7 @@
 		
 		$.ajax({
 			type: "post",
-			url: "review.do",
+			url: "reviewupdate.do",
 			data: formData,
 			contentType: false,
 			processData: false,
@@ -231,6 +265,8 @@
 					window.opener.gotoLogin();
 					window.close();
 				} else if (result == 2) {
+					alert('권한이 없습니다.');				
+				} else if (result == 3) {
 					alert('작성에 실패했습니다.');
 				}
 			}
@@ -288,6 +324,7 @@
 				</div>
 				
 				<form id="reviewForm" action="review.do" method="post" enctype="multipart/form-data">
+					<input id="fileChanged" type="hidden" name="fileChanged" value="0">
 					<input type="hidden" name="resIdx" value="${rsvVO.resIdx}">
 					<input type="hidden" name="spaceIdx" value="${rsvVO.spaceIdx}">
 					<div class="review-buttons-wrap">
@@ -308,7 +345,7 @@
 						<button type="button" class="normal-button accent-button" onclick="reviewSubmit()">등록</button>
 					</div>
 					<div class="review-content-wrap">
-						<textarea class="review-textarea" name="content" placeholder="내용을 입력하세요."></textarea>
+						<textarea class="review-textarea" name="content" placeholder="내용을 입력하세요.">${reviewVO.content}</textarea>
 						<div class="upload-img-box">
 							<img id="uploaded-image" onclick="imgReset()">
 						</div>

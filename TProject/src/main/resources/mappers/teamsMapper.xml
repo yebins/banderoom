@@ -57,9 +57,10 @@
 			,type
 			,genre
 			,title
+			,status
 			,enddate
 		  FROM teams
-		 WHERE status=0
+		 WHERE status!=1
 		 <if test="vo != null">
 			 <if test="vo.addr1 != null and vo.addr1 != ''">
 			   AND addr1=#{vo.addr1}
@@ -87,7 +88,7 @@
 			   )
 			 </if>
 		 </if>
-		 ORDER BY teamidx DESC
+		 ORDER BY status, teamidx DESC
 	</select>
 	
 	<select id="selectParts" resultType="partsVO" parameterType="int">
@@ -109,12 +110,13 @@
 			,title
 			,content
 			,regdate
+			,status
 			,enddate
 		  FROM teams
 		 WHERE teamidx = #{teamIdx}
 	</select>
 	
-	<insert id="apply" parameterType="ApplicationsVO">
+	<insert id="apply" parameterType="applicationsVO">
 		INSERT INTO applications(
 			 teamidx
 			,midx
@@ -135,4 +137,95 @@
 		   SET status = 1
 		 WHERE teamidx = #{teamIdx}
 	</update>
+	
+	<update id="update" parameterType="teamsVO">
+		UPDATE teams
+		   SET mnickname = #{mNickname},
+		   	   title = #{title},
+			   content = #{content},
+			   endDate = #{endDate}
+		 WHERE teamidx = #{teamIdx}
+	</update>
+	
+	<select id="reglist" parameterType="int" resultType="teamsVO">
+		SELECT
+			 teamidx
+			,midx
+			,mnickname
+			,addr1
+			,addr2
+			,teamlevel
+			,type
+			,genre
+			,title
+			,content
+			,regdate
+			,status
+			,enddate
+		  FROM teams
+		 WHERE midx=#{mIdx}
+		   AND status!=1
+	</select>
+	
+	<select id="applist" parameterType="int" resultType="applicationsVO">
+		SELECT
+			 team.teamidx
+			,team.midx
+			,team.mnickname
+			,app.appidx
+			,team.title
+			,team.status
+			,app.partidx
+			,p.name as partname
+			,app.content
+			,team.enddate
+		  FROM teams team
+		  JOIN applications app 
+		    ON team.teamidx = app.teamidx
+		  JOIN parts p
+            ON app.partidx = p.partidx 
+		   AND app.midx=#{mIdx}
+	</select>
+	
+	<update id="finish" parameterType="int">
+		UPDATE teams
+		   SET status=2
+		 WHERE teamidx = #{teamIdx}
+	</update>
+	
+	<select id="myapp" parameterType="int" resultType="applicationsVO">
+		SELECT
+			 team.teamidx
+			,app.midx
+			,app.appidx
+			,team.title
+			,team.status
+			,app.partidx
+			,p.name as partname
+			,p.capacity as partcapacity
+			,app.content
+			,app.mnickname
+			,team.enddate
+		  FROM teams team
+		  JOIN applications app 
+		    ON team.teamidx = app.teamidx
+		  JOIN parts p
+            ON app.partidx = p.partidx 
+		   AND team.teamidx=#{teamIdx};
+	</select>
+	
+	<update id="updateStatus">
+		update teams set status=2 where enddate<![CDATA[<]]>curdate()
+	</update>
+	
+	<update id="updateApp" parameterType="applicationsVO">
+		UPDATE applications
+		   SET content = #{content}
+		 WHERE appidx = #{appIdx}
+	</update>
+	
+	<delete id="deleteApp" parameterType="int">
+		DELETE FROM applications WHERE appidx = #{appIdx}
+	</delete>
+	
 </mapper>

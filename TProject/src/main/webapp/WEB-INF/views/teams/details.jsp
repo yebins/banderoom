@@ -48,6 +48,14 @@
 	position: absolute;
 	right: 0px;
 }
+.midx:hover{
+	cursor: pointer;
+}
+#endPost{
+	text-align: center;
+    font-size: 25px;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -60,18 +68,20 @@
 			type:"post",
 			data:"teamIdx="+$("#teamIdx").val(),
 			success:function(data){
-				if(data != 0){
-					alert('삭제되었습니다.');
-					location.replace('main.do');
-				}else{
-					alert('글 삭제가 완료되지 않았습니다.');
-				}
+					if(data = "ok"){
+						alert('삭제되었습니다.');
+						location.replace('main.do');
+					}else{
+						alert('글 삭제가 완료되지 않았습니다.');
+					}
 				}
 			});
 		}
-
-		
-		
+	}
+	
+	function loginAlert(){
+		alert('로그인해주세요.');
+		location.href = "/member/glogin.do";
 	}
 	
 </script>
@@ -89,10 +99,14 @@
 			팀원 모집
 		</div>
 		<div id="page-content">
-			<div class="inner-box" style="height:820px;">
+			<div class="inner-box" style="height:820px; <c:if test='${details.status==2}'>filter: brightness(0.8);</c:if> ">
 				<input type="hidden" name="teamIdx" id="teamIdx" value="${details.teamIdx}">
+				<c:if test='${details.status==2}'>
+					<div id="endPost">마감된 글입니다.</div>
+				</c:if>
 				<div id="title">[${details.type}] ${details.title}</div>
-				<div id="writer">${details.mNickname} 
+				<div id="writer">
+					<span class="midx" onclick="profileOpen(${details.mIdx})">${details.mNickname}</span>
 					<span class="terms date"><b>작성일자</b> <fmt:formatDate value="${details.regDate}" pattern="yyyy년 MM월 dd일 HH시 mm분"/></span>
 				</div>
 				<hr style="margin-top: 0px; margin-bottom:25px;">
@@ -117,13 +131,20 @@
 					<div id="content" class="form-control" style="width:100%; height:500px;">${details.content}</div>
 				</div>
 				<div class="inner-box-button-wrap">
+				<c:if test="${details.status==0}">
 					<c:if test="${details.mIdx == login.mIdx}">
 						<button type="button" class="normal-button" onclick="location.href='update.do?teamIdx=${details.teamIdx}'">수정</button> 
 						<button type="button" class="normal-button" onclick="deleteFn()">삭제</button>
 					</c:if>
+					<c:if test="${login == null}">
+						<button type="button" class="normal-button accent-button" onclick="loginAlert()">지원하기</button>
+					</c:if>
+					<c:if test="${login != null}">
 						<button type="button" class="normal-button accent-button" 
 						onclick="window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
                        'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');">지원하기</button> 
+					</c:if>
+				</c:if>
 				</div>
 			</div>
 		</div>

@@ -1,12 +1,14 @@
 package com.project.vo;
 
-public class ApplicationsVO {
+public class ApplicationsVO extends TeamsVO{
 
 	private int appIdx;
 	private int teamIdx;
 	private int mIdx;
 	private String mNickname;
 	private int partIdx;
+	private String partname;
+	private String partcapacity;
 	private String content;
 	
 	public int getAppIdx() {
@@ -45,4 +47,17 @@ public class ApplicationsVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
+	public String getPartname() {
+		return partname;
+	}
+	public void setPartname(String partname) {
+		this.partname = partname;
+	}
+	public String getPartcapacity() {
+		return partcapacity;
+	}
+	public void setPartcapacity(String partcapacity) {
+		this.partcapacity = partcapacity;
+	}
+	
 }

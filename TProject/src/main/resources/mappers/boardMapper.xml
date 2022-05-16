@@ -8,8 +8,8 @@
 		(select row_number() over(order by aIdx desc) as rownum, s.* from articles s
 		where bIdx=#{bIdx} 
 		and status != 1
-		<if test="searchtitle != ''">
-		and title like concat('%',#{searchtitle},'%')
+		<if test='searchValue != null and !"".equals(searchValue)'>
+			and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>
 		order by aIdx desc) a
 		<![CDATA[where rownum >= #{start} and rownum <= #{end}]]>
@@ -23,8 +23,8 @@
 		select * from articles
 		where bidx = #{bIdx}
 		and status != 1
-		<if test="searchtitle != ''">
-		and title like concat('%',#{searchtitle},'%')
+		<if test='searchValue != null and !"".equals(searchValue)'>
+			and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>
 	</select>
 	
@@ -117,9 +117,10 @@
 			  art.*
 			FROM articles art,(select @rownum:=0) rn_art
 		]]>
-			where bIdx=3
-			<if test='searchtitle != null and !"".equals(searchtitle)'>
-			and title like CONCAT('%',#{searchtitle},'%')
+			where bIdx=#{bIdx}
+			and status!=1
+			<if test='searchValue != null and !"".equals(searchValue)'>
+			and ${searchType} like CONCAT('%',#{searchValue},'%')
 			</if>
 			<if test="status != 0 and status != null">
 			and status=#{status}
@@ -133,9 +134,10 @@
 	<select id="jlistArticleCount" parameterType="Map" resultType="int">
 		select count(aIdx)
 		from articles
-		where bidx=3
-		<if test='searchtitle != null and !"".equals(searchtitle)'>
-		and title like CONCAT('%',#{searchtitle},'%')
+		where bidx=#{bIdx}
+		and status!=1
+		<if test='searchValue != null and !"".equals(searchValue)'>
+		and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>
 		<if test="status != 0 and status != null">
 		and status=#{status}
@@ -200,7 +202,7 @@
 			)		
 	</insert>
 	
-<!-- 	<select id="commentList" parameterType="map" resultType="commentsVO">
+ 	<!-- <select id="commentList" parameterType="map" resultType="commentsVO">
 		<![CDATA[
 		select * from
 			(SELECT
@@ -219,17 +221,23 @@
 			where 
 				rownum>=${start} and rownum <=#{end}
 		]]>
-	</select> -->
-	
+	</select> 
+	 -->
 	<select id="commentCount" parameterType="map" resultType="int">
-		select count(cIdx) from comments where aIdx=#{aIdx}
+		select (c_count + cr_count) count from 
+			(select count(cc.cidx) as c_count 
+				from comments cc where aidx = #{aIdx}) a, 
+			(select count(cr.cidx) as cr_count from comments c right join comment_replies cr on c.cidx = cr.cidx where c.aidx = #{aIdx}) b;
+	</select>
+	
+	<select id="onlyCommentTotal" parameterType="map" resultType="int">
+		select count(cIdx) from comments
+		where 
+			aIdx=#{aIdx}
+		and
+			bIdx=#{bIdx};
 	</select>
 
-	<select id="commentsList" parameterType="CommentsVO" resultType="CommentsVO">
-		select * from comments
-		where aIdx=#{aIdx}
-		and bIdx=#{bIdx}
-	</select>
 	<select id="commentList" parameterType="map" resultType="commentsVO">
 		select 	list.rownum
 				,list.cidx
@@ -271,5 +279,68 @@
 			where 
 				rownum>=#{start} and rownum <=#{end}
 				]]>
+	</select>
+	
+	<select id="bestArticles" resultType="ArticlesVO">
+		select a.*, count(*) as likeCount from articles a inner join liked_articles la
+		on a.aidx = la.aidx group by a.aidx order by likeCount desc limit 3;
+	</select>
+		
+	<update id="commentUpdate" parameterType="commentsVO">
+		update comments set
+			<if test='content != null and !"".equals(content)'>
+			content=#{content}
+			</if>
+			<if test='picSrc != null and !"".equals(picSrc)'>
+			,picsrc=#{picSrc}
+			</if>
+			<if test='status != null and !"".equals(status)'>
+			,status=#{status}
+			</if>
+			where
+				aIdx=#{aIdx}
+			and 
+				bIdx=#{bIdx}
+			and 
+				cIdx=#{cIdx}
+	</update> 
+	
+	<update id="commentDelete" parameterType="commentsVO">
+		update comments set status=1 where cIdx=#{cIdx}
+	</update>
+	
+	<insert id="replyWrite" parameterType="commentRepliesVO">
+		insert into comment_replies(
+			cIdx
+			,mIdx
+			,mnickname
+			,content
+			,picsrc
+			,regdate
+			)values(
+			#{cIdx}
+			,#{mIdx}
+			,#{mNickname}
+			,#{content}
+			,#{picSrc}
+			,now()
+			)
+	</insert>
+	
+	<select id="replyList" parameterType="commentRepliesVO" resultType="commentRepliesVO">
+		select 
+			rIdx
+			,cIdx
+			,mIdx
+			,mnickname
+			,content
+			,picsrc
+			,regdate
+		from
+			comment_replies
+		where
+			cIdx=#{cIdx}
+		order by
+			regDate
 	</select>
 </mapper>

@@ -94,13 +94,24 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public List<SpaceReviewVO> spaceReviewList(SpacesVO vo) {
-		return dao.spaceReviewList(vo);
+	public List<SpaceReviewVO> spaceReviewList(Map<String, Object> params) {
+		return dao.spaceReviewList(params);
 	}
 	
 	@Override
 	public Map<String, Object> spaceReviewCntAvg(SpacesVO vo) {
-		return dao.spaceReviewCntAvg(vo);
+		Map<String, Object> result = dao.spaceReviewCntAvg(vo);
+
+		if (result == null) {
+			result = new HashMap<String, Object>();
+			
+			result.put("count", 0);
+			result.put("avg", 0.0);
+			result.put("spaceidx", vo.getIdx());
+			
+		}
+		
+		return result;
 	}
 	
 	//테스트용
@@ -160,9 +171,27 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
-	public List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange) {
+	public int countPastRsv(GeneralMembersVO vo, String dateType, String dateRange) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		
+		params.put("mIdx", vo.getmIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.countPastRsv(params);
+	}
+
+	@Override
+	public List<ReservationsVO> getPastRsv(GeneralMembersVO vo, String dateType, String dateRange, int start) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("startRow", start);
 		params.put("mIdx", vo.getmIdx());
 		
 		try {
@@ -180,6 +209,133 @@ public class SpaceServiceImpl implements SpaceService {
 	public int isReviewExist(ReservationsVO vo) {
 		return dao.isReviewExist(vo);
 	}
-	
 
+	@Override
+	public int insertReview(SpaceReviewVO vo) {
+		return dao.insertReview(vo);
+	}
+	
+	@Override
+	public SpaceReviewVO getReviewInfo(SpaceReviewVO vo) {
+		return dao.getReviewInfo(vo);
+	}
+	
+	@Override
+	public int deleteReview(SpaceReviewVO vo) {
+		return dao.deleteReview(vo);
+	}
+	
+	@Override
+	public int updateReview(SpaceReviewVO vo) {
+		return dao.updateReview(vo);
+	}
+
+	@Override
+	public int countQna(SpacesVO vo) {
+		return dao.countQna(vo);
+	}
+
+	@Override
+	public int insertQnaQ(SpaceQnaVO vo) {
+		return dao.insertQnaQ(vo);
+	}
+
+	@Override
+	public List<SpaceQnaVO> qnaList(Map<String, Object> params) {
+		return dao.qnaList(params);
+	}
+
+	@Override
+	public int insertQnaA(SpaceQnaVO vo) {
+		return dao.insertQnaA(vo);
+	}
+
+	@Override
+	public int deleteQnaA(SpaceQnaVO vo) {
+		return dao.deleteQnaA(vo);
+	}
+
+	@Override
+	public SpaceQnaVO qnaInfo(SpaceQnaVO vo) {
+		return dao.qnaInfo(vo);
+	}
+
+	@Override
+	public int deleteQna(SpaceQnaVO vo) {
+		return dao.deleteQna(vo);
+	}
+	
+	@Override
+	public int updateQnaQ(SpaceQnaVO vo) {
+		return dao.updateQnaQ(vo);
+	}
+
+	@Override
+	public int countRsvBySpace(SpacesVO vo, String dateType, String dateRange) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("spaceIdx", vo.getIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.countRsvBySpace(params);
+	}
+
+	@Override
+	public List<ReservationsVO> getRsvBySpace(SpacesVO vo, String dateType, String dateRange, int start) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("startRow", start);
+		params.put("spaceIdx", vo.getIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.getRsvBySpace(params);
+	}
+
+	@Override
+	public int countPointHistory(GeneralMembersVO login, String dateRange) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("mIdx", login.getmIdx());
+
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		
+		return dao.countPointHistory(params);
+	}
+	
+	@Override
+	public List<PointsVO> pointHistory(GeneralMembersVO login, String dateRange, int start) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("startRow", start);
+		params.put("mIdx", login.getmIdx());
+
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		
+		return dao.pointHistory(params);
+	}
 }
