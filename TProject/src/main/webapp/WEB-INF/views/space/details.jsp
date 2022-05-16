@@ -630,25 +630,33 @@
 		outline: none;
 	}
 	
+	
 	#qna-page-nav {
+		border-top: 1px solid lightgray;
 		width: 100%;
+		height: 80px;
+		margin-top: 15px;
+		padding-top: 15px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border-top: 1px solid lightgray;
-		margin-top: 15px;
-		padding-top: 15px;
-		height: 70px;
 	}
-	
-	.qna-page-nav-button:hover {
+	.qna-page-nav-button {
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		margin: 7.5px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.qna-page-nav-button:not(.qna-current-page) {
 		cursor: pointer;
 	}
-	.qna-current-page {
+	.qna-page-nav-button.qna-current-page {
+		background-color: #fbe6b2;
 		font-weight: bold;
-	}
-	.qna-current-page:hover {
-		cursor: default;
 	}
 	
 	.qna-buttons {
@@ -1593,30 +1601,30 @@
 				if (qnaLastPage < 6) {
 					for (var i = qnaStartPage; i <= qnaEndPage; i++) {
 						if (i == qnaCurrentPage) {
-							html += '<div class="qna-page-nav-button qna-current-page">[' + i + ']</div>&nbsp;';
+							html += '<div class="qna-page-nav-button qna-current-page">' + i + '</div>';
 						} else {
-							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">[' + i + ']&nbsp;</div>';
+							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">' + i + '</div>';
 						}
 					}
 				}
 				
 				if (qnaLastPage > 5) {
 					if (qnaStartPage > 5) {
-						html += '<div class="qna-page-nav-button" onclick="qnaList(1)">[1]</div>&nbsp;';
-						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaStartPage - 1)">◀</div>&nbsp;';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(1)">1</div>';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaStartPage - 1)">◀</div>';
 					}
 
 					for (var i = qnaStartPage; i <= qnaEndPage; i++) {
 						if (i == currentPage) {
-							html += '<div class="qna-page-nav-button qna-current-page">[' + i + ']</div>&nbsp;';
+							html += '<div class="qna-page-nav-button qna-current-page">' + i + '</div>';
 						} else {
-							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">[' + i + ']&nbsp;</div>';
+							html += '<div class="qna-page-nav-button" onclick="qnaList(' + i + ')">' + i + '</div>';
 						}
 					}
 					
 					if (qnaEndPage < qnaLastPage) {
-						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaEndPage + 1)">▶</div>&nbsp;';
-						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaLastPage)">[' + qnaLastPage + ']</div>&nbsp;';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaEndPage + 1)">▶</div>';
+						html += '<div class="qna-page-nav-button" onclick="qnaList(qnaLastPage)">' + qnaLastPage + '</div>';
 					}
 				}
 				
@@ -2177,34 +2185,34 @@
 										<c:forEach var="i" begin="${qnaStartPage}" end="${qnaEndPage}">
 											<c:choose>
 												<c:when test="${i == 1}">
-													<div class="qna-page-nav-button qna-current-page">[${i}]</div>&nbsp;
+													<div class="qna-page-nav-button qna-current-page">${i}</div>
 												</c:when>
 												<c:otherwise>
-													<div class="qna-page-nav-button" onclick="qnaList(${i})">[${i}]&nbsp;</div>
+													<div class="qna-page-nav-button" onclick="qnaList(${i})">${i}</div>
 												</c:otherwise>
 											</c:choose>
 										</c:forEach>
 									</c:if>
 									<c:if test="${qnaLastPage > 5}">
 										<c:if test="${qnaStartPage > 5}">
-											<div class="qna-page-nav-button" onclick="qnaList(1)">[1]</div>&nbsp;
-											<div class="qna-page-nav-button" onclick="qnaList(${qnaStartPage - 1})">◀</div>&nbsp;
+											<div class="qna-page-nav-button" onclick="qnaList(1)">1</div>
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaStartPage - 1})">◀</div>
 										</c:if>
 										
 										<c:forEach var="i" begin="${qnaStartPage}" end="${qnaEndPage}">
 											<c:choose>
 												<c:when test="${i == 1}">
-													<div class="qna-page-nav-button qna-current-page">[${i}]</div>&nbsp;
+													<div class="qna-page-nav-button qna-current-page">${i}</div>
 												</c:when>
 												<c:otherwise>
-													<div class="qna-page-nav-button" onclick="qnaList(${i})">[${i}]&nbsp;</div>
+													<div class="qna-page-nav-button" onclick="qnaList(${i})">${i}</div>
 												</c:otherwise>
 											</c:choose>
 										</c:forEach>
 										
 										<c:if test="${qnaEndPage < qnaLastPage}">
-											<div class="qna-page-nav-button" onclick="qnaList(${qnaEndPage + 1})">▶</div>&nbsp;
-											<div class="qna-page-nav-button" onclick="qnaList(${qnaLastPage})">[${qnaLastPage}]</div>&nbsp;
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaEndPage + 1})">▶</div>
+											<div class="qna-page-nav-button" onclick="qnaList(${qnaLastPage})">${qnaLastPage}</div>
 										</c:if>
 									</c:if>
 								</div>
