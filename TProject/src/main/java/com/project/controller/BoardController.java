@@ -83,13 +83,26 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/list.do",method=RequestMethod.GET)
-	public String list(Model model,int bIdx,String searchtitle, int page) {
-		List<ArticlesVO> list=boardService.list(bIdx, searchtitle, page);
+	public String list(Model model, @RequestParam Map<String, Object> map, HttpServletRequest request) {
+		List<ArticlesVO> list=boardService.list(map, request);
+		if(map.get("bIdx") == null) {
+			map.put("bIdx", 2);
+		}
+		for(int i=0;i<list.size();i++) {
+			String co=list.get(i).getContent().replaceAll(" ", "");
+			
+			if(co.indexOf("<img") != -1) {
+				
+				list.get(i).setTitle(list.get(i).getTitle()+"<img src='/images/picture-button.png' height='11px'>");
+			}
+		}
+		
 		Map<Integer, Integer> likeList = new HashMap<Integer, Integer>();		
 		for (int i = 0; i < list.size(); i++) {
 			likeList.put(list.get(i).getaIdx(), boardService.likeCount(list.get(i).getaIdx()));
 		}
-		List<ArticlesVO> pc= boardService.pageCount(bIdx, searchtitle);
+		List<ArticlesVO> pc= boardService.pageCount(map);
+		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
 		PagingUtil pu = new PagingUtil(pc.size(), page, 10, 10);
 		
 		model.addAttribute("pu", pu);
@@ -97,6 +110,12 @@ public class BoardController {
 		model.addAttribute("likeList", likeList);
 		
 		model.addAttribute("list",list);
+		
+		List<ArticlesVO> bestArticles=boardService.bestArticles();
+		
+		model.addAttribute("bestArticles", bestArticles);
+		
+		model.addAttribute("searchtitle", map.get("searchtitle"));
 		
 		return "board/list";
 	}
@@ -396,6 +415,7 @@ public class BoardController {
 			
 			return data;
 		}
+		
 		
 }
 

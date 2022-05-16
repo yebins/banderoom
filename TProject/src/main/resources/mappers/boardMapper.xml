@@ -8,8 +8,8 @@
 		(select row_number() over(order by aIdx desc) as rownum, s.* from articles s
 		where bIdx=#{bIdx} 
 		and status != 1
-		<if test="searchtitle != ''">
-		and title like concat('%',#{searchtitle},'%')
+		<if test='searchValue != null and !"".equals(searchValue)'>
+			and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>
 		order by aIdx desc) a
 		<![CDATA[where rownum >= #{start} and rownum <= #{end}]]>
@@ -23,8 +23,8 @@
 		select * from articles
 		where bidx = #{bIdx}
 		and status != 1
-		<if test="searchtitle != ''">
-		and title like concat('%',#{searchtitle},'%')
+		<if test='searchValue != null and !"".equals(searchValue)'>
+			and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>
 	</select>
 	
@@ -227,11 +227,6 @@
 		select count(cIdx) from comments where aIdx=#{aIdx}
 	</select>
 
-	<select id="commentsList" parameterType="CommentsVO" resultType="CommentsVO">
-		select * from comments
-		where aIdx=#{aIdx}
-		and bIdx=#{bIdx}
-	</select>
 	<select id="commentList" parameterType="map" resultType="commentsVO">
 		select 	list.rownum
 				,list.cidx
@@ -273,5 +268,10 @@
 			where 
 				rownum>=#{start} and rownum <=#{end}
 				]]>
+	</select>
+	
+	<select id="bestArticles" resultType="ArticlesVO">
+		select a.*, count(*) as likeCount from articles a inner join liked_articles la
+		on a.aidx = la.aidx group by a.aidx order by likeCount desc limit 3;
 	</select>
 </mapper>
