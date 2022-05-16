@@ -710,7 +710,7 @@ public class SpaceController {
 		return spaceService.getRsvHours(date);
 	}
 	
-	@RequestMapping(value = "myspacersv.do")
+	@RequestMapping(value = "myrsv.do")
 	public String mySpaceRsv(Model model, String dateType, String dateRange, HttpServletRequest request) {
 
 		if (request.getSession().getAttribute("login") == null) {
@@ -738,13 +738,13 @@ public class SpaceController {
 			model.addAttribute("endPage", pastRsvPu.getEndPage());
 			model.addAttribute("lastPage", pastRsvPu.getLastPage());
 			model.addAttribute("today", new Date());
-			return "space/myspacersv";
+			return "space/myrsv";
 		}
 	}
 	
-	@RequestMapping(value = "loadMySpaceRsv.do")
+	@RequestMapping(value = "loadMyRsv.do")
 	@ResponseBody
-	public Map<String, Object> loadMySpaceRsv(int page, String dateType, String dateRange, HttpServletRequest request) {
+	public Map<String, Object> loadMyRsv(int page, String dateType, String dateRange, HttpServletRequest request) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -893,7 +893,6 @@ public class SpaceController {
 		params.put("spacesVO", spacesVO);
 		
 		List<SpaceQnaVO> qnaList = spaceService.qnaList(params);
-		
 		
 		
 		// 비공개 처리: 자신이 등록한 공간일 경우 모두 공개
@@ -1143,6 +1142,134 @@ public class SpaceController {
 		  	return 3; // 입력 오류
 		  }
 		}
+	}
+	
+	@RequestMapping(value = "myspacersv.do")
+	public String mySpaceRsv(Model model, SpacesVO vo, String dateType, String dateRange, HttpServletRequest request) {
+		
+		vo = spaceService.details(vo);
+
+		GeneralMembersVO glogin = new GeneralMembersVO();
+		HostMembersVO hlogin = new HostMembersVO();
+		
+		if (request.getSession().getAttribute("login") != null) {
+			glogin = (GeneralMembersVO) request.getSession().getAttribute("login");
+		}
+		
+		if (request.getSession().getAttribute("hlogin") != null) {
+			hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+		}
+		
+		boolean auth = false;
+		
+		if (glogin.getAuth() == 3) {
+			auth = true;
+		}
+		
+		if (hlogin.getmIdx() == vo.getHostIdx()) {
+			auth = true;
+		}
+		
+		if (auth) {
+			PagingUtil pastRsvPu = new PagingUtil(spaceService.countRsvBySpace(vo, dateType, dateRange), 1, 10, 5);
+			
+			List<ReservationsVO> pastRsv = spaceService.getRsvBySpace(vo, dateType, dateRange, pastRsvPu.getStart() - 1);
+
+			Iterator<ReservationsVO> rsvIterator = pastRsv.iterator();
+			
+			Map<Integer, GeneralMembersVO> gmVOList = new HashMap<Integer, GeneralMembersVO>();
+			
+			while (rsvIterator.hasNext()) {
+				ReservationsVO rsvVO = rsvIterator.next();
+				GeneralMembersVO gmVO = new GeneralMembersVO();
+				gmVO.setmIdx(rsvVO.getmIdx());
+				gmVOList.put(rsvVO.getResIdx(), memberService.oneMemberInfo(gmVO));
+			}
+			
+			model.addAttribute("pastRsv", pastRsv);
+			model.addAttribute("startPage", pastRsvPu.getStartPage());
+			model.addAttribute("endPage", pastRsvPu.getEndPage());
+			model.addAttribute("lastPage", pastRsvPu.getLastPage());
+			model.addAttribute("gmVOList", gmVOList);
+			model.addAttribute("today", new Date());
+			return "space/myspacersv";
+		} else {
+			model.addAttribute("msg", "조회 권한이 없습니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		}
+	}
+	
+	@RequestMapping(value = "loadMySpaceRsv.do")
+	@ResponseBody
+	public Map<String, Object> loadMySpaceRsv(int page, SpacesVO vo, String dateType, String dateRange, HttpServletRequest request) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+	
+		PagingUtil pastRsvPu = new PagingUtil(spaceService.countRsvBySpace(vo, dateType, dateRange), page, 10, 5);
+		
+		List<ReservationsVO> pastRsv = spaceService.getRsvBySpace(vo, dateType, dateRange, pastRsvPu.getStart() - 1);
+
+		Iterator<ReservationsVO> rsvIterator = pastRsv.iterator();
+		
+		Map<Integer, GeneralMembersVO> gmVOList = new HashMap<Integer, GeneralMembersVO>();
+		
+		while (rsvIterator.hasNext()) {
+			ReservationsVO rsvVO = rsvIterator.next();
+			GeneralMembersVO gmVO = new GeneralMembersVO();
+			gmVO.setmIdx(rsvVO.getmIdx());
+			gmVOList.put(rsvVO.getResIdx(), memberService.oneMemberInfo(gmVO));
+		}
+		
+		result.put("pastRsv", pastRsv);
+		result.put("startPage", pastRsvPu.getStartPage());
+		result.put("endPage", pastRsvPu.getEndPage());
+		result.put("lastPage", pastRsvPu.getLastPage());
+		result.put("gmVOList", gmVOList);
+		result.put("today", new Date());
+	
+		return result;
+	}
+	
+	@RequestMapping(value = "mypoint.do")
+	public String myPoint(Model model, HttpServletRequest request, String dateRange) {
+
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			PagingUtil pu = new PagingUtil(spaceService.countPointHistory(login, dateRange), 1, 10, 5);
+			
+			model.addAttribute("pointVO", spaceService.pointHistory(login, dateRange, pu.getStart() - 1));
+			model.addAttribute("startPage", pu.getStartPage());
+			model.addAttribute("endPage", pu.getEndPage());
+			model.addAttribute("lastPage", pu.getLastPage());
+			
+			return "space/mypoint";
+		}
+	}
+	
+	@RequestMapping(value = "loadmypoint.do")
+	@ResponseBody
+	public Map<String, Object> loadMyPoint(HttpServletRequest request, Integer page, String dateRange) {
+		
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		PagingUtil pu = new PagingUtil(spaceService.countPointHistory(login, dateRange), page, 10, 5);
+		
+		data.put("pointVO", spaceService.pointHistory(login, dateRange, pu.getStart() - 1));
+		data.put("startPage", pu.getStartPage());
+		data.put("endPage", pu.getEndPage());
+		data.put("lastPage", pu.getLastPage());
+		
+		return data;
+		
 	}
 	
 	/*

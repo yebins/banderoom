@@ -269,6 +269,73 @@ public class SpaceServiceImpl implements SpaceService {
 	public int updateQnaQ(SpaceQnaVO vo) {
 		return dao.updateQnaQ(vo);
 	}
-	
 
+	@Override
+	public int countRsvBySpace(SpacesVO vo, String dateType, String dateRange) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("spaceIdx", vo.getIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.countRsvBySpace(params);
+	}
+
+	@Override
+	public List<ReservationsVO> getRsvBySpace(SpacesVO vo, String dateType, String dateRange, int start) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("startRow", start);
+		params.put("spaceIdx", vo.getIdx());
+		
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("dateType", dateType);
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		return dao.getRsvBySpace(params);
+	}
+
+	@Override
+	public int countPointHistory(GeneralMembersVO login, String dateRange) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("mIdx", login.getmIdx());
+
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		
+		return dao.countPointHistory(params);
+	}
+	
+	@Override
+	public List<PointsVO> pointHistory(GeneralMembersVO login, String dateRange, int start) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("startRow", start);
+		params.put("mIdx", login.getmIdx());
+
+		try {
+			String[] dates = dateRange.split(" ~ ");
+			System.out.println(Arrays.toString(dates));
+			params.put("start", dates[0]);
+			params.put("end", dates[1]);
+		} catch (Exception e) {
+		}
+		
+		return dao.pointHistory(params);
+	}
 }

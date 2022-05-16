@@ -42,6 +42,10 @@ public interface SpaceService {
 	SpaceQnaVO qnaInfo(SpaceQnaVO vo);
 	int deleteQna(SpaceQnaVO vo);
 	int updateQnaQ(SpaceQnaVO vo);
+	int countRsvBySpace(SpacesVO vo, String dateType, String dateRange);
+	List<ReservationsVO> getRsvBySpace(SpacesVO vo, String dateType, String dateRange, int start);
+	int countPointHistory(GeneralMembersVO login, String dateRange);
+	List<PointsVO> pointHistory(GeneralMembersVO login, String dateRange, int start);
 
 	//테스트용
 	public List<String> getAddr1();

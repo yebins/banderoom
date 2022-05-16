@@ -369,10 +369,10 @@ header {
     </h2>
     <div id="c1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/space/myspacersv.do'">
+       	<div class="sm-innerlist" onclick="location.href='/space/myrsv.do'">
        	공간 예약 내역
        	</div>
-       	<div class="sm-innerlist" onclick="">
+       	<div class="sm-innerlist" onclick="location.href='/space/mypoint.do'">
        	포인트 획득 / 사용 내역
        	</div>
       </div>

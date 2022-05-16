@@ -211,4 +211,20 @@ public class SpaceDAO {
 	public int updateQnaQ(SpaceQnaVO vo) {
 		return sqlSession.update("com.project.mapper.spaceMapper.updateQnaQ", vo);
 	}
+	
+	public int countRsvBySpace(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countRsvBySpace", params);
+	}
+	
+	public List<ReservationsVO> getRsvBySpace(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.getRsvBySpace", params);
+	}
+	
+	public int countPointHistory(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.countPointHistory", params);
+	}
+	
+	public List<PointsVO> pointHistory(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.pointHistory", params);
+	}
 }
