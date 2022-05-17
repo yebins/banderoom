@@ -490,9 +490,9 @@ public class BoardController {
 			List<CommentsVO> list= boardService.commentList(params,request);
 			
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss"); 
-			
+			Map<Integer, List<CommentRepliesVO>> replyMap = new HashMap<>();
 			for(int i=0;i<list.size();i++) {
-				String date=simpleDateFormat.format(list.get(i).getRegDate());
+				replyMap.put(list.get(i).getcIdx(),boardService.replylist(list.get(i).getcIdx()));
 			}
 			
 			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
@@ -507,10 +507,23 @@ public class BoardController {
 			data.add(list);
 			data.add(request.getAttribute("page"));
 			data.add(request.getAttribute("oCCount"));
-			
+			data.add(replyMap);
 			
 			
 			return data;
+		}
+		
+		@RequestMapping(value="/replyDelete.do")
+		@ResponseBody
+		public int replyDelete(CommentRepliesVO vo,HttpServletRequest request) {
+			
+			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
+			
+			if(vo.getmIdx() == login.getmIdx()) {
+				return boardService.replyDelete(vo);				
+			} else {
+				return -2;
+			}
 		}
 		
 		
