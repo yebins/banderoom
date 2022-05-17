@@ -7,8 +7,8 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script>
-    var msg = "<c:out value='${msg}'/>";
-    var url = "<c:out value='${url}'/>";
+    var msg = "${msg}";
+    var url = "${url}";
     alert(msg);
     location.href = url;
 </script>

@@ -52,9 +52,10 @@ public class BoardController {
 	public String register(ArticlesVO vo, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
+		
 		if(session.getAttribute("login") != null) {
 			boardService.insertArticlesVO(vo);
-			
+			vo.setmIdx(((GeneralMembersVO) session.getAttribute("login")).getmIdx());
 			if(vo.getbIdx() == 2) {
 				
 				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();		
@@ -86,14 +87,16 @@ public class BoardController {
 	@RequestMapping(value="/list.do",method=RequestMethod.GET)
 	public String list(Model model, @RequestParam Map<String, Object> map, HttpServletRequest request) {
 		List<ArticlesVO> list=boardService.list(map, request);
+		Map<Integer,Integer> cSize=new HashMap<Integer, Integer>();
 		if(map.get("bIdx") == null) {
 			map.put("bIdx", 2);
 		}
 		for(int i=0;i<list.size();i++) {
 			String co=list.get(i).getContent().replaceAll(" ", "");
+			cSize.put(list.get(i).getaIdx(), boardService.commentCount(list.get(i).getaIdx()));
+			
 			
 			if(co.indexOf("<img") != -1) {
-				
 				list.get(i).setTitle(list.get(i).getTitle()+"<img src='/images/picture-button.png' height='11px'>");
 			}
 		}
@@ -102,6 +105,7 @@ public class BoardController {
 		for (int i = 0; i < list.size(); i++) {
 			likeList.put(list.get(i).getaIdx(), boardService.likeCount(list.get(i).getaIdx()));
 		}
+		
 		List<ArticlesVO> pc= boardService.pageCount(map);
 		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
 		PagingUtil pu = new PagingUtil(pc.size(), page, 10, 10);
@@ -111,8 +115,13 @@ public class BoardController {
 		model.addAttribute("likeList", likeList);
 		
 		model.addAttribute("list",list);
-		
+	
 		List<ArticlesVO> bestArticles=boardService.bestArticles();
+		for(int i =0; i<bestArticles.size(); i++) {
+			cSize.put(bestArticles.get(i).getaIdx(), boardService.commentCount(bestArticles.get(i).getaIdx()));
+		}
+		
+		model.addAttribute("cSize", cSize);
 		
 		model.addAttribute("bestArticles", bestArticles);
 		
@@ -121,19 +130,19 @@ public class BoardController {
 		return "board/list";
 	}
 	
-	@RequestMapping(value="/details.do")
-	public String details(Model model,ArticlesVO vo) {
-		
-		boardService.readCount(vo);
-		
-		ArticlesVO revo = boardService.selectArticles(vo);
-		
-		model.addAttribute("vo",revo);
-		
-		
-		return "board/details";
-	}
-	
+//	@RequestMapping(value="/details.do")
+//	public String details(Model model,ArticlesVO vo) {
+//		
+//		boardService.readCount(vo);
+//		
+//		ArticlesVO revo = boardService.selectArticles(vo);
+//		
+//		model.addAttribute("vo",revo);
+//		
+//		
+//		return "board/details";
+//	}
+//	
 	@RequestMapping(value="/update.do", method=RequestMethod.GET)
 	public String update(Model model, HttpServletRequest request, ArticlesVO vo){
 		
@@ -346,6 +355,10 @@ public class BoardController {
 		
 		writer=memberService.oneMemberInfo(writer); // midx 넣은 멤버의 정보 가져오기
 		
+		List<ArticlesVO> prev = boardService.prevList(vo);
+		List<ArticlesVO> next = boardService.nextList(vo);
+		model.addAttribute("prev", prev);
+		model.addAttribute("next", next);
 		
 		System.out.println("게시글정보"+one.toString());
 		

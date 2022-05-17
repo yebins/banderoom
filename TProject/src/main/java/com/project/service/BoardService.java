@@ -39,4 +39,7 @@ public interface BoardService {
 	int replyWrite(CommentRepliesVO vo);
 	int replyDelete(CommentRepliesVO vo);
 	List<CommentRepliesVO> replylist(int cIdx);
+	List<ArticlesVO> prevList(ArticlesVO vo);
+	List<ArticlesVO> nextList(ArticlesVO vo);
+	
 }
