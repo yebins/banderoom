@@ -130,19 +130,6 @@ public class BoardController {
 		return "board/list";
 	}
 	
-//	@RequestMapping(value="/details.do")
-//	public String details(Model model,ArticlesVO vo) {
-//		
-//		boardService.readCount(vo);
-//		
-//		ArticlesVO revo = boardService.selectArticles(vo);
-//		
-//		model.addAttribute("vo",revo);
-//		
-//		
-//		return "board/details";
-//	}
-//	
 	@RequestMapping(value="/update.do", method=RequestMethod.GET)
 	public String update(Model model, HttpServletRequest request, ArticlesVO vo){
 		
@@ -355,8 +342,8 @@ public class BoardController {
 		
 		writer=memberService.oneMemberInfo(writer); // midx 넣은 멤버의 정보 가져오기
 		
-		List<ArticlesVO> prev = boardService.prevList(vo);
-		List<ArticlesVO> next = boardService.nextList(vo);
+		List<ArticlesVO> prev = boardService.prevList(vo);//이전글 리스트
+		List<ArticlesVO> next = boardService.nextList(vo);//다음글 리스트
 		model.addAttribute("prev", prev);
 		model.addAttribute("next", next);
 		

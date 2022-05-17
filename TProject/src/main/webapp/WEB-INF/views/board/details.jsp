@@ -154,7 +154,7 @@
     }
     .details-button{
     	display:flex;
-    	justify-content:end;
+    	flex-direction: row-reverse;
     	padding-right:20px;
     }
    	
