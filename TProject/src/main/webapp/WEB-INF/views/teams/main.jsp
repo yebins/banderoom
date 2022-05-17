@@ -235,6 +235,11 @@ button.col-1{
 			
 			<div class="container">
 				<div class="reg-btn">
+					<select class="form-select form-select-sm" name="addr1" style="width: 120px;">
+						<option value="" selected hidden>정렬하기</option>
+						<option>등록순</option>
+						<option>마감날짜순</option>
+					</select>
 					<c:if test="${login.mIdx ne null}">
 						<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
 					</c:if>
