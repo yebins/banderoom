@@ -1291,6 +1291,48 @@ public class SpaceController {
 		
 	}
 	
+	public String calculation(Model model, HostMembersVO hMemberVO, HttpServletRequest request) {
+
+		GeneralMembersVO gMemberVO = new GeneralMembersVO();
+
+		if (request.getSession().getAttribute("login") == null && request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else if (request.getSession().getAttribute("login") != null) {
+			
+			gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+			request.getSession().setAttribute("login", gMemberVO);
+			
+			if (gMemberVO.getAuth() != 3) {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/");
+				
+				return "alert";
+			}
+
+		} else if (request.getSession().getAttribute("hlogin") != null) {
+			
+			HostMembersVO hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+			if (hMemberVO.getmIdx() != hlogin.getmIdx()) {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/");
+				
+				return "alert";
+			}
+		}
+		
+		
+		
+		
+		
+		
+	}
+	
 	/*
 	@RequestMapping(value="setlist.do")
 	public String setListData() {
