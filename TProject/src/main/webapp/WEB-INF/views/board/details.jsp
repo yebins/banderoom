@@ -860,23 +860,27 @@
 					</div>
 				</div>
 			</div>
-			<!-- <div class="inner-box" style="margin-top:20px;">
+			<div class="inner-box" style="margin-top:20px;">
 				<table>
-					<c:forEach var="i" begin="0" end="${next.length()-1}">
-						<tr>
-							<td>${next.get(i).title }</td>
-						</tr>
-					</c:forEach>
+					<c:if test="${next.size() != 0}">
+						<c:forEach var="i" begin="0" end="${next.size()-1}">
+							<tr>
+								<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${next.get(next.size()-1-i).aIdx}">${next.get(next.size()-1-i).title }</a></td>
+							</tr>
+						</c:forEach>
+					</c:if>
 					<tr>
-						<td>${vo.title}</td>
+						<td style="font-weight:bold;">${vo.title}</td>
 					</tr>
-					<c:forEach var="i" begin="0" end="${prev.length()-1}">
-						<tr>
-							<td>${prev.get(i).title }</td>
-						</tr>
-					</c:forEach>
+					<c:if test="${prev.size() != 0}">
+						<c:forEach var="i" begin="0" end="${prev.size()-1}">
+							<tr>
+								<td><a href="details.do?bIdx=${param.bIdx}&aIdx=${prev.get(i).aIdx}">${prev.get(i).title }</a></td>
+							</tr>
+						</c:forEach>
+					</c:if>
 				</table>
-			</div> -->
+			</div>
 		</div>
 	</div>
 	<c:import url="/footer.do" />
