@@ -123,6 +123,11 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
+	public int validateRsv(ReservationsVO vo) {
+		return dao.validateRsv(vo);
+	}
+	
+	@Override
 	public ReservationsVO insertRsv(ReservationsVO rsvVO) {
 		return dao.getRSV(dao.insertRsv(rsvVO));
 	}

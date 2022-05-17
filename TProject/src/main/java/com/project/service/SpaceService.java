@@ -21,6 +21,7 @@ public interface SpaceService {
 	List<SpacesVO> spaceList(Map<String, Object> params);
 	List<SpaceReviewVO> spaceReviewList(Map<String, Object> params);
 	Map<String, Object> spaceReviewCntAvg(SpacesVO vo);
+	int validateRsv(ReservationsVO vo);
 	ReservationsVO insertRsv(ReservationsVO vo);
 	int insertPoint(PointsVO vo);
 	ReservationsVO getRSV(ReservationsVO vo);

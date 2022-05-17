@@ -618,6 +618,14 @@ public class SpaceController {
 	public String paySuccess(Model model, HttpServletRequest request, ReservationsVO rsvVO) {
 		GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
 		
+		if (spaceService.validateRsv(rsvVO) != 0) {
+
+			model.addAttribute("msg", "이미 예약된 시간대입니다.");
+			model.addAttribute("url", "/space/details.do?idx=" + rsvVO.getSpaceIdx());
+			
+			return "alert";
+		}
+		
 		rsvVO = spaceService.insertRsv(rsvVO);
 
 		SpacesVO spacesVO = new SpacesVO();
@@ -653,6 +661,9 @@ public class SpaceController {
 			memberService.setPoint(pointsVO);
 			gMemberVO = memberService.gLogin(gMemberVO);
 		}
+
+		request.getSession().setAttribute("login", memberService.gLogin(
+				(GeneralMembersVO) request.getSession().getAttribute("login")));
 				
 		return "redirect:/space/paysuccess.do?resIdx=" + rsvVO.getResIdx();
 	}
@@ -1324,9 +1335,11 @@ public class SpaceController {
 				
 				return "alert";
 			}
+			
 		}
 		
-		
+
+		return "space/calculation";
 		
 		
 		

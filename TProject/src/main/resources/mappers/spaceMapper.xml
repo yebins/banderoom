@@ -280,6 +280,13 @@
 		select addr2 from locations where addr1 = #{addr1}
 	</select>
 	
+	<select id="validateRsv" parameterType="reservationsVO" resultType="int">
+		select count(*) from reservations
+		where startdate = #{startDate}
+		and enddate = #{endDate}
+		and spaceidx = #{spaceIdx}
+	</select>
+	
 	<insert id="insertRsv" parameterType="reservationsVO" useGeneratedKeys="true" keyProperty="resIdx">
 		insert into reservations(
 			midx,
