@@ -273,7 +273,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<ArticlesVO> prevList(ArticlesVO vo) {
-		// TODO Auto-generated method stub
+		
 		return dao.prevList(vo);
 	}
 
@@ -281,7 +281,7 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<ArticlesVO> nextList(ArticlesVO vo) {
-		// TODO Auto-generated method stub
+		
 		return dao.nextList(vo);
 	}
 		

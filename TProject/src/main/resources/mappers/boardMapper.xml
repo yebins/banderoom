@@ -30,14 +30,12 @@
 	
 	<insert id="insertArticles" parameterType="articlesVO">
 		insert into articles(
-			
 			bidx
 			,title
 			,content
 			,midx
 			,mnickname
 		) values(
-			
 			#{bIdx}
 			,#{title}
 			,#{content}
@@ -350,10 +348,11 @@
 	</select>
 	
 	<select id="prevList" parameterType="ArticlesVO" resultType="ArticlesVO">
-		select * from articles where aidx &lt; ${aIdx} and bidx = ${bIdx} order by aidx desc limit 2;
+		select * from articles where aidx &lt; ${aIdx} and bidx = ${bIdx} and status != 1 order by aidx desc limit 2;
 	</select>
 	
 	<select id="nextList" parameterType="ArticlesVO" resultType="ArticlesVO">
-	select * from articles where aidx &gt; ${aIdx} and bidx = ${bIdx} order by aidx limit 2;
+	select * from articles where aidx &gt; ${aIdx} and bidx = ${bIdx} and status != 1 order by aidx limit 2;
 	</select>
+	
 </mapper>

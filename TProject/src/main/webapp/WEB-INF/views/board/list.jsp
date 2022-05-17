@@ -93,10 +93,10 @@
 					<c:forEach var="i" begin="0" end="${bestArticles.size()-1}">
 						<tr>
 							<td class="bestArticles">${bestArticles.get(i).aIdx }</td>
-							<td class="title-area"><a style="color: #FB6544; font-weight:bold;" href="details.do?bIdx=${param.bIdx}&aIdx=${bestArticles.get(i).aIdx}">
+							<td class="title-area"><a style="color: #FB6544; font-weight:bold; margin-top:3px;" href="details.do?bIdx=${param.bIdx}&aIdx=${bestArticles.get(i).aIdx}">
 							${bestArticles.get(i).title }</a>
 								<c:if test="${cSize.get(bestArticles.get(i).aIdx) != 0}">
-									&nbsp;[${cSize.get(bestArticles.get(i).aIdx)}]
+									<span style="margin-top:3px;">&nbsp;[${cSize.get(bestArticles.get(i).aIdx)}]</span>
 								</c:if>
 							</td>
 							<td class="bestArticles" onclick="profileOpen(${bestArticles.get(i).mIdx})">${bestArticles.get(i).mNickname }</td>
@@ -112,10 +112,10 @@
 					<c:forEach var="i" begin="0" end="${list.size()-1}">
 						<tr>
 							<td>${list.get(i).aIdx }</td>
-							<td class="title-area"><a href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}">
+							<td class="title-area"><a style="margin-top:3px;" href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}">
 								${list.get(i).title}</a>
-								<c:if test="${cSize.get(list.get(i).aIdx) != 0 }">
-									&nbsp;[${cSize.get(list.get(i).aIdx)}]
+								<c:if  test="${cSize.get(list.get(i).aIdx) != 0 }">
+									<span style="margin-top:3px;">&nbsp;[${cSize.get(list.get(i).aIdx)}]</span>
 								</c:if>
 								</td>
 							<td onclick="profileOpen(${list.get(i).mIdx})">${list.get(i).mNickname }</td>
