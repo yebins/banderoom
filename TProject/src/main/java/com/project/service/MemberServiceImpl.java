@@ -221,9 +221,6 @@ public class MemberServiceImpl implements MemberService {
 		
 		GeneralMembersVO vo1=(GeneralMembersVO)dao.oneMemberInfo(vo);
 		vo1.setPassword("");
-		vo1.setName("");
-		vo1.setTel("");
-		
 		return vo1;
 	}
 

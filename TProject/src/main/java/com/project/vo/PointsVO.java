@@ -1,6 +1,6 @@
 package com.project.vo;
 
-public class PointsVO {
+public class PointsVO extends ReservationsVO {
 
 	private int pointIdx;
 	private int mIdx;

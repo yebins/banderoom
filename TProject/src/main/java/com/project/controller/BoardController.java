@@ -26,6 +26,7 @@ import com.project.service.BoardService;
 import com.project.service.MemberService;
 import com.project.util.PagingUtil;
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentRepliesVO;
 import com.project.vo.CommentsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.LikedArticlesVO;
@@ -51,9 +52,10 @@ public class BoardController {
 	public String register(ArticlesVO vo, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
+		
 		if(session.getAttribute("login") != null) {
 			boardService.insertArticlesVO(vo);
-			
+			vo.setmIdx(((GeneralMembersVO) session.getAttribute("login")).getmIdx());
 			if(vo.getbIdx() == 2) {
 				
 				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();		
@@ -83,13 +85,29 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/list.do",method=RequestMethod.GET)
-	public String list(Model model,int bIdx,String searchtitle, int page) {
-		List<ArticlesVO> list=boardService.list(bIdx, searchtitle, page);
+	public String list(Model model, @RequestParam Map<String, Object> map, HttpServletRequest request) {
+		List<ArticlesVO> list=boardService.list(map, request);
+		Map<Integer,Integer> cSize=new HashMap<Integer, Integer>();
+		if(map.get("bIdx") == null) {
+			map.put("bIdx", 2);
+		}
+		for(int i=0;i<list.size();i++) {
+			String co=list.get(i).getContent().replaceAll(" ", "");
+			cSize.put(list.get(i).getaIdx(), boardService.commentCount(list.get(i).getaIdx()));
+			
+			
+			if(co.indexOf("<img") != -1) {
+				list.get(i).setTitle(list.get(i).getTitle()+"<img src='/images/picture-button.png' height='11px'>");
+			}
+		}
+		
 		Map<Integer, Integer> likeList = new HashMap<Integer, Integer>();		
 		for (int i = 0; i < list.size(); i++) {
 			likeList.put(list.get(i).getaIdx(), boardService.likeCount(list.get(i).getaIdx()));
 		}
-		List<ArticlesVO> pc= boardService.pageCount(bIdx, searchtitle);
+		
+		List<ArticlesVO> pc= boardService.pageCount(map);
+		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
 		PagingUtil pu = new PagingUtil(pc.size(), page, 10, 10);
 		
 		model.addAttribute("pu", pu);
@@ -97,23 +115,34 @@ public class BoardController {
 		model.addAttribute("likeList", likeList);
 		
 		model.addAttribute("list",list);
+	
+		List<ArticlesVO> bestArticles=boardService.bestArticles();
+		for(int i =0; i<bestArticles.size(); i++) {
+			cSize.put(bestArticles.get(i).getaIdx(), boardService.commentCount(bestArticles.get(i).getaIdx()));
+		}
+		
+		model.addAttribute("cSize", cSize);
+		
+		model.addAttribute("bestArticles", bestArticles);
+		
+		model.addAttribute("searchtitle", map.get("searchtitle"));
 		
 		return "board/list";
 	}
 	
-	@RequestMapping(value="/details.do")
-	public String details(Model model,ArticlesVO vo) {
-		
-		boardService.readCount(vo);
-		
-		ArticlesVO revo = boardService.selectArticles(vo);
-		
-		model.addAttribute("vo",revo);
-		
-		
-		return "board/details";
-	}
-	
+//	@RequestMapping(value="/details.do")
+//	public String details(Model model,ArticlesVO vo) {
+//		
+//		boardService.readCount(vo);
+//		
+//		ArticlesVO revo = boardService.selectArticles(vo);
+//		
+//		model.addAttribute("vo",revo);
+//		
+//		
+//		return "board/details";
+//	}
+//	
 	@RequestMapping(value="/update.do", method=RequestMethod.GET)
 	public String update(Model model, HttpServletRequest request, ArticlesVO vo){
 		
@@ -135,7 +164,16 @@ public class BoardController {
 		
 		if(login.getmIdx() == vo.getmIdx()) {
 			boardService.boardUpdate(vo);
-			return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();
+			if(vo.getbIdx() == 4) {
+				return "redirect:/board/hlist.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else if (vo.getbIdx() == 2) {
+				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else {
+				return "redirect:/board/jlist.do?page=1&bIdx=" + vo.getbIdx();				
+			}
+			
 		}else {
 			
 			request.setAttribute("msg", "수정할 수 없습니다.");
@@ -153,7 +191,16 @@ public class BoardController {
 		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 		if(login.getmIdx() == vo.getmIdx()) {
 			boardService.listDelete(vo);
-			return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();
+			
+			if(vo.getbIdx() == 4) {
+				return "redirect:/board/hlist.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else if (vo.getbIdx() == 2) {
+				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();				
+				
+			} else {
+				return "redirect:/board/jlist.do?page=1&bIdx=" + vo.getbIdx();				
+			}
 		}else{
 			
 			request.setAttribute("msg", "삭제권한이 없습니다.");
@@ -200,6 +247,7 @@ public class BoardController {
 		if( list.size() >0) {
 			
 		Map<Integer,String> map=new HashMap<Integer, String>();
+		Map<Integer,Integer> map2=new HashMap<Integer, Integer>();
 			for(int i=0;i<list.size();i++) {
 				String co=list.get(i).getContent().replaceAll(" ", "");
 				
@@ -217,6 +265,10 @@ public class BoardController {
 				model.addAttribute("imgsrc", map);
 				
 				System.out.println(map.toString());
+				
+				map2.put(i,boardService.commentCount(list.get(i).getaIdx()));
+				
+				model.addAttribute("cmt",map2);
 			}
 		}
 		
@@ -245,6 +297,7 @@ public class BoardController {
 		if( list.size() >0) {
 			
 			Map<Integer,String> map=new HashMap<Integer, String>();
+			Map<Integer,Integer> map2=new HashMap<Integer, Integer>();
 			for(int i=0;i<list.size();i++) {
 				String co=list.get(i).getContent().replaceAll(" ", "");
 				
@@ -261,7 +314,9 @@ public class BoardController {
 				}
 				model.addAttribute("imgsrc", map);
 				
-				System.out.println(map.toString());
+				map2.put(i,boardService.commentCount(list.get(i).getaIdx()));
+				
+				model.addAttribute("cmt",map2);
 			}
 		}
 		
@@ -288,13 +343,22 @@ public class BoardController {
 		
 		Map<String, Object> one = boardService.jlistOneArticle(params,request);//게시글정보
 		List<CommentsVO> cmtList=boardService.commentList(params,request);//댓글리스트
-		
+		Map<Integer, List<CommentRepliesVO>> replyMap = new HashMap<Integer, List<CommentRepliesVO>>();
+		for(int i=0;i<cmtList.size();i++) {
+				
+				replyMap.put(cmtList.get(i).getcIdx(), boardService.replylist(cmtList.get(i).getcIdx()));
+				
+		}
 		GeneralMembersVO writer=new GeneralMembersVO();
 		int a=(int) one.get("mIdx");//게시글 작성자 midx
 		writer.setmIdx(a);//게시글 작성자의 midx 삽입
 		
 		writer=memberService.oneMemberInfo(writer); // midx 넣은 멤버의 정보 가져오기
 		
+		List<ArticlesVO> prev = boardService.prevList(vo);
+		List<ArticlesVO> next = boardService.nextList(vo);
+		model.addAttribute("prev", prev);
+		model.addAttribute("next", next);
 		
 		System.out.println("게시글정보"+one.toString());
 		
@@ -303,6 +367,7 @@ public class BoardController {
 		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글 총개수?
 		model.addAttribute("vo",one);//게시글정보 보내기
 		model.addAttribute("profileSrc",writer.getProfileSrc());//글 작성자 프로필 사진 
+		model.addAttribute("replyList",replyMap);
 		
 		
 		
@@ -346,6 +411,89 @@ public class BoardController {
 			}
 		
 		}
+		@RequestMapping(value="/replyWrite.do")
+		@ResponseBody
+		public int replyWrite(CommentRepliesVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+			
+			if(vo.getContent() != null && vo.getContent() != "") {
+				
+				if(!file.isEmpty()) {
+					System.out.println(file);
+					
+					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+					
+					String fileName=file.getOriginalFilename();
+					
+					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+					
+					UUID uuid = UUID.randomUUID();
+					
+					String newFileName = uuid.toString() + extension;
+					
+					File target = new File(path, newFileName);
+					
+					System.out.println(target.toString());
+					
+					file.transferTo(target);//파일이생성됨
+					
+					vo.setPicSrc("/upload/"+newFileName);
+				}
+				
+				return boardService.replyWrite(vo);
+				
+			} else {
+				
+				return -2;
+			}
+			
+		}
+		
+		@RequestMapping(value="/commentUpdate.do")
+		@ResponseBody
+		public int commentUpdate(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+			
+			if(vo.getContent() != null && vo.getContent() != "") {
+				
+				if(!file.isEmpty()) {
+					System.out.println(file);
+					
+					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+					
+					String fileName=file.getOriginalFilename();
+					
+					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+					
+					UUID uuid = UUID.randomUUID();
+					
+					String newFileName = uuid.toString() + extension;
+					
+					File target = new File(path, newFileName);
+					
+					System.out.println(target.toString());
+					
+					file.transferTo(target);//파일이생성됨
+					
+					vo.setPicSrc("/upload/"+newFileName);
+				}
+				
+				System.out.println(vo.toString());
+				System.out.println(vo.getContent());
+				
+				return boardService.commentUpdate(vo);
+				
+			} else {
+				
+				return -1;
+			}
+			
+		}
+		
+		@RequestMapping(value="/commentDelete.do")
+		@ResponseBody
+		public int commentsDelete(CommentsVO vo) {
+			
+			return boardService.commentDelete(vo);
+		}
 		
 		@RequestMapping(value="/commentList.do")
 		@ResponseBody
@@ -355,10 +503,15 @@ public class BoardController {
 			List<CommentsVO> list= boardService.commentList(params,request);
 			
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss"); 
-			System.out.println(simpleDateFormat.format(list.get(0).getRegDate()));
-			
+			Map<Integer, List<CommentRepliesVO>> replyMap = new HashMap<>();
 			for(int i=0;i<list.size();i++) {
-				String date=simpleDateFormat.format(list.get(i).getRegDate());
+				replyMap.put(list.get(i).getcIdx(),boardService.replylist(list.get(i).getcIdx()));
+			}
+			
+			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
+			
+			if(request.getSession().getAttribute("login") != null) {
+				System.out.println("현재로그인한사람의 midx"+login.getmIdx());				
 			}
 			
 			
@@ -366,11 +519,26 @@ public class BoardController {
 			data.add(request.getAttribute("count"));
 			data.add(list);
 			data.add(request.getAttribute("page"));
-			
+			data.add(request.getAttribute("oCCount"));
+			data.add(replyMap);
 			
 			
 			return data;
 		}
+		
+		@RequestMapping(value="/replyDelete.do")
+		@ResponseBody
+		public int replyDelete(CommentRepliesVO vo,HttpServletRequest request) {
+			
+			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
+			
+			if(vo.getmIdx() == login.getmIdx()) {
+				return boardService.replyDelete(vo);				
+			} else {
+				return -2;
+			}
+		}
+		
 		
 }
 

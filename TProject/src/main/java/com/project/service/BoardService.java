@@ -6,13 +6,13 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.project.vo.ArticlesVO;
+import com.project.vo.CommentRepliesVO;
 import com.project.vo.CommentsVO;
 import com.project.vo.LikedArticlesVO;
 import com.project.vo.ServiceInfoVO;
 
 public interface BoardService {
 	
-	List<ArticlesVO> list(int bIdx,String searchtitle, int page);
 	int insertArticlesVO(ArticlesVO vo);
 	ServiceInfoVO selectOneServiceInfo(int idx);
 	int updateServiceInfo(ServiceInfoVO vo);
@@ -26,9 +26,20 @@ public interface BoardService {
 	int likedAtricles(LikedArticlesVO vo);
 	int unLikedArticles(LikedArticlesVO vo);
 	int likeCount(int aIdx);
-	List<ArticlesVO> pageCount(int bIdx, String searchtitle);
 	List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request);
 	Map<String,Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request);
-	Map<String,Object> commentWrite(CommentsVO vo);
+	Map<String, Object> commentWrite(CommentsVO vo);
 	List<CommentsVO> commentList(Map<String, Object> params,HttpServletRequest request);
+	List<ArticlesVO> bestArticles();
+	List<ArticlesVO> pageCount(Map<String, Object> map);
+	List<ArticlesVO> list(Map<String, Object> map, HttpServletRequest request);
+	int commentUpdate(CommentsVO vo);
+	int commentDelete(CommentsVO vo);
+	int commentCount(int aIdx);
+	int replyWrite(CommentRepliesVO vo);
+	int replyDelete(CommentRepliesVO vo);
+	List<CommentRepliesVO> replylist(int cIdx);
+	List<ArticlesVO> prevList(ArticlesVO vo);
+	List<ArticlesVO> nextList(ArticlesVO vo);
+	
 }

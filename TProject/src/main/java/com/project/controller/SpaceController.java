@@ -184,7 +184,11 @@ public class SpaceController {
 	}
 
 	@RequestMapping(value = "/details.do")
-	public String details(Model model, SpacesVO vo) {
+	public String details(Model model, SpacesVO vo, HttpServletRequest request) {
+		
+		vo = spaceService.details(vo);
+		
+		// 리뷰 목록 불러오기
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("spacesVO", vo);
 		
@@ -202,11 +206,78 @@ public class SpaceController {
 		
 		params.put("start", reviewPu.getStart() - 1);
 		
+		List<SpaceReviewVO> reviewList = spaceService.spaceReviewList(params);
+		
+		Iterator<SpaceReviewVO> reviewIterator = reviewList.iterator();
+		
+		while(reviewIterator.hasNext()) {
+			SpaceReviewVO reviewVO = reviewIterator.next();
+			
+			reviewVO.setContent(reviewVO.getContent().replaceAll("\r\n", "<br>"));
+		}
+		
 		model.addAttribute("reviewLastPage", reviewPu.getLastPage());
-		model.addAttribute("spacesVO", spaceService.details(vo));
+		model.addAttribute("spacesVO", vo);
 		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
-		model.addAttribute("reviewList", spaceService.spaceReviewList(params));
+		model.addAttribute("reviewList", reviewList);
 		model.addAttribute("reviewCntAvg", spaceService.spaceReviewCntAvg(vo));
+		
+		// qna 목록 불러오기
+		params = new HashMap<String, Object>();
+
+		PagingUtil qnaPu = new PagingUtil(spaceService.countQna(vo), 1, 5, 5);
+		
+		params.put("start", qnaPu.getStart() - 1);
+		params.put("spacesVO", vo);
+		
+		List<SpaceQnaVO> qnaList = spaceService.qnaList(params);
+
+		// 비공개 처리: 자신이 등록한 공간일 경우 모두 공개
+		// 로그인 안 된 경우에는 비공개 글 모두 비공개
+		// 일반 회원 로그인 된 경우에는 자신 글 빼고 비공개
+		HostMembersVO hlogin = new HostMembersVO();
+		if (request.getSession().getAttribute("hlogin") != null)  {
+			hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+		}
+		
+		if (vo.getHostIdx() != hlogin.getmIdx()) {
+			if (request.getSession().getAttribute("login") == null) {
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+				
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N")) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
+					}
+					qnaVO.setContent(qnaVO.getContent().replaceAll("\r\n", "<br>"));
+				}
+			} else {
+				GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+				
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+				
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
+					}
+					qnaVO.setContent(qnaVO.getContent().replaceAll("\r\n", "<br>"));
+				}
+			}
+		}
+		
+		model.addAttribute("qnaList", qnaList);
+		model.addAttribute("qnaStartPage", qnaPu.getStartPage());
+		model.addAttribute("qnaEndPage", qnaPu.getEndPage());
+		model.addAttribute("qnaLastPage", qnaPu.getLastPage());
 		
 		return "space/details";
 	}
@@ -227,8 +298,18 @@ public class SpaceController {
 				, reviewPage, 5, 10);
 		
 		params.put("start", reviewPu.getStart() - 1);
+
+		List<SpaceReviewVO> reviewList = spaceService.spaceReviewList(params);
 		
-		return spaceService.spaceReviewList(params);
+		Iterator<SpaceReviewVO> reviewIterator = reviewList.iterator();
+		
+		while(reviewIterator.hasNext()) {
+			SpaceReviewVO reviewVO = reviewIterator.next();
+			
+			reviewVO.setContent(reviewVO.getContent().replaceAll("\r\n", "<br>"));
+		}
+		
+		return reviewList;
 	}
 
 	@RequestMapping(value = "/delete.do")
@@ -629,7 +710,7 @@ public class SpaceController {
 		return spaceService.getRsvHours(date);
 	}
 	
-	@RequestMapping(value = "myspacersv.do")
+	@RequestMapping(value = "myrsv.do")
 	public String mySpaceRsv(Model model, String dateType, String dateRange, HttpServletRequest request) {
 
 		if (request.getSession().getAttribute("login") == null) {
@@ -657,13 +738,13 @@ public class SpaceController {
 			model.addAttribute("endPage", pastRsvPu.getEndPage());
 			model.addAttribute("lastPage", pastRsvPu.getLastPage());
 			model.addAttribute("today", new Date());
-			return "space/myspacersv";
+			return "space/myrsv";
 		}
 	}
 	
-	@RequestMapping(value = "loadMySpaceRsv.do")
+	@RequestMapping(value = "loadMyRsv.do")
 	@ResponseBody
-	public Map<String, Object> loadMySpaceRsv(int page, String dateType, String dateRange, HttpServletRequest request) {
+	public Map<String, Object> loadMyRsv(int page, String dateType, String dateRange, HttpServletRequest request) {
 		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
@@ -696,37 +777,56 @@ public class SpaceController {
 	
 	@RequestMapping(value = "rsvdetails.do")
 	public String resDetails(Model model, HttpServletRequest request, int resIdx) {
+		
+		GeneralMembersVO gMemberVO = new GeneralMembersVO();
+		HostMembersVO hMemberVO = new HostMembersVO();
+		
+		ReservationsVO rsvVO = new ReservationsVO();
+		rsvVO.setResIdx(resIdx);
+		rsvVO = spaceService.getRSV(rsvVO);
+		
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(rsvVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		
+		HostMembersVO hostVO = new HostMembersVO();
+		hostVO.setmIdx(spacesVO.getHostIdx());
+		hostVO = memberService.getHostMember(hostVO);
 
-		if (request.getSession().getAttribute("login") == null) {
+
+		if (request.getSession().getAttribute("login") == null && request.getSession().getAttribute("hlogin") == null) {
 
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			model.addAttribute("url", "/member/glogin.do");
 			
 			return "alert";
-		} else {
+		} else if (request.getSession().getAttribute("login") != null) {
 			
-			GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
-
-			ReservationsVO rsvVO = new ReservationsVO();
-			rsvVO.setResIdx(resIdx);
-			rsvVO = spaceService.getRSV(rsvVO);
-			
-			SpacesVO spacesVO = new SpacesVO();
-			spacesVO.setIdx(rsvVO.getSpaceIdx());
-			spacesVO = spaceService.details(spacesVO);
-			HostMembersVO hostVO = new HostMembersVO();
-			hostVO.setmIdx(spacesVO.getHostIdx());
-			hostVO = memberService.getHostMember(hostVO);
-
+			gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
 			request.getSession().setAttribute("login", gMemberVO);
+
+		} else if (request.getSession().getAttribute("hlogin") != null) {
 			
-			model.addAttribute("spacesVO", spacesVO);
-			model.addAttribute("hostVO", hostVO);
-			model.addAttribute("rsvVO", rsvVO);
-			
-			return "space/rsvdetails";
-			
+			hMemberVO = (HostMembersVO) request.getSession().getAttribute("hlogin");
+			gMemberVO.setmIdx(rsvVO.getmIdx());
+			gMemberVO = memberService.oneMemberInfo(gMemberVO);
+			model.addAttribute("login", gMemberVO);
 		}
+		
+		if (gMemberVO.getmIdx() != rsvVO.getmIdx() && gMemberVO.getAuth() != 3 && hMemberVO.getmIdx() != spacesVO.getHostIdx()) {
+
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		}
+		
+		model.addAttribute("spacesVO", spacesVO);
+		model.addAttribute("hostVO", hostVO);
+		model.addAttribute("rsvVO", rsvVO);
+		
+		return "space/rsvdetails";
+		
 	}
 	
 	@RequestMapping(value = "review.do", method = RequestMethod.GET)
@@ -767,6 +867,430 @@ public class SpaceController {
 		  }
 		}
 	}
+	
+	@RequestMapping(value="insertqnaq.do")
+	@ResponseBody
+	public int insertQnaQ(SpaceQnaVO vo, Integer privateChecked, HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+			
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			
+			vo.setmIdx(login.getmIdx());
+			vo.setmNickname(login.getNickname());
+			
+			if (privateChecked != null) {
+				vo.setPublicYN("N");
+			} else {
+				vo.setPublicYN("Y");
+			}
+			
+			int result = spaceService.insertQnaQ(vo);
+			
+			if (result > 0) {
+				return 0; // 정상 입력
+			} else {
+				return 2; // 입력 오류
+			}
+			
+		}
+	}
+	
+	@RequestMapping(value = "qnalist.do")
+	@ResponseBody
+	public Map<String, Object> qnaList(HttpServletRequest request, Integer page, SpacesVO spacesVO) {
+		
+		spacesVO = spaceService.details(spacesVO);
+		Map<String, Object> data = new HashMap<String, Object>();
+		Map<String, Object> params = new HashMap<String, Object>();
+
+		PagingUtil qnaPu = new PagingUtil(spaceService.countQna(spacesVO), page, 5, 5);
+		
+		params.put("start", qnaPu.getStart() - 1);
+		params.put("spacesVO", spacesVO);
+		
+		List<SpaceQnaVO> qnaList = spaceService.qnaList(params);
+		
+		
+		// 비공개 처리: 자신이 등록한 공간일 경우 모두 공개
+		// 로그인 안 된 경우에는 비공개 글 모두 비공개
+		// 일반 회원 로그인 된 경우에는 자신 글 빼고 비공개
+		HostMembersVO hlogin = new HostMembersVO();
+		if (request.getSession().getAttribute("hlogin") != null)  {
+			hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+		}
+		
+		if (spacesVO.getHostIdx() != hlogin.getmIdx()) {
+			if (request.getSession().getAttribute("login") == null) {
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+				
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N")) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
+					}
+					
+					qnaVO.setContent(qnaVO.getContent().replaceAll("\r\n", "<br>"));
+					
+				}
+			} else {
+				GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+				
+				Iterator<SpaceQnaVO> qnaIterator = qnaList.iterator();
+				
+				while(qnaIterator.hasNext()) {
+					SpaceQnaVO qnaVO = qnaIterator.next();
+					
+					if (qnaVO.getPublicYN().equals("N") && qnaVO.getmIdx() != login.getmIdx()) {
+						qnaVO.setContent("비공개 질문입니다.");
+						if (qnaVO.getAnswer() != null) {
+							qnaVO.setAnswer("비공개 답변입니다.");
+						}
+					}
+
+					qnaVO.setContent(qnaVO.getContent().replaceAll("\r\n", "<br>"));
+				}
+			}
+		}
+		
+		data.put("qnaList", qnaList);
+		data.put("qnaStartPage", qnaPu.getStartPage());
+		data.put("qnaEndPage", qnaPu.getEndPage());
+		data.put("qnaLastPage", qnaPu.getLastPage());
+		
+		return data;
+	}
+	
+	@RequestMapping(value = "insertqnaanswer.do")
+	@ResponseBody
+	public int insertQnaAnswer(SpaceQnaVO qnaVO, HttpServletRequest request) {
+		
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(qnaVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		
+		if (request.getSession().getAttribute("hlogin") == null)  {
+			return 1; // 로그인 안 됨
+		}
+		
+		int hostIdx = ((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx();
+		
+		if (spacesVO.getHostIdx() != hostIdx) {
+			return 2; // 권한 없음
+		} 
+		
+		int result = spaceService.insertQnaA(qnaVO);
+		
+		if (result > 0) {
+			return 0; // 정상 등록
+		} else {
+			return 3; // 등록 오류
+		}
+	}
+	
+
+	@RequestMapping(value = "deleteqnaanswer.do")
+	@ResponseBody
+	public int deleteQnaAnswer(SpaceQnaVO qnaVO, HttpServletRequest request) {
+		
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(qnaVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		
+		if (request.getSession().getAttribute("hlogin") == null)  {
+			return 1; // 로그인 안 됨
+		}
+		
+		int hostIdx = ((HostMembersVO) request.getSession().getAttribute("hlogin")).getmIdx();
+		
+		if (spacesVO.getHostIdx() != hostIdx) {
+			return 2; // 권한 없음
+		} 
+		
+		int result = spaceService.deleteQnaA(qnaVO);
+		
+		if (result > 0) {
+			return 0; // 정상 등록
+		} else {
+			return 3; // 등록 오류
+		}
+	}
+	
+	@RequestMapping (value = "deleteqna.do")
+	@ResponseBody
+	public int deleteQna(SpaceQnaVO qnaVO, HttpServletRequest request) {
+		
+		qnaVO = spaceService.qnaInfo(qnaVO);
+
+		if (request.getSession().getAttribute("login") == null)  {
+			return 1; // 로그인 안 됨
+		}
+		
+		int loginIdx = ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx();
+		
+		if (qnaVO.getmIdx() != loginIdx) {
+			return 2; // 권한 없음
+		}
+		
+		int result = spaceService.deleteQna(qnaVO);
+
+		if (result > 0) {
+			return 0; // 정상 등록
+		} else {
+			return 3; // 등록 오류
+		}
+	}
+	
+
+	@RequestMapping(value="updateqnaq.do")
+	@ResponseBody
+	public int updateQnaQ(SpaceQnaVO vo, Integer privateChecked, HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+
+			int loginIdx = ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx();
+			
+			SpaceQnaVO original = spaceService.qnaInfo(vo);
+			
+			if (original.getmIdx() != loginIdx) {
+				return 2; // 권한 없음
+			}
+			
+			if (privateChecked != null) {
+				vo.setPublicYN("N");
+			} else {
+				vo.setPublicYN("Y");
+			}
+			
+			int result = spaceService.updateQnaQ(vo);
+			
+			if (result > 0) {
+				return 0; // 정상 입력
+			} else {
+				return 3; // 입력 오류
+			}
+			
+		}
+	}
+	
+	@RequestMapping(value = "deletereview.do")
+	@ResponseBody
+	public int deleteReview(SpaceReviewVO vo, HttpServletRequest request) {
+		
+		vo = spaceService.getReviewInfo(vo);
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+
+			int loginIdx = ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx();
+			
+			if (vo.getmIdx() != loginIdx) {
+				return 2; // 권한 없음
+			}
+			
+			int result = spaceService.deleteReview(vo);
+			
+			if (result > 0) {
+				return 0; // 정상 입력
+			} else {
+				return 3; // 삭제 오류
+			}
+		}
+	}
+	
+	@RequestMapping(value = "reviewupdate.do", method = RequestMethod.GET)
+	public String reviewUpdate(Model model, ReservationsVO vo, HttpServletRequest request) {
+		SpaceReviewVO reviewVO = new SpaceReviewVO();
+		reviewVO.setResIdx(vo.getResIdx());
+		model.addAttribute("reviewVO", spaceService.getReviewInfo(reviewVO));
+		model.addAttribute("rsvVO", spaceService.getRSV(vo));
+		return "space/reviewupdate";
+	}
+	
+	@RequestMapping(value = "reviewupdate.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int reviewUpdate(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, int fileChanged, HttpServletRequest request) throws Exception {
+		
+		SpaceReviewVO original = spaceService.getReviewInfo(vo);
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return 1; // 로그인 안 됨
+		} else {
+
+			int loginIdx = ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx();
+			
+			if (original.getmIdx() != loginIdx) {
+				return 2; // 권한 없음
+			}
+			
+			if (fileChanged == 1) {
+				
+				if (picture.getSize() != 0) {
+	
+					Map<String, String> pictureSrc = uploadPicture(request, picture, 200, 200);
+					
+				  vo.setPictureSrc(pictureSrc.get("original"));
+				  vo.setThumbSrc(pictureSrc.get("thumb"));
+				  
+				} else {
+				  vo.setPictureSrc(null);
+				  vo.setThumbSrc(null);
+				}
+			
+			}
+			
+		  GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		  
+		  vo.setmIdx(login.getmIdx());
+		  vo.setmNickname(login.getNickname());
+
+		  int result = spaceService.updateReview(vo);
+		  
+		  if (result > 0) {
+		  	return 0; // 정상 입력		  	
+		  } else {
+		  	return 3; // 입력 오류
+		  }
+		}
+	}
+	
+	@RequestMapping(value = "myspacersv.do")
+	public String mySpaceRsv(Model model, SpacesVO vo, String dateType, String dateRange, HttpServletRequest request) {
+		
+		vo = spaceService.details(vo);
+
+		GeneralMembersVO glogin = new GeneralMembersVO();
+		HostMembersVO hlogin = new HostMembersVO();
+		
+		if (request.getSession().getAttribute("login") != null) {
+			glogin = (GeneralMembersVO) request.getSession().getAttribute("login");
+		}
+		
+		if (request.getSession().getAttribute("hlogin") != null) {
+			hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+		}
+		
+		boolean auth = false;
+		
+		if (glogin.getAuth() == 3) {
+			auth = true;
+		}
+		
+		if (hlogin.getmIdx() == vo.getHostIdx()) {
+			auth = true;
+		}
+		
+		if (auth) {
+			PagingUtil pastRsvPu = new PagingUtil(spaceService.countRsvBySpace(vo, dateType, dateRange), 1, 10, 5);
+			
+			List<ReservationsVO> pastRsv = spaceService.getRsvBySpace(vo, dateType, dateRange, pastRsvPu.getStart() - 1);
+
+			Iterator<ReservationsVO> rsvIterator = pastRsv.iterator();
+			
+			Map<Integer, GeneralMembersVO> gmVOList = new HashMap<Integer, GeneralMembersVO>();
+			
+			while (rsvIterator.hasNext()) {
+				ReservationsVO rsvVO = rsvIterator.next();
+				GeneralMembersVO gmVO = new GeneralMembersVO();
+				gmVO.setmIdx(rsvVO.getmIdx());
+				gmVOList.put(rsvVO.getResIdx(), memberService.oneMemberInfo(gmVO));
+			}
+			
+			model.addAttribute("pastRsv", pastRsv);
+			model.addAttribute("startPage", pastRsvPu.getStartPage());
+			model.addAttribute("endPage", pastRsvPu.getEndPage());
+			model.addAttribute("lastPage", pastRsvPu.getLastPage());
+			model.addAttribute("gmVOList", gmVOList);
+			model.addAttribute("today", new Date());
+			return "space/myspacersv";
+		} else {
+			model.addAttribute("msg", "조회 권한이 없습니다.");
+			model.addAttribute("url", "/member/hlogin.do");
+			
+			return "alert";
+		}
+	}
+	
+	@RequestMapping(value = "loadMySpaceRsv.do")
+	@ResponseBody
+	public Map<String, Object> loadMySpaceRsv(int page, SpacesVO vo, String dateType, String dateRange, HttpServletRequest request) {
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+	
+		PagingUtil pastRsvPu = new PagingUtil(spaceService.countRsvBySpace(vo, dateType, dateRange), page, 10, 5);
+		
+		List<ReservationsVO> pastRsv = spaceService.getRsvBySpace(vo, dateType, dateRange, pastRsvPu.getStart() - 1);
+
+		Iterator<ReservationsVO> rsvIterator = pastRsv.iterator();
+		
+		Map<Integer, GeneralMembersVO> gmVOList = new HashMap<Integer, GeneralMembersVO>();
+		
+		while (rsvIterator.hasNext()) {
+			ReservationsVO rsvVO = rsvIterator.next();
+			GeneralMembersVO gmVO = new GeneralMembersVO();
+			gmVO.setmIdx(rsvVO.getmIdx());
+			gmVOList.put(rsvVO.getResIdx(), memberService.oneMemberInfo(gmVO));
+		}
+		
+		result.put("pastRsv", pastRsv);
+		result.put("startPage", pastRsvPu.getStartPage());
+		result.put("endPage", pastRsvPu.getEndPage());
+		result.put("lastPage", pastRsvPu.getLastPage());
+		result.put("gmVOList", gmVOList);
+		result.put("today", new Date());
+	
+		return result;
+	}
+	
+	@RequestMapping(value = "mypoint.do")
+	public String myPoint(Model model, HttpServletRequest request, String dateRange) {
+
+		if (request.getSession().getAttribute("login") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else {
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			PagingUtil pu = new PagingUtil(spaceService.countPointHistory(login, dateRange), 1, 10, 5);
+			
+			model.addAttribute("pointVO", spaceService.pointHistory(login, dateRange, pu.getStart() - 1));
+			model.addAttribute("startPage", pu.getStartPage());
+			model.addAttribute("endPage", pu.getEndPage());
+			model.addAttribute("lastPage", pu.getLastPage());
+			
+			return "space/mypoint";
+		}
+	}
+	
+	@RequestMapping(value = "loadmypoint.do")
+	@ResponseBody
+	public Map<String, Object> loadMyPoint(HttpServletRequest request, Integer page, String dateRange) {
+		
+		Map<String, Object> data = new HashMap<String, Object>();
+
+		GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		PagingUtil pu = new PagingUtil(spaceService.countPointHistory(login, dateRange), page, 10, 5);
+		
+		data.put("pointVO", spaceService.pointHistory(login, dateRange, pu.getStart() - 1));
+		data.put("startPage", pu.getStartPage());
+		data.put("endPage", pu.getEndPage());
+		data.put("lastPage", pu.getLastPage());
+		
+		return data;
+		
+	}
+	
 	/*
 	@RequestMapping(value="setlist.do")
 	public String setListData() {

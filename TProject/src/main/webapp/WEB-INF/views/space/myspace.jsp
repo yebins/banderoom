@@ -48,11 +48,13 @@
 		align-items: center;
 	}
 	
+	.spacebox {
+		position: relative;
+	}
+	
 	.spacebox:hover {
 		cursor: pointer;
-	}
-	.spacebox:active {
-		filter: brightness(90%);
+		outline: 3px solid #fb6544;
 	}
 	
 	.space-thumb {
@@ -97,6 +99,15 @@
 	}
 	.status-refused {
 		color: #FB6544;
+	}
+	
+	.myspacersv-button {
+		position: absolute;
+		top: 15px;
+		right: 15px;
+		width: 80px;
+		height: 30px;
+		font-size: 14px;
 	}
 		
 </style>
@@ -217,6 +228,11 @@
 		
 	}
 	
+	function mySpaceRsv(idx) {
+		event.stopPropagation();
+		location.href = 'myspacersv.do?idx=' + idx;
+	}
+	
 	
 </script>
 </head>
@@ -300,6 +316,7 @@
 							</div>
 						</div>
 					</div>
+					<button class="normal-button myspacersv-button" onclick="mySpaceRsv(${vo.idx})">예약 내역</button>
 				</div>
 			</c:forEach>
 			

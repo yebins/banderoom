@@ -191,7 +191,9 @@
 				 </c:forEach> 
 				  </div>
 				  <div class="content-write">
-					<button class="normal-button accent-button"><a href="serinfoupdate.do">글쓰기</a></button>
+				  	<c:if test="${login.auth == 3}">
+						<button class="normal-button accent-button"><a href="serinfoupdate.do">글쓰기</a></button>
+				  	</c:if>	
 				  </div>
 			</div>
 		</div>	

@@ -133,7 +133,6 @@
 	.filters-wrap select {
 		width: fit-content;
 		padding: 0px 15px;
-		width: 150px;
 	}
 	.dateInput {
 		margin-left: 10px;
@@ -146,16 +145,6 @@
 	}
 	.dateInput-button {
 		margin-left: 10px;
-	}
-	
-	.search-form {
-		display: flex;
-		align-items: center;
-	}
-	
-	.form-select:focus {
-		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-		outline: none;
 	}
 	
 	.past-rsv-box {
@@ -189,34 +178,116 @@
 		margin-left: 5px;
 	}
 	#page-nav {
+		border-top: 1px solid lightgray;
 		width: 100%;
-		height: 50px;
+		height: 80px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 	}
 	.page-nav-button {
-	
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		margin: 7.5px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.page-nav-button:not(.current-page) {
 		cursor: pointer;
 	}
 	.page-nav-button.current-page {
+		background-color: #fbe6b2;
 		font-weight: bold;
 	}
 </style>
-<script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 <script>
+	
+	var mapContainer;
+	
+	function drawMap(address, name) {
+		mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+		    mapOption = {
+		        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+		        level: 3 // 지도의 확대 레벨
+		    };  
+		
+		// 지도를 생성합니다    
+		var map = new kakao.maps.Map(mapContainer, mapOption); 
+		
+	
+		// 일반 지도와 스카이뷰로 지도 타입을 전환할 수 있는 지도타입 컨트롤을 생성합니다
+		var mapTypeControl = new kakao.maps.MapTypeControl();
+	
+		// 지도에 컨트롤을 추가해야 지도위에 표시됩니다
+		// kakao.maps.ControlPosition은 컨트롤이 표시될 위치를 정의하는데 TOPRIGHT는 오른쪽 위를 의미합니다
+		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+	
+		// 지도 확대 축소를 제어할 수 있는  줌 컨트롤을 생성합니다
+		var zoomControl = new kakao.maps.ZoomControl();
+		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+		
+		
+		// 주소-좌표 변환 객체를 생성합니다
+		var geocoder = new kakao.maps.services.Geocoder();
+		
+		// 주소로 좌표를 검색합니다
+		geocoder.addressSearch(address, function(result, status) {
+		
+		    // 정상적으로 검색이 완료됐으면 
+		     if (status === kakao.maps.services.Status.OK) {
+		
+		        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+		
+		        // 결과값으로 받은 위치를 마커로 표시합니다
+		        var marker = new kakao.maps.Marker({
+		            map: map,
+		            position: coords
+		        });
+		
+		        // 인포윈도우로 장소에 대한 설명을 표시합니다
+		        var infowindow = new kakao.maps.InfoWindow({
+		            content: '<div class="map-popup" onclick="window.open(\'https://map.kakao.com/link/search/' + address + '\')">' + name + '</div>'
+		        });
+		        infowindow.open(map, marker);
+		
+		        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+		        map.setCenter(coords);
+		    } 
+		});   
+	
+	}
+	
+	function showMap(address, name) {
+		event.stopPropagation();
+		$("#map").children().remove();
+	    drawMap(address, name);
+		$("#mapBackOveray").css("visibility", "visible");
+	// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	}
 	
 	$(function() {
 		if (${param.dateRange != null || param.dateAll != null}) {
-			if (${param.dateAll == null}) {
-				$("select[name=dateType]").val('${param.dateType}');
-			}			
+			$("select[name=dateType]").val('${param.dateType}');
 			var div = document.getElementById("scroll-here");
 			div.scrollIntoView();
 		}
 	})
+	
+	function review(resIdx) {
+		window.open('review.do?resIdx=' + resIdx, '_blank', 
+        'top=140, left=200, width=800, height=500, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
+	}
+	
+	function reload() {	    // 팝업 창에서 호출할 함수
+		location.reload();
+	}
+	function gotoLogin() {
+		location.href="/member/glogin.do";
+	}
 	
 	var currentPage = 1;
 	var startPage = ${startPage};
@@ -235,11 +306,10 @@
 	function loadMyRsv(page) {
 		$.ajax({
 			type: "get",
-			url: "loadMySpaceRsv.do",
-			data: "idx=${param.idx}&page=" + page + "&dateType=" + dateType + "&dateRange=" + dateRange,
+			url: "loadMyRsv.do",
+			data: "page=" + page + "&dateType=" + dateType + "&dateRange=" + dateRange,
 			success: function(result) {
 				
-				var gmVOList = result.gmVOList;
 				var pastRsv = result.pastRsv;
 				
 				$("#past-rsv").children().each(function() {
@@ -252,17 +322,26 @@
 					
 					html += '<div class="past-rsv-wrap">';
 					html += '<div class="past-rsv-info-wrap">';
-					html += '<div class="past-rsv-name">' + gmVOList[pastRsv[i].resIdx].name + '</div>';
+					html += '<div class="past-rsv-name"><a href="details.do?idx=' + pastRsv[i].idx + '">' + pastRsv[i].name + '</a></div>';
 					html += '<div class="past-rsv-info">';
 					html += '<div class="past-rsv-info-items">';
 					html += '<div class="small-title">공간 사용일</div>';
 					html += '<div class="small-content">';
 					
 					var date = new Date(pastRsv[i].startDate);
-					var dateString = moment(date).format("YYYY/MM/DD k시~");
+					var dateString = "" + date.getFullYear() + "/";
+					if ((date.getMonth() + 1) < 10) {
+						dateString += "0";
+					}
+					dateString += (date.getMonth() + 1) + "/";
+					if (date.getDate() < 10) {
+						dateString += "0";
+					}
+					dateString += date.getDate() + " ";
+					dateString += date.getHours() + "시~";
 					
 					date = new Date(pastRsv[i].endDate);
-					dateString += moment(date).format("k시, ");
+					dateString += date.getHours() + "시, ";
 					
 					dateString += pastRsv[i].rsvHours + "시간";
 					
@@ -273,16 +352,19 @@
 					html += '<div class="small-content">';
 					
 					date = new Date(pastRsv[i].resDate);
-					dateString = moment(date).format("YYYY/MM/DD");
+					dateString = "" + date.getFullYear() + "/";
+					if ((date.getMonth() + 1) < 10) {
+						dateString += "0";
+					}
+					dateString += (date.getMonth() + 1) + "/";
+					if (date.getDate() < 10) {
+						dateString += "0";
+					}
+					dateString += date.getDate();
 					
 					html += dateString;
 					html += '</div></div></div>';
 					html += '<div class="past-rsv-info">';
-					html += '<div class="past-rsv-info-items">';
-					html += '<div class="small-title">연락처</div>';
-					html += '<div class="small-content">';
-					html += gmVOList[pastRsv[i].resIdx].tel;
-					html += '</div></div>&nbsp;&nbsp;';
 					html += '<div class="past-rsv-info-items">';
 					html += '<div class="small-title">이용료</div>';
 					html += '<div class="small-content">';
@@ -290,8 +372,20 @@
 					var cost = pastRsv[i].cost.toLocaleString();
 					
 					html += cost + "원";
+					html += '</div></div>&nbsp;&nbsp;';
+					html += '<div class="past-rsv-info-items">';
+					html += '<div class="small-title">결제 금액</div>';
+					html += '<div class="small-content">';
+					
+					cost = pastRsv[i].totalCost.toLocaleString();
+
+					html += cost + "원";
 					html += '</div></div>&nbsp;&nbsp;</div></div>';
 					html += '<div class="past-rsv-buttons">';
+					
+					if (pastRsv[i].endDate < result.today && result.reviewed[pastRsv[i].resIdx] == 0) {
+						html += '<button class="normal-button accent-button" onclick="review(' + pastRsv[i].resIdx + ')">후기 작성</button>&nbsp;&nbsp;';
+					}
 					
 					html += '<button class="normal-button" onclick="location.href=\'rsvdetails.do?resIdx=' + pastRsv[i].resIdx + '\'">예약 상세</button>';
 					html += '</div></div>';
@@ -314,30 +408,30 @@
 				if (lastPage < 6) {
 					for (var i = startPage; i <= endPage; i++) {
 						if (i == currentPage) {
-							html += '<div class="page-nav-button current-page">[' + i + ']</div>&nbsp;';
+							html += '<div class="page-nav-button current-page">' + i + '</div>';
 						} else {
-							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">[' + i + ']&nbsp;</div>';
+							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">' + i + '</div>';
 						}
 					}
 				}
 				
 				if (lastPage > 5) {
 					if (startPage > 5) {
-						html += '<div class="page-nav-button" onclick="loadMyRsv(1)">[1]</div>&nbsp;';
-						html += '<div class="page-nav-button" onclick="loadMyRsv(startPage - 1)">◀</div>&nbsp;';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(1)">1</div>';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(startPage - 1)">◀</div>';
 					}
 
 					for (var i = startPage; i <= endPage; i++) {
 						if (i == currentPage) {
-							html += '<div class="page-nav-button current-page">[' + i + ']</div>&nbsp;';
+							html += '<div class="page-nav-button current-page">' + i + '</div>';
 						} else {
-							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">[' + i + ']&nbsp;</div>';
+							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">' + i + '</div>';
 						}
 					}
 					
 					if (endPage < lastPage) {
-						html += '<div class="page-nav-button" onclick="loadMyRsv(endPage + 1)">▶</div>&nbsp;';
-						html += '<div class="page-nav-button" onclick="loadMyRsv(lastPage)">[' + lastPage + ']</div>&nbsp;';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(endPage + 1)">▶</div>';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(lastPage)">' + lastPage + '</div>';
 					}
 				}
 				
@@ -389,16 +483,15 @@
 				예약 내역
 			</div>
 			<div class="filters-wrap">
-				<form class="search-form" action="myspacersv.do">
-					<input type="hidden" name="idx" value="${param.idx}">
-					<select name="dateType" class="form-select normal-button">
+				<form action="myrsv.do">
+					<select name="dateType" class="normal-button">
 						<option value="resDate">예약일</option>
 						<option value="startDate">공간 사용일</option>
 					</select>
 					<input class="datepicker-here dateInput" name="dateRange"
 						data-language="ko" data-range="true" data-multiple-dates-separator=" ~ "
 						type="text" id="dateRange" autocomplete="false" placeholder="기간 선택" value="${param.dateRange}" readonly>
-					<button type="button" class="normal-button dateInput-button" onclick="location.href='myspacersv.do?idx=${param.idx}&dateAll=1'">전체보기</button>
+					<button type="button" class="normal-button dateInput-button" onclick="location.href='myrsv.do?dateAll=1'">전체보기</button>
 					<button class="normal-button accent-button dateInput-button">검색</button>
 				</form>
 			</div>
@@ -408,7 +501,7 @@
 					<c:forEach var="rsvVO" items="${pastRsv}">
 						<div class="past-rsv-wrap">
 							<div class="past-rsv-info-wrap">
-								<div class="past-rsv-name">${gmVOList.get(rsvVO.getResIdx()).getName()}</div>
+								<div class="past-rsv-name"><a href="details.do?idx=${rsvVO.idx}">${rsvVO.name}</a></div>
 								<div class="past-rsv-info">
 									<div class="past-rsv-info-items">
 										<div class="small-title">공간 사용일</div>
@@ -426,13 +519,15 @@
 								</div>
 								<div class="past-rsv-info">
 									<div class="past-rsv-info-items">
-										<div class="small-title">연락처</div>
-										<div class="small-content">${gmVOList.get(rsvVO.resIdx).tel}</div>
-									</div>&nbsp;&nbsp;
-									<div class="past-rsv-info-items">
 										<div class="small-title">이용료</div>
 										<div class="small-content">
 											<fmt:formatNumber value="${rsvVO.cost}" pattern="#,###" />원
+										</div>
+									</div>&nbsp;&nbsp;
+									<div class="past-rsv-info-items">
+										<div class="small-title">결제 금액</div>
+										<div class="small-content">
+											<fmt:formatNumber value="${rsvVO.totalCost}" pattern="#,###" />원
 										</div>
 									</div>&nbsp;&nbsp;
 								</div>
@@ -452,34 +547,34 @@
 							<c:forEach var="i" begin="${startPage}" end="${endPage}">
 								<c:choose>
 									<c:when test="${i == 1}">
-										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+										<div class="page-nav-button current-page">${i}</div>
 									</c:when>
 									<c:otherwise>
-										<div class="page-nav-button" onclick="loadMyRsv(${i})">[${i}]&nbsp;</div>
+										<div class="page-nav-button" onclick="loadMyRsv(${i})">${i}</div>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 						</c:if>
 						<c:if test="${lastPage > 5}">
 							<c:if test="${startPage > 5}">
-								<div class="page-nav-button" onclick="loadMyRsv(1)">[1]</div>&nbsp;
-								<div class="page-nav-button" onclick="loadMyRsv(${startPage - 1})">◀</div>&nbsp;
+								<div class="page-nav-button" onclick="loadMyRsv(1)">1</div>
+								<div class="page-nav-button" onclick="loadMyRsv(${startPage - 1})">◀</div>
 							</c:if>
 							
 							<c:forEach var="i" begin="${startPage}" end="${endPage}">
 								<c:choose>
 									<c:when test="${i == param.page}">
-										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+										<div class="page-nav-button current-page">${i}</div>
 									</c:when>
 									<c:otherwise>
-										<div class="page-nav-button" onclick="loadMyRsv(${i})">[${i}]&nbsp;</div>
+										<div class="page-nav-button" onclick="loadMyRsv(${i})">${i}</div>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							
 							<c:if test="${endPage < lastPage}">
-								<div class="page-nav-button" onclick="loadMyRsv(${endPage + 1})">▶</div>&nbsp;
-								<div class="page-nav-button" onclick="loadMyRsv(${lastPage})">[${lastPage}]</div>&nbsp;
+								<div class="page-nav-button" onclick="loadMyRsv(${endPage + 1})">▶</div>
+								<div class="page-nav-button" onclick="loadMyRsv(${lastPage})">${lastPage}</div>
 							</c:if>
 						</c:if>
 					</div>

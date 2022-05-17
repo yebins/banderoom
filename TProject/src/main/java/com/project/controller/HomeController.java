@@ -66,42 +66,6 @@ public class HomeController {
 		
 		return "footer";
 	}
-	
-	@RequestMapping(value = "/newfile.do")
-	public String newfile () {
-		
-		return "NewFile";
-	}
-
-	@RequestMapping(value = "/newfile1.do")
-	public String newfile1 () {
-		
-		return "NewFile1";
-	}
-	
-	@RequestMapping(value = "/payProcess.do", method = RequestMethod.POST)
-	public void payProcess(String imp_uid, String merchant_uid) {
-		System.out.println(imp_uid + merchant_uid);
-		
-	}
-	
-	@RequestMapping(value = "/newfile2.do")
-	public String newfile2() {
-		return "NewFile2";
-	}
-
-	@RequestMapping(value = "/newfile3.do")
-	public String newfile3() {
-		return "NewFile3";
-	}
-
-	@RequestMapping(value = "/formtest.do")
-	public String formtest(String no, String yes) {
-		System.out.println(no);
-		System.out.println(yes);
-		return "NewFile3";
-	}
-	
 
 	@RequestMapping(value = "/frame.do")
 	public String frame() {
@@ -222,19 +186,18 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/serlist.do",method=RequestMethod.GET)
-	public String serlist(Model model,Integer bIdx,String searchtitle) {
-		System.out.println(bIdx);//bIdx값 확인
-		System.out.println(searchtitle);//검색어 확인
-		if(bIdx == null) {
-			bIdx=1;
+	public String serlist(Model model, @RequestParam Map<String, Object> map, HttpServletRequest request) {
+		if(map.get("bIdx") == null) {
+			map.put("bIdx", 1);
 		}
 		
-		List<ArticlesVO> list=boardService.list(bIdx,searchtitle, 1);
+		List<ArticlesVO> list=boardService.list(map, request);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
-		model.addAttribute("bIdx",bIdx);
+		model.addAttribute("bIdx",map.get("bIdx"));
 		
 		return "serlist";
+		
 	}
 	
 	@RequestMapping(value="/serlistDelete.do")
