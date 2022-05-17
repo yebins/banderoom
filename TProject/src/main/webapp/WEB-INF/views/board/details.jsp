@@ -677,9 +677,11 @@
 					</div>
 					<div class="board-area-content">
 						${vo.content}
-						<div class="board-content-like">
-							<input type="button" id="like-button" class="normal-button" style="width:70px;" onclick="likedArtilces()" value="추천">
-						</div>
+						<c:if test="${login != null}">
+							<div class="board-content-like">
+								<input type="button" id="like-button" class="normal-button" style="width:70px;" onclick="likedArtilces()" value="추천">
+							</div>
+						</c:if>
 					</div>
 				</div>
 				<div class="details-button">
@@ -858,6 +860,23 @@
 					</div>
 				</div>
 			</div>
+			<!-- <div class="inner-box" style="margin-top:20px;">
+				<table>
+					<c:forEach var="i" begin="0" end="${next.length()-1}">
+						<tr>
+							<td>${next.get(i).title }</td>
+						</tr>
+					</c:forEach>
+					<tr>
+						<td>${vo.title}</td>
+					</tr>
+					<c:forEach var="i" begin="0" end="${prev.length()-1}">
+						<tr>
+							<td>${prev.get(i).title }</td>
+						</tr>
+					</c:forEach>
+				</table>
+			</div> -->
 		</div>
 	</div>
 	<c:import url="/footer.do" />

@@ -38,4 +38,7 @@ public interface BoardService {
 	int commentCount(int aIdx);
 	int replyWrite(CommentRepliesVO vo);
 	List<CommentRepliesVO> replylist(int cIdx);
+	List<ArticlesVO> prevList(ArticlesVO vo);
+	List<ArticlesVO> nextList(ArticlesVO vo);
+	
 }

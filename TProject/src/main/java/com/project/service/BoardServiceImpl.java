@@ -259,5 +259,21 @@ public class BoardServiceImpl implements BoardService {
 		
 		return dao.replyList(cIdx);
 	}
+
+
+
+	@Override
+	public List<ArticlesVO> prevList(ArticlesVO vo) {
+		// TODO Auto-generated method stub
+		return dao.prevList(vo);
+	}
+
+
+
+	@Override
+	public List<ArticlesVO> nextList(ArticlesVO vo) {
+		// TODO Auto-generated method stub
+		return dao.nextList(vo);
+	}
 		
 }

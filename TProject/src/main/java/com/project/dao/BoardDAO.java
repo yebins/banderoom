@@ -156,4 +156,14 @@ public class BoardDAO {
 		
 		return sqlSession.selectList("com.project.mapper.boardMapper.replyList",cIdx);
 	}
+	
+	public List<ArticlesVO> prevList(ArticlesVO vo){
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.prevList", vo);
+	}
+	
+	public List<ArticlesVO> nextList(ArticlesVO vo){
+		
+		return sqlSession.selectList("com.project.mapper.boardMapper.nextList", vo);
+	}
 }
