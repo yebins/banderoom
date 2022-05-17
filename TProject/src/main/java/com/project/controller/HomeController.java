@@ -194,6 +194,7 @@ public class HomeController {
 		List<ArticlesVO> list=boardService.list(map, request);
 		System.out.println(list.size());
 		model.addAttribute("list",list);
+		model.addAttribute("bIdx",map.get("bIdx"));
 		
 		return "serlist";
 		

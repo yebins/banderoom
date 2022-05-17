@@ -37,5 +37,6 @@ public interface BoardService {
 	int commentDelete(CommentsVO vo);
 	int commentCount(int aIdx);
 	int replyWrite(CommentRepliesVO vo);
+	int replyDelete(CommentRepliesVO vo);
 	List<CommentRepliesVO> replylist(int cIdx);
 }

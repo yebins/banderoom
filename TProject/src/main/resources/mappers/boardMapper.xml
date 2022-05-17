@@ -327,6 +327,11 @@
 			)
 	</insert>
 	
+	<delete id="replyDelete" parameterType="commentRepliesVO">
+		delete from comment_replies
+		where ridx=#{rIdx}
+	</delete>
+	
 	<select id="replyList" parameterType="commentRepliesVO" resultType="commentRepliesVO">
 		select 
 			rIdx
