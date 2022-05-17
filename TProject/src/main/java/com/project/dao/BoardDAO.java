@@ -152,6 +152,11 @@ public class BoardDAO {
 		
 	}
 	
+	public int replyDelete(CommentRepliesVO vo) {
+		
+		return sqlSession.delete("com.project.mapper.boardMapper.replyDelete",vo);
+	}
+	
 	public List<CommentRepliesVO> replyList(int cIdx){
 		
 		return sqlSession.selectList("com.project.mapper.boardMapper.replyList",cIdx);

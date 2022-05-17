@@ -127,7 +127,7 @@ function kakaoLogin() {
         			  if (data == 0) {
         				  location.href='gjoin.do?isKakao=Y'
         			  } else if (data == 1) {
-        				  location.href='/';
+        				  location.href = document.referrer;
         			  }
         		  }
         	  })
@@ -162,7 +162,7 @@ function kakaoLogin() {
 			 if (data == 0) {
 				 alert('일치하는 회원 정보가 없습니다.\n이메일과 비밀번호를 확인해 주세요.')
 			 } else if (data == 1) {
-				 location.href='/';
+				 location.href = document.referrer;
 			 }
 			 
 		 }

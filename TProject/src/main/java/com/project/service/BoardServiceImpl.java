@@ -174,7 +174,8 @@ public class BoardServiceImpl implements BoardService {
 		map.put("aIdx", vo.getaIdx());
 		
 		int count=dao.commentCount(map);
-		int page=(int) Math.ceil((double)count/10);
+		int onlyCommentCount=dao.onlyCommentTotal(map);
+		int page=(int) Math.ceil((double)onlyCommentCount/10);
 		System.out.println("write"+page);
 		
 		Map<String, Object> map2 = new HashMap<>();
@@ -250,6 +251,14 @@ public class BoardServiceImpl implements BoardService {
 	public int replyWrite(CommentRepliesVO vo) {
 		
 		return dao.replyWrite(vo);
+	}
+
+
+
+	@Override
+	public int replyDelete(CommentRepliesVO vo) {
+		
+		return dao.replyDelete(vo);
 	}
 
 

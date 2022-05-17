@@ -372,12 +372,12 @@ function submitAllForms(obj) {
 			if (data > 0) {
 				// 성공
 				alert("회원가입이 완료되었습니다.");
-				location.href='hlogin.do';
+				location.href='/';
 				
 			} else {
 				// 실패
 				alert("가입에 실패했습니다. 다시 시도해 주세요.");
-				location.href='hlogin.do';
+				location.href='/';
 			}
 		}
 	})

@@ -295,19 +295,21 @@
 				console.log(list[1]);
 				console.log(list[2]);
 				console.log(list[3]);
+				console.log(list[4]);
 				var htmls="";
 				
 				if(list[1].length <1){
 					htmls+="무플";
 				} else {
 					$.each(list[1],function(index,el){
+						var cIdx=el.cIdx;
 						htmls+='<li class="comment-area-ul-li">'
 						htmls+='<div class="comment-area-content">'
 						htmls+='<div class="comment-area-content-toparea">'
 						htmls+='<div class="comment-area-content-toparea-left">'
 						htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="'+el.mProfileSrc+'" style="width:22.5px; height:100%;"/>'+el.mNickname+ " "+'</a>'
 						htmls+='<a>'+el.regDate+" "+'</a><a onclick="commentReply('+el.cIdx+')">답글달기</a>';
-						if(el.mIdx == list[3]){
+						if(el.mIdx == ${login.mIdx}){
 							if(el.status != 1){
 						htmls+='<a onclick="commentModify('+el.cIdx+')"> 수정하기 </a>';															
 						htmls+='<a onclick="commentDelete('+el.cIdx+')"> 삭제하기 </a>';							
@@ -332,6 +334,33 @@
 						htmls+='</div>'
 						htmls+='</div>'
 						htmls+='</li>'
+						console.log('대댓글리스트'+Object.keys(list[4]).length);
+						if(Object.keys(list[4]).length > 0){
+								$.each(list[4][el.cIdx],function(index,rl){
+								htmls+='<li class="comment-area-ul-li" style="margin-left:20px;">'
+								htmls+='<div class="comment-area-content">'
+								htmls+='<div class="comment-area-content-toparea">'
+								htmls+='<div class="comment-area-content-toparea-left">'
+								htmls+='<a class="miniprofile" onclick="profileOpen('+rl.mIdx+')"><img src="" style="width:22.5px; height:100%;"/>'+rl.mNickname+" "+'</a>'
+								htmls+='<a>'+rl.regDate+" "+'</a>'
+								if(rl.mIdx == ${login.mIdx}){
+									htmls+='<a onclick="replyDelete('+rl.rIdx+','+list[2]+','+rl.mIdx+')"> 삭제하기 </a>'						
+								}
+								htmls+='</div>'
+								htmls+='<div class="comment-area-content-toparea-right">'
+								htmls+='</div>'
+								htmls+='</div>'
+								htmls+='<div class="comment-area-content-contentarea">'
+								htmls+='<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >'+rl.content+'<br>'
+								if(rl.picSrc != null){
+								htmls+='<img src="'+rl.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'							
+								}
+								htmls+='</div>'
+								htmls+='</div>'
+								htmls+='</div>'
+								htmls+='</li>'
+								})						
+						}
 						/* 수정하기 */				
 						htmls+='<div id="commentModify'+el.cIdx+'" class="commentHidden">'
 					 	htmls+='<div class="comment-area-write">'
@@ -382,7 +411,7 @@
 						htmls+='</label>'
 						htmls+='<div class="comment-area-write-content">'
 						htmls+='<textarea id="reply-write-content'+el.cIdx+'" name="content" class="comment-area-write-content-area"></textarea>'
-						htmls+='<input id="reply-write-button'+el.cIdx+'" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},'+el.cIdx+')">'
+						htmls+='<input id="reply-write-button'+el.cIdx+'" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},'+el.cIdx+','+list[2]+')">'
 						htmls+='</div>'
 					 	htmls+='</form>'
 						htmls+='</div>'
@@ -475,7 +504,7 @@
 		
 	}
 	//답글 쓰기 
-	function replyWrite(mIdx,cIdx){
+	function replyWrite(mIdx,cIdx,page){
 		var tg="replyFile"+cIdx;
 		var formData = new FormData($('#'+tg)[0]);
 		
@@ -484,9 +513,6 @@
 			if(mIdx != null){
 				mIdx=mIdx;
 			}
-			
-			console.log(formData);
-			console.log(formData.content);
 		
 		$.ajax({
 			url:"replyWrite.do",
@@ -510,13 +536,35 @@
 					$('#'+formID).addClass('commentHidden')
 					
 				} else {
-					console.log(result);
 					alert('내용을 적어주세요');	
 				}
+				console.log("page"+page);
+			commentList(page);
 			}
 		});
 		
+	}
+	
+	function replyDelete(rIdx,page,mIdx){
+		var data={
+			rIdx:rIdx,
+			mIdx:mIdx
+		};
 		
+		
+		$.ajax({
+			url:"replyDelete.do",
+			type:"post",
+			data:data,
+			success:function(result){
+				if(result>0){
+					alert('삭제되었습니다.')
+				}else{
+					alert('작성자가 아닙니다');
+				}
+			commentList(page);
+			}
+		});
 	}
 	//댓글 수정하기
 	function commentUpdate(mIdx,cIdx){
@@ -748,6 +796,33 @@
 									</div>
 								</div>
 							 </li>
+							 <c:set var="key" value="${item.cIdx}"/>
+							 <c:if test="${fn:length(replyList[key]) gt 0}">
+							 <c:forEach items="${replyList[key]}" varStatus="j" var="rList">
+							 <li class="comment-area-ul-li" style="margin-left:20px;">
+								<div class="comment-area-content">
+									<div class="comment-area-content-toparea">
+							 			<div class="comment-area-content-toparea-left">
+							 				<a class="miniprofile" onclick="profileOpen('${rList.mIdx}')"><img src="" style="width:22.5px; height:100%;"/>${rList.mNickname}</a>
+							 				<a><fmt:formatDate value="${rList.regDate}" pattern="YY-MM-dd HH:mm:ss"/></a>
+								 			<c:if test="${rList.mIdx == login.mIdx}">
+							 				<a onclick="replyDelete('${rList.rIdx}','${page}','${rList.mIdx}')">삭제하기</a>							 				
+								 			</c:if>
+							 			</div>
+										<div class="comment-area-content-toparea-right">
+										</div>
+								 	</div>
+							 		<div class="comment-area-content-contentarea">
+								 		<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >${rList.content}<br>
+											<c:if test="${rList.picSrc ne null}">
+									 			<img src="${rList.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
+											</c:if>
+										</div>
+									</div>
+								</div>
+							 </li>
+							 </c:forEach>
+							 </c:if>
 							 <!-- 수정하기 박스 -->
 							  <div id="commentModify${item.cIdx}" class="commentHidden">
 							 	<div class="comment-area-write${item.cIdx}" id="comment-area-write_id">
@@ -803,7 +878,7 @@
 										</label>
 										<div class="comment-area-write-content">
 												<textarea id="reply-write-content${item.cIdx}" name="content" class="comment-area-write-content-area"></textarea>
-												<input id="reply-write-button${item.cIdx}" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},${item.cIdx})">
+												<input id="reply-write-button${item.cIdx}" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},${item.cIdx},${page})">
 										</div>
 									</form>
 								</div>

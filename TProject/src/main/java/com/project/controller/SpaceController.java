@@ -777,37 +777,56 @@ public class SpaceController {
 	
 	@RequestMapping(value = "rsvdetails.do")
 	public String resDetails(Model model, HttpServletRequest request, int resIdx) {
+		
+		GeneralMembersVO gMemberVO = new GeneralMembersVO();
+		HostMembersVO hMemberVO = new HostMembersVO();
+		
+		ReservationsVO rsvVO = new ReservationsVO();
+		rsvVO.setResIdx(resIdx);
+		rsvVO = spaceService.getRSV(rsvVO);
+		
+		SpacesVO spacesVO = new SpacesVO();
+		spacesVO.setIdx(rsvVO.getSpaceIdx());
+		spacesVO = spaceService.details(spacesVO);
+		
+		HostMembersVO hostVO = new HostMembersVO();
+		hostVO.setmIdx(spacesVO.getHostIdx());
+		hostVO = memberService.getHostMember(hostVO);
 
-		if (request.getSession().getAttribute("login") == null) {
+
+		if (request.getSession().getAttribute("login") == null && request.getSession().getAttribute("hlogin") == null) {
 
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			model.addAttribute("url", "/member/glogin.do");
 			
 			return "alert";
-		} else {
+		} else if (request.getSession().getAttribute("login") != null) {
 			
-			GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
-
-			ReservationsVO rsvVO = new ReservationsVO();
-			rsvVO.setResIdx(resIdx);
-			rsvVO = spaceService.getRSV(rsvVO);
-			
-			SpacesVO spacesVO = new SpacesVO();
-			spacesVO.setIdx(rsvVO.getSpaceIdx());
-			spacesVO = spaceService.details(spacesVO);
-			HostMembersVO hostVO = new HostMembersVO();
-			hostVO.setmIdx(spacesVO.getHostIdx());
-			hostVO = memberService.getHostMember(hostVO);
-
+			gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
 			request.getSession().setAttribute("login", gMemberVO);
+
+		} else if (request.getSession().getAttribute("hlogin") != null) {
 			
-			model.addAttribute("spacesVO", spacesVO);
-			model.addAttribute("hostVO", hostVO);
-			model.addAttribute("rsvVO", rsvVO);
-			
-			return "space/rsvdetails";
-			
+			hMemberVO = (HostMembersVO) request.getSession().getAttribute("hlogin");
+			gMemberVO.setmIdx(rsvVO.getmIdx());
+			gMemberVO = memberService.oneMemberInfo(gMemberVO);
+			model.addAttribute("login", gMemberVO);
 		}
+		
+		if (gMemberVO.getmIdx() != rsvVO.getmIdx() && gMemberVO.getAuth() != 3 && hMemberVO.getmIdx() != spacesVO.getHostIdx()) {
+
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		}
+		
+		model.addAttribute("spacesVO", spacesVO);
+		model.addAttribute("hostVO", hostVO);
+		model.addAttribute("rsvVO", rsvVO);
+		
+		return "space/rsvdetails";
+		
 	}
 	
 	@RequestMapping(value = "review.do", method = RequestMethod.GET)
