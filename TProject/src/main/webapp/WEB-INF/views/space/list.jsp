@@ -39,8 +39,8 @@
 	.form-select {
     margin-right: 20px;
     width: 160px;
-    height: 50px;
-    border-radius: 25px;
+    height: 36px;
+    border-radius: 18px;
     padding: 0px 20px;
 		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 		border: none;
@@ -73,8 +73,8 @@
 		flex: 1;	
     margin-right: 20px;
     width: 160px;
-    height: 50px;
-    border-radius: 25px;
+    height: 36px;
+    border-radius: 18px;
     padding: 0px 20px;
 		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
 		border: none;
@@ -217,6 +217,18 @@
 		border-width: 10px;
 		color: #FB6544;
 	}
+	
+	.liked-button {
+		width: 36px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0px;
+	}
+	
+	.liked-button img {
+		width: 18px;
+	}
 </style>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
@@ -226,6 +238,27 @@
 	var page = 1;
 	var loading = false;
 	var allLoaded = false;
+	var orderType = "review";
+	if (${param.orderType != null}) {
+		orderType = '${param.orderType}';		
+	}
+	
+	var liked = 0;
+	if (${param.liked != null}) {
+		liked = '${param.liked}';
+	}
+	
+	function searchLiked() {
+		if (liked == 0) {
+			liked = 1;
+			$("input[name=liked]").val(1);
+			$(".liked-button img").attr("src", "/images/heart-filled.png");
+		} else {
+			liked = 0;
+			$("input[name=liked]").val(0);
+			$(".liked-button img").attr("src", "/images/heart-empty.png");
+		}
+	}
 	
 	function addList() {
 		if (loading || allLoaded) {
@@ -341,6 +374,14 @@
 				$("select[name=addr2]").val("${param.addr2}");
 				$("select[name=type]").val("${param.type}");
 				$("input[name=name]").val("${param.name}");
+				$("select[name=orderType]").val(orderType);
+				if (liked == 1) {
+					$("input[name=liked]").val(1);
+					$(".liked-button img").attr("src", "/images/heart-filled.png");
+				} else {
+					$("input[name=liked]").val(0);
+					$(".liked-button img").attr("src", "/images/heart-empty.png");
+				}
 
 				drawMap();
 			}
@@ -503,11 +544,21 @@
 								</select>
 							</div>
 							<div class="filter-buttons">
+								<input type="hidden" name="liked" value="0">
+								<c:if test="${login != null}">
+								<button type="button" class="normal-button liked-button" onclick="searchLiked()">
+									<img src="/images/heart-empty.png">
+								</button>
+								</c:if>
 								<button type="button" class="normal-button map-button" onclick="showMap()">&nbsp;지도<img src="/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>
 								<button type="button" class="normal-button search-button reset-filter" onclick="location.href='list.do'">필터 초기화</button>
 							</div>
 						</div>
 						<div class="search-text">
+							<select id="space-orderType" class="form-select form-select-sm" name="orderType">
+								<option value="review">리뷰 많은 순</option>
+								<option value="score">별점 높은 순</option>
+							</select>
 							<input type="text" class="search-name-input" name="name" placeholder="공간 이름">
 							<button class="normal-button accent-button search-button">검색</button>
 						</div>

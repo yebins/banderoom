@@ -231,4 +231,12 @@ public class SpaceDAO {
 	public List<PointsVO> pointHistory(Map<String, Object> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.pointHistory", params);
 	}
+	
+	public List<PointsVO> pointInfo(ReservationsVO vo) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.pointInfo", vo);
+	}
+	
+	public int cancelRsv(ReservationsVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.cancelRsv", vo);
+	}
 }

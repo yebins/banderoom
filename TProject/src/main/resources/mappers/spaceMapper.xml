@@ -234,7 +234,16 @@
 			</if>
 			
 		</if>
+		<if test="liked == 1">
+		and liked = 1
+		</if>
 		
+		<if test="orderType == 'review'">
+			order by reviewCnt desc		
+		</if>
+		<if test="orderType == 'score'">
+			order by reviewAvg desc
+		</if>
 		limit #{start}, 12
 	</select>
 	
@@ -282,6 +291,7 @@
 		where startdate = #{startDate}
 		and enddate = #{endDate}
 		and spaceidx = #{spaceIdx}
+		and rsvstatus = 0
 	</select>
 	
 	<insert id="insertRsv" parameterType="reservationsVO" useGeneratedKeys="true" keyProperty="resIdx">
@@ -343,6 +353,7 @@
 			select date(startdate) as date, sum(rsvhours) as rsvhours
 			from reservations
 			where spaceidx = #{spaceIdx} and date(startdate) between #{nowDate} and #{afterMonth}
+			and rsvstatus = 0
 			group by date
 			) a	where a.rsvhours = 15;
 	</select>
@@ -350,6 +361,7 @@
 	<select id="getRsvHours" parameterType="Map" resultType="Map">
 		select startDate, endDate from reservations
 		where spaceidx = #{spaceIdx} and date(startdate) = #{date}
+		and rsvstatus = 0
 	</select>
 	
 	<select id="getCurrentRsv" parameterType="generalMembersVO" resultType="reservationsVO">
@@ -361,7 +373,8 @@
 			a.startdate, 
 			a.enddate, 
 			a.rsvhours, 
-			a.resdate, 
+			a.resdate,
+			a.rsvstatus, 
 			b.idx,
 			b.type, 
 			b.name, 
@@ -374,6 +387,7 @@
 		where a.enddate <![CDATA[>=]]> now()
 		and a.spaceidx = b.idx
 		and a.midx = #{mIdx}
+		and a.rsvstatus = 0
 		order by startdate;
 	</select>
 	
@@ -421,6 +435,7 @@
 			a.cost,
 			a.usedPoint,
 			a.totalCost,
+			a.rsvStatus,
 			b.idx,
 			b.type, 
 			b.name, 
@@ -616,6 +631,7 @@
 			a.cost,
 			a.usedPoint,
 			a.totalCost,
+			a.rsvstatus,
 			b.idx,
 			b.type, 
 			b.name, 
@@ -627,27 +643,30 @@
 		from reservations a, spaces b
 		where a.spaceidx = b.idx
 		and a.spaceidx = #{spaceIdx}
+		<if test="start == null or start == ''">
+			order by resdate desc
+		</if>
 		<if test="start != null and start != ''">
 			<if test="dateType == 'resDate'">
 				<if test="end == null or end == ''">
 					and date(a.resdate) = #{start}
-					order by resdate
+					order by resdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.resdate) <![CDATA[>=]]> #{start}
 					and date(a.resdate) <![CDATA[<=]]> #{end}
-					order by resdate
+					order by resdate desc
 				</if>
 			</if>
 			<if test="dateType == 'startDate'">
 				<if test="end == null or end == ''">
 					and date(a.startdate) = #{start}
-					order by startdate
+					order by startdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.startdate) <![CDATA[>=]]> #{start}
 					and date(a.startdate) <![CDATA[<=]]> #{end}
-					order by startdate
+					order by startdate desc
 				</if>
 			</if>
 		</if>
@@ -689,4 +708,14 @@
 		order by pointidx desc
 		limit #{startRow}, 10
 	</select>
+	
+	<select id="pointInfo" parameterType="reservationsVO" resultType="pointsVO">
+		select * from points where resIdx = #{resIdx}
+	</select>
+	
+	<update id="cancelRsv" parameterType="reservationsVO">
+		update reservations set
+			rsvstatus = 1
+		where resIdx = #{resIdx}
+	</update>
 </mapper>

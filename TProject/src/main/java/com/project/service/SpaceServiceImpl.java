@@ -341,4 +341,14 @@ public class SpaceServiceImpl implements SpaceService {
 		
 		return dao.pointHistory(params);
 	}
+	
+	@Override
+	public List<PointsVO> pointInfo(ReservationsVO vo) {
+		return dao.pointInfo(vo);
+	}
+	
+	@Override
+	public int cancelRsv(ReservationsVO vo) {
+		return dao.cancelRsv(vo);
+	}
 }
