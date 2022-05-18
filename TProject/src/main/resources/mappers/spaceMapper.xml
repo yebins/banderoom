@@ -206,39 +206,36 @@
 	
 	<select id="spaceList" resultType="spacesVO" parameterType="HashMap">
 		select * from (
-			select row_number() over(order by idx) as rownum, s.*
-			from spaces s
+			select a.*, count(ls.spaceidx) as liked from (
+				select s.*, 
+					count(sr.score) as reviewCnt, 
+					avg(sr.score) as reviewAvg
+				from space_review sr right join spaces s 
+				on sr.spaceidx = s.idx group by s.idx
+				) a left join (select * from liked_spaces where midx = #{likedMidx}) ls
+			on a.idx = ls.spaceidx
+			group by a.idx
+		) aa 
+		where status = 1
+		
+		<if test="vo != null">
 			
-			<if test="vo != null">
-				<if test="liked != null and liked != ''">
-				, liked_spaces ls
-				</if>
+			<if test="vo.addr1 != null and vo.addr1 != ''">
+			and addr1 = #{vo.addr1}
+			</if>
+			<if test="vo.addr2 != null and vo.addr2 != ''">
+			and addr2 = #{vo.addr2}
+			</if>
+			<if test="vo.type != null and vo.type != ''">
+			and type = #{vo.type}
+			</if>
+			<if test="vo.name != null and vo.name != ''">
+			and name like concat('%', #{vo.name}, '%')
 			</if>
 			
-			where s.status = 1
-			
-			<if test="vo != null">
-				
-				<if test="liked != null and liked != ''">
-				and s.idx = ls.spaceidx
-				and ls.midx = #{liked.mIdx}
-				</if>
-				<if test="vo.addr1 != null and vo.addr1 != ''">
-				and addr1 = #{vo.addr1}
-				</if>
-				<if test="vo.addr2 != null and vo.addr2 != ''">
-				and addr2 = #{vo.addr2}
-				</if>
-				<if test="vo.type != null and vo.type != ''">
-				and type = #{vo.type}
-				</if>
-				<if test="vo.name != null and vo.name != ''">
-				and name like concat('%', #{vo.name}, '%')
-				</if>
-				
-			</if>
-			
-		) a where a.rownum <![CDATA[>=]]> #{start} and a.rownum <![CDATA[<=]]> #{end}
+		</if>
+		
+		limit #{start}, 12
 	</select>
 	
 	<select id="spaceReviewCntAvg" parameterType="spacesVO" resultType="Map">
@@ -435,27 +432,30 @@
 		from reservations a, spaces b
 		where a.spaceidx = b.idx
 		and a.midx = #{mIdx}
+		<if test="start == null or start == ''">
+			order by resdate desc
+		</if>
 		<if test="start != null and start != ''">
 			<if test="dateType == 'resDate'">
 				<if test="end == null or end == ''">
 					and date(a.resdate) = #{start}
-					order by resdate
+					order by resdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.resdate) <![CDATA[>=]]> #{start}
 					and date(a.resdate) <![CDATA[<=]]> #{end}
-					order by resdate
+					order by resdate desc
 				</if>
 			</if>
 			<if test="dateType == 'startDate'">
 				<if test="end == null or end == ''">
 					and date(a.startdate) = #{start}
-					order by startdate
+					order by startdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.startdate) <![CDATA[>=]]> #{start}
 					and date(a.startdate) <![CDATA[<=]]> #{end}
-					order by startdate
+					order by startdate desc
 				</if>
 			</if>
 		</if>

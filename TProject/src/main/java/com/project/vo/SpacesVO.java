@@ -20,6 +20,9 @@ public class SpacesVO {
 	private int hostIdx;
 	private int status; // 0: 등록 대기(기본값) 1: 등록 승인 2: 등록 거부 3: 삭제됨
 	private String thumb;
+	private int reviewCnt;
+	private double reviewAvg;
+	private int liked;
 	
 	public int getIdx() {
 		return idx;
@@ -116,5 +119,23 @@ public class SpacesVO {
 	}
 	public void setThumb(String thumb) {
 		this.thumb = thumb;
+	}
+	public int getReviewCnt() {
+		return reviewCnt;
+	}
+	public void setReviewCnt(int reviewCnt) {
+		this.reviewCnt = reviewCnt;
+	}
+	public double getReviewAvg() {
+		return reviewAvg;
+	}
+	public void setReviewAvg(double reviewAvg) {
+		this.reviewAvg = reviewAvg;
+	}
+	public int getLiked() {
+		return liked;
+	}
+	public void setLiked(int liked) {
+		this.liked = liked;
 	}
 }

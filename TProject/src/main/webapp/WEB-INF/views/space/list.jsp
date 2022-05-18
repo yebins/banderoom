@@ -255,7 +255,7 @@
 					html += '<div class="inner-box spacebox" onclick="location.href=\'details.do?idx=' + data.spaceList[i].idx + '\'">';
 					html += '<input type="hidden" name="idx" value="' + data.spaceList[i].idx + '">';
 					html += '<input type="hidden" name="address" value="' + data.spaceList[i].address + '">';
-					if (data.likedStatus[data.spaceList[i].idx] == 1) {
+					if (data.spaceList[i].liked == 1) {
 						html += '<img class="liked-space" src="/images/heart-filled.png">';
 					}
 					html += '<div class="space-thumb">';
@@ -280,7 +280,7 @@
 					html += '<div class="space-restinfo-restinfo">';
 					html += '<div class="space-addr">' + data.spaceList[i].addr1 + ' ' + data.spaceList[i].addr2 + '</div>';
 					html += '<div class="space-score">';
-					html += '⭐ ' + data.reviewAvg[data.spaceList[i].idx].toFixed(1) + ' (' + data.reviewCount[data.spaceList[i].idx] + ')';
+					html += '⭐ ' + data.spaceList[i].reviewAvg.toFixed(1) + ' (' + data.spaceList[i].reviewCnt + ')';
 					html += '</div></div></div></div></div></div>';
 					
 					$(".spacerow").append(html);
@@ -523,7 +523,7 @@
 								<div class="inner-box spacebox" onclick="location.href='details.do?idx=${spaceList[i].getIdx()}'">
 								<input type="hidden" name="idx" value="${spaceList[i].getIdx()}">
 								<input type="hidden" name="address" value="${spaceList[i].getAddress()}">
-								<c:if test="${likedStatus.get(spaceList[i].getIdx()) == 1 }">
+								<c:if test="${spaceList[i].liked == 1 }">
 								<img class="liked-space" src="/images/heart-filled.png">
 								</c:if>
 									<div class="space-thumb">
@@ -544,7 +544,7 @@
 											<div class="space-restinfo-restinfo">
 												<div class="space-addr">${spaceList[i].getAddr1()} ${spaceList[i].getAddr2()}</div>
 												<div class="space-score">
-													⭐ <fmt:formatNumber value="${reviewAvg.get(spaceList[i].getIdx())}" pattern="0.0" /> (${reviewCount.get(spaceList[i].getIdx())})
+													⭐ <fmt:formatNumber value="${spaceList[i].getReviewAvg()}" pattern="0.0" /> (${spaceList[i].getReviewCnt()})
 												</div>
 											</div>
 										</div>

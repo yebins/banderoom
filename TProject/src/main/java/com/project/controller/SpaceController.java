@@ -479,49 +479,20 @@ public class SpaceController {
 		if (page == null) {
 			page = 1;
 		}
-		int start = page * 12 - 11;
-		int end = page * 12;
+		int start = page * 12 - 12;
 		
 		if (search != null) {
 			params.put("vo", vo);
 		}
 		params.put("start", start);
-		params.put("end", end);
 		
+		params.put("likedMidx", 0);
+		if (request.getSession().getAttribute("login") != null) {
+			params.put("likedMidx", ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+		}
 		
 		List<SpacesVO> spaceList = spaceService.spaceList(params);
 		model.addAttribute("spaceList", spaceList);
-		
-		Map<Integer, Integer> reviewCount = new HashMap<>();
-		
-		Iterator<SpacesVO> iterator = spaceList.iterator();
-		Map<Integer, Double> reviewAvg = new HashMap<>();
-		
-		Map<Integer, Integer> likedStatus = new HashMap<>();
-		
-		while (iterator.hasNext()) {
-			
-			SpacesVO spacesVO = iterator.next(); 
-			
-			Map<String, Object> reviewCntAvg = spaceService.spaceReviewCntAvg(spacesVO);
-			
-			reviewCount.put(spacesVO.getIdx(), Integer.parseInt(String.valueOf(reviewCntAvg.get("count"))));
-			reviewAvg.put(spacesVO.getIdx(), Double.parseDouble(String.valueOf(reviewCntAvg.get("avg"))));
-			
-			LikedSpacesVO liked = new LikedSpacesVO();
-			
-			if ((GeneralMembersVO) request.getSession().getAttribute("login") != null) {
-				liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
-				liked.setSpaceIdx(spacesVO.getIdx());
-				likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
-			} else {
-				likedStatus.put(spacesVO.getIdx(), 0);
-			}
-		}
-		
-		model.addAttribute("reviewCount", reviewCount);
-		model.addAttribute("reviewAvg", reviewAvg);
-		model.addAttribute("likedStatus", likedStatus);
 		
 		return "space/list";
 	}
@@ -536,50 +507,20 @@ public class SpaceController {
 		if (page == null) {
 			page = 1;
 		}
-		int start = page * 12 - 11;
-		int end = page * 12;
+		int start = page * 12 - 12;
 		
 		if (search != null) {
 			params.put("vo", vo);
 		}
-		
 		params.put("start", start);
-		params.put("end", end);
 		
+		params.put("likedMidx", 0);
+		if (request.getSession().getAttribute("login") != null) {
+			params.put("likedMidx", ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+		}
 		
 		List<SpacesVO> spaceList = spaceService.spaceList(params);
 		map.put("spaceList", spaceList);
-		
-		Map<Integer, Integer> reviewCount = new HashMap<>();
-		
-		Iterator<SpacesVO> iterator = spaceList.iterator();
-		Map<Integer, Double> reviewAvg = new HashMap<>();
-		
-		Map<Integer, Integer> likedStatus = new HashMap<>();
-		
-		while (iterator.hasNext()) {
-			
-			SpacesVO spacesVO = iterator.next(); 
-			
-			Map<String, Object> reviewCntAvg = spaceService.spaceReviewCntAvg(spacesVO);
-			
-			reviewCount.put(spacesVO.getIdx(), Integer.parseInt(String.valueOf(reviewCntAvg.get("count"))));
-			reviewAvg.put(spacesVO.getIdx(), Double.parseDouble(String.valueOf(reviewCntAvg.get("avg"))));
-			
-			LikedSpacesVO liked = new LikedSpacesVO();
-			
-			if ((GeneralMembersVO) request.getSession().getAttribute("login") != null) {
-				liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
-				liked.setSpaceIdx(spacesVO.getIdx());
-				likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
-			} else {
-				likedStatus.put(spacesVO.getIdx(), 0);
-			}
-		}
-		
-		map.put("reviewCount", reviewCount);
-		map.put("reviewAvg", reviewAvg);
-		map.put("likedStatus", likedStatus);
 		
 		return map;
 	}
