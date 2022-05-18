@@ -542,7 +542,7 @@
 					</c:forEach>
 					</div>
 					
-					<div id="page-nav">					
+					<div id="page-nav"><!-- 페이지 시작 -->					
 						<c:if test="${lastPage < 6}">
 							<c:forEach var="i" begin="${startPage}" end="${endPage}">
 								<c:choose>
