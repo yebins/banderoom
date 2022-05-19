@@ -171,4 +171,9 @@ public class BoardDAO {
 		
 		return sqlSession.selectList("com.project.mapper.boardMapper.nextList", vo);
 	}
+	
+	public Map<String, Integer> twoinone(int aIdx){
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.twoinone", aIdx);
+	}
 }

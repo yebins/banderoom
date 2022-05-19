@@ -41,5 +41,6 @@ public interface BoardService {
 	List<CommentRepliesVO> replylist(int cIdx);
 	List<ArticlesVO> prevList(ArticlesVO vo);
 	List<ArticlesVO> nextList(ArticlesVO vo);
+	Map<String, Integer> twoinone(int aIdx);
 	
 }

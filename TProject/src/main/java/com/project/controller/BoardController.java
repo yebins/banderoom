@@ -87,28 +87,26 @@ public class BoardController {
 	@RequestMapping(value="/list.do",method=RequestMethod.GET)
 	public String list(Model model, @RequestParam Map<String, Object> map, HttpServletRequest request) {
 		List<ArticlesVO> list=boardService.list(map, request);
-		Map<Integer,Integer> cSize=new HashMap<Integer, Integer>();
+		Map<Integer, Integer> cSize=new HashMap<Integer, Integer>();
+		Map<Integer, Integer> likeList = new HashMap<Integer, Integer>();
+		
 		if(map.get("bIdx") == null) {
 			map.put("bIdx", 2);
 		}
+		
 		for(int i=0;i<list.size();i++) {
 			String co=list.get(i).getContent().replaceAll(" ", "");
-			cSize.put(list.get(i).getaIdx(), boardService.commentCount(list.get(i).getaIdx()));
-			
+			cSize.put(list.get(i).getaIdx(), Integer.parseInt(String.valueOf(boardService.twoinone(list.get(i).getaIdx()).get("count"))));
+			likeList.put(list.get(i).getaIdx(), Integer.parseInt(String.valueOf(boardService.twoinone(list.get(i).getaIdx()).get("likeCount"))));
 			
 			if(co.indexOf("<img") != -1) {
 				list.get(i).setTitle(list.get(i).getTitle()+"<img src='/images/picture-button.png' height='11px'>");
 			}
 		}
 		
-		Map<Integer, Integer> likeList = new HashMap<Integer, Integer>();		
-		for (int i = 0; i < list.size(); i++) {
-			likeList.put(list.get(i).getaIdx(), boardService.likeCount(list.get(i).getaIdx()));
-		}
-		
 		List<ArticlesVO> pc= boardService.pageCount(map);
 		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
-		PagingUtil pu = new PagingUtil(pc.size(), page, 10, 10);
+		PagingUtil pu = new PagingUtil(pc.size(), page, 10, 5);
 		
 		model.addAttribute("pu", pu);
 		
@@ -124,8 +122,6 @@ public class BoardController {
 		model.addAttribute("cSize", cSize);
 		
 		model.addAttribute("bestArticles", bestArticles);
-		
-		model.addAttribute("searchtitle", map.get("searchtitle"));
 		
 		return "board/list";
 	}
@@ -228,7 +224,7 @@ public class BoardController {
 		if(params.get("bIdx") == null) {
 			params.put("bIdx", 3);
 		}
-		System.out.println(params.toString());
+		//System.out.println(params.toString());
 		List<ArticlesVO> list = boardService.Jlist(params,request);
 		
 		if( list.size() >0) {
@@ -260,7 +256,7 @@ public class BoardController {
 		}
 		
 		int articlesTotal=(Integer)request.getAttribute("count");
-		System.out.println("총게시물"+articlesTotal);
+		//System.out.println("총게시물"+articlesTotal);
 		
 		//카멜?기법
 		model.addAttribute("list", list);
@@ -278,7 +274,7 @@ public class BoardController {
 		if(params.get("bIdx") == null) {
 			params.put("bIdx", 4);
 		}
-		System.out.println(params.toString());
+		//System.out.println(params.toString());
 		List<ArticlesVO> list = boardService.Jlist(params,request);
 		
 		if( list.size() >0) {
@@ -308,7 +304,7 @@ public class BoardController {
 		}
 		
 		int articlesTotal=(Integer)request.getAttribute("count");
-		System.out.println("총게시물"+articlesTotal);
+		//System.out.println("총게시물"+articlesTotal);
 		
 		//카멜?기법
 		model.addAttribute("list", list);
@@ -326,7 +322,7 @@ public class BoardController {
 			
 		boardService.readCount(vo);
 		
-		System.out.println(params);
+		//System.out.println(params);
 		
 		Map<String, Object> one = boardService.jlistOneArticle(params,request);//게시글정보
 		List<CommentsVO> cmtList=boardService.commentList(params,request);//댓글리스트
@@ -347,7 +343,7 @@ public class BoardController {
 		model.addAttribute("prev", prev);
 		model.addAttribute("next", next);
 		
-		System.out.println("게시글정보"+one.toString());
+		//System.out.println("게시글정보"+one.toString());
 		
 		model.addAttribute("page", request.getAttribute("page"));
 		model.addAttribute("cmtList",cmtList);//댓글 리스트
@@ -456,7 +452,7 @@ public class BoardController {
 					
 					File target = new File(path, newFileName);
 					
-					System.out.println(target.toString());
+					//System.out.println(target.toString());
 					
 					file.transferTo(target);//파일이생성됨
 					
