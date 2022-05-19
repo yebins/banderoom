@@ -431,14 +431,20 @@ public class BoardController {
 			
 		}
 		
-		@RequestMapping(value="/commentUpdate.do")
+		@RequestMapping(value="/replyUpdate.do")
 		@ResponseBody
-		public int commentUpdate(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
+		public int replyUpdate(CommentRepliesVO vo,@RequestParam("commentSrc") MultipartFile file,int fileChange,HttpServletRequest request) throws IllegalStateException, IOException {
+			CommentRepliesVO one=boardService.commentRepliesOneInfo(vo);
+			System.out.println(one.getPicSrc());
+			vo.setPicSrc(one.getPicSrc());
 			
 			if(vo.getContent() != null && vo.getContent() != "") {
 				
-				if(!file.isEmpty()) {
-					System.out.println(file);
+				
+				//사진 변경 삭제
+				if(fileChange == 1) {
+					//변경
+					if (!file.isEmpty()) {
 					
 					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
 					
@@ -457,10 +463,56 @@ public class BoardController {
 					file.transferTo(target);//파일이생성됨
 					
 					vo.setPicSrc("/upload/"+newFileName);
+					} else {
+					vo.setPicSrc(null);
+					}
 				}
 				
-				System.out.println(vo.toString());
-				System.out.println(vo.getContent());
+				return boardService.commentRepliesUpdate(vo);
+				
+			} else {
+				
+				return -1;
+			}
+			
+		}
+		
+		@RequestMapping(value="/commentUpdate.do")
+		@ResponseBody
+		public int commentUpdate(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,int fileChange,HttpServletRequest request) throws IllegalStateException, IOException {
+			CommentsVO one=boardService.commentOneInfo(vo);
+			System.out.println(one.getPicSrc());
+			vo.setPicSrc(one.getPicSrc());
+			
+			if(vo.getContent() != null && vo.getContent() != "") {
+				
+				
+				//사진 변경 삭제
+				if(fileChange == 1) {
+					//변경
+					if (!file.isEmpty()) {
+					
+					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+					
+					String fileName=file.getOriginalFilename();
+					
+					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+					
+					UUID uuid = UUID.randomUUID();
+					
+					String newFileName = uuid.toString() + extension;
+					
+					File target = new File(path, newFileName);
+					
+					//System.out.println(target.toString());
+					
+					file.transferTo(target);//파일이생성됨
+					
+					vo.setPicSrc("/upload/"+newFileName);
+					} else {
+					vo.setPicSrc(null);
+					}
+				}
 				
 				return boardService.commentUpdate(vo);
 				

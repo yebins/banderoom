@@ -141,6 +141,11 @@ public class BoardDAO {
 		return sqlSession.update("com.project.mapper.boardMapper.commentDelete",vo);
 	}
 	
+	public CommentsVO commentOneInfo(CommentsVO vo) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.commentOneInfo",vo);
+	}
+	
 	public int onlyCommentTotal(Map<String, Object> map) {
 		
 		return sqlSession.selectOne("com.project.mapper.boardMapper.onlyCommentTotal",map);
@@ -175,5 +180,15 @@ public class BoardDAO {
 	public Map<String, Integer> twoinone(int aIdx){
 		
 		return sqlSession.selectOne("com.project.mapper.boardMapper.twoinone", aIdx);
+	}
+	
+	public CommentRepliesVO commentRepliesOneInfo(CommentRepliesVO vo) {
+		
+		return sqlSession.selectOne("com.project.mapper.boardMapper.commentRepliesOneInfo",vo);
+	}
+	
+	public int commentRepliesUpdate(CommentRepliesVO vo) {
+		
+		return sqlSession.update("com.project.mapper.boardMapper.commentRepliesUpdate",vo);
 	}
 }

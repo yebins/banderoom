@@ -36,11 +36,14 @@ public interface BoardService {
 	int commentUpdate(CommentsVO vo);
 	int commentDelete(CommentsVO vo);
 	int commentCount(int aIdx);
+	CommentsVO commentOneInfo(CommentsVO vo);
 	int replyWrite(CommentRepliesVO vo);
 	int replyDelete(CommentRepliesVO vo);
 	List<CommentRepliesVO> replylist(int cIdx);
 	List<ArticlesVO> prevList(ArticlesVO vo);
 	List<ArticlesVO> nextList(ArticlesVO vo);
 	Map<String, Integer> twoinone(int aIdx);
+	CommentRepliesVO commentRepliesOneInfo(CommentRepliesVO vo);
+	int commentRepliesUpdate(CommentRepliesVO vo);
 	
 }

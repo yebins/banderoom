@@ -125,6 +125,10 @@
    		resize: none;
    		overflow: hidden;
 	}
+	.comment-area-content-contentarea img{
+		width:200px;
+		height:100%;
+	}
 	textarea {
 		outline:none;
 		height:auto;
@@ -224,6 +228,19 @@
 	}
 	img{
 		cursor:pointer;
+	}
+	html body .imgExtend{
+		z-index:10000;
+		width:100%;
+		height:100vh;
+		display:block;
+		margin:auto;
+		top:0;
+		left:0;
+		position:fixed;
+	}
+	.IED{
+		display:none;
 	}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
@@ -437,12 +454,13 @@
 								htmls+='</div>'
 								htmls+='<div class="comment-area-content-bottomarea">'
 									if(rl.mIdx == ${login.mIdx}){										
-										htmls+='<a onclick="replyUpdate('+rl.rIdx+','+list[2]+','+rl.mIdx+')"> 수정 </a>'						
+										htmls+='<a onclick="replyModify('+rl.rIdx+')"> 수정 </a>'						
 										htmls+='<a onclick="replyDelete('+rl.rIdx+','+list[2]+','+rl.mIdx+')"> 삭제 </a>'						
 									}
 								htmls+='</div>'
 								htmls+='</div>'
 								htmls+='</li>'
+								//답글 수정하기 박스
 								htmls+='<div id="replyModify'+rl.rIdx+'" class="commentHidden">'
 								htmls+='<div class="comment-area-write">'
 								htmls+='<div id="reply-uploaded-file'+rl.rIdx+'" class="uploaded-file">'
@@ -452,11 +470,12 @@
 								}
 								htmls+='</div>'
 								htmls+='<form id="replyfile'+rl.rIdx+'">'
+								htmls+='<input type="hidden" name="fileChange" value="0">'
 								htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
 								htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
 								htmls+='<label style="margin-bottom:10px">'
-								htmls+='<input type="file" id="refile'+el.cIdx+'" name="commentSrc" style="display:none" onchange="preview(event,'+el.cIdx+')" accept="image/*">'
-								htmls+='<label for="file'+el.cIdx+'">'
+								htmls+='<input type="file" id="replyfile'+rl.rIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+rl.cIdx+',this)" accept="image/*">'
+								htmls+='<label for="replyfile'+rl.rIdx+'">'
 									if(rl.picSrc != null){
 								htmls+='<a> <strong>사진 변경하기</strong></a>'
 									} else{
@@ -466,7 +485,7 @@
 								htmls+='</label>'
 								htmls+='<div class="comment-area-write-content">'
 								htmls+='<textarea id="reply-write-content'+rl.rIdx+'" name="content" class="comment-area-write-content-area">'+rl.content+'</textarea>'
-								htmls+='<input id="reply-write-button'+rl.rIdx+'" type="button" value="수정" class="comment-area-write-content-button" onclick="replyUpdate(${login.mIdx},'+rl.rIdx+')">'
+								htmls+='<input id="reply-write-button'+rl.rIdx+'" type="button" value="수정" class="comment-area-write-content-button" onclick="replyUpdate(${login.mIdx},'+rl.rIdx+',this)">'
 								htmls+='</div>'
 								htmls+='</form>'
 								htmls+='</div>'
@@ -483,13 +502,15 @@
 								}
 						htmls+='</div>'
 						htmls+='<form id="commentfile'+el.cIdx+'">'
+						htmls+='<input type="hidden" name="fileChange" value="0">'
 						htmls+='<input type="hidden" name="aIdx" value="'+el.aIdx+'">'
 						htmls+='<input type="hidden" name="bIdx" value="'+el.bIdx+'">'
 						htmls+='<input type="hidden" name="cIdx" value="'+el.cIdx+'">'
 						htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
 						htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
+						htmls+='<input type="hidden" name="status" value="'+el.status+'">'
 						htmls+='<label style="margin-bottom:10px">'
-						htmls+='<input type="file" id="file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="preview(event,'+el.cIdx+')" accept="image/*">'
+						htmls+='<input type="file" id="file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="preview(event,'+el.cIdx+',this)" accept="image/*">'
 						htmls+='<label for="file'+el.cIdx+'">'
 							if(el.picSrc != null){
 						htmls+='<a> <strong>사진 변경하기</strong></a>'
@@ -516,7 +537,7 @@
 						htmls+='<input type="hidden" name="cIdx" value="'+el.cIdx+'">'
 						htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
 						htmls+='<label style="margin-bottom:10px">'
-						htmls+='<input type="file" id="reply-file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+el.cIdx+')" accept="image/*">'
+						htmls+='<input type="file" id="reply-file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+el.cIdx+',this)" accept="image/*">'
 						htmls+='<label for="reply-file'+el.cIdx+'">'
 						htmls+='</label>'
 						htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>'											
@@ -528,7 +549,7 @@
 					 	htmls+='</form>'
 						htmls+='</div>'
 						htmls+='</div>'
-						/*답글 수정하기*/
+						
 						
 					})
 					var htmlss="";
@@ -541,7 +562,9 @@
 					console.log(startNum);
 					console.log(lastNum);
 					
-					htmlss+='<button onclick="commentList(1)" class="page-nav-button">◀◀</button>'
+					if(page>5){
+					htmlss+='<button onclick="commentList(1)" class="page-nav-button">1</button>'						
+					}
 					htmlss+='<button onclick="commentList('+(startNum-5)+')" class="page-nav-button"'
 					if(startNum <= 1){
 					htmlss+='style="display:none"'
@@ -563,7 +586,9 @@
 					htmlss+='style="display:none"'
 					}
 					htmlss+='>▶</button>'
-					htmlss+='<button onclick="commentList('+lastNum+')" class="page-nav-button">▶▶</button>'
+					if((lastNum-5)>=page){
+					htmlss+='<button onclick="commentList('+lastNum+')" class="page-nav-button">'+lastNum+'</button>'						
+					}
 					
 						
 				}
@@ -571,6 +596,7 @@
 				$("#commentUl").html(htmls);
 				$("#cmtPageNum").html(htmlss);
 				$("#cmtTotal").html(list[0]);
+				caa();
 			}
 		});
 		
@@ -688,8 +714,6 @@
 				mIdx=mIdx;
 			}
 			
-			console.log(formData);
-		
 		$.ajax({
 			url:"commentUpdate.do",
 			type:"post",
@@ -709,8 +733,8 @@
 		
 	}
 	//답글수정하기
-	function replyUpdate(mIdx,rIdx){
-		var formTG="replyfile"+rIdx;
+	function replyUpdate(mIdx,rIdx,obj){
+		var formTG="replyFile"+rIdx;
 		var formData = new FormData($('#'+formTG)[0]);
 		
 		var mIdx=0;
@@ -722,7 +746,7 @@
 			console.log(formData);
 		
 		$.ajax({
-			url:"commentUpdate.do",
+			url:"replyUpdate.do",
 			type:"post",
 			data:formData,
 			contentType: false,
@@ -741,6 +765,9 @@
 	}
 		//사진미리보기
 		function preview(event,cIdx,obj){
+			var fileChange=$(obj).parent().parent().children().first();
+			fileChange.val('1');
+			
 			if(cIdx != null){
 			var id="uploaded-file"+cIdx;
 			var ds="uploaded-file"+cIdx+">img";
@@ -758,7 +785,7 @@
 				img.setAttribute("src",event.target.result);//이 이벤트를 발생한 곳의 값을 따와서 설정
 				img.addEventListener("click",(e)=>{
 					$(e.target).remove();
-					$('#'+obj.id).val('');
+					fileChange.val('1');
 				})
 				document.querySelector('#'+id).appendChild(img);
 				document.querySelector('#'+id).style.display='inline-flex';
@@ -769,10 +796,12 @@
 
 		}
 		//답글사진미리보기
-		function replyPreview(event,cIdx,obj){
-			if(cIdx != null){
-			var id="reply-uploaded-file"+cIdx;
-			var ds="reply-uploaded-file"+cIdx+">img";
+		function replyPreview(event,rIdx,obj){
+			var fileChange=$(obj).parent().parent().children().first();
+			
+			if(rIdx != null){
+			var id="reply-uploaded-file"+rIdx;
+			var ds="reply-uploaded-file"+rIdx+">img";
 				$('#'+ds).remove();
 				
 			} else {
@@ -787,7 +816,7 @@
 				img.setAttribute("src",event.target.result);//이 이벤트를 발생한 곳의 값을 따와서 설정
 				img.addEventListener("click",(e)=>{
 					$(e.target).remove();
-					$('#'+obj.id).val('');
+					fileChange.val('1');
 				});
 				document.querySelector('#'+id).appendChild(img);
 				document.querySelector('#'+id).style.display='inline-flex';
@@ -817,9 +846,30 @@
 			var bb="uploaded-file"+obj;
 			var cc="file"+obj;
 			$('#'+bb+'>img').click(function (){
-				$('#'+bb+'>img').remove();
-				$('#'+bb).next().children('label').children('input').val('');
-				console.log($('#'+bb).next().children('label').children('input'));
+				$(this).remove();
+				var cmt="commentfile"+obj;
+				console.log($('#'+cmt).children('input[name=fileChange]').val('1'));
+			});
+			$('#'+bb).css("display","inline-flex");
+			let aa=$('#'+a);
+			if(aa.hasClass('commentHidden')){
+				aa.removeClass('commentHidden')
+				aa.addClass('commentModify');
+			} else {
+				aa.addClass('commentHidden');				
+				aa.removeClass('commentModify');
+			}
+			
+		}
+		//답글 수정버튼
+		function replyModify(obj){
+			var a ="replyModify"+obj;
+			var bb="reply-uploaded-file"+obj;
+			var cc="replyfile"+obj;
+			$('#'+bb+'>img').click(function (){
+				$(this).remove();
+				var cmt="replyfile"+obj;
+				console.log($('#'+cmt).children('input[name=fileChange]').val('1'));
 			});
 			$('#'+bb).css("display","inline-flex");
 			let aa=$('#'+a);
@@ -946,7 +996,7 @@
 							 			<c:when test="${item.status eq 0}">
 								 		<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >${item.content}<br>
 											<c:if test="${item.picSrc ne null}">
-									 			<img src="${item.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
+									 			<img src="${item.picSrc}"/>
 											</c:if>
 										</div>
 										</c:when>
@@ -999,7 +1049,8 @@
 									</div>
 									<div class="comment-area-content-bottomarea">
 										<c:if test="${rList.mIdx == login.mIdx}">
-							 				<a onclick="replyDelete('${rList.rIdx}','${page}','${rList.mIdx}')">삭제하기</a>							 				
+							 				<a onclick="replyModify('${rList.rIdx}','${page}','${rList.mIdx}')">수정</a>							 				
+							 				<a onclick="replyDelete('${rList.rIdx}','${page}','${rList.mIdx}')">삭제</a>							 				
 								 		</c:if>
 									</div>
 								</div>
@@ -1016,11 +1067,13 @@
 										</c:if>
 									</div>
 									<form id="commentfile${item.cIdx}">
+										<input type="hidden" name="fileChange" value="0">
 										<input type="hidden" name="aIdx" value="${param.aIdx}">
 										<input type="hidden" name="bIdx" value="${param.bIdx}">
 										<input type="hidden" name="mIdx" value="${login.mIdx}">
 										<input type="hidden" name="cIdx" value="${item.cIdx}">
 										<input type="hidden" name="mNickname" value="${login.nickname}">
+										<input type="hidden" name="status" value="${item.status}">
 										<label style="margin-bottom:10px">
 											<input type="file" id="file${item.cIdx}" name="commentSrc" style='display:none' onchange="preview(event,'${item.cIdx}',this)" accept="image/*">
 											<c:choose>
@@ -1071,8 +1124,10 @@
 					</ul>
 					<!-- 댓글 페이징 -->
 					<c:if test="${fn:length(cmtList) gt 0}">
-					<div id="cmtPageNum" class="pageNum" style="padding-top:30px;">	
-						<button onclick="commentList(1)" class="page-nav-button">◀◀</button>
+					<div id="cmtPageNum" class="pageNum" style="padding-top:30px;">
+						<c:if test="${page>5}">
+						<button onclick="commentList(1)" class="page-nav-button">1</button>
+						</c:if>
 						<button onclick="commentList('${startNum-5}')" class="page-nav-button" style="display:${startNum <= 1?'none':'block'}">◀</button>
 						<c:forEach var="i" begin="0" end="4">
 							<c:if test="${(startNum+i)<= lastNum}">
@@ -1087,7 +1142,9 @@
 							</c:if>
 						</c:forEach>
 						<button onclick="commentList('${startNum+5}')" class="page-nav-button" style="display:${(startNum+5)>lastNum?'none':'block'}">▶</button>
-						<button onclick="commentList('${page}')" class="page-nav-button">▶▶</button>
+						<c:if test="${(lastNum-5) >= page}">
+						<button onclick="commentList('${page}')" class="page-nav-button">${lastNum}</button>
+						</c:if>
 					</div>
 					</c:if>
 					<!-- 댓글 등록 -->
@@ -1154,12 +1211,30 @@
 			</div>
 		</div>
 	</div>
+	<div id="IExtend" class="IED">
+		<img src="" style="width:100%;height:100%">
+	</div>
 	<script>
-	(function imgWide(){
+	//이미지 확대해서보기
+	var caa=function imgWide(){
+		
 		var img=document.querySelectorAll('.comment-area-content-contentarea div>img');
-		console.log(img);
-	})();
-	
+		for(var i=0;i<img.length; i++){
+			img[i].addEventListener("click",function(){
+				console.log(this.src);
+				$('#IExtend>img').attr('src',this.src);
+				var imgDIV=document.querySelector('#IExtend');
+				imgDIV.classList.toggle("imgExtend");
+			});
+		}
+		
+		var imgd=document.querySelector('#IExtend');
+		imgd.addEventListener("click",function(){
+			$(this).removeClass('imgExtend');
+		})
+	}
+	//로드시 
+	caa();
 	</script>
 	<c:import url="/footer.do" />
 </body>

@@ -286,22 +286,50 @@
 		
 	<update id="commentUpdate" parameterType="commentsVO">
 		update comments set
-			<if test='content != null and !"".equals(content)'>
 			content=#{content}
-			</if>
-			<if test='picSrc != null and !"".equals(picSrc)'>
 			,picsrc=#{picSrc}
-			</if>
-			<if test='status != null and !"".equals(status)'>
 			,status=#{status}
-			</if>
-			where
-				aIdx=#{aIdx}
-			and 
-				bIdx=#{bIdx}
-			and 
-				cIdx=#{cIdx}
-	</update> 
+			where cIdx=#{cIdx}
+	</update>
+	
+	<update id="replyUpdate" parameterType="commentRepliesVO">
+		update comment_replies set
+			content=#{content}
+			,picsrc=#{picSrc}
+			where rIdx=#{rIdx}
+	</update>
+	
+	<select id="commentOneInfo" parameterType="commentsVO" resultType="commentsVO">
+		select 
+			cIdx
+			,bIdx
+			,aIdx
+			,mIdx
+			,mNickname
+			,content
+			,picsrc
+			,regdate
+			,status
+		from
+			comments
+		where
+			cIdx=#{cIdx}
+	</select>
+	
+	<select id="commentRepliesOneInfo" parameterType="commentRepliesVO" resultType="commentRepliesVO">
+		select
+			rIdx
+			,cIdx
+			,mIdx
+			,mNickname
+			,content
+			,picsrc
+			,regdate
+		from
+			comment_replies
+		where
+			rIdx=#{rIdx}
+	</select>
 	
 	<update id="commentDelete" parameterType="commentsVO">
 		update comments set status=1 where cIdx=#{cIdx}

@@ -1093,6 +1093,9 @@ public class SpaceController {
 		
 		SpaceReviewVO original = spaceService.getReviewInfo(vo);
 		
+		vo.setPictureSrc(original.getPictureSrc());
+		vo.setThumbSrc(original.getThumbSrc());
+		
 		if (request.getSession().getAttribute("login") == null) {
 			return 1; // 로그인 안 됨
 		} else {
