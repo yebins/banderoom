@@ -247,7 +247,7 @@
 					<div class="content-wrap">
 							<c:forEach var="i" begin="0" end="${spaceList.size() - 1}">
 								<div class="spacecol">
-									<div class="inner-box spacebox" onclick="location.href='details.do?idx=${spaceList[i].getIdx()}'">
+									<div class="inner-box spacebox" onclick="location.href='/space/details.do?idx=${spaceList[i].getIdx()}'">
 									<input type="hidden" name="idx" value="${spaceList[i].getIdx()}">
 									<input type="hidden" name="address" value="${spaceList[i].getAddress()}">
 									<c:if test="${spaceList[i].liked == 1 }">
