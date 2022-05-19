@@ -841,7 +841,7 @@
 			})
 		}
 		
-		
+	
 </script>
 </head>
 <body>
@@ -1117,6 +1117,13 @@
 			</div>
 		</div>
 	</div>
+	<script>
+	(function imgWide(){
+		var img=document.querySelectorAll('.comment-area-content-contentarea div>img');
+		console.log(img);
+	})();
+	
+	</script>
 	<c:import url="/footer.do" />
 </body>
 </html>
