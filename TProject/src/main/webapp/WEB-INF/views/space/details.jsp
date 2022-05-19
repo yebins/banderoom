@@ -736,7 +736,7 @@
 		display: flex;
 		margin-top: 15px;
 	}
-	.qna-answer-modify-button, {
+	.qna-answer-modify-button {
 		height: 30px;
 		border-radius: 15px;
 		width: 80px;

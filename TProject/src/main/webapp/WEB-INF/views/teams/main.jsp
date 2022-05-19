@@ -101,12 +101,19 @@ td{
 .reg-btn{
 	text-align: right;
 	margin-bottom: 20px;
+	height:36px;
 }
 .team-btn{
     width: 150px;
 }
 button.col-1{
 	margin-right: 10px;
+}
+select[name=sort]{
+    width: 120px;
+    margin-top: 20px;
+    position: absolute;
+    margin-left: 12px;
 }
 /*@font-face {
     font-family: 'SuncheonB';
@@ -130,6 +137,13 @@ button.col-1{
 		$("select[name=type]").val("${param.type}");
 		$("input[name=searchWord]").val("${param.searchWord}");
 		$("input[name=endDate]").val("${param.endDate}");
+		
+		var sort = "${param.sort}";
+		if(sort == ""){
+			sort = "regdate";
+		}
+		$("select[name=sort]").val(sort);
+		
 		
 		
 		$.ajax({
@@ -200,8 +214,7 @@ button.col-1{
 			팀원 모집
 		</div>
 		<div id="page-content">
-		<button type="button" class="normal-button" onclick="location.href='myteams.do'">내 팀 목록</button>
-			<form action="main.do">
+			<form id="search-form" action="main.do">
 				<div class="form">
 					<input type="hidden" name="search" value="1">
 					<div class="mb-3 d-inline-flex search-top">
@@ -231,16 +244,17 @@ button.col-1{
 						<button type="button" class="normal-button col-1" onclick="location.href='main.do'">초기화</button>
 					</div>
 				</div>
+				<select class="form-select form-select-sm" name="sort" onchange="$('#search-form').submit()">
+					<option value="regdate">등록순</option>
+					<option value="enddate">마감날짜순</option>
+				</select>
 			</form>
 			
 			<div class="container">
 				<div class="reg-btn">
-					<select class="form-select form-select-sm" name="addr1" style="width: 120px;">
-						<option value="" selected hidden>정렬하기</option>
-						<option>등록순</option>
-						<option>마감날짜순</option>
-					</select>
+					
 					<c:if test="${login.mIdx ne null}">
+						<button type="button" class="normal-button" onclick="location.href='myteams.do'" style="margin-right:5px;">내가 쓴 글</button>
 						<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
 					</c:if>
 				</div>

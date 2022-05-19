@@ -19,6 +19,7 @@ public class ReservationsVO extends SpacesVO {
 	private int cost;				// 포인트 적용 전 금액
 	private int usedPoint;	// 사용한 포인트
 	private int totalCost;	// 실제 결제 금액
+	private int rsvStatus; 	// 0: 예약됨 1: 취소됨
 	
 	public int getResIdx() {
 		return resIdx;
@@ -85,5 +86,11 @@ public class ReservationsVO extends SpacesVO {
 	}
 	public void setTotalCost(int totalCost) {
 		this.totalCost = totalCost;
+	}
+	public int getRsvStatus() {
+		return rsvStatus;
+	}
+	public void setRsvStatus(int rsvStatus) {
+		this.rsvStatus = rsvStatus;
 	}
 }

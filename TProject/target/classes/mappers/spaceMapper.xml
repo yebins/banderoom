@@ -206,39 +206,45 @@
 	
 	<select id="spaceList" resultType="spacesVO" parameterType="HashMap">
 		select * from (
-			select row_number() over(order by idx) as rownum, s.*
-			from spaces s
+			select a.*, count(ls.spaceidx) as liked from (
+				select s.*, 
+					count(sr.score) as reviewCnt, 
+					avg(sr.score) as reviewAvg
+				from space_review sr right join spaces s 
+				on sr.spaceidx = s.idx group by s.idx
+				) a left join (select * from liked_spaces where midx = #{likedMidx}) ls
+			on a.idx = ls.spaceidx
+			group by a.idx
+		) aa 
+		where status = 1
+		
+		<if test="vo != null">
 			
-			<if test="vo != null">
-				<if test="liked != null and liked != ''">
-				, liked_spaces ls
-				</if>
+			<if test="vo.addr1 != null and vo.addr1 != ''">
+			and addr1 = #{vo.addr1}
+			</if>
+			<if test="vo.addr2 != null and vo.addr2 != ''">
+			and addr2 = #{vo.addr2}
+			</if>
+			<if test="vo.type != null and vo.type != ''">
+			and type = #{vo.type}
+			</if>
+			<if test="vo.name != null and vo.name != ''">
+			and name like concat('%', #{vo.name}, '%')
 			</if>
 			
-			where s.status = 1
-			
-			<if test="vo != null">
-				
-				<if test="liked != null and liked != ''">
-				and s.idx = ls.spaceidx
-				and ls.midx = #{liked.mIdx}
-				</if>
-				<if test="vo.addr1 != null and vo.addr1 != ''">
-				and addr1 = #{vo.addr1}
-				</if>
-				<if test="vo.addr2 != null and vo.addr2 != ''">
-				and addr2 = #{vo.addr2}
-				</if>
-				<if test="vo.type != null and vo.type != ''">
-				and type = #{vo.type}
-				</if>
-				<if test="vo.name != null and vo.name != ''">
-				and name like concat('%', #{vo.name}, '%')
-				</if>
-				
-			</if>
-			
-		) a where a.rownum <![CDATA[>=]]> #{start} and a.rownum <![CDATA[<=]]> #{end}
+		</if>
+		<if test="liked == 1">
+		and liked = 1
+		</if>
+		
+		<if test="orderType == 'review'">
+			order by reviewCnt desc		
+		</if>
+		<if test="orderType == 'score'">
+			order by reviewAvg desc
+		</if>
+		limit #{start}, 12
 	</select>
 	
 	<select id="spaceReviewCntAvg" parameterType="spacesVO" resultType="Map">
@@ -278,6 +284,14 @@
 	
 	<select id="getAddr2" parameterType="locationsVO" resultType="String">
 		select addr2 from locations where addr1 = #{addr1}
+	</select>
+	
+	<select id="validateRsv" parameterType="reservationsVO" resultType="int">
+		select count(*) from reservations
+		where startdate = #{startDate}
+		and enddate = #{endDate}
+		and spaceidx = #{spaceIdx}
+		and rsvstatus = 0
 	</select>
 	
 	<insert id="insertRsv" parameterType="reservationsVO" useGeneratedKeys="true" keyProperty="resIdx">
@@ -339,6 +353,7 @@
 			select date(startdate) as date, sum(rsvhours) as rsvhours
 			from reservations
 			where spaceidx = #{spaceIdx} and date(startdate) between #{nowDate} and #{afterMonth}
+			and rsvstatus = 0
 			group by date
 			) a	where a.rsvhours = 15;
 	</select>
@@ -346,6 +361,7 @@
 	<select id="getRsvHours" parameterType="Map" resultType="Map">
 		select startDate, endDate from reservations
 		where spaceidx = #{spaceIdx} and date(startdate) = #{date}
+		and rsvstatus = 0
 	</select>
 	
 	<select id="getCurrentRsv" parameterType="generalMembersVO" resultType="reservationsVO">
@@ -357,7 +373,8 @@
 			a.startdate, 
 			a.enddate, 
 			a.rsvhours, 
-			a.resdate, 
+			a.resdate,
+			a.rsvstatus, 
 			b.idx,
 			b.type, 
 			b.name, 
@@ -370,6 +387,7 @@
 		where a.enddate <![CDATA[>=]]> now()
 		and a.spaceidx = b.idx
 		and a.midx = #{mIdx}
+		and a.rsvstatus = 0
 		order by startdate;
 	</select>
 	
@@ -417,6 +435,7 @@
 			a.cost,
 			a.usedPoint,
 			a.totalCost,
+			a.rsvStatus,
 			b.idx,
 			b.type, 
 			b.name, 
@@ -428,27 +447,30 @@
 		from reservations a, spaces b
 		where a.spaceidx = b.idx
 		and a.midx = #{mIdx}
+		<if test="start == null or start == ''">
+			order by resdate desc
+		</if>
 		<if test="start != null and start != ''">
 			<if test="dateType == 'resDate'">
 				<if test="end == null or end == ''">
 					and date(a.resdate) = #{start}
-					order by resdate
+					order by resdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.resdate) <![CDATA[>=]]> #{start}
 					and date(a.resdate) <![CDATA[<=]]> #{end}
-					order by resdate
+					order by resdate desc
 				</if>
 			</if>
 			<if test="dateType == 'startDate'">
 				<if test="end == null or end == ''">
 					and date(a.startdate) = #{start}
-					order by startdate
+					order by startdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.startdate) <![CDATA[>=]]> #{start}
 					and date(a.startdate) <![CDATA[<=]]> #{end}
-					order by startdate
+					order by startdate desc
 				</if>
 			</if>
 		</if>
@@ -609,6 +631,7 @@
 			a.cost,
 			a.usedPoint,
 			a.totalCost,
+			a.rsvstatus,
 			b.idx,
 			b.type, 
 			b.name, 
@@ -620,27 +643,30 @@
 		from reservations a, spaces b
 		where a.spaceidx = b.idx
 		and a.spaceidx = #{spaceIdx}
+		<if test="start == null or start == ''">
+			order by resdate desc
+		</if>
 		<if test="start != null and start != ''">
 			<if test="dateType == 'resDate'">
 				<if test="end == null or end == ''">
 					and date(a.resdate) = #{start}
-					order by resdate
+					order by resdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.resdate) <![CDATA[>=]]> #{start}
 					and date(a.resdate) <![CDATA[<=]]> #{end}
-					order by resdate
+					order by resdate desc
 				</if>
 			</if>
 			<if test="dateType == 'startDate'">
 				<if test="end == null or end == ''">
 					and date(a.startdate) = #{start}
-					order by startdate
+					order by startdate desc
 				</if>
 				<if test="end != null and end != ''">
 					and date(a.startdate) <![CDATA[>=]]> #{start}
 					and date(a.startdate) <![CDATA[<=]]> #{end}
-					order by startdate
+					order by startdate desc
 				</if>
 			</if>
 		</if>
@@ -682,4 +708,14 @@
 		order by pointidx desc
 		limit #{startRow}, 10
 	</select>
+	
+	<select id="pointInfo" parameterType="reservationsVO" resultType="pointsVO">
+		select * from points where resIdx = #{resIdx}
+	</select>
+	
+	<update id="cancelRsv" parameterType="reservationsVO">
+		update reservations set
+			rsvstatus = 1
+		where resIdx = #{resIdx}
+	</update>
 </mapper>

@@ -56,7 +56,14 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/header.do")
-	public String header () {
+	public String header (HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("login") != null) {
+			request.getSession().setAttribute("login"
+					, memberService.oneMemberInfo(
+							(GeneralMembersVO) request.getSession().getAttribute("login")
+							));
+		}
 		
 		return "header";
 	}
@@ -69,7 +76,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/frame.do")
 	public String frame() {
-		return "frame2";
+		return "frame";
 	}
 	
 	@RequestMapping(value="/serinfo.do")

@@ -126,6 +126,10 @@ public class SpaceDAO {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.getAddr2", vo);		
 	} //
 	
+	public int validateRsv(ReservationsVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.validateRsv", vo);
+	}
+	
 	public ReservationsVO insertRsv(ReservationsVO vo) {
 		sqlSession.insert("com.project.mapper.spaceMapper.insertRsv", vo);
 		
@@ -226,5 +230,13 @@ public class SpaceDAO {
 	
 	public List<PointsVO> pointHistory(Map<String, Object> params) {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.pointHistory", params);
+	}
+	
+	public List<PointsVO> pointInfo(ReservationsVO vo) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.pointInfo", vo);
+	}
+	
+	public int cancelRsv(ReservationsVO vo) {
+		return sqlSession.update("com.project.mapper.spaceMapper.cancelRsv", vo);
 	}
 }

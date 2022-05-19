@@ -160,10 +160,46 @@
 		font-size: 28px;
 	}
 	
+	.rsv-buttons-wrap {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin-top: 30px;
+	}
+	
+	.rsv-buttons-wrap button {
+		margin-left: 10px;
+	}
 </style>
 
-<!-- iamport.payment.js -->
- <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
+<script>
+
+	function cancelRsv(resIdx) {
+		
+		if (!confirm('예약을 취소하시겠습니까?')) {
+			return;
+		}
+		
+		$.ajax({
+			type: "post",
+			url: "cancelRsv.do",
+			data: "resIdx=" + resIdx,
+			success: function(result) {
+				if (result == 0) {
+					alert('정상적으로 취소되었습니다.');
+					location.reload();
+				} else if (result == 1) {
+					location.reload();
+				} else if (result == 2) {
+					alert('권한이 없습니다.');
+				}
+				
+			}
+			
+		})
+	}
+
+</script>
  
 </head>
 <body>
@@ -333,6 +369,24 @@
 						<span id="gettingPoint"><fmt:formatNumber value="${rsvVO.totalCost * 0.01}" pattern="#,###"/></span> P
 					</div>
 				</div>
+			</div>
+			
+			<div class="rsv-buttons-wrap">
+				<div class="rsv-cancel-info">
+					<c:choose>
+						<c:when test="${rsvVO.rsvStatus == 0}">
+						예약 취소는 사용 시작 24시간 전까지 가능합니다.
+						</c:when>
+						<c:otherwise>
+						이 예약은 취소되었습니다.
+						</c:otherwise>
+					</c:choose>
+				</div>
+				<c:if test="${(rsvVO.startDate > nextDay && rsvVO.rsvStatus == 0) || (hlogin.mIdx == hostVO.mIdx && rsvVO.rsvStatus == 0)}">
+					<button class="normal-button accent-button" onclick="cancelRsv(${rsvVO.resIdx})">
+						예약 취소
+					</button>
+				</c:if>
 			</div>
 		</div>
 		

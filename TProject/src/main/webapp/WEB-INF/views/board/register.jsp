@@ -107,6 +107,7 @@
 		</div>
 		<form action="register.do" method="post">
 			<input type="hidden" name="bIdx" value="${param.bIdx}"> 
+			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<div id="page-content">

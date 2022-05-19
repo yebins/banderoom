@@ -16,10 +16,11 @@ public interface TeamsService {
 	int apply(ApplicationsVO vo);
 	int delete(int teamIdx);
 	int update(TeamsVO vo);
-	List<TeamsVO> reglist(int mIdx);
+	List<TeamsVO> reglist(Map<String, Integer> endMap);
 	List<ApplicationsVO> applist(int mIdx);
 	int finish(int teamIdx);
 	List<ApplicationsVO> myapp(int teamIdx);
+	int myappCount(int teamIdx);
 	void updateStatus();
 	int updateApp(ApplicationsVO vo);
 	int deleteApp(int appIdx);

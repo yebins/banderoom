@@ -176,19 +176,19 @@
 				<c:set var="page" value="${(param.page == null)?1:param.page}"/>
 				<c:set var="startNum" value="${page-(page-1)%5}"/>	
 				<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(articlesTotal/6),'.')}"/>
-			검색된 게시물 수 : ${articlesTotal}
+				검색된 게시물 수 : ${articlesTotal}
 			<div class="pageNum">	
-						<button class="normal-button accent-button hListPageButton" style="visibility:${(startNum<=1)?'hidden':'visible'};">
-							<a href="hlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">이전</a>
-						</button>
-						<c:forEach var="i" begin="0" end="4">
-							<c:if test="${(startNum+i)<= lastNum}">
-								<a href="hlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}" style="color:${page==(startNum+i)?'lightgreen; border:1px solid lightgray; padding:5px; border-radius:10px;':''}">${startNum+i}</a>
-							</c:if>
-						</c:forEach>
-						<button class="normal-button accent-button hListPageButton" style="visibility:${(startNum+5<=lastNum)?'visible':'hidden'};">
-							<a href="hlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">다음</a>
-						</button>
+				<button class="normal-button accent-button hListPageButton" style="visibility:${(startNum<=1)?'hidden':'visible'};">
+					<a href="hlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">이전</a>
+				</button>
+				<c:forEach var="i" begin="0" end="4">
+					<c:if test="${(startNum+i)<= lastNum}">
+						<a href="hlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}" style="color:${page==(startNum+i)?'lightgreen; border:1px solid lightgray; padding:5px; border-radius:10px;':''}">${startNum+i}</a>
+					</c:if>
+				</c:forEach>
+				<button class="normal-button accent-button hListPageButton" style="visibility:${(startNum+5<=lastNum)?'visible':'hidden'};">
+					<a href="hlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">다음</a>
+				</button>
 			</div>
 		</div>
 	</div>

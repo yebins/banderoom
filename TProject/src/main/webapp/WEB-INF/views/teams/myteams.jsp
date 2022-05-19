@@ -23,7 +23,7 @@
 	}
 	
 	.reglist-box {
-		margin-top: 20px;
+		margin-top: 5px;
 		padding: 0px 15px !important;
 	}
 	
@@ -59,8 +59,8 @@
 		justify-content: center;
 		align-items: center;
 	}
-	.reglist-button {
-	
+	.reglist-info-wrap {
+		flex:1;
 	}
 	.reglist-button:not(.current-page) {
 		cursor: pointer;
@@ -83,6 +83,15 @@
 	    width: 100%;
 	    height: 300px;
 	    resize: none;
+	}
+	.endYN{
+		background: white;
+	    width: 170px;
+	    padding: 5px;
+	    border-radius: 30px;
+	    box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
+	    text-align: center;
+	    margin-top: 20px;
 	}
 	
 </style>
@@ -155,6 +164,38 @@
 		}
 	}
 	
+	function deletePost(teamIdx){
+		if(confirm('정말 삭제하시겠습니까?')){
+			$.ajax({
+			url:"delete.do",
+			type:"post",
+			data:"teamIdx="+teamIdx,
+			success:function(data){
+					if(data = "ok"){
+						alert('삭제되었습니다.');
+						location.replace('myteams.do');
+					}else{
+						alert('글 삭제가 완료되지 않았습니다.');
+					}
+				}
+			});
+		}
+	}
+	
+	$(function() {
+		if("${param.endYN}" == 1){
+			$("#endYN").prop('checked',true);
+		} 
+		
+		$("#endYN").change(function(){
+	        if($("#endYN").is(":checked")){
+	        	document.endYNform.submit();
+	        }else{
+	        	document.endYNform.submit();
+	        }
+	    });
+	});
+	
 </script>
 
 </head>
@@ -172,17 +213,21 @@
 			<c:if test="${reglist.size() == 0}">
 				<div class="inner-box" style="height:50px; margin-top:20px;">작성한 글이 없습니다.</div>
 			</c:if>
-			
+		<form action="myteams.do" method="post" name="endYNform">
+			<div class="endYN">
+				<input type="checkbox" id="endYN" name="endYN" value="1"> 마감 글 제외하기
+			</div>
+		</form>
 			<div class="inner-box reglist-box">
 			<c:if test="${reglist.size() > 0}">
 				<div id="reglist">
 					<c:forEach var="reglists" items="${reglist}">
 						<div class="reglist-wrap">
-							<div class="reglist-info-wrap">
-								<div class="reglist-name"><a href="details.do?teamIdx=${reglists.teamIdx}">
+							<div class="reglist-info-wrap" >
+								<div class="reglist-name"><a id="teamIdx" href="details.do?teamIdx=${reglists.teamIdx}">
 								<c:if test="${reglists.status == 0}">[모집중]</c:if>
 								<c:if test="${reglists.status == 2}">[마감]</c:if>
-								${reglists.title}</a></div>
+								${reglists.title} </a></div>
 								<div class="reglist-info">
 									<div class="reglist-info-items">
 										<div class="small-title">지역</div>
@@ -226,6 +271,9 @@
 							<div class="reglist-buttons">
 								<c:if test="${reglists.status == 0}">
 									<button class="normal-button" onclick="finish(${reglists.teamIdx})">마감하기</button>&nbsp;
+								</c:if>
+								<c:if test="${reglists.status == 2}">
+									<button type="button" class="normal-button" onclick="deletePost(${reglists.teamIdx})">삭제</button>&nbsp;
 								</c:if>
 								<button class="normal-button accent-button" style="width:110px;" onclick="location.href='myapp.do?teamIdx=${reglists.teamIdx}&mIdx=${reglists.mIdx}'">지원서 보기</button>
 							</div>
@@ -271,10 +319,11 @@
 					</div>-->
 				</div>
 				
-		<div class="big-title" style="margin-top:60px;">
-			작성한 지원서 목록
-		</div>
+			<div class="big-title" style="margin-top:60px;">
+				작성한 지원서 목록
+			</div>
 				<c:forEach var="applists" items="${applist}">
+				<c:if test="${applists.status != 1}">
 					<div class="inner-box applist-box">
 						<div class="reglist-name"><a href="details.do?teamIdx=${applists.teamIdx}">
 							<c:if test="${applists.status == 0}">[모집중]</c:if>
@@ -290,12 +339,14 @@
 						<div class="small-title">내용</div>
 						<div id="update-content${applists.appIdx}">
 							<div class="content"><pre id="pre-app${applists.appIdx}" style="font-family:'맑은 고딕';">${applists.content}</pre></div>
-							<c:if test="${applists.status == 0}">
+							
 							<div class="inner-box-button-wrap">
+								<c:if test="${applists.status == 0}">
 								<button class="normal-button" onclick="roadContent(${applists.appIdx})">수정</button>
+								</c:if>
 								<button class="normal-button" onclick="deleteApp(${applists.appIdx})" style="margin-left: 15px;">삭제</button>
 							</div>
-							</c:if>
+							
 						</div>
 						<div id="update-form${applists.appIdx}" style="display: none;">
 							<div class="content"><textarea class="textarea" id='textarea${applists.appIdx}' name='content'>${applists.content}</textarea></div>
@@ -304,9 +355,8 @@
 								<button class="normal-button" onclick="cancel(${applists.appIdx})" style="margin-left: 15px;">취소</button>
 							</div>
 						</div>
-					
-				</div>
-				
+					</div>
+				</c:if>
 			</c:forEach>
 		</div>
 		

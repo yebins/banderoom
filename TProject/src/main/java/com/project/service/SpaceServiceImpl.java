@@ -123,6 +123,11 @@ public class SpaceServiceImpl implements SpaceService {
 	}
 
 	@Override
+	public int validateRsv(ReservationsVO vo) {
+		return dao.validateRsv(vo);
+	}
+	
+	@Override
 	public ReservationsVO insertRsv(ReservationsVO rsvVO) {
 		return dao.getRSV(dao.insertRsv(rsvVO));
 	}
@@ -178,7 +183,6 @@ public class SpaceServiceImpl implements SpaceService {
 		
 		try {
 			String[] dates = dateRange.split(" ~ ");
-			System.out.println(Arrays.toString(dates));
 			params.put("dateType", dateType);
 			params.put("start", dates[0]);
 			params.put("end", dates[1]);
@@ -196,7 +200,6 @@ public class SpaceServiceImpl implements SpaceService {
 		
 		try {
 			String[] dates = dateRange.split(" ~ ");
-			System.out.println(Arrays.toString(dates));
 			params.put("dateType", dateType);
 			params.put("start", dates[0]);
 			params.put("end", dates[1]);
@@ -337,5 +340,15 @@ public class SpaceServiceImpl implements SpaceService {
 		}
 		
 		return dao.pointHistory(params);
+	}
+	
+	@Override
+	public List<PointsVO> pointInfo(ReservationsVO vo) {
+		return dao.pointInfo(vo);
+	}
+	
+	@Override
+	public int cancelRsv(ReservationsVO vo) {
+		return dao.cancelRsv(vo);
 	}
 }

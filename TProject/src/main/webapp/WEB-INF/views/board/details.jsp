@@ -169,7 +169,7 @@
     }
     .details-button{
     	display:flex;
-    	justify-content:end;
+    	flex-direction: row-reverse;
     	padding-right:20px;
     }
    	
@@ -179,6 +179,17 @@
    	.commentHidden{
    		display:none;
    	}
+   	.prev-next{
+   		width:100%;
+   	}
+   	tr{
+   		text-align:center;
+   	}
+   	.title-area{
+		display:flex;
+		justfy-content:center;
+		margin-left:30px;
+		}
    	.reg-date{
    		font-size: 14px;
     	color: darkgray;
@@ -250,7 +261,6 @@
 				aIdx:${vo.aIdx}
 			},
 			success : function(result){
-				console.log(result);
 				document.querySelector('#likeCount').innerText=result;
 			}
 		});
@@ -1114,6 +1124,33 @@
 						</form>
 					</div>
 				</div>
+			</div>
+			<div class="inner-box" style="margin-top:20px;">
+				<table class="prev-next">
+					<c:if test="${next.size() != 0}">
+						<c:forEach var="i" begin="0" end="${next.size()-1}">
+							<tr>
+								<td class="title-area"><a href="details.do?bIdx=${param.bIdx}&aIdx=${next.get(next.size()-1-i).aIdx}">${next.get(next.size()-1-i).title }</a></td>
+								<td>${next.get(next.size()-1-i).mNickname }</td>
+								<td><fmt:formatDate value="${next.get(next.size()-1-i).regDate }" pattern="yyyy-MM-dd hh:mm"/></td>
+							</tr>
+						</c:forEach>
+					</c:if>
+					<tr>
+						<td class="title-area" style="font-weight:bold;">${vo.title}</td>
+						<td width="30%">${vo.mNickname}</td>
+						<td width="20%"><fmt:formatDate value="${vo.regDate}" pattern="yyyy-MM-dd hh:mm"/></td>
+					</tr>
+					<c:if test="${prev.size() != 0}">
+						<c:forEach var="i" begin="0" end="${prev.size()-1}">
+							<tr>
+								<td class="title-area"><a href="details.do?bIdx=${param.bIdx}&aIdx=${prev.get(i).aIdx}">${prev.get(i).title }</a></td>
+								<td>${prev.get(i).mNickname }</td>
+								<td><fmt:formatDate value="${prev.get(i).regDate }" pattern="yyyy-MM-dd hh:mm"/></td>
+							</tr>
+						</c:forEach>
+					</c:if>
+				</table>
 			</div>
 		</div>
 	</div>
