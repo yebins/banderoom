@@ -16,23 +16,129 @@
 <!-- Air datepicker css -->
 <script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
 <script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<meta charset="UTF-8">
+
+<style>
+.form-select{
+	margin-right:10px;
+	width: 170px;
+	height: 35px;
+	border-radius:17.5px;
+}
+.form-control{
+	margin-right:10px;
+	width:200px;
+	height: 35px;
+	border-radius:17.5px;
+}
+.search{
+	width:600px;
+	margin-right:10px;
+}
+.form{
+    width: 100%;
+    text-align: center;
+    margin: auto;
+    margin-bottom:5px;
+    padding: 30px 50px 14px;
+    border-radius: 15px;
+    background: white;
+    box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
+}
+.search-top{
+	display:flex;
+}
+.people-num{
+	height:35px;
+	margin-right:10px;
+}
+.people-num>button{
+	background: #fff;
+	border: 1px solid #ced4da;
+}
+.left-btn{
+	border-top-left-radius: 17.5px;
+    border-bottom-left-radius: 17.5px;
+}
+.right-btn{
+	border-top-right-radius: 17.5px;
+    border-bottom-right-radius: 17.5px;
+}
+.person{
+	line-height: 35px;
+}
+.add-part{
+    font-size: 13px;
+}
+.inner-box{
+	margin-bottom: 100px;
+}
+.inner-box-content{
+	margin:10px 0px;
+}
+.list-content{
+	width:100%;
+	height:470px;
+}
+.list-title{
+	width:100%;
+}
+.dropdown-toggle::after {
+	display:none;
+}
+.select-parts{
+	text-align: left;
+	margin-bottom: 15px;
+}
+.select-part{
+	border:1px solid #ced4da;
+    border-radius: 17.5px;
+    padding: 6px;
+    font-size: 12px;
+    background: #FBE6B2;
+    margin-right:5px;
+}
+.parts{
+	display:inline-block;
+}
+.x{
+	font-size: 5px;
+    height: 20px;
+    width: 20px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+	margin-right: 15px;
+}
+#datepicker{
+	background:white;
+}
+</style>
 
 <script>
 
 
 	function selectType(obj){ //obj:분야
-		var band = ["장르 선택", "락", "팝", "재즈", "직접 입력"];
-		var dance = ["장르 선택", "힙합", "브레이킹", "팝핑", "왁킹", "락킹", "K-POP", "직접 입력"];
+		var band = ["장르 선택", "락", "팝", "재즈"];
+		var dance = ["장르 선택", "힙합", "브레이킹", "팝핑", "왁킹", "락킹", "K-POP"];
 		var target = document.getElementById("genre");
 	
 		if(obj.value == "밴드") {
 			var type = band;
+			$("#write-genre").val("");
 			$("#part").prop('disabled',false);
+			$(".parts").remove();
+			$("#result").html("1");
 		}
 		else if(obj.value == "댄스") {
 			var type = dance;
+			$("#write-genre").val("");
+			$("#write-genre").prop('readonly',true);
 			$("#part").prop('disabled',true);
 			$("#write-part").prop('disabled',true);
+			$("#write-part").val("");
+			$(".parts").remove();
+			$("#result").html("1");
 		}
 	
 		target.options.length = 0;
@@ -42,7 +148,12 @@
 			opt.value = type[x];
 			opt.innerHTML = type[x];
 			target.appendChild(opt);
-		}	
+		}
+		
+		var opt = document.createElement("option");
+		opt.value = "";
+		opt.innerHTML = "직접 입력";
+		target.appendChild(opt);
 	
 	}
 
@@ -52,22 +163,28 @@
 		var jazz = ["보컬", "어쿠스틱 기타", "드럼", "피아노", "베이스", "더블베이스", "콘트라베이스", "트럼펫", "색소폰", "직접 입력"];
 		var target = document.getElementById("part");
 		
+		var genreVal = $("#genre").val();
+		
 		if($("#type").val() == "밴드"){
-			if(obj.value != "직접 입력"){
-				$("#write-genre").prop('disabled',true);
+			if(obj.value != ""){ //직접 입력 x
+				$("#write-genre").prop('readonly',true);
 				$("#write-part").prop('disabled',true);
 				$("#part").prop('disabled',false);
 				
 				if(obj.value == "락") {
+					$("#write-genre").val(genreVal);
 					var genre = rock;
 				}else if(obj.value == "팝") {
+					$("#write-genre").val(genreVal);
 					var genre = pop;
 				}else if(obj.value == "재즈") {
+					$("#write-genre").val(genreVal);
 					var genre = jazz;
 				}
 			}
-			else if(obj.value == "직접 입력") {
-				$("#write-genre").prop('disabled',false);
+			else if(obj.value == "") { //직접 입력
+				$("#write-genre").val("");
+				$("#write-genre").prop('readonly',false);
 				$("#write-part").prop('disabled',false);
 				$("#part").prop('disabled',true);
 				
@@ -75,14 +192,19 @@
 			
 		}else if($("#type").val() == "댄스"){
 			
-			if(obj.value == "직접 입력") {
-				$("#write-genre").prop('disabled',false);
+			if(obj.value == "") { //직접 입력
+				$("#write-genre").val("");
+				$("#write-genre").prop('readonly',false);
 				$("#write-part").prop('disabled',true);
 				$("#part").prop('disabled',true);
+				$("#part").html("sdf");
 				
 			}else{
-				$("#write-genre").prop('disabled',true);
+				$("#write-genre").val("");
+				$("#write-genre").val(genreVal);
+				$("#write-genre").prop('readonly',true);
 				$("#write-part").prop('disabled',true);
+				$("#part").html("sdf");
 			}
 		}
 		
@@ -122,25 +244,54 @@
 			$(".left-btn").attr("disabled", false);
 			result = parseInt(result)-1;
 			}
-		}$("#result").text(result);
+		}
+		$("#result").text(result);
+		
 	}
 	
 	function addPart(){
 		var type = $("#type").val();
 		var part = $("#part").val();
 		var people = $("#result").text();
+		var writePart = $("#write-part").val();
 		
+		var div = $("<div class='parts'>");
 		
 		if(type == "밴드" && part != "장르를 선택하세요."){
-			if(part == null || part == "직접 입력"){
-				var div = $("<div class='parts'>");
+			if((part == null || part == "직접 입력") && writePart == ""){
+				alert("파트를 입력해주세요.");
+			}else if((part == null || part == "직접 입력") && writePart != ""){
+				var partExist = false;
+				
+				$("input[name=name]").each(function() {
+					if ($(this).val().trim() == writePart.trim()) {
+						partExist = true;
+					}
+				})
+				
+				if (partExist) {
+					return;
+				}
+				
 				$(".select-parts").append(div);
-				$(div).append("<span class='select-part' name='part'>"+$('#write-part').val()+" "+people+"명</span>");
+				$(div).append("<span class='select-part' name='part'>"+writePart+" "+people+"명</span>");
 				$(div).append("<button type='button' class='x' onclick='remove(this)'>x</button>");
-				$(div).append("<input type='hidden' name='name' value='"+$('#write-part').val()+"'>");
+				$(div).append("<input type='hidden' name='name' value='"+writePart+"'>");
 				$(div).append("<input type='hidden' name='capacity' value='"+people+"'>");
 			}else{
-				var div = $("<div class='parts'>");
+				
+				var partExist = false;
+				
+				$("input[name=name]").each(function() {
+					if ($(this).val().trim() == part.trim()) {
+						partExist = true;
+					}
+				})
+				
+				if (partExist) {
+					return;
+				}
+				
 				$(".select-parts").append(div);
 				$(div).append("<span class='select-part' name='part'>"+part+" "+people+"명</span>");
 				$(div).append("<button type='button' class='x' onclick='remove(this)'>x</button>");
@@ -149,11 +300,14 @@
 			}
 		}else if(type == "댄스"){
 			$(".select-parts").empty();
-			$(".select-parts").append("<span class='select-part' name='capacity'>"+people+"명</span>");
-			$(".select-parts").append("<input type='hidden' name='capacity' value='"+people+"'>");
+			$(".select-parts").append(div);
+			
+			$(div).append("<span class='select-part' name='capacity'>"+people+"명</span>");
+			$(div).append("<input type='hidden' name='capacity' value='"+people+"'>");
 			
 		}
 		$("#write-part").val("");
+		$("#result").text("1");
 		
 	}
 	
@@ -279,6 +433,7 @@
 		}
 	}
 	
+	
 	function regFormCheck(){
 		
 		var addr1 = document.getElementById("addr1");
@@ -315,7 +470,7 @@
 		if(genre.value == "장르 선택"){
 			alert("장르를 선택해주세요.");
 			return false;
-		}else if(genre.value == "직접 입력"){
+		}else if(genre.value == ""){
 			if(writeGenre.value == ""){
 				alert("장르를 직접 입력해주세요.");
 				return false;
@@ -324,8 +479,6 @@
 		
 		if(part.value == undefined && part.length == 0){
 			alert("파트 및 인원을 선택해주세요.");
-			console.log(part);
-			console.log(part.value);
 			return false;
 		}
 		
@@ -344,104 +497,14 @@
 			return false;
 		}
 		
-		document.regForm.submit();
+		if(confirm("글을 등록하시겠습니까? \n모집 조건은 수정하실 수 없습니다.")){
+			document.regForm.submit();
+		}
+		
 	}
 	
 </script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-<meta charset="UTF-8">
-<style>
-.form-select{
-	margin-right:10px;
-	width: 170px;
-	height: 35px;
-	border-radius:17.5px;
-}
-.form-control{
-	margin-right:10px;
-	width:200px;
-	height: 35px;
-	border-radius:17.5px;
-}
-.search{
-	width:600px;
-	margin-right:10px;
-}
-.form{
-    width: 100%;
-    text-align: center;
-    margin: auto;
-    margin-bottom:5px;
-    padding: 30px 50px 14px;
-    border-radius: 15px;
-    background: white;
-    box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
-}
-.search-top{
-	display:flex;
-}
-.people-num{
-	height:35px;
-	margin-right:10px;
-}
-.people-num>button{
-	background: #fff;
-	border: 1px solid #ced4da;
-}
-.left-btn{
-	border-top-left-radius: 17.5px;
-    border-bottom-left-radius: 17.5px;
-}
-.right-btn{
-	border-top-right-radius: 17.5px;
-    border-bottom-right-radius: 17.5px;
-}
-.person{
-	line-height: 35px;
-}
-.add-part{
-    font-size: 13px;
-}
-.inner-box{
-	margin-bottom: 100px;
-}
-.inner-box-content{
-	margin:10px 0px;
-}
-.list-content{
-	width:100%;
-	height:470px;
-}
-.list-title{
-	width:100%;
-}
-.dropdown-toggle::after {
-	display:none;
-}
-.select-parts{
-	text-align: left;
-	margin-bottom: 15px;
-}
-.select-part{
-	border:1px solid #ced4da;
-    border-radius: 17.5px;
-    padding: 6px;
-    font-size: 12px;
-    background: #FBE6B2;
-    margin-right:5px;
-}
-.parts{
-	display:inline-block;
-}
-.x{
-	font-size: 5px;
-    height: 20px;
-    width: 20px;
-    border: 1px solid lightgray;
-    border-radius: 10px;
-	margin-right: 15px;
-}
-</style>
+
 <title>팀원구하기 글등록</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 </head>
@@ -475,10 +538,10 @@
 							<option>밴드</option>
 							<option>댄스</option>
 						</select>
-						<select class="form-select form-select-sm" name="genre" id="genre" onchange="selectGenre(this)">
+						<select class="form-select form-select-sm" id="genre" onchange="selectGenre(this)">
 							<option value="">분야를 선택하세요.</option>
 						</select>
-						<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" disabled>
+						<input class="form-control form-control-sm" id="write-genre" type="text" name="genre" placeholder="장르 입력" readonly>
 					</div><br>
 					
 					<div class="mb-3 d-flex search-bottom">
@@ -492,7 +555,7 @@
 							<button type="button" class="btn btn-outline-secondary right-btn"onclick="count('plus')">+</button>
 						</div>
 						<button type="button" class="normal-button add-part" style="width:40px; margin-right:10px;" onclick="addPart()">추가</button>
-						<input class="form-control form-control-sm" placeholder="마감 날짜 선택" name="endDate" id="datepicker">
+						<input class="form-control form-control-sm" placeholder="마감 날짜 선택" name="endDate" id="datepicker" readonly>
 					</div>
 						<div class="select-parts">
 					</div>

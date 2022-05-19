@@ -50,45 +50,61 @@
 	
 	<select id="selectList" resultType="teamsVO" parameterType="hashMap">
 		SELECT
-			 teamidx
-			,addr1
-			,addr2
-			,teamlevel
-			,type
-			,genre
-			,title
-			,status
-			,enddate
-		  FROM teams
+			 t.teamidx
+			,t.addr1
+			,t.addr2
+			,t.teamlevel
+			,t.type
+			,t.genre
+			,t.title
+			,t.status
+			,t.enddate
+			,a.parts
+		  FROM teams t, (
+		  	select teamidx, group_concat(name SEPARATOR ':') parts 
+			from parts group by teamidx
+		  ) a
 		 WHERE status!=1
+		   AND t.teamidx = a.teamidx
 		 <if test="vo != null">
 			 <if test="vo.addr1 != null and vo.addr1 != ''">
-			   AND addr1=#{vo.addr1}
+			   AND t.addr1=#{vo.addr1}
 			 </if>
 			 <if test="vo.addr2 != null and vo.addr2 != ''">
-			   AND addr2=#{vo.addr2}
+			   AND t.addr2=#{vo.addr2}
 			 </if>
 			 <if test="vo.teamLevel != null and vo.teamLevel != ''">
-			   AND teamLevel=#{vo.teamLevel}
+			   AND t.teamLevel=#{vo.teamLevel}
 			 </if>
 			 <if test="vo.type != null and vo.type != ''">
-			   AND type=#{vo.type}
+			   AND t.type=#{vo.type}
 			 </if>
 			 <if test="vo.endDate != null and vo.endDate != ''">
-			   AND date(endDate) <![CDATA[<=]]> #{vo.endDate}
+			   AND date(t.endDate) <![CDATA[<=]]> #{vo.endDate}
 			 </if>
 			 <if test="searchWord != null and searchWord != ''">
 			   AND (
-			   		mnickname like concat('%',#{searchWord},'%')
-			     or addr1 like concat('%',#{searchWord},'%')
-			     or addr2 like concat('%',#{searchWord},'%')
-			     or genre like concat('%',#{searchWord},'%')
-			     or title like concat('%',#{searchWord},'%')
-			     or content like concat('%',#{searchWord},'%')
+			   		t.mnickname like concat('%',#{searchWord},'%')
+			     or t.addr1 like concat('%',#{searchWord},'%')
+			     or t.addr2 like concat('%',#{searchWord},'%')
+			     or t.genre like concat('%',#{searchWord},'%')
+			     or t.title like concat('%',#{searchWord},'%')
+			     or t.content like concat('%',#{searchWord},'%')
+			     or a.parts like concat('%',#{searchWord},'%')
 			   )
 			 </if>
 		 </if>
-		 ORDER BY status, teamidx DESC
+		 <if test="sort == null">
+		 	ORDER BY t.status, t.teamidx DESC
+		 </if>
+		 <if test="sort != null">
+		 	<if test="sort == 'enddate'">
+		 		 ORDER BY t.status, t.enddate
+		 	</if>
+		 	<if test="sort == 'regdate'">
+		 		 ORDER BY t.status, t.teamidx DESC
+		 	</if>
+		 </if>
 	</select>
 	
 	<select id="selectParts" resultType="partsVO" parameterType="int">
@@ -147,7 +163,7 @@
 		 WHERE teamidx = #{teamIdx}
 	</update>
 	
-	<select id="reglist" parameterType="int" resultType="teamsVO">
+	<select id="reglist" parameterType="hashMap" resultType="teamsVO">
 		SELECT
 			 teamidx
 			,midx
@@ -164,10 +180,14 @@
 			,enddate
 		  FROM teams
 		 WHERE midx=#{mIdx}
-		   AND status!=1
+		   AND status != 1
+		<if test="endYN == 1">
+		   AND status != 2
+		</if>
+		 ORDER BY status, teamidx desc
 	</select>
 	
-	<select id="applist" parameterType="int" resultType="applicationsVO">
+	<select id="applist" parameterType="hashMap" resultType="applicationsVO">
 		SELECT
 			 team.teamidx
 			,team.midx
@@ -185,6 +205,7 @@
 		  JOIN parts p
             ON app.partidx = p.partidx 
 		   AND app.midx=#{mIdx}
+		 ORDER BY team.status, app.appidx desc;
 	</select>
 	
 	<update id="finish" parameterType="int">
@@ -212,6 +233,16 @@
 		  JOIN parts p
             ON app.partidx = p.partidx 
 		   AND team.teamidx=#{teamIdx};
+	</select>
+	
+	<select id="myappCount" parameterType="int" resultType="int">
+		SELECT count(*)
+		  FROM teams t
+		  JOIN applications a
+		    ON t.teamidx = a.teamidx
+		  JOIN parts p
+            ON a.partidx = p.partidx 
+		   AND t.teamidx = #{teamIdx};
 	</select>
 	
 	<update id="updateStatus">

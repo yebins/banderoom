@@ -1,14 +1,11 @@
 package com.project.controller;
 
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +19,6 @@ import com.project.vo.ApplicationsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.PartsVO;
 import com.project.vo.TeamsVO;
-import com.sun.java.swing.plaf.windows.resources.windows;
 
 @RequestMapping(value="/teams")
 @Controller
@@ -32,13 +28,14 @@ public class TeamsController {
 	private TeamsService teamsService;
 
 	@RequestMapping(value="/main.do")
-	public String teamsMain(Model model, TeamsVO vo, String searchWord, Integer search) {
+	public String teamsMain(Model model, TeamsVO vo, String searchWord, Integer search, String sort) {
 		
 		Map<String, Object> searchMap = new HashMap<String, Object>();
 		
 		if(search != null) {
 			searchMap.put("vo", vo);
 			searchMap.put("searchWord", searchWord);
+			searchMap.put("sort", sort);
 		}
 		
 		List<TeamsVO> teamsList = teamsService.selectList(searchMap);
@@ -201,7 +198,7 @@ public class TeamsController {
 	}
 	
 	@RequestMapping(value="/myteams.do")
-	public String myteams(Model model, HttpServletRequest request) {
+	public String myteams(Model model, HttpServletRequest request, Integer endYN) {
 		
 		if (request.getSession().getAttribute("login") == null) {
 
@@ -213,7 +210,13 @@ public class TeamsController {
 			GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 			
 			int mIdx = login.getmIdx();
-			List<TeamsVO> teamsList = teamsService.reglist(mIdx);
+			
+			Map<String, Integer> endMap = new HashMap<String, Integer>();
+			
+			endMap.put("mIdx", mIdx);
+			endMap.put("endYN", endYN);
+			
+			List<TeamsVO> teamsList = teamsService.reglist(endMap);
 			
 			Map<Integer, List<PartsVO>> partsMap = new HashMap<Integer, List<PartsVO>>();
 			
@@ -224,7 +227,6 @@ public class TeamsController {
 			
 			model.addAttribute("reglist", teamsList);
 			model.addAttribute("partsMap", partsMap);
-			
 			
 			List<ApplicationsVO> appList = teamsService.applist(mIdx); 
 			

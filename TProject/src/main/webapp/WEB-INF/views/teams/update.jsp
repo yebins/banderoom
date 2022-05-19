@@ -64,7 +64,8 @@
 	   $('#summernote').summernote('fontName', '맑은 고딕');
 	   
 	   $("#datepicker").datepicker({
-			language: 'ko'
+		   minDate: new Date(),
+		   language: 'ko'
 		}); 
 	   
 	});
@@ -148,7 +149,7 @@
 						</span>
 						<span class='terms'><b>마감날짜</b>
 						
-							<input type="text" id="datepicker" name="endDate" 
+							<input type="text" id="datepicker" name="endDate" readonly
 							value='<fmt:parseDate value="${details.endDate}" var="endDate" pattern="yyyy-MM-dd"/><fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>'>
 							
 						</span>
@@ -165,7 +166,7 @@
 						</form>
 					</div>
 					<div class="inner-box-button-wrap">
-						<button type="submit" class="normal-button accent-button" style="margin-right: 8px;">등록하기</button> 
+						<button type="submit" class="normal-button accent-button" style="margin-right: 8px;">수정하기</button> 
 						<button type="button" class="normal-button" onclick="location.href='/teams/main.do'">취소하기</button>
 					</div>
 				</div>
