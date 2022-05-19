@@ -189,20 +189,35 @@
 		margin-left: 5px;
 	}
 	#page-nav {
+		border-top: 1px solid lightgray;
 		width: 100%;
-		height: 50px;
+		height: 80px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 	}
 	.page-nav-button {
-	
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		margin: 7.5px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.page-nav-button:not(.current-page) {
 		cursor: pointer;
 	}
 	.page-nav-button.current-page {
+		background-color: #fbe6b2;
 		font-weight: bold;
+	}
+	.cancelled {
+		font-size: 14px;
+		font-weight: bold;
+		color: #fb6544;
+		margin-right: 10px;
 	}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
@@ -293,6 +308,10 @@
 					html += '</div></div>&nbsp;&nbsp;</div></div>';
 					html += '<div class="past-rsv-buttons">';
 					
+					if (pastRsv[i].rsvStatus == 1) {
+						html += '<span class="cancelled">취소됨</span>';
+					}
+					
 					html += '<button class="normal-button" onclick="location.href=\'rsvdetails.do?resIdx=' + pastRsv[i].resIdx + '\'">예약 상세</button>';
 					html += '</div></div>';
 				}
@@ -314,30 +333,30 @@
 				if (lastPage < 6) {
 					for (var i = startPage; i <= endPage; i++) {
 						if (i == currentPage) {
-							html += '<div class="page-nav-button current-page">[' + i + ']</div>&nbsp;';
+							html += '<div class="page-nav-button current-page">' + i + '</div>';
 						} else {
-							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">[' + i + ']&nbsp;</div>';
+							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">' + i + '</div>';
 						}
 					}
 				}
 				
 				if (lastPage > 5) {
 					if (startPage > 5) {
-						html += '<div class="page-nav-button" onclick="loadMyRsv(1)">[1]</div>&nbsp;';
-						html += '<div class="page-nav-button" onclick="loadMyRsv(startPage - 1)">◀</div>&nbsp;';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(1)">1</div>';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(startPage - 1)">◀</div>';
 					}
 
 					for (var i = startPage; i <= endPage; i++) {
 						if (i == currentPage) {
-							html += '<div class="page-nav-button current-page">[' + i + ']</div>&nbsp;';
+							html += '<div class="page-nav-button current-page">' + i + '</div>';
 						} else {
-							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">[' + i + ']&nbsp;</div>';
+							html += '<div class="page-nav-button" onclick="loadMyRsv(' + i + ')">' + i + '</div>';
 						}
 					}
 					
 					if (endPage < lastPage) {
-						html += '<div class="page-nav-button" onclick="loadMyRsv(endPage + 1)">▶</div>&nbsp;';
-						html += '<div class="page-nav-button" onclick="loadMyRsv(lastPage)">[' + lastPage + ']</div>&nbsp;';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(endPage + 1)">▶</div>';
+						html += '<div class="page-nav-button" onclick="loadMyRsv(lastPage)">' + lastPage + '</div>';
 					}
 				}
 				
@@ -438,8 +457,8 @@
 								</div>
 							</div>
 							<div class="past-rsv-buttons">
-								<c:if test="${rsvVO.endDate < today and reviewed.get(rsvVO.resIdx) == 0}">
-									<button class="normal-button accent-button" onclick="review(${rsvVO.resIdx})">후기 작성</button>&nbsp;
+								<c:if test="${rsvVO.rsvStatus == 1}">
+									<span class="cancelled">취소됨</span>
 								</c:if>
 								<button class="normal-button" onclick="location.href='rsvdetails.do?resIdx=${rsvVO.resIdx}'">예약 상세</button>
 							</div>
@@ -452,34 +471,34 @@
 							<c:forEach var="i" begin="${startPage}" end="${endPage}">
 								<c:choose>
 									<c:when test="${i == 1}">
-										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+										<div class="page-nav-button current-page">${i}</div>
 									</c:when>
 									<c:otherwise>
-										<div class="page-nav-button" onclick="loadMyRsv(${i})">[${i}]&nbsp;</div>
+										<div class="page-nav-button" onclick="loadMyRsv(${i})">${i}</div>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 						</c:if>
 						<c:if test="${lastPage > 5}">
 							<c:if test="${startPage > 5}">
-								<div class="page-nav-button" onclick="loadMyRsv(1)">[1]</div>&nbsp;
-								<div class="page-nav-button" onclick="loadMyRsv(${startPage - 1})">◀</div>&nbsp;
+								<div class="page-nav-button" onclick="loadMyRsv(1)">1</div>
+								<div class="page-nav-button" onclick="loadMyRsv(${startPage - 1})">◀</div>
 							</c:if>
 							
 							<c:forEach var="i" begin="${startPage}" end="${endPage}">
 								<c:choose>
 									<c:when test="${i == param.page}">
-										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+										<div class="page-nav-button current-page">${i}</div>
 									</c:when>
 									<c:otherwise>
-										<div class="page-nav-button" onclick="loadMyRsv(${i})">[${i}]&nbsp;</div>
+										<div class="page-nav-button" onclick="loadMyRsv(${i})">${i}</div>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							
 							<c:if test="${endPage < lastPage}">
-								<div class="page-nav-button" onclick="loadMyRsv(${endPage + 1})">▶</div>&nbsp;
-								<div class="page-nav-button" onclick="loadMyRsv(${lastPage})">[${lastPage}]</div>&nbsp;
+								<div class="page-nav-button" onclick="loadMyRsv(${endPage + 1})">▶</div>
+								<div class="page-nav-button" onclick="loadMyRsv(${lastPage})">${lastPage}</div>
 							</c:if>
 						</c:if>
 					</div>

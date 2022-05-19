@@ -275,7 +275,7 @@ header {
 				<button class="normal-button accent-button notlogin" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
 				<button class="normal-button accent-button notlogin" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
 			</c:if>
-			<c:if test="${login != null}">
+			<c:if test="${sessionScope.login != null}">
 				<div id="sm-profile-info">
 					<div id="sm-profile-picture-wrap">
 						<img src="${login.getProfileSrc()}" width="100%">
@@ -316,7 +316,7 @@ header {
 				</div>
 			</c:if>
 		</div>
-		<c:if test="${login != null}">
+		<c:if test="${sessionScope.login != null}">
 		<div id="sm-buttons">
 			<div class="sm-button-wrap" onclick="location.href='/space/list.do'">
 				연습실 대여
@@ -340,7 +340,7 @@ header {
 			<div class="sm-list-area">
 			
 		
-		<c:if test="${login.getAuth() == 3}">
+		<c:if test="${sessionScope.login.getAuth() == 3}">
 			<div class="accordion-item">
 		<h2 class="accordion-header" id="headingOne">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c0" aria-expanded="true" aria-controls="collapseOne">
@@ -360,7 +360,7 @@ header {
     </div>
 		</c:if>
 			
-		<c:if test="${login != null}">
+		<c:if test="${sessionScope.login != null}">
 			<div class="accordion-item">
 		<h2 class="accordion-header" id="headingOne">
       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#c1" aria-expanded="true" aria-controls="collapseOne">
@@ -398,7 +398,7 @@ header {
     </div>
   </div>
 			
-		<c:if test="${login != null}">
+		<c:if test="${sessionScope.login != null}">
 			
 			
 				<div class="accordion-item">

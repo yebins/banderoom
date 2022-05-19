@@ -473,62 +473,43 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value = "/list.do")
-	public String list(Model model, HttpServletRequest request, Integer page, Integer search, SpacesVO vo) {
+	public String list(Model model, HttpServletRequest request, Integer page, Integer search, String orderType, Integer liked, SpacesVO vo) {
 		
 		Map<String, Object> params = new HashMap<>();
 		if (page == null) {
 			page = 1;
 		}
-		int start = page * 12 - 11;
-		int end = page * 12;
+		int start = page * 12 - 12;
 		
 		if (search != null) {
 			params.put("vo", vo);
 		}
 		params.put("start", start);
-		params.put("end", end);
 		
+		params.put("likedMidx", 0);
+		if (request.getSession().getAttribute("login") != null) {
+			params.put("likedMidx", ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+		}
+		
+		if (orderType == null) {
+			orderType = "review";
+		}
+		params.put("orderType", orderType);
+		
+		if (liked == null) {
+			liked = 0;
+		}
+		params.put("liked", liked);
 		
 		List<SpacesVO> spaceList = spaceService.spaceList(params);
 		model.addAttribute("spaceList", spaceList);
-		
-		Map<Integer, Integer> reviewCount = new HashMap<>();
-		
-		Iterator<SpacesVO> iterator = spaceList.iterator();
-		Map<Integer, Double> reviewAvg = new HashMap<>();
-		
-		Map<Integer, Integer> likedStatus = new HashMap<>();
-		
-		while (iterator.hasNext()) {
-			
-			SpacesVO spacesVO = iterator.next(); 
-			
-			Map<String, Object> reviewCntAvg = spaceService.spaceReviewCntAvg(spacesVO);
-			
-			reviewCount.put(spacesVO.getIdx(), Integer.parseInt(String.valueOf(reviewCntAvg.get("count"))));
-			reviewAvg.put(spacesVO.getIdx(), Double.parseDouble(String.valueOf(reviewCntAvg.get("avg"))));
-			
-			LikedSpacesVO liked = new LikedSpacesVO();
-			
-			if ((GeneralMembersVO) request.getSession().getAttribute("login") != null) {
-				liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
-				liked.setSpaceIdx(spacesVO.getIdx());
-				likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
-			} else {
-				likedStatus.put(spacesVO.getIdx(), 0);
-			}
-		}
-		
-		model.addAttribute("reviewCount", reviewCount);
-		model.addAttribute("reviewAvg", reviewAvg);
-		model.addAttribute("likedStatus", likedStatus);
 		
 		return "space/list";
 	}
 	
 	@RequestMapping(value = "addlist.do")
 	@ResponseBody
-	public Map<String, Object> addList(HttpServletRequest request, Integer page, Integer search, SpacesVO vo) {
+	public Map<String, Object> addList(HttpServletRequest request, Integer page, Integer search, String orderType, Integer liked, SpacesVO vo) {
 		
 		Map<String, Object> map = new HashMap<>();
 
@@ -536,50 +517,23 @@ public class SpaceController {
 		if (page == null) {
 			page = 1;
 		}
-		int start = page * 12 - 11;
-		int end = page * 12;
+		int start = page * 12 - 12;
 		
 		if (search != null) {
 			params.put("vo", vo);
 		}
-		
 		params.put("start", start);
-		params.put("end", end);
 		
+		params.put("likedMidx", 0);
+		if (request.getSession().getAttribute("login") != null) {
+			params.put("likedMidx", ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+		}
+		
+		params.put("orderType", orderType);
+		params.put("liked", liked);
 		
 		List<SpacesVO> spaceList = spaceService.spaceList(params);
 		map.put("spaceList", spaceList);
-		
-		Map<Integer, Integer> reviewCount = new HashMap<>();
-		
-		Iterator<SpacesVO> iterator = spaceList.iterator();
-		Map<Integer, Double> reviewAvg = new HashMap<>();
-		
-		Map<Integer, Integer> likedStatus = new HashMap<>();
-		
-		while (iterator.hasNext()) {
-			
-			SpacesVO spacesVO = iterator.next(); 
-			
-			Map<String, Object> reviewCntAvg = spaceService.spaceReviewCntAvg(spacesVO);
-			
-			reviewCount.put(spacesVO.getIdx(), Integer.parseInt(String.valueOf(reviewCntAvg.get("count"))));
-			reviewAvg.put(spacesVO.getIdx(), Double.parseDouble(String.valueOf(reviewCntAvg.get("avg"))));
-			
-			LikedSpacesVO liked = new LikedSpacesVO();
-			
-			if ((GeneralMembersVO) request.getSession().getAttribute("login") != null) {
-				liked.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
-				liked.setSpaceIdx(spacesVO.getIdx());
-				likedStatus.put(spacesVO.getIdx(), spaceService.getLikedStatus(liked));
-			} else {
-				likedStatus.put(spacesVO.getIdx(), 0);
-			}
-		}
-		
-		map.put("reviewCount", reviewCount);
-		map.put("reviewAvg", reviewAvg);
-		map.put("likedStatus", likedStatus);
 		
 		return map;
 	}
@@ -603,7 +557,7 @@ public class SpaceController {
 			hostVO = memberService.getHostMember(hostVO);
 			rsvVO.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
 			
-			request.getSession().setAttribute("login", memberService.gLogin(
+			request.getSession().setAttribute("login", memberService.oneMemberInfo(
 					(GeneralMembersVO) request.getSession().getAttribute("login")));
 			
 			model.addAttribute("spacesVO", spacesVO);
@@ -617,6 +571,14 @@ public class SpaceController {
 	@RequestMapping(value = "paysuccess.do", method = RequestMethod.POST)
 	public String paySuccess(Model model, HttpServletRequest request, ReservationsVO rsvVO) {
 		GeneralMembersVO gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+		
+		if (spaceService.validateRsv(rsvVO) != 0) {
+
+			model.addAttribute("msg", "이미 예약된 시간대입니다.");
+			model.addAttribute("url", "/space/details.do?idx=" + rsvVO.getSpaceIdx());
+			
+			return "alert";
+		}
 		
 		rsvVO = spaceService.insertRsv(rsvVO);
 
@@ -638,7 +600,7 @@ public class SpaceController {
 			pointsVO.setResIdx(rsvVO.getResIdx());
 			spaceService.insertPoint(pointsVO);
 			memberService.setPoint(pointsVO);
-			gMemberVO = memberService.gLogin(gMemberVO);
+			gMemberVO = memberService.oneMemberInfo(gMemberVO);
 		}
 		
 		// 포인트 적립 내역
@@ -651,8 +613,11 @@ public class SpaceController {
 			pointsVO.setResIdx(rsvVO.getResIdx());
 			spaceService.insertPoint(pointsVO);
 			memberService.setPoint(pointsVO);
-			gMemberVO = memberService.gLogin(gMemberVO);
+			gMemberVO = memberService.oneMemberInfo(gMemberVO);
 		}
+
+		request.getSession().setAttribute("login", memberService.oneMemberInfo(
+				(GeneralMembersVO) request.getSession().getAttribute("login")));
 				
 		return "redirect:/space/paysuccess.do?resIdx=" + rsvVO.getResIdx();
 	}
@@ -821,9 +786,15 @@ public class SpaceController {
 			return "alert";
 		}
 		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DATE, 1);
+		Date nextDay = cal.getTime();
+		
 		model.addAttribute("spacesVO", spacesVO);
 		model.addAttribute("hostVO", hostVO);
 		model.addAttribute("rsvVO", rsvVO);
+		model.addAttribute("nextDay", nextDay);
 		
 		return "space/rsvdetails";
 		
@@ -1289,6 +1260,96 @@ public class SpaceController {
 		
 		return data;
 		
+	}
+	
+	public String calculation(Model model, HostMembersVO hMemberVO, HttpServletRequest request) {
+
+		GeneralMembersVO gMemberVO = new GeneralMembersVO();
+
+		if (request.getSession().getAttribute("login") == null && request.getSession().getAttribute("hlogin") == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+		} else if (request.getSession().getAttribute("login") != null) {
+			
+			gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
+			request.getSession().setAttribute("login", memberService.oneMemberInfo((GeneralMembersVO) request.getSession().getAttribute("login")));
+			
+			if (gMemberVO.getAuth() != 3) {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/");
+				
+				return "alert";
+			}
+
+		} else if (request.getSession().getAttribute("hlogin") != null) {
+			
+			HostMembersVO hlogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+			if (hMemberVO.getmIdx() != hlogin.getmIdx()) {
+
+				model.addAttribute("msg", "권한이 없습니다.");
+				model.addAttribute("url", "/");
+				
+				return "alert";
+			}
+			
+		}
+		
+		return "space/calculation";
+	}
+	
+	@RequestMapping(value = "cancelRsv.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int cancelRsv(HttpServletRequest request, ReservationsVO rsvVO) {
+
+		GeneralMembersVO gLogin = new GeneralMembersVO();
+		rsvVO = spaceService.getRSV(rsvVO);
+		
+		if (request.getSession().getAttribute("login") == null && request.getSession().getAttribute("hlogin") == null) {
+			return 1; // 로그인 안 됨
+		} else if (request.getSession().getAttribute("login") != null) {
+			gLogin = (GeneralMembersVO) request.getSession().getAttribute("login");
+			if (rsvVO.getmIdx() != gLogin.getmIdx() && gLogin.getAuth() != 3) {
+				return 2; // 권한 없음
+			}
+		} else if (request.getSession().getAttribute("hlogin") != null) {
+			HostMembersVO hLogin = (HostMembersVO) request.getSession().getAttribute("hlogin");
+			if (rsvVO.getHostIdx() != hLogin.getmIdx()) {
+				return 2; // 권한 없음
+			}
+		}
+		
+		
+		List<PointsVO> pointList = spaceService.pointInfo(rsvVO);
+		
+		Iterator<PointsVO> pointIterator = pointList.iterator();
+		
+		
+		while(pointIterator.hasNext()) {
+			GeneralMembersVO resMember = new GeneralMembersVO();
+			resMember.setmIdx(rsvVO.getmIdx());
+			resMember = memberService.oneMemberInfo(resMember);
+			
+			PointsVO pointsVO = pointIterator.next();
+			PointsVO refund = new PointsVO();
+			refund.setResIdx(rsvVO.getResIdx());
+			refund.setmIdx(rsvVO.getmIdx());
+						
+			refund.setContent("공간 예약 취소_" + rsvVO.getName());
+			refund.setAmount(- pointsVO.getAmount());
+			refund.setBalance(resMember.getPoint() + refund.getAmount());
+			
+			spaceService.insertPoint(refund);
+			memberService.setPoint(refund);
+			
+		}
+		
+		spaceService.cancelRsv(rsvVO);
+		
+		return 0; // 정상 취소
 	}
 	
 	/*

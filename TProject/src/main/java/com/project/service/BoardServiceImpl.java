@@ -35,8 +35,6 @@ public class BoardServiceImpl implements BoardService {
 		return dao.list(map);
 	}
 	
-	
-
 	@Override
 	public int insertArticlesVO(ArticlesVO vo) {
 		
@@ -143,8 +141,8 @@ public class BoardServiceImpl implements BoardService {
 		map.put("start", start);
 		map.put("end", end);
 		map.put("articlesCount", count);
-		System.out.println(map.toString());
-		System.out.println(count);
+		//System.out.println(map.toString());
+		//System.out.println(count);
 		
 		request.setAttribute("count", count);
 				
@@ -190,10 +188,10 @@ public class BoardServiceImpl implements BoardService {
 	public List<CommentsVO> commentList(Map<String, Object> map,HttpServletRequest request) {
 		int TotalCount=dao.commentCount(map);
 		int onlyCommentCount=dao.onlyCommentTotal(map);
-		System.out.println("댓글개수"+TotalCount);
+		//System.out.println("댓글개수"+TotalCount);
 		
 		int a=(int) Math.ceil((double)onlyCommentCount/10);
-		System.out.println("올림페이지"+a);
+		//System.out.println("올림페이지"+a);
 		
 		int page = map.get("page") == null ? a : Integer.parseInt(map.get("page").toString());
 		
@@ -210,20 +208,15 @@ public class BoardServiceImpl implements BoardService {
 		return dao.commentList(map);
 	}
 
-
-
 	@Override
 	public List<ArticlesVO> bestArticles() {
 		return dao.bestArticles();
 	}
 	
-	
 	public int commentUpdate(CommentsVO vo) {
 		
 		return dao.commentUpdate(vo);
 	}
-
-
 
 	@Override
 	public int commentDelete(CommentsVO vo) {
@@ -231,21 +224,17 @@ public class BoardServiceImpl implements BoardService {
 		return dao.commentDelete(vo);
 	}
 
-
-
 	@Override
 	public int commentCount(int aIdx) {
 		Map<String, Object> map=new HashMap<String, Object>();
 		
 		map.put("aIdx",aIdx);
-		System.out.println(aIdx);
+		//System.out.println(aIdx);
 		
-		System.out.println(aIdx+"게시물에 댓글개수"+dao.commentCount(map));
+		//System.out.println(aIdx+"게시물에 댓글개수"+dao.commentCount(map));
 		
 		return dao.commentCount(map);
 	}
-
-
 
 	@Override
 	public int replyWrite(CommentRepliesVO vo) {
@@ -253,15 +242,11 @@ public class BoardServiceImpl implements BoardService {
 		return dao.replyWrite(vo);
 	}
 
-
-
 	@Override
 	public int replyDelete(CommentRepliesVO vo) {
 		
 		return dao.replyDelete(vo);
 	}
-
-
 
 	@Override
 	public List<CommentRepliesVO> replylist(int cIdx) {
@@ -269,20 +254,22 @@ public class BoardServiceImpl implements BoardService {
 		return dao.replyList(cIdx);
 	}
 
-
-
 	@Override
 	public List<ArticlesVO> prevList(ArticlesVO vo) {
-		// TODO Auto-generated method stub
+		
 		return dao.prevList(vo);
 	}
 
-
-
 	@Override
 	public List<ArticlesVO> nextList(ArticlesVO vo) {
-		// TODO Auto-generated method stub
+		
 		return dao.nextList(vo);
+	}
+
+	@Override
+	public Map<String, Integer> twoinone(int aIdx) {
+		
+		return dao.twoinone(aIdx);
 	}
 		
 }

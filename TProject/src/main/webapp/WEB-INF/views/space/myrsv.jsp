@@ -202,6 +202,12 @@
 		background-color: #fbe6b2;
 		font-weight: bold;
 	}
+	.cancelled {
+		font-size: 14px;
+		font-weight: bold;
+		color: #fb6544;
+		margin-right: 10px;
+	}
 </style>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 <script>
@@ -383,7 +389,11 @@
 					html += '</div></div>&nbsp;&nbsp;</div></div>';
 					html += '<div class="past-rsv-buttons">';
 					
-					if (pastRsv[i].endDate < result.today && result.reviewed[pastRsv[i].resIdx] == 0) {
+					if (pastRsv[i].rsvStatus == 1) {
+						html += '<span class="cancelled">취소됨</span>';
+					}
+					
+					if (pastRsv[i].endDate < result.today && result.reviewed[pastRsv[i].resIdx] == 0 && pastRsv[i].rsvStatus == 0) {
 						html += '<button class="normal-button accent-button" onclick="review(' + pastRsv[i].resIdx + ')">후기 작성</button>&nbsp;&nbsp;';
 					}
 					
@@ -533,7 +543,10 @@
 								</div>
 							</div>
 							<div class="past-rsv-buttons">
-								<c:if test="${rsvVO.endDate < today and reviewed.get(rsvVO.resIdx) == 0}">
+								<c:if test="${rsvVO.rsvStatus == 1}">
+									<span class="cancelled">취소됨</span>
+								</c:if>
+								<c:if test="${rsvVO.endDate < today and reviewed.get(rsvVO.resIdx) == 0 and rsvVO.rsvStatus == 0}">
 									<button class="normal-button accent-button" onclick="review(${rsvVO.resIdx})">후기 작성</button>&nbsp;
 								</c:if>
 								<button class="normal-button" onclick="location.href='rsvdetails.do?resIdx=${rsvVO.resIdx}'">예약 상세</button>
@@ -542,7 +555,7 @@
 					</c:forEach>
 					</div>
 					
-					<div id="page-nav">					
+					<div id="page-nav"><!-- 페이지 시작 -->					
 						<c:if test="${lastPage < 6}">
 							<c:forEach var="i" begin="${startPage}" end="${endPage}">
 								<c:choose>

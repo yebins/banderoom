@@ -21,6 +21,7 @@ public interface SpaceService {
 	List<SpacesVO> spaceList(Map<String, Object> params);
 	List<SpaceReviewVO> spaceReviewList(Map<String, Object> params);
 	Map<String, Object> spaceReviewCntAvg(SpacesVO vo);
+	int validateRsv(ReservationsVO vo);
 	ReservationsVO insertRsv(ReservationsVO vo);
 	int insertPoint(PointsVO vo);
 	ReservationsVO getRSV(ReservationsVO vo);
@@ -46,6 +47,8 @@ public interface SpaceService {
 	List<ReservationsVO> getRsvBySpace(SpacesVO vo, String dateType, String dateRange, int start);
 	int countPointHistory(GeneralMembersVO login, String dateRange);
 	List<PointsVO> pointHistory(GeneralMembersVO login, String dateRange, int start);
+	List<PointsVO> pointInfo(ReservationsVO vo);
+	int cancelRsv(ReservationsVO vo);
 
 	//테스트용
 	public List<String> getAddr1();

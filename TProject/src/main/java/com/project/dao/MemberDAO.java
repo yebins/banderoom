@@ -1,12 +1,18 @@
 package com.project.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.project.vo.*;
+import com.project.vo.EmailRegVO;
+import com.project.vo.GeneralMembersVO;
+import com.project.vo.HostMembersVO;
+import com.project.vo.MessagesVO;
+import com.project.vo.PointsVO;
+import com.project.vo.TelRegVO;
 
 @Repository
 public class MemberDAO {
@@ -117,5 +123,19 @@ public class MemberDAO {
 	
 	public int setPoint(PointsVO vo) {
 		return sqlSession.update("com.project.mapper.memberMapper.setPoint", vo);
+	}
+	
+	public List<MessagesVO> listMessage(Map<String, Object> map){
+		
+		return sqlSession.selectList("com.project.mapper.memberMapper.listMessage", map);
+	}
+	
+	public int senderListCount(int sender) {
+		
+		return sqlSession.selectOne("com.project.mapper.memberMapper.listCount",sender);
+	}
+	public int receiverListCount(int receiver) {
+		
+		return sqlSession.selectOne("com.project.mapper.memberMapper.listCount",receiver);
 	}
 }
