@@ -99,6 +99,7 @@
 			팀원 모집
 		</div>
 		<div id="page-content">
+		<c:if test='${details.status!=1}'>
 			<div class="inner-box" style="height:820px; <c:if test='${details.status==2}'>filter: brightness(0.8);</c:if> ">
 				<input type="hidden" name="teamIdx" id="teamIdx" value="${details.teamIdx}">
 				<c:if test='${details.status==2}'>
@@ -139,7 +140,7 @@
 					<c:if test="${login == null}">
 						<button type="button" class="normal-button accent-button" onclick="loginAlert()">지원하기</button>
 					</c:if>
-					<c:if test="${login != null}">
+					<c:if test="${login != null && details.mIdx != login.mIdx}">
 						<button type="button" class="normal-button accent-button" 
 						onclick="window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
                        'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');">지원하기</button> 
@@ -147,8 +148,11 @@
 				</c:if>
 				</div>
 			</div>
+		</c:if>
 		</div>
-		
+		<c:if test='${details.status1=1}'>
+		삭제된 글입니다.
+		</c:if>
 	</div>
 	<c:import url="/footer.do" />
 </body>

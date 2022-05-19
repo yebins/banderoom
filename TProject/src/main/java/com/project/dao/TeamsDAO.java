@@ -57,8 +57,8 @@ public class TeamsDAO {
 		return sqlSession.update("com.project.mapper.teamsMapper.update", vo);
 	}
 	
-	public List<TeamsVO> reglist(int mIdx) {
-		return sqlSession.selectList("com.project.mapper.teamsMapper.reglist", mIdx);
+	public List<TeamsVO> reglist(Map<String, Integer> endMap) {
+		return sqlSession.selectList("com.project.mapper.teamsMapper.reglist", endMap);
 	}
 	
 	public List<ApplicationsVO> applist(int mIdx) {
@@ -71,6 +71,10 @@ public class TeamsDAO {
 	
 	public List<ApplicationsVO> myapp(int teamIdx) {
 		return sqlSession.selectList("com.project.mapper.teamsMapper.myapp", teamIdx);
+	}
+	
+	public int myappCount(int teamIdx) {
+		return sqlSession.selectOne("com.project.mapper.teamsMapper.myappCount", teamIdx);
 	}
 	
 	public void updateStatus() {

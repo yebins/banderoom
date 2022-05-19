@@ -53,8 +53,8 @@ public class TeamsServiceImpl implements TeamsService{
 	}
 
 	@Override
-	public List<TeamsVO> reglist(int mIdx) {
-		return dao.reglist(mIdx);
+	public List<TeamsVO> reglist(Map<String, Integer> endMap) {
+		return dao.reglist(endMap);
 	}
 
 	@Override
@@ -71,6 +71,11 @@ public class TeamsServiceImpl implements TeamsService{
 	public List<ApplicationsVO> myapp(int teamIdx) {
 		return dao.myapp(teamIdx);
 	}
+	
+	@Override
+	public int myappCount(int teamIdx) {
+		return dao.myappCount(teamIdx);
+	}
 
 	@Override
 	public void updateStatus() {
@@ -86,5 +91,6 @@ public class TeamsServiceImpl implements TeamsService{
 	public int deleteApp(int appIdx) {
 		return dao.deleteApp(appIdx);
 	}
+
 	
 }
