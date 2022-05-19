@@ -242,8 +242,15 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public List<MessagesVO> MessagesList(HttpServletRequest request, Map<String, Object> map) {
-		// TODO Auto-generated method stub
-		return null;
+		System.out.println(map.toString());
+		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
+		
+		int start = page+(page-1)*13;
+		int end=page*14;
+		map.put("start", start);
+		map.put("end", end);
+		
+		return dao.listMessage(map);
 	}
 	
 	

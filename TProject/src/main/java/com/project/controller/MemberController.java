@@ -3,6 +3,7 @@ package com.project.controller;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,6 +24,7 @@ import com.project.service.MemberService;
 import com.project.vo.EmailRegVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.HostMembersVO;
+import com.project.vo.MessagesVO;
 import com.project.vo.TelRegVO;
 
 @RequestMapping(value = "/member")
@@ -255,7 +257,12 @@ public class MemberController {
 		System.out.println("쪽지함 로그인정보"+login.getmIdx());
 		
 		if( login != null) {
-			
+				params.put("mIdx", login.getmIdx());
+				List<MessagesVO> vo=memberService.MessagesList(request, params);
+				
+				model.addAttribute("list",vo);
+				model.addAttribute("receiveCount",request.getAttribute("receiveCount"));
+				model.addAttribute("sendCount",request.getAttribute("sendCount"));
 			
 			return "myMessage";
 		} 
