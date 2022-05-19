@@ -144,7 +144,7 @@
 							<ul>
 								<li>
 									<a href="">받은쪽지함 
-										<b>10</b>
+										<b>${receiveCount}</b>
 									</a>
 								</li>
 								<li>
@@ -154,7 +154,7 @@
 								</li>
 								<li>
 									<a href="">보낸쪽지함 
-										<b>10</b>
+										<b>#{sendCount}</b>
 									</a>
 								</li>
 							</ul>

@@ -109,6 +109,7 @@
 			<input type="hidden" name="bIdx" value="${param.bIdx}"> 
 			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
+			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<div id="page-content">
 				<div class="inner-box" style="height:500px;">
 					<div class="select-board">	

@@ -255,6 +255,25 @@
 		)
 	</insert>
 	
+	<select id="listMessage" parameterType="map" resultType="messagesVO">
+		<![CDATA[
+			select * from
+			(SELECT
+			  @rownum:=@rownum+1 as rownum, 
+			  msg.*
+			FROM messages msg,(select @rownum:=0) rn_msg ]]>
+		<if test="receiver != null and receiver != ''">
+			where msg.receiver = #{receiver}
+		</if>
+		<if test="sender != null and sender != ''">
+			where msg.sender = #{sender}
+		</if>
+			order by msgidx desc) list
+		<![CDATA[where rownum>=#{start} and rownum <=#{end}]]>
+	</select>
+	
+	
+	
 	<select id="getHostMember" parameterType="hostMembersVO" resultType="hostMembersVO">
 		select * from host_members where midx=#{mIdx}
 	</select>
