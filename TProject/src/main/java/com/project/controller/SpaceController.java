@@ -795,6 +795,7 @@ public class SpaceController {
 		model.addAttribute("hostVO", hostVO);
 		model.addAttribute("rsvVO", rsvVO);
 		model.addAttribute("nextDay", nextDay);
+		model.addAttribute("today", new Date());
 		
 		return "space/rsvdetails";
 		
@@ -1092,6 +1093,9 @@ public class SpaceController {
 	public int reviewUpdate(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, int fileChanged, HttpServletRequest request) throws Exception {
 		
 		SpaceReviewVO original = spaceService.getReviewInfo(vo);
+		
+		vo.setPictureSrc(original.getPictureSrc());
+		vo.setThumbSrc(original.getThumbSrc());
 		
 		if (request.getSession().getAttribute("login") == null) {
 			return 1; // 로그인 안 됨

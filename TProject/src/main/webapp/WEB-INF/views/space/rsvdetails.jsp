@@ -382,7 +382,7 @@
 						</c:otherwise>
 					</c:choose>
 				</div>
-				<c:if test="${(rsvVO.startDate > nextDay && rsvVO.rsvStatus == 0) || (hlogin.mIdx == hostVO.mIdx && rsvVO.rsvStatus == 0)}">
+				<c:if test="${(rsvVO.startDate > nextDay && rsvVO.rsvStatus == 0) || (hlogin.mIdx == hostVO.mIdx && rsvVO.rsvStatus == 0 && rsvVO.startDate > today)}">
 					<button class="normal-button accent-button" onclick="cancelRsv(${rsvVO.resIdx})">
 						예약 취소
 					</button>
