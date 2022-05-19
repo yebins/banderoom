@@ -150,7 +150,7 @@
 			</div>
 		</c:if>
 		</div>
-		<c:if test='${details.status1=1}'>
+		<c:if test='${details.status==1}'>
 		삭제된 글입니다.
 		</c:if>
 	</div>

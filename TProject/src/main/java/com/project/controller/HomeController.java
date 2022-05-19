@@ -76,7 +76,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/frame.do")
 	public String frame() {
-		return "frame2";
+		return "frame";
 	}
 	
 	@RequestMapping(value="/serinfo.do")
