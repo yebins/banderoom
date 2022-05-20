@@ -120,6 +120,25 @@
     .search-button{
     	align-self:center;
     }
+    .page-nav-button {
+   		border:none;
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		margin: 7.5px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background-color:white;
+	}
+	.page-nav-button:not(.current-page) {
+		cursor: pointer;
+	}
+	.page-nav-button.current-page {
+		background-color: #fbe6b2;
+		font-weight: bold;
+	}
 </style>
 </head>
 <body>
@@ -188,18 +207,41 @@
 				<c:set var="startNum" value="${page-(page-1)%5}"/>	
 				<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(articlesTotal/6),'.')}"/>
 			검색된 게시물 수 : ${articlesTotal}
-			<div class="pageNum">	
-						<button class="normal-button accent-button jListPageButton" style="visibility:${(startNum<=1)?'hidden':'visible'};">
-							<a href="jlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">이전</a>
+			<div class="pageNum">
+						<c:if test="${page>5}">
+						<button class="page-nav-button">
+							<a href="jlist.do?page=1&status=${status}&searchtitle=${searchtitle}">1</a>
 						</button>
+						<button class="page-nav-button">
+							<a href="jlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">◀</a>
+						</button>
+						</c:if>
 						<c:forEach var="i" begin="0" end="4">
 							<c:if test="${(startNum+i)<= lastNum}">
-								<a href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}" style="color:${page==(startNum+i)?'lightgreen; border:1px solid lightgray; padding:5px; border-radius:10px;':''}">${startNum+i}</a>
+							<c:choose>
+									<c:when test="${(startNum+i) == page }">
+									<button class="page-nav-button current-page" >
+										<a href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">${startNum+i}</a>
+									</button>
+									</c:when>
+									<c:otherwise>
+									<button class="page-nav-button" >
+										<a href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">${startNum+i}</a>
+									</button>
+									</c:otherwise>
+								</c:choose>
 							</c:if>
 						</c:forEach>
-						<button class="normal-button accent-button jListPageButton" style="visibility:${(startNum+5<=lastNum)?'visible':'hidden'};">
-							<a href="jlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">다음</a>
+						<c:if test="${(startNum+5) < lastNum}">
+						<button class="page-nav-button">
+							<a href="jlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">▶</a>
 						</button>
+						</c:if>
+						<c:if test="${(startNum+5) <= lastNum}">
+						<button class="page-nav-button">
+							<a href="jlist.do?page=${lastNum}&status=${status}&searchtitle=${searchtitle}">${lastNum}</a>
+						</button>
+						</c:if>
 			</div>
 		</div>
 	</div>

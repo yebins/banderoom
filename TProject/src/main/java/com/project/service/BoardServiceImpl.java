@@ -36,6 +36,12 @@ public class BoardServiceImpl implements BoardService {
 	}
 	
 	@Override
+	public CommentsVO commentOneInfo(CommentsVO vo){
+		
+		return dao.commentOneInfo(vo);
+	}
+
+	@Override
 	public int insertArticlesVO(ArticlesVO vo) {
 		
 		return dao.insertArticlesVO(vo);
@@ -112,6 +118,18 @@ public class BoardServiceImpl implements BoardService {
 	public int likeCount(int aIdx) {
 		
 		return dao.likeCount(aIdx);
+	}
+
+	@Override
+	public CommentRepliesVO commentRepliesOneInfo(CommentRepliesVO vo) {
+		
+		return dao.commentRepliesOneInfo(vo);
+	}
+
+	@Override
+	public int commentRepliesUpdate(CommentRepliesVO vo) {
+		
+		return dao.commentRepliesUpdate(vo);
 	}
 
 	@Override
