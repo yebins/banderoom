@@ -713,7 +713,6 @@
 			if(mIdx != null){
 				mIdx=mIdx;
 			}
-			
 		$.ajax({
 			url:"commentUpdate.do",
 			type:"post",
