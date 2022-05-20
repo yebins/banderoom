@@ -55,6 +55,16 @@
 	text-align: center;
     font-size: 25px;
 }
+#delete{
+    text-align: center;
+    font-size: 25px;
+}
+.psrc{
+	border-radius:12.5px;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+	width:25px;
+	margin-right:10px;
+}
 
 </style>
 
@@ -99,61 +109,70 @@
 			팀원 모집
 		</div>
 		<div id="page-content">
-		<c:if test='${details.status!=1}'>
-			<div class="inner-box" style="height:820px; <c:if test='${details.status==2}'>filter: brightness(0.8);</c:if> ">
-				<input type="hidden" name="teamIdx" id="teamIdx" value="${details.teamIdx}">
-				<c:if test='${details.status==2}'>
-					<div id="endPost">마감된 글입니다.</div>
-				</c:if>
-				<div id="title">[${details.type}] ${details.title}</div>
-				<div id="writer">
-					<span class="midx" onclick="profileOpen(${details.mIdx})">${details.mNickname}</span>
-					<span class="terms date"><b>작성일자</b> <fmt:formatDate value="${details.regDate}" pattern="yyyy년 MM월 dd일 HH시 mm분"/></span>
-				</div>
-				<hr style="margin-top: 0px; margin-bottom:25px;">
-				
-				<div class="terms-list">
-					<span class='terms'><b>지역</b> ${details.addr1} ${details.addr2}</span>
-					<span class='terms'><b>팀 레벨</b> ${details.teamLevel}</span>
-					<span class='terms'><b>장르</b> ${details.genre}</span>
-				</div>
-				<div class="terms-list">
-					<span class='terms'><b>파트/인원</b> 
-						<c:forEach var="parts" items="${parts}" varStatus="lastPart">
-						${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
-						</c:forEach>
-					</span>
-					<span class='terms'><b>마감날짜</b> 
-						<fmt:parseDate value="${details.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
-						<fmt:formatDate value="${endDate}" pattern="yyyy년 MM월 dd일"/>
-					</span>
-				</div>
-				<div class="inner-box-content">
-					<div id="content" class="form-control" style="width:100%; height:500px;">${details.content}</div>
-				</div>
-				<div class="inner-box-button-wrap">
-				<c:if test="${details.status==0}">
-					<c:if test="${details.mIdx == login.mIdx}">
-						<button type="button" class="normal-button" onclick="location.href='update.do?teamIdx=${details.teamIdx}'">수정</button> 
-						<button type="button" class="normal-button" onclick="deleteFn()">삭제</button>
+			<c:if test='${details.status!=1}'>
+				<div class="inner-box" style="height:820px; <c:if test='${details.status==2}'>filter: brightness(0.8);</c:if> ">
+					<input type="hidden" name="teamIdx" id="teamIdx" value="${details.teamIdx}">
+					<c:if test='${details.status==2}'>
+						<div id="endPost">마감된 글입니다.</div>
 					</c:if>
-					<c:if test="${login == null}">
-						<button type="button" class="normal-button accent-button" onclick="loginAlert()">지원하기</button>
+					<div id="title">[${details.type}] ${details.title}</div>
+					<div id="writer">
+					
+						<a class="miniprofile" onclick="profileOpen('${details.mIdx}')">
+							<img src="${profileSrc}" class="psrc"/>
+							<span style="font-weight:600;vertical-align: middle;">${details.mNickname}</span>						
+						</a>
+					
+						<span class="terms date"><b>작성일자</b> <fmt:formatDate value="${details.regDate}" pattern="yyyy년 MM월 dd일 HH시 mm분"/></span>
+					</div>
+					<hr style="margin-top: 0px; margin-bottom:25px;">
+					
+					<div class="terms-list">
+						<span class='terms'><b>지역</b> ${details.addr1} ${details.addr2}</span>
+						<span class='terms'><b>팀 레벨</b> ${details.teamLevel}</span>
+						<span class='terms'><b>장르</b> ${details.genre}</span>
+					</div>
+					<div class="terms-list">
+						<span class='terms'><b>파트/인원</b> 
+							<c:forEach var="parts" items="${parts}" varStatus="lastPart">
+							${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
+							</c:forEach>
+						</span>
+						<span class='terms'><b>마감날짜</b> 
+							<fmt:parseDate value="${details.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
+							<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일"/>
+						</span>
+					</div>
+					<div class="inner-box-content">
+						<div id="content" class="form-control" style="width:100%; height:500px;">${details.content}</div>
+					</div>
+					<div class="inner-box-button-wrap">
+					<c:if test="${details.status==0}">
+						<c:if test="${details.mIdx == login.mIdx}">
+							<button type="button" class="normal-button" onclick="location.href='update.do?teamIdx=${details.teamIdx}'">수정</button> 
+							<button type="button" class="normal-button" onclick="deleteFn()">삭제</button>
+						</c:if>
+						<c:if test="${login == null}">
+							<button type="button" class="normal-button accent-button" onclick="loginAlert()">지원하기</button>
+						</c:if>
+						<c:if test="${login != null && details.mIdx != login.mIdx}">
+							<button type="button" class="normal-button accent-button" 
+							onclick="window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
+	                       'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');">지원하기</button> 
+						</c:if>
 					</c:if>
-					<c:if test="${login != null && details.mIdx != login.mIdx}">
-						<button type="button" class="normal-button accent-button" 
-						onclick="window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
-                       'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');">지원하기</button> 
-					</c:if>
-				</c:if>
+					</div>
 				</div>
+			</c:if>
+			<c:if test='${details.status==1}'>
+				<div id="delete">삭제된 글입니다.</div>
+			</c:if>
+			<div>
+					${appNum}명
 			</div>
-		</c:if>
 		</div>
-		<c:if test='${details.status==1}'>
-		삭제된 글입니다.
-		</c:if>
 	</div>
+	
 	<c:import url="/footer.do" />
 </body>
 </html>

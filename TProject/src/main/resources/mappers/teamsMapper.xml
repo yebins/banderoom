@@ -132,6 +132,19 @@
 		 WHERE teamidx = #{teamIdx}
 	</select>
 	
+	<select id="appNum" parameterType="hashMap" resultType="">
+	SELECT p.name, count(t.teamidx)
+		  FROM teams t
+		  JOIN applications a
+		    ON t.teamidx = a.teamidx
+		  JOIN parts p
+            ON a.partidx = p.partidx 
+		   AND t.teamidx=#{teamIdx}
+		   and p.name = #{partname};
+	</select>
+	
+	
+	
 	<insert id="apply" parameterType="applicationsVO">
 		INSERT INTO applications(
 			 teamidx
@@ -165,24 +178,40 @@
 	
 	<select id="reglist" parameterType="hashMap" resultType="teamsVO">
 		SELECT
-			 teamidx
-			,midx
-			,mnickname
-			,addr1
-			,addr2
-			,teamlevel
-			,type
-			,genre
-			,title
-			,content
-			,regdate
-			,status
-			,enddate
-		  FROM teams
-		 WHERE midx=#{mIdx}
-		   AND status != 1
+			 t.teamidx
+			,t.midx
+			,t.mnickname
+			,t.addr1
+			,t.addr2
+			,t.teamlevel
+			,t.type
+			,t.genre
+			,t.title
+			,t.content
+			,t.regdate
+			,t.status
+			,t.enddate
+			,count(a.appidx) appcount
+		  FROM teams t
+		  LEFT JOIN applications a
+			ON t.teamidx = a.teamidx
+		 WHERE t.midx=#{mIdx}
+		   AND t.status != 1
 		<if test="endYN == 1">
-		   AND status != 2
+		   AND t.status != 2
+		</if>
+		GROUP BY t.teamidx
+		 ORDER BY status, teamidx desc
+		 LIMIT #{start}, 8
+	</select>
+	
+	<select id="reglistCount" parameterType="int" resultType="int">
+		SELECT count(teamidx)
+		  FROM teams t
+		 WHERE t.midx=#{mIdx}
+		   AND t.status != 1
+		<if test="endYN == 1">
+		   AND t.status != 2
 		</if>
 		 ORDER BY status, teamidx desc
 	</select>
@@ -205,7 +234,18 @@
 		  JOIN parts p
             ON app.partidx = p.partidx 
 		   AND app.midx=#{mIdx}
-		 ORDER BY team.status, app.appidx desc;
+		 ORDER BY team.status, app.appidx desc
+		 LIMIT #{start}, 5
+	</select>
+	
+	<select id="applistCount" parameterType="int" resultType="int">
+		SELECT count(a.appidx)
+		  FROM teams t
+		  JOIN applications a 
+		    ON t.teamidx = a.teamidx
+		  JOIN parts p
+            ON a.partidx = p.partidx 
+		   AND a.midx=#{mIdx}
 	</select>
 	
 	<update id="finish" parameterType="int">
