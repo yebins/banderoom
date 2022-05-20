@@ -7,6 +7,7 @@
 <head>
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
@@ -52,13 +53,33 @@
 		font-size: 14px;
 		margin-left: 5px;
 	}
-	#page-nav {
+	
+	#page-nav, #app-page-nav {
+		border-top: 1px solid lightgray;
 		width: 100%;
-		height: 50px;
+		height: 80px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 	}
+	.page-nav-button {
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		margin: 7.5px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.page-nav-button:not(.current-page) {
+		cursor: pointer;
+	}
+	.page-nav-button.current-page {
+		background-color: #fbe6b2;
+		font-weight: bold;
+	}
+	
 	.reglist-info-wrap {
 		flex:1;
 	}
@@ -71,6 +92,9 @@
 	.applist-box {
 		margin-top: 20px;
 		padding:15px !important;
+	}
+	#appCount{
+		color: #FB6544;
 	}
 	.content{
 		border:1px solid lightgray;
@@ -86,14 +110,17 @@
 	}
 	.endYN{
 		background: white;
-	    width: 170px;
+	    width: 150px;
 	    padding: 5px;
 	    border-radius: 30px;
-	    box-shadow: 0px 5px 10px rgb(0 0 0 / 20%);
+	    box-shadow: 0px 0px 5px rgb(0 0 0 / 20%);
 	    text-align: center;
 	    margin-top: 20px;
+	    font-size: 14px;
 	}
-	
+	.del-btn{
+		width: 70px;
+	}
 </style>
 
 <script type="text/javascript">
@@ -196,6 +223,216 @@
 	    });
 	});
 	
+	
+	//var currPage = 1;
+	//var startPage = 1;
+	//var endPage = ${regPageUtil.endPage};
+	//var lastPage = ${regPageUtil.lastPage};
+	var endYN = "";
+	
+	if(${param.endYN != null}){
+		endYN = "&endYN=${param.endYN}";
+	}
+	
+	function reglistPaging(page){
+		$.ajax({
+			url:"reglistPaging.do",
+			type:"get",
+			data:"page="+page+endYN,
+			success:function(data){
+				html = '';
+				
+				var reglist = data.reglist;
+				
+				for (i in reglist) {
+					html += '<div class="reglist-wrap">';
+					html += '<div class="reglist-info-wrap">';
+					html += '<div class="reglist-name"><a id="teamIdx" href="details.do?teamIdx='+reglist[i].teamIdx+'">';
+					
+					if(reglist[i].status == 0){
+						html += '[모집중] ';
+					}else if(reglist[i].status == 2){
+						html += '[마감] ';
+					}
+						
+					html += reglist[i].title +'<span id="appCount"> ('+reglist[i].appCount+')</span></a></div>';
+					html += '<div class="reglist-info"><div class="reglist-info-items">';
+					html += '<div class="small-title">지역</div><div class="small-content">'+reglist[i].addr1+' '+reglist[i].addr2+'</div></div>&nbsp;&nbsp;';
+					html += '<div class="reglist-info-items"><div class="small-title">팀 레벨</div><div class="small-content">'+reglist[i].teamLevel+'</div></div>&nbsp;&nbsp;';
+					html += '<div class="reglist-info-items"><div class="small-title">분야</div><div class="small-content">'+reglist[i].type+'</div></div>&nbsp;&nbsp;';
+					html += '<div class="reglist-info-items"><div class="small-title">장르</div><div class="small-content">'+reglist[i].genre+'</div></div></div>';
+					html += '<div class="reglist-info"><div class="reglist-info-items"><div class="small-title">파트/인원</div><div class="small-content">';
+
+					var partslist = data.partsMap[reglist[i].teamIdx];
+					for(j in partslist){
+						html += partslist[j].name+' '+partslist[j].capacity+'명';
+						//i가 마지막일 때 빼고 , 붙이기
+						if(j != partslist.length-1){
+							html += ', '
+						}
+					}
+					
+					html += '</div></div>&nbsp;&nbsp;';
+					html += '<div class="reglist-info-items"><div class="small-title">마감날짜</div>';
+					html += '<div class="small-content">';
+					
+					var endDate = moment(reglist[i].endDate);
+					html += moment(endDate).format("YYYY년 M월 D일");
+					
+					html += '</div></div></div></div><div class="reglist-buttons">';
+					
+					if(reglist[i].status == 0){
+						html += '<button class="normal-button" onclick="finish('+reglist[i].teamIdx+')">마감하기</button>&nbsp;&nbsp;';
+					}
+					if(reglist[i].status == 2){
+						html += '<button type="button" class="normal-button del-btn" onclick="deletePost('+reglist[i].teamIdx+')">삭제</button>&nbsp;&nbsp;';
+					}
+					if(reglist[i].appCount != 0){
+						html += '<button class="normal-button accent-button" style="width:110px;" onclick="location.href=\'myapp.do?teamIdx='+reglist[i].teamIdx+'&mIdx='+reglist[i].mIdx+'\'">지원서 보기</button>';
+					}
+					
+					html += '</div></div>';
+				}
+				
+				$("#reglist").html(html);
+				
+				//페이지네비게이션
+				
+				var currPage = data.regPageUtil.nowPage;//현재페이지
+				var startPage = data.regPageUtil.startPage;
+				var endPage = data.regPageUtil.endPage;
+				var lastPage = data.regPageUtil.lastPage;
+				
+				html = '';
+				
+				if(lastPage < 6){
+					for(var i=startPage; i <= endPage; i++){
+						if(i == currPage){
+							html += '<div class="page-nav-button current-page">'+i+'</div>';
+						}else{
+							html += '<div class="page-nav-button" onclick="reglistPaging('+i+')">'+i+'</div>';
+						}
+					}
+				}
+				
+				if(lastPage>5){
+					if(startPage > 5){
+						html += '<div class="page-nav-button" onclick="reglistPaging(1)">1</div>';
+						html += '<div class="page-nav-button" onclick="reglistPaging('+(startPage-1)+')">◀</div>';
+					}
+					for(var i=startPage; i <= endPage; i++){
+						if(i == currPage){
+							html += '<div class="page-nav-button current-page">'+i+'</div>';
+						}else{
+							html += '<div class="page-nav-button" onclick="reglistPaging('+i+')">'+i+'</div>';
+						}
+					}
+					
+					if(endPage < lastPage){
+						html += '<div class="page-nav-button" onclick="reglistPaging('+(endPage+1)+')">▶</div>';
+						html += '<div class="page-nav-button" onclick="reglistPaging('+lastPage+')">'+lastPage+'</div>';
+					}
+				}
+				
+				$("#page-nav").html(html);
+			}
+		})
+		
+	}
+	
+	
+	function applistPaging(page){
+		$.ajax({
+			url:"applistPaging.do",
+			type:"get",
+			data:"page="+page,
+			success:function(data){
+				console.log(data);
+				html = '';
+				
+				var applist = data.applist;
+				
+				for (i in applist) {
+					
+					if(applist[i].status != 1){
+						html += '<div class="inner-box applist-box"><div class="reglist-name">';
+						html += '<a href="details.do?teamIdx='+applist[i].teamIdx+'">';
+						if(applist[i].status == 0){
+							html += ' [모집중]';
+						}else if(applist[i].status == 2){
+							html += ' [마감]';
+						}
+						html += applist[i].title+'</a></div>';
+						
+						if(applist[i].partname != ''){
+							html += '<div class="reglist-info-items" style="margin:10px 0px;"><div class="small-title">지원한 파트</div>';
+							html += '<div class="small-content">'+applist[i].partname+'</div></div>';
+						}
+						
+						html += '<div class="small-title">내용</div>';
+						html += '<div id="update-content'+applist[i].appIdx+'">';
+						html += '<div class="content"><pre id="pre-app'+applist[i].appIdx+'" style="font-family:\'맑은 고딕\';">'+applist[i].content+'</pre></div>';
+						html += '<div class="inner-box-button-wrap">';
+						if(applist[i].status == 0){
+							html += '<button class="normal-button" onclick="roadContent('+applist[i].appIdx+')">수정</button>';
+						}
+						
+						html += '<button class="normal-button" onclick="deleteApp('+applist[i].appIdx+')" style="margin-left: 15px;">삭제</button></div></div>';
+						html += '<div id="update-form'+applist[i].appIdx+'" style="display: none;">';
+						html += '<div class="content"><textarea class="textarea" id="textarea'+applist[i].appIdx+'" name="content">'+applist[i].content+'</textarea></div>';
+						html += '<div class="inner-box-button-wrap">';
+						html += '<button class="normal-button" onclick="updateApp('+applist[i].appIdx+')">수정하기</button>';
+						html += '<button class="normal-button" onclick="cancel('+applist[i].appIdx+')" style="margin-left: 15px;">취소</button></div></div></div>';
+						
+					}
+					
+				}
+				$("#applist").html(html);
+				
+				//페이지네비게이션
+				
+				var currPage = data.appPageUtil.nowPage;//현재페이지
+				var startPage = data.appPageUtil.startPage;
+				var endPage = data.appPageUtil.endPage;
+				var lastPage = data.appPageUtil.lastPage;
+				
+				html = '';
+				
+				if(lastPage < 6){
+					for(var i=startPage; i <= endPage; i++){
+						if(i == currPage){
+							html += '<div class="page-nav-button current-page">'+i+'</div>';
+						}else{
+							html += '<div class="page-nav-button" onclick="applistPaging('+i+')">'+i+'</div>';
+						}
+					}
+				}
+				
+				if(lastPage>5){
+					if(startPage > 5){
+						html += '<div class="page-nav-button" onclick="applistPaging(1)">1</div>';
+						html += '<div class="page-nav-button" onclick="applistPaging('+(startPage-1)+')">◀</div>';
+					}
+					for(var i=startPage; i <= endPage; i++){
+						if(i == currPage){
+							html += '<div class="page-nav-button current-page">'+i+'</div>';
+						}else{
+							html += '<div class="page-nav-button" onclick="applistPaging('+i+')">'+i+'</div>';
+						}
+					}
+					
+					if(endPage < lastPage){
+						html += '<div class="page-nav-button" onclick="applistPaging('+(endPage+1)+')">▶</div>';
+						html += '<div class="page-nav-button" onclick="applistPaging('+lastPage+')">'+lastPage+'</div>';
+					}
+				}
+				
+				$("#app-page-nav").html(html);
+			}
+		});
+		
+	}
+	
 </script>
 
 </head>
@@ -213,13 +450,15 @@
 			<c:if test="${reglist.size() == 0}">
 				<div class="inner-box" style="height:50px; margin-top:20px;">작성한 글이 없습니다.</div>
 			</c:if>
-		<form action="myteams.do" method="post" name="endYNform">
-			<div class="endYN">
-				<input type="checkbox" id="endYN" name="endYN" value="1"> 마감 글 제외하기
-			</div>
-		</form>
-			<div class="inner-box reglist-box">
+			
 			<c:if test="${reglist.size() > 0}">
+			<form action="myteams.do" method="post" name="endYNform">
+				<div class="endYN">
+					<input type="checkbox" id="endYN" name="endYN" value="1"> 마감 글 제외하기
+					
+				</div>
+			</form>
+			<div class="inner-box reglist-box">
 				<div id="reglist">
 					<c:forEach var="reglists" items="${reglist}">
 						<div class="reglist-wrap">
@@ -227,7 +466,7 @@
 								<div class="reglist-name"><a id="teamIdx" href="details.do?teamIdx=${reglists.teamIdx}">
 								<c:if test="${reglists.status == 0}">[모집중]</c:if>
 								<c:if test="${reglists.status == 2}">[마감]</c:if>
-								${reglists.title} </a></div>
+								${reglists.title} <span id="appCount">(${reglists.appCount})</span></a></div> 
 								<div class="reglist-info">
 									<div class="reglist-info-items">
 										<div class="small-title">지역</div>
@@ -263,7 +502,7 @@
 										<div class="small-title">마감날짜</div>
 										<div class="small-content">
 											<fmt:parseDate value="${reglists.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
-											<fmt:formatDate value="${endDate}" pattern="yyyy년 MM월 dd일"/>
+											<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일"/>
 										</div>
 									</div>
 								</div>
@@ -273,55 +512,58 @@
 									<button class="normal-button" onclick="finish(${reglists.teamIdx})">마감하기</button>&nbsp;
 								</c:if>
 								<c:if test="${reglists.status == 2}">
-									<button type="button" class="normal-button" onclick="deletePost(${reglists.teamIdx})">삭제</button>&nbsp;
+									<button type="button" class="normal-button del-btn" onclick="deletePost(${reglists.teamIdx})">삭제</button>&nbsp;
 								</c:if>
-								<button class="normal-button accent-button" style="width:110px;" onclick="location.href='myapp.do?teamIdx=${reglists.teamIdx}&mIdx=${reglists.mIdx}'">지원서 보기</button>
+								<c:if test="${reglists.appCount != 0}">
+									<button class="normal-button accent-button" style="width:110px;" onclick="location.href='myapp.do?teamIdx=${reglists.teamIdx}&mIdx=${reglists.mIdx}'">지원서 보기</button>
+								</c:if>
 							</div>
 						</div>
-						</c:forEach>
-					</div>
-			</c:if>
-					<!--  div id="page-nav">					
-						<c:if test="${lastPage < 6}">
-							<c:forEach var="i" begin="${startPage}" end="${endPage}">
+					</c:forEach>
+				</div>
+				</c:if>
+					<div id="page-nav"><!-- 페이지 시작 -->					
+						<c:if test="${regPageUtil.lastPage < 6}">
+							<c:forEach var="i" begin="${regPageUtil.startPage}" end="${regPageUtil.endPage}">
 								<c:choose>
 									<c:when test="${i == 1}">
-										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+										<div class="page-nav-button current-page">${i}</div>
 									</c:when>
 									<c:otherwise>
-										<div class="page-nav-button" onclick="loadMySpaceRsv(${i})">[${i}]&nbsp;</div>
+										<div class="page-nav-button" onclick="reglistPaging(${i})">${i}</div>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 						</c:if>
-						<c:if test="${lastPage > 5}">
-							<c:if test="${startPage > 5}">
-								<div class="page-nav-button" onclick="loadMySpaceRsv(1)">[1]</div>&nbsp;
-								<div class="page-nav-button" onclick="loadMySpaceRsv(${startPage - 1})">◀</div>&nbsp;
+						<c:if test="${regPageUtil.lastPage > 5}">
+							<c:if test="${regPageUtil.startPage > 5}">
+								<div class="page-nav-button" onclick="reglistPaging(1)">1</div>
+								<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.startPage - 1})">◀</div>
 							</c:if>
 							
-							<c:forEach var="i" begin="${startPage}" end="${endPage}">
+							<c:forEach var="i" begin="${regPageUtil.startPage}" end="${regPageUtil.endPage}">
 								<c:choose>
-									<c:when test="${i == param.page}">
-										<div class="page-nav-button current-page">[${i}]</div>&nbsp;
+									<c:when test="${i == 1}">
+										<div class="page-nav-button current-page">${i}</div>
 									</c:when>
 									<c:otherwise>
-										<div class="page-nav-button" onclick="loadMySpaceRsv(${i})">[${i}]&nbsp;</div>
+										<div class="page-nav-button" onclick="reglistPaging(${i})">${i}</div>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							
-							<c:if test="${endPage < lastPage}">
-								<div class="page-nav-button" onclick="loadMySpaceRsv(${endPage + 1})">▶</div>&nbsp;
-								<div class="page-nav-button" onclick="loadMySpaceRsv(${lastPage})">[${lastPage}]</div>&nbsp;
+							<c:if test="${regPageUtil.endPage < regPageUtil.lastPage}">
+								<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.endPage + 1})">▶</div>
+								<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.lastPage})">${regPageUtil.lastPage}</div>
 							</c:if>
 						</c:if>
-					</div>-->
+					</div>
 				</div>
 				
 			<div class="big-title" style="margin-top:60px;">
 				작성한 지원서 목록
 			</div>
+			<div id="applist">
 				<c:forEach var="applists" items="${applist}">
 				<c:if test="${applists.status != 1}">
 					<div class="inner-box applist-box">
@@ -358,31 +600,44 @@
 					</div>
 				</c:if>
 			</c:forEach>
-		</div>
-		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button class="normal-button">버튼</button> 
-			일반 버튼 (button class="normal-button") (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="normal-button accent-button">버튼</button> 강조 버튼 (button class="normal-button accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button class="normal-button">일반버튼</button>
-					<button class="normal-button accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
 			</div>
-			<br><br>
+			<div id="app-page-nav"><!-- 페이지 시작 -->					
+				<c:if test="${appPageUtil.lastPage < 6}">
+					<c:forEach var="i" begin="${appPageUtil.startPage}" end="${appPageUtil.endPage}">
+						<c:choose>
+							<c:when test="${i == 1}">
+								<div class="page-nav-button current-page">${i}</div>
+							</c:when>
+							<c:otherwise>
+								<div class="page-nav-button" onclick="applistPaging(${i})">${i}</div>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+				</c:if>
+				<c:if test="${appPageUtil.lastPage > 5}">
+					<c:if test="${appPageUtil.startPage > 5}">
+						<div class="page-nav-button" onclick="applistPaging(1)">1</div>
+						<div class="page-nav-button" onclick="applistPaging(${appPageUtil.startPage - 1})">◀</div>
+					</c:if>
+					
+					<c:forEach var="i" begin="${appPageUtil.startPage}" end="${appPageUtil.endPage}">
+						<c:choose>
+							<c:when test="${i == 1}">
+								<div class="page-nav-button current-page">${i}</div>
+							</c:when>
+							<c:otherwise>
+								<div class="page-nav-button" onclick="applistPaging(${i})">${i}</div>
+							</c:otherwise>
+						</c:choose>
+					</c:forEach>
+					
+					<c:if test="${appPageUtil.endPage < appPageUtil.lastPage}">
+						<div class="page-nav-button" onclick="applistPaging(${appPageUtil.endPage + 1})">▶</div>
+						<div class="page-nav-button" onclick="applistPaging(${appPageUtil.lastPage})">${appPageUtil.lastPage}</div>
+					</c:if>
+				</c:if>
+			</div>
 		</div>
-		<!-- 여기까지 -->
 		
 	</div>
 	

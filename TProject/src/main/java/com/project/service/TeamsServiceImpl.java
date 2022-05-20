@@ -38,6 +38,12 @@ public class TeamsServiceImpl implements TeamsService{
 	}
 
 	@Override
+	public int appNum(Map<String, Object> appNumMap) {
+		return dao.appNum(appNumMap);
+	}
+
+	
+	@Override
 	public int apply(ApplicationsVO vo) {
 		return dao.apply(vo);
 	}
@@ -58,9 +64,21 @@ public class TeamsServiceImpl implements TeamsService{
 	}
 
 	@Override
-	public List<ApplicationsVO> applist(int mIdx) {
-		return dao.applist(mIdx);
+	public int reglistCount(Map<String, Integer> endMap) {
+		// TODO Auto-generated method stub
+		return dao.reglistCount(endMap);
 	}
+	
+	@Override
+	public List<ApplicationsVO> applist(Map<String, Integer> appMap) {
+		return dao.applist(appMap);
+	}
+	
+	@Override
+	public int applistCount(int mIdx) {
+		return dao.applistCount(mIdx);
+	}
+
 
 	@Override
 	public int finish(int teamIdx) {
@@ -91,6 +109,9 @@ public class TeamsServiceImpl implements TeamsService{
 	public int deleteApp(int appIdx) {
 		return dao.deleteApp(appIdx);
 	}
+
+
+	
 
 	
 }

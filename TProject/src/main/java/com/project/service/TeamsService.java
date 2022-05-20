@@ -13,11 +13,14 @@ public interface TeamsService {
 	List<PartsVO> selectParts(int teamIdx);
 	int register(TeamsVO vo, List<PartsVO> partsVOlist);
 	TeamsVO details(int teamIdx);
+	int appNum(Map<String, Object> appNumMap);
 	int apply(ApplicationsVO vo);
 	int delete(int teamIdx);
 	int update(TeamsVO vo);
 	List<TeamsVO> reglist(Map<String, Integer> endMap);
-	List<ApplicationsVO> applist(int mIdx);
+	int reglistCount(Map<String, Integer> endMap);
+	List<ApplicationsVO> applist(Map<String, Integer> appMap);
+	int applistCount(int mIdx);
 	int finish(int teamIdx);
 	List<ApplicationsVO> myapp(int teamIdx);
 	int myappCount(int teamIdx);

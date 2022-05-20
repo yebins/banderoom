@@ -21,6 +21,8 @@
 	margin-right:10px;
 	height: 35px;
 	border-radius:17.5px;
+	border: none;
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 20%);
 }
 .part{
 	margin:0px;
@@ -30,6 +32,8 @@
 	width:200px;
 	height: 35px;
 	border-radius:17.5px;
+	border: none;
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 20%);
 }
 .form{
     width: 100%;
@@ -47,6 +51,9 @@
     justify-content: space-between;
     display: flex;
     width: 100%;
+}
+#datepicker{
+	background: white;
 }
 .container{
 	margin-top:20px;
@@ -114,6 +121,8 @@ select[name=sort]{
     margin-top: 20px;
     position: absolute;
     margin-left: 12px;
+    border: none;
+    box-shadow: 0px 0px 5px rgb(0 0 0 / 20%);
 }
 /*@font-face {
     font-family: 'SuncheonB';
@@ -126,10 +135,12 @@ select[name=sort]{
 }*/
 </style>
 <script type="text/javascript">
+
 	$(function(){
 		$("#datepicker").datepicker({
 			language: 'ko'
 		});
+		
 		
 		$("select[name=addr1]").val("${param.addr1}");
 		$("select[name=addr2]").val("${param.addr2}");
@@ -143,7 +154,6 @@ select[name=sort]{
 			sort = "regdate";
 		}
 		$("select[name=sort]").val(sort);
-		
 		
 		
 		$.ajax({
@@ -238,7 +248,7 @@ select[name=sort]{
 					</div>
 					<br>
 					<div class="mb-3 d-inline-flex search-bottom row">
-						<input class="form-control form-control-sm col-4" type="text" placeholder="모집 기간 선택" id="datepicker" name="endDate">
+						<input class="form-control form-control-sm col-4" type="text" placeholder="모집 기간 선택" id="datepicker" name="endDate" readonly>
 						<input class="form-control form-control-sm col" type="text" placeholder="검색어를 입력하세요." name="searchWord">
 						<button type="submit" class="accent-button normal-button col-1">검색하기</button>
 						<button type="button" class="normal-button col-1" onclick="location.href='main.do'">초기화</button>
@@ -305,7 +315,7 @@ select[name=sort]{
 											<td>모집기간</td>
 											<td>
 												<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
-												<fmt:formatDate value="${endDate}" pattern="yyyy년 MM월 dd일 마감"/>
+												<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일 마감"/>
 											</td>
 										</tr>
 									</table>
