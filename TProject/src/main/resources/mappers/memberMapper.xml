@@ -128,7 +128,6 @@
 	<select id="kakaoLogin" parameterType="generalMembersVO" resultType="generalMembersVO">
 		select midx,
 					 email,
-					 password,
 					 name,
 					 nickname,
 					 address,
@@ -151,7 +150,6 @@
 	<select id="gLogin" parameterType="generalMembersVO" resultType="generalMembersVO">
 		select midx,
 					 email,
-					 password,
 					 name,
 					 nickname,
 					 address,
@@ -219,7 +217,6 @@
 		select midx,
 					 brn,
 					 email,
-					 password,
 					 name,
 					 nickname,
 					 address,

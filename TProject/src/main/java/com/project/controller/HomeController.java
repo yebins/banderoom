@@ -27,10 +27,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.service.BoardService;
 import com.project.service.MemberService;
+import com.project.service.SpaceService;
 import com.project.vo.ArticlesVO;
 import com.project.vo.CommentsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.ServiceInfoVO;
+import com.project.vo.SpacesVO;
 
 
 /**
@@ -43,6 +45,8 @@ public class HomeController {
 	private BoardService boardService;
 	@Autowired
 	private MemberService memberService;
+	@Autowired
+	private SpaceService spaceService;
 	
 	
 	
@@ -50,7 +54,22 @@ public class HomeController {
 	 * Simply selects the home view to render by returning its name.
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model) {
+	public String home(Model model, HttpServletRequest request) {
+
+		Map<String, Object> params = new HashMap<>();
+		
+		params.put("start", 0);
+		
+		params.put("likedMidx", 0);
+		if (request.getSession().getAttribute("login") != null) {
+			params.put("likedMidx", ((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+		}
+		
+		params.put("orderType", "score");
+		params.put("liked", 0);
+		
+		List<SpacesVO> spaceList = spaceService.spaceList(params);
+		model.addAttribute("spaceList", spaceList);
 		
 		return "home";
 	}

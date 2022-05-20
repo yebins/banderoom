@@ -530,6 +530,7 @@
 		display: flex;
 		align-items: center;
 		font-size: 14px;
+		color: darkgray;
 	}
 	
 	.review-body {
@@ -730,6 +731,7 @@
 	
 	.qna-answer-date {
 		font-size: 14px;
+		color: darkgray;
 	}
 	
 	.qna-answer-buttons {
@@ -1295,6 +1297,17 @@
 		
 		$("#rsv-input-peopleNum").val(currentNum);
 		
+	}
+	
+	function checkPeopleNum() {
+		var currentNum = +$("#rsv-input-peopleNum").val();
+		if (currentNum > ${spacesVO.capacity}) {
+			currentNum = ${spacesVO.capacity};
+		} else if (currentNum < 1) {
+			currentNum = 1;
+		}
+
+		$("#rsv-input-peopleNum").val(currentNum);
 	}
 	
 	function rsvSubmit() {
@@ -2315,7 +2328,7 @@
 											총&nbsp;&nbsp;
 											<div class="peopleNum-buttons">
 												<button class="peopleNum-button" onclick="changePeopleNum(-1)">-</button>
-												<input id="rsv-input-peopleNum" type="number" name="peopleNum" min="1" max="${spacesVO.capacity}" value="1">
+												<input id="rsv-input-peopleNum" type="number" name="peopleNum" min="1" max="${spacesVO.capacity}" value="1" onchange="checkPeopleNum()">
 												<button class="peopleNum-button" onclick="changePeopleNum(1)">+</button>
 											</div>
 											&nbsp;&nbsp;명

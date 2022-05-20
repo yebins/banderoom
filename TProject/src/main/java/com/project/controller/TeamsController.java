@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.project.service.MemberService;
 import com.project.service.TeamsService;
+import com.project.util.PagingUtil;
 import com.project.vo.ApplicationsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.PartsVO;
@@ -26,6 +28,8 @@ public class TeamsController {
 	
 	@Autowired
 	private TeamsService teamsService;
+	@Autowired
+	private MemberService memberService;
 
 	@RequestMapping(value="/main.do")
 	public String teamsMain(Model model, TeamsVO vo, String searchWord, Integer search, String sort) {
@@ -105,22 +109,54 @@ public class TeamsController {
 		model.addAttribute("details", teamsVO);
 		model.addAttribute("parts", partsVO);
 		
+		GeneralMembersVO writer = new GeneralMembersVO();
+		int mIdx = teamsVO.getmIdx();//게시글 작성자 midx
+		writer.setmIdx(mIdx);//게시글 작성자의 midx 삽입
+		
+		writer = memberService.oneMemberInfo(writer);
+		model.addAttribute("profileSrc",writer.getProfileSrc());
+		
+		
+		Map<String, Object> appNumMap = new HashMap<String, Object>();
+		
+		int[] appNum;
+		
+		for(int i=0; i<partsVO.size(); i++) {
+			String partname = partsVO.get(i).getName();
+			appNumMap.put("partname", partname);
+			appNumMap.put("teamIdx", teamIdx);
+			//appNum[i] = teamsService.appNum(appNumMap);
+			//model.addAttribute("appNum", appNum[i]);
+		}
+		
+		
+		
 		return "teams/details";
 	}
 	
 	@RequestMapping(value="/application.do", method=RequestMethod.GET)
 	public String application(HttpServletRequest request, Model model, int teamIdx) {
-		if (request.getSession().getAttribute("login") == null) {
+		
+		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+		TeamsVO teamsVO = teamsService.details(teamIdx);
+		
+		if (login == null) {
 
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			model.addAttribute("url", "/member/glogin.do");
 			
 			return "alert";
 			
+		} else if(login.getmIdx() == teamsVO.getmIdx()){
+			
+			model.addAttribute("msg", "본인 글에는 지원하실 수 없습니다.");
+			model.addAttribute("url", "/teams/main.do");
+			
+			return "alert";
+			
 		} else {
 		
 			List<PartsVO> partsVO = teamsService.selectParts(teamIdx);
-			TeamsVO teamsVO = teamsService.details(teamIdx);
 			
 			model.addAttribute("parts", partsVO);
 			model.addAttribute("details", teamsVO);
@@ -209,12 +245,22 @@ public class TeamsController {
 		}else {
 			GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 			
+			int regPage = 1; //등록한글
+			
 			int mIdx = login.getmIdx();
+			
 			
 			Map<String, Integer> endMap = new HashMap<String, Integer>();
 			
 			endMap.put("mIdx", mIdx);
 			endMap.put("endYN", endYN);
+			
+			PagingUtil regPageUtil = new PagingUtil(teamsService.reglistCount(endMap), regPage, 8, 5);
+			
+			endMap.put("start", regPageUtil.getStart()-1);
+			
+			model.addAttribute("regPageUtil", regPageUtil);
+			
 			
 			List<TeamsVO> teamsList = teamsService.reglist(endMap);
 			
@@ -228,13 +274,96 @@ public class TeamsController {
 			model.addAttribute("reglist", teamsList);
 			model.addAttribute("partsMap", partsMap);
 			
-			List<ApplicationsVO> appList = teamsService.applist(mIdx); 
+			
+			int appPage = 1; //등록한지원서
+			
+			Map<String, Integer> appMap = new HashMap<String, Integer>();
+			
+			appMap.put("mIdx", mIdx);
+			
+			PagingUtil appPageUtil = new PagingUtil(teamsService.applistCount(mIdx), appPage, 5, 5);
+			
+			appMap.put("start", appPageUtil.getStart()-1);
+			
+			model.addAttribute("appPageUtil", appPageUtil);
+			
+			List<ApplicationsVO> appList = teamsService.applist(appMap); 
 			
 			model.addAttribute("applist", appList);
 			
 			return "teams/myteams";
 		}
 	}
+	
+	
+	@RequestMapping(value="/reglistPaging.do")
+	@ResponseBody
+	public Map<String, Object> reglistPaging(HttpServletRequest request, Integer endYN, int page) {
+		
+		Map<String, Object> reglistMap = new HashMap<String, Object>();
+		
+		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+		
+		int regPage = page; //등록한글
+		
+		int mIdx = login.getmIdx();
+		
+		Map<String, Integer> endMap = new HashMap<String, Integer>();
+		
+		
+		endMap.put("mIdx", mIdx);
+		endMap.put("endYN", endYN);
+		
+		PagingUtil regPageUtil = new PagingUtil(teamsService.reglistCount(endMap), regPage, 8, 5);
+		
+		endMap.put("start", regPageUtil.getStart()-1);
+		
+		reglistMap.put("regPageUtil", regPageUtil);
+		
+		
+		List<TeamsVO> teamsList = teamsService.reglist(endMap);
+		
+		Map<Integer, List<PartsVO>> partsMap = new HashMap<Integer, List<PartsVO>>();
+		
+		for (int i=0; i<teamsList.size(); i++) {
+			List<PartsVO> partsList = teamsService.selectParts(teamsList.get(i).getTeamIdx());
+			partsMap.put(teamsList.get(i).getTeamIdx(), partsList);
+		}
+		
+		reglistMap.put("reglist", teamsList);
+		reglistMap.put("partsMap", partsMap);
+		
+		return reglistMap;
+	}
+	
+	@RequestMapping(value="/applistPaging.do")
+	@ResponseBody
+	public Map<String, Object> applistPaging(HttpServletRequest request, int page){
+		
+		Map<String, Object> applistMap = new HashMap<String, Object>();
+		
+		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+		
+		int mIdx = login.getmIdx();
+		
+		int appPage = page; //등록한지원서
+		
+		Map<String, Integer> appMap = new HashMap<String, Integer>();
+		
+		appMap.put("mIdx", mIdx);
+		
+		PagingUtil appPageUtil = new PagingUtil(teamsService.applistCount(mIdx), appPage, 5, 5);
+		
+		appMap.put("start", appPageUtil.getStart()-1);
+		applistMap.put("appPageUtil", appPageUtil);
+		
+		List<ApplicationsVO> appList = teamsService.applist(appMap); 
+		
+		applistMap.put("applist", appList);
+		
+		return applistMap;
+	}
+	
 	
 	@RequestMapping(value="/finish.do")
 	@ResponseBody
@@ -255,7 +384,9 @@ public class TeamsController {
 	
 	@RequestMapping(value="/myapp.do")
 	public String myapp(HttpServletRequest request, Model model, int teamIdx, int mIdx) {
+		
 		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+		
 		if (login == null) {
 
 			model.addAttribute("msg", "로그인이 필요합니다.");
@@ -310,4 +441,6 @@ public class TeamsController {
 		}
 		return 0;
 	}
+	
+	
 }

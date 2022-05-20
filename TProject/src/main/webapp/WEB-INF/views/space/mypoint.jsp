@@ -59,6 +59,7 @@
 	}
 	.point-resDate {
 		text-align: right;
+		color: darkgray;
 	}
 	
 	.small-title {

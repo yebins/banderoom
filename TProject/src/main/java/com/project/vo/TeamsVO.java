@@ -17,6 +17,7 @@ public class TeamsVO {
 	private Date regDate;
 	private int status;	// 0: 모집중 1: 삭제됨 2: 마감
 	private String endDate;
+	private int appCount;
 	
 	public int getTeamIdx() {
 		return teamIdx;
@@ -95,5 +96,11 @@ public class TeamsVO {
 	}
 	public void setEndDate(String endDate) {
 		this.endDate = endDate;
+	}
+	public int getAppCount() {
+		return appCount;
+	}
+	public void setAppCount(int appCount) {
+		this.appCount = appCount;
 	}
 }

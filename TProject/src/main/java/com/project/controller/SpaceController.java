@@ -795,6 +795,7 @@ public class SpaceController {
 		model.addAttribute("hostVO", hostVO);
 		model.addAttribute("rsvVO", rsvVO);
 		model.addAttribute("nextDay", nextDay);
+		model.addAttribute("today", new Date());
 		
 		return "space/rsvdetails";
 		
