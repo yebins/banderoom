@@ -734,7 +734,7 @@
 	}
 	//답글수정하기
 	function replyUpdate(mIdx,rIdx,obj){
-		var formTG="replyFile"+rIdx;
+		var formTG="replyfile"+rIdx;
 		var formData = new FormData($('#'+formTG)[0]);
 		
 		var mIdx=0;
@@ -743,7 +743,6 @@
 				mIdx=mIdx;
 			}
 			
-			console.log(formData);
 		
 		$.ajax({
 			url:"replyUpdate.do",
