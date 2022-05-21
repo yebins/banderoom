@@ -220,7 +220,7 @@ public class MemberServiceImpl implements MemberService {
 	public GeneralMembersVO oneMemberInfo(GeneralMembersVO vo) {
 		
 		GeneralMembersVO vo1=(GeneralMembersVO)dao.oneMemberInfo(vo);
-		vo1.setPassword("");
+		vo1.setPassword(null);
 		return vo1;
 	}
 
@@ -253,5 +253,19 @@ public class MemberServiceImpl implements MemberService {
 		return dao.listMessage(map);
 	}
 	
+	@Override
+	public int infoUpdate(GeneralMembersVO vo) {
+		return dao.infoUpdate(vo);
+	}
+	
+	@Override
+	public String selectCurrPw(String memberType, int mIdx) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		
+		params.put("memberType", memberType);
+		params.put("mIdx", mIdx);
+		
+		return dao.selectCurrPw(params);
+	}
 	
 }

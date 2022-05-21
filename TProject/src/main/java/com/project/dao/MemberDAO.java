@@ -94,7 +94,11 @@ public class MemberDAO {
 	}
 	
 	public GeneralMembersVO gLogin(GeneralMembersVO vo) {
-		return sqlSession.selectOne("com.project.mapper.memberMapper.gLogin", vo);
+		vo = sqlSession.selectOne("com.project.mapper.memberMapper.gLogin", vo);
+		if (vo != null) {
+			vo.setPassword(null);
+		}
+		return vo;
 	}
 	
 	public int isBrnExist(String brn) {
@@ -137,5 +141,13 @@ public class MemberDAO {
 	public int receiverListCount(int receiver) {
 		
 		return sqlSession.selectOne("com.project.mapper.memberMapper.listCount",receiver);
+	}
+	
+	public int infoUpdate(GeneralMembersVO vo) {
+		return sqlSession.update("com.project.mapper.memberMapper.infoUpdate", vo);
+	}
+	
+	public String selectCurrPw(Map<String, Object> params) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.selectCurrPw", params);
 	}
 }

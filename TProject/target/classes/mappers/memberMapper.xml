@@ -280,4 +280,34 @@
 			point = #{balance}
 			where midx = #{mIdx}
 	</update>
+	
+	<!-- 내 정보 업데이트 부분 -->
+	<update id="infoUpdate" parameterType="generalMembersVO">
+		update general_members set
+			nickname = #{nickname},
+			profilesrc = #{profileSrc},
+			<if test="password != null">
+				password = #{password},
+			</if>
+			addr1 = #{addr1},
+			addr2 = #{addr2},
+			address = #{address},
+			addressDetail = #{addressDetail},
+			name = #{name},
+			gender = #{gender},
+			tel = #{tel}
+		where midx = #{mIdx}
+	</update>
+	
+	<select id="selectCurrPw" parameterType="map" resultType="String">
+		select password from
+		<if test="memberType == 'general'">
+			general_members 
+		</if>
+		<if test="memberType == 'host'">
+			host_members 
+		</if>
+		where midx = #{mIdx}
+	</select>
+	<!-- 내 정보 업데이트 부분 -->
 </mapper>

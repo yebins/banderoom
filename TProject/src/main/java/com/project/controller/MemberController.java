@@ -272,6 +272,127 @@ public class MemberController {
 				
 			return "alert";
 		
+	}
+	
+	@RequestMapping(value = "ginfo.do", method = RequestMethod.GET)
+	public String info(HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return "member/glogin";
+		}
+		
+		return "member/ginfo";
+	}
+	
+	@RequestMapping(value = "profileupdate.do")
+	@ResponseBody
+	public String profileUpdate(HttpServletRequest request, @RequestParam("profilePicture") MultipartFile file) throws Exception {
 
+		if (request.getSession().getAttribute("login") == null) {
+			return "1"; // 로그인 안 됨
+		}
+		
+		String path = request.getSession().getServletContext().getRealPath("/resources/upload");
+		String fileName = file.getOriginalFilename();
+		
+		String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+
+		UUID uuid = UUID.randomUUID();
+		String newFileName = uuid.toString() + extension;
+
+		File dir = new File(path);
+		if (!dir.exists()) {	// 해당 디렉토리가 존재하지 않는 경우
+			dir.mkdirs();				// 경로의 폴더가 없는 경우 상위 폴더에서부터 전부 생성
+		}
+		
+		File target = new File(path, newFileName);
+		
+		file.transferTo(target);
+		
+		makeThumbnail(target.getAbsolutePath(), uuid.toString(), extension.substring(1), path);
+		
+		GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		
+		String src = "/upload/THUMB_" + newFileName;
+		
+		login.setProfileSrc(src);
+		memberService.infoUpdate(login);
+		
+		return src;
+	}
+	
+	@RequestMapping(value = "profilereset.do")
+	@ResponseBody
+	public String profileReset(HttpServletRequest request) {
+
+		if (request.getSession().getAttribute("login") == null) {
+			return "1"; // 로그인 안 됨
+		}
+
+		GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		
+		String src = "/images/profile_default.png";
+
+		login.setProfileSrc(src);
+		memberService.infoUpdate(login);
+		
+		return src;
+	}
+	
+	@RequestMapping(value = "updatenickname.do")
+	@ResponseBody
+	public String updateNickname(HttpServletRequest request, String nickname) {
+
+		if (request.getSession().getAttribute("login") == null) {
+			return "1"; // 로그인 안 됨
+		}
+
+		GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		
+		if (memberService.checkNickname(nickname, "general") == 1) {
+			return "2"; // 이미 존재하는 닉네임
+		}
+		
+		login.setNickname(nickname);
+		
+		if (memberService.infoUpdate(login) > 0) {
+			return "0"; // 정상 업데이트
+		} else {
+			return "3"; // 업데이트 실패
+		}
+	}
+	
+	@RequestMapping(value = "changepassword.do", method = RequestMethod.GET)
+	public String changePassword(HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("login") == null) {
+			return "member/glogin";
+		}
+		
+		return "member/changepassword";
+	}
+	
+	@RequestMapping(value = "changepassword.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String changePassword(HttpServletRequest request, String currPw, String pw1) {
+
+		if (request.getSession().getAttribute("login") == null) {
+			return "1"; // 로그인 안 됨
+		}
+
+		GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+		
+		if (!currPw.equals(memberService.selectCurrPw("general", login.getmIdx()))) {
+			return "2"; // 현재 비밀번호 틀림
+		}
+		
+		login.setPassword(pw1);
+
+		if (memberService.infoUpdate(login) > 0) {
+			return "0"; // 정상 업데이트
+		} else {
+			return "3"; // 업데이트 실패
+		}
+		
 	}
 }

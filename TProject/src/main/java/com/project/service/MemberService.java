@@ -32,4 +32,6 @@ public interface MemberService {
 	HostMembersVO getHostMember(HostMembersVO vo);
 	int setPoint(PointsVO vo);
 	List<MessagesVO> MessagesList(HttpServletRequest request,Map<String, Object> map);
+	int infoUpdate(GeneralMembersVO vo);
+	String selectCurrPw(String memberType, int mIdx);
 }
