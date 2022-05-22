@@ -31,6 +31,7 @@ import com.project.service.SpaceService;
 import com.project.vo.ArticlesVO;
 import com.project.vo.CommentsVO;
 import com.project.vo.GeneralMembersVO;
+import com.project.vo.HostMembersVO;
 import com.project.vo.ServiceInfoVO;
 import com.project.vo.SpacesVO;
 
@@ -81,6 +82,12 @@ public class HomeController {
 			request.getSession().setAttribute("login"
 					, memberService.oneMemberInfo(
 							(GeneralMembersVO) request.getSession().getAttribute("login")
+							));
+		}
+		if (request.getSession().getAttribute("hlogin") != null) {
+			request.getSession().setAttribute("hlogin"
+					, memberService.oneMemberInfo(
+							(HostMembersVO) request.getSession().getAttribute("hlogin")
 							));
 		}
 		

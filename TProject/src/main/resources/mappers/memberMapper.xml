@@ -237,6 +237,24 @@
 	<select id="oneMemberInfo" parameterType="generalMembersVO" resultType="generalMembersVO">
 		select * from general_members where midx=#{mIdx}
 	</select>
+	<select id="hostMemberInfo" parameterType="generalMembersVO" resultType="hostMembersVO">
+		select midx,
+					 brn,
+					 email,
+					 name,
+					 nickname,
+					 address,
+					 addressDetail,
+					 addr1,
+					 addr2,
+					 tel,
+					 profileSrc,
+					 gender,
+					 auth,
+					 joinDate
+		from host_members
+		where midx=#{mIdx}
+	</select>
 	
 	<insert id="sendMessage" parameterType="map">
 		insert into messages(
@@ -282,10 +300,35 @@
 	</update>
 	
 	<!-- 내 정보 업데이트 부분 -->
-	<update id="infoUpdate" parameterType="generalMembersVO">
+	<update id="ginfoUpdate" parameterType="generalMembersVO">
 		update general_members set
+			<if test="nickname != null">
 			nickname = #{nickname},
+			</if>
+			<if test="profileSrc != null">
 			profilesrc = #{profileSrc},
+			</if>
+			<if test="password != null">
+				password = #{password},
+			</if>
+			addr1 = #{addr1},
+			addr2 = #{addr2},
+			address = #{address},
+			addressDetail = #{addressDetail},
+			name = #{name},
+			gender = #{gender},
+			tel = #{tel}
+		where midx = #{mIdx}
+	</update>
+	
+	<update id="hinfoUpdate" parameterType="hostMembersVO">
+		update host_members set
+			<if test="nickname != null">
+			nickname = #{nickname},
+			</if>
+			<if test="profileSrc != null">
+			profilesrc = #{profileSrc},
+			</if>
 			<if test="password != null">
 				password = #{password},
 			</if>

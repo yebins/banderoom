@@ -31,7 +31,7 @@ public class MemberServiceImpl implements MemberService {
 		params.put("memberType", memberType);
 		params.put("email", email);
 		
-		if (dao.isEmailExist(params)) {
+		if (((String) params.get("memberType")).equals("general") && dao.isEmailExist(params)) {
 			
 			return 2; // 이미 존재하는 이메일
 		}
@@ -225,6 +225,11 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public HostMembersVO oneMemberInfo(HostMembersVO vo) {
+		return dao.oneMemberInfo(vo);
+	}
+	
+	@Override
 	public int sendMessage(Map<String, Object> map) {
 		
 		return dao.sendMessage(map);
@@ -255,6 +260,10 @@ public class MemberServiceImpl implements MemberService {
 	
 	@Override
 	public int infoUpdate(GeneralMembersVO vo) {
+		return dao.infoUpdate(vo);
+	}
+	@Override
+	public int infoUpdate(HostMembersVO vo) {
 		return dao.infoUpdate(vo);
 	}
 	

@@ -202,13 +202,13 @@
 <script>
 
 	var login = {
-			addr1: '${login.addr1}',
-			addr2: '${login.addr2}',
-			address: '${login.address}',
-			addressDetail: '${login.addressDetail}',
-			gender: '${login.gender}',
-			name: '${login.name}',
-			nickname: '${login.nickname}',
+			addr1: '${hlogin.addr1}',
+			addr2: '${hlogin.addr2}',
+			address: '${hlogin.address}',
+			addressDetail: '${hlogin.addressDetail}',
+			gender: '${hlogin.gender}',
+			name: '${hlogin.name}',
+			nickname: '${hlogin.nickname}',
 			
 	}
 
@@ -470,7 +470,7 @@
 		
 		$.ajax({
 			type: "post",
-			url: "ginfo.do",
+			url: "hinfo.do",
 			data: $("#info-form").serialize(),
 			success: function(result) {
 				if (result == 0) {
@@ -509,7 +509,7 @@
 								<input type="file" name="profilePicture" id="profile-picture-input" onchange="updateProfile(this)">
 							</form>
 							<div class="profile-picture">
-								<img id="profile-picture-img" src="${login.profileSrc}">
+								<img id="profile-picture-img" src="${hlogin.profileSrc}">
 							</div>
 							<label class="profile-picture-update" for="profile-picture-input">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -519,21 +519,16 @@
 							</label>
 						</div>
 						<div class="nickname-pw-wrap">
-							<div class="nickname">${login.nickname}</div>
+							<div class="nickname">${hlogin.nickname}</div>
 							<div class="profile-buttons">
 								<button class="normal-button info-button" onclick="profileReset()">사진 초기화</button>
 								<button class="normal-button info-button" onclick="showNicknameInput(this)">닉네임 변경</button>
-								<c:if test="${login.isKakao == 'N'}">
 								<button class="normal-button info-button" onclick="showPasswordForm()">비밀번호 변경</button>
-								</c:if>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			
-			<style>
-			</style>
 			
 			<div class="inner-box basic-info">
 				<div class="info-view">
@@ -541,35 +536,35 @@
 						이메일
 					</div>
 					<div class="info-content">
-						${login.email}
+						${hlogin.email}
 					</div>
 					<div class="small-title">
 						이름
 					</div>
 					<div class="info-content">
-						${login.name}
+						${hlogin.name}
 					</div>
 					<div class="small-title">
 						주소
 					</div>
 					<div class="info-content">
-						${login.address}<br>
-						${login.addressDetail}
+						${hlogin.address}<br>
+						${hlogin.addressDetail}
 					</div>
 					<div class="small-title">
 						전화번호
 					</div>
 					<div class="info-content">
-						${login.tel}
+						${hlogin.tel}
 					</div>
 					<div class="small-title">
 						성별
 					</div>
 					<div class="info-content">
-						<c:if test="${login.gender == 'M'}">
+						<c:if test="${hlogin.gender == 'M'}">
 						남자
 						</c:if>
-						<c:if test="${login.gender == 'F'}">
+						<c:if test="${hlogin.gender == 'F'}">
 						여자
 						</c:if>
 					</div>
@@ -581,24 +576,24 @@
 							이메일
 						</div>
 						<div class="info-content" style="margin-bottom: 30px;">
-							${login.email}
+							${hlogin.email}
 						</div>
 						<div class="join-row join-row-title">이름</div>
 						<div class="join-row join-row-content">
-							<input type="text" name="name" value="${login.name}" required>
+							<input type="text" name="name" value="${hlogin.name}" required>
 						</div>
 						<div class="join-row join-row-title">주소</div>
 						<div class="join-row join-row-content address-wrap">
-							<input type="hidden" name="addr1" value="${login.addr1}">
-							<input type="hidden" name="addr2" value="${login.addr2}">
+							<input type="hidden" name="addr1" value="${hlogin.addr1}">
+							<input type="hidden" name="addr2" value="${hlogin.addr2}">
 							<input type="text" name="address" readonly onclick="searchAddr()"
-								placeholder="주소 검색" value="${login.address}" required><br>
-							<input type="text" name="addressDetail" value="${login.addressDetail}" placeholder="상세 주소">
+								placeholder="주소 검색" value="${hlogin.address}" required><br>
+							<input type="text" name="addressDetail" value="${hlogin.addressDetail}" placeholder="상세 주소">
 						</div>
 						<div class="join-row join-row-title">휴대폰 번호</div>
 						<div class="join-row join-row-content with-button" style="margin: 0px;">
 							<input type="text" class="narrow" name="tel"
-								id="tel-input" value="${login.tel}" autocomplete="off"
+								id="tel-input" value="${hlogin.tel}" autocomplete="off"
 								oninput="maxLengthCheck(this)"
 								onchange="checkTelAlert(this)"
 								onfocus="chkPhoneType('focus', this)"

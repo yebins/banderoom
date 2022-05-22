@@ -117,6 +117,10 @@ public class MemberDAO {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.oneMemberInfo",vo);
 	}
 	
+	public HostMembersVO oneMemberInfo(HostMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.hostMemberInfo",vo);
+	}
+	
 	public int sendMessage(Map<String,Object> map) {
 		return sqlSession.insert("com.project.mapper.memberMapper.sendMessage",map);
 	}
@@ -144,7 +148,11 @@ public class MemberDAO {
 	}
 	
 	public int infoUpdate(GeneralMembersVO vo) {
-		return sqlSession.update("com.project.mapper.memberMapper.infoUpdate", vo);
+		return sqlSession.update("com.project.mapper.memberMapper.ginfoUpdate", vo);
+	}
+	
+	public int infoUpdate(HostMembersVO vo) {
+		return sqlSession.update("com.project.mapper.memberMapper.hinfoUpdate", vo);
 	}
 	
 	public String selectCurrPw(Map<String, Object> params) {
