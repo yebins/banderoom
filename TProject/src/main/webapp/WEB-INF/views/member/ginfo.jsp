@@ -11,16 +11,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<script	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <style>
+	#page-content {
+		max-width: 800px;
+	}
+
 	.inner-box {
 		padding: 40px !important;
 		margin: auto;
-		max-width: 800px;
+	}
+	
+	.inner-box:not(.inner-box:first-child) {
+		margin-top: 40px;
 	}
 	
 	.small-title {
 		font-size: 14px;
 		font-weight: bold;
+	}
+	.small-title:not(.small-title:first-child) {
+		margin-top: 20px;
 	}
 	
 	.content-wrap {
@@ -108,7 +119,84 @@
 		padding: 0px 20px;
 		margin-right: 20px;
 	}
+	.join-row-title {
+		margin-bottom: 10px;
+		font-size: 14px;
+		font-weight: bold;
+	}
 	
+	.join-row-content {
+		margin-bottom: 30px;
+	}
+	
+	input[type=text], input[type=email], input[type=password], input[type=number]
+		{
+		height: 36px;
+		border: 1px solid lightgray;
+		border-radius: 18px;
+		padding: 0px 20px;
+		box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+	}
+	
+	input.narrow {
+		flex: 1;
+		margin-right: 10px;
+	}
+	
+	div.tel-field {
+		display: none;
+		margin-top: 15px;
+	}
+	
+	.join-button {
+		width: 120px;
+	}
+	
+	input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button
+		{
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	.form-check-input:checked {
+	    background-color: #fb6544;
+	    border-color: #fb6544;
+	}
+	
+	.gender-radioes {
+		display: flex;
+	}
+	
+	.outter-buttons {
+		width: 100%;
+		margin: 50px 0px;
+		display: flex;
+		justify-content: flex-end;	
+	}
+	.form-check-input:focus {
+		box-shadow: none;
+	}
+	
+	.address-wrap input {
+		width: 436px;
+	}
+	.address-wrap input:last-child {
+	
+		margin-top: 15px;
+	}
+	
+	.info-modify {
+		display: none;
+	}
+	
+	.button-wrap {
+		margin-top: 30px;
+		text-align: right;
+	}
+	
+	#info-submit-button {
+		margin-left: 10px;
+		display: none;
+	}
 </style>
 
 <script>
@@ -203,6 +291,161 @@
 	function reload() {	// 자식 창에서 실행할 함수
 		location.reload();
 	}
+
+	var telChecked = true;
+
+	function searchAddr() {
+		new daum.Postcode({
+			oncomplete : function(data) {
+				$('input[name=address]').val(
+						data.address + " ("
+								+ data.bname + ")");
+				$('input[name=addressDetail]').val(
+						data.buildingName);
+				$('input[name=addr1]').val(data.sido);
+				$('input[name=addr2]').val(data.sigungu);
+			}
+		}).open();
+	}
+
+	function chkPhoneType(type, obj) {
+		var input = $(obj).val();
+
+		//focus out인 경우 
+		//input type을 text로 바꾸고 '-'추가
+		if (type == 'blur') {
+			$(obj).prop('type', 'text');
+			var phone = chkItemPhone(input);
+		}
+
+		//focus인 경우
+		//input type을 number로 바꾸고 '-' 제거
+		if (type == 'focus') {
+			var phone = input.replace(/-/gi, '');
+			$(obj).prop('type', 'number');
+		}
+
+		$(obj).val(phone);
+	}
+
+	function chkItemPhone(temp) {
+		var number = temp.replace(/[^0-9]/g, "");
+		var phone = "";
+
+		if (number.length < 9) {
+			return number;
+		} else if (number.length < 10) {
+			phone += number.substr(0, 2);
+			phone += "-";
+			phone += number.substr(2, 3);
+			phone += "-";
+			phone += number.substr(5);
+		} else if (number.length < 11) {
+			phone += number.substr(0, 3);
+			phone += "-";
+			phone += number.substr(3, 3);
+			phone += "-";
+			phone += number.substr(6);
+		} else {
+			phone += number.substr(0, 3);
+			phone += "-";
+			phone += number.substr(3, 4);
+			phone += "-";
+			phone += number.substr(7);
+		}
+
+		return phone;
+	}
+	function maxLengthCheck(object) {
+		if (object.value.length > 11) {
+			object.value = object.value.slice(0, 11);
+		}
+	}
+	
+	function checkPhone(obj) {
+		var tel = $('#tel-input').val()
+		$(obj).attr("disabled", true);
+		$(obj).text("• • •");
+
+		if (tel == null || tel == '') {
+			$(obj).attr("disabled", false);
+			$(obj).text("휴대폰 인증");
+			return;
+		}
+
+		
+		$.ajax({
+			type: "post",
+			url: "sendSms.do",
+			data: "tel=" + tel,
+			success: function() {
+
+				$(obj).attr("disabled", false);
+				$(obj).text("휴대폰 인증");
+				$(obj).removeClass("accent-button");
+				$(".tel-field").css("display", "flex");
+			}
+		})
+	}
+	
+	function checkTelAlert(obj) {
+		telChecked = false;
+		$(obj).next().addClass("accent-button");
+	}
+	
+
+	function checkTelKey() {
+		var tel = $('input[name=tel]').val();
+		var regkey = $('#tel-key').val();
+
+		if (regkey == null || regkey == '') {
+			alert('값을 입력해 주세요.');
+			return;
+		}
+
+		$.ajax({
+			type : "post",
+			url : "checkTel.do",
+			data : "tel=" + tel + "&regkey=" + regkey,
+			success : function(data) {
+				if (data == 0) {
+					telChecked = true;
+					alert('인증이 완료되었습니다.');
+					$(".tel-field").css("display", "none");
+				} else if (data == 1) {
+					alert('해당 번호로 보낸 인증 키가 없습니다.\n다시 보내 주세요.');
+				} else if (data == 2) {
+					alert('인증 키가 일치하지 않습니다.');
+				} else if (data == 3) {
+					alert('인증 시간이 만료되었습니다.');
+				}
+			}
+		})
+	}
+	
+	function showInfoModify(buttonObj) {
+		if ($(buttonObj).hasClass("pressed")) {
+			location.reload();
+		} else {
+		
+			$(".info-view").css("display", "none");
+			$(".info-modify").css("display", "block");
+			
+			$(buttonObj).addClass("pressed");	
+			$(buttonObj).text("취소");
+			$("#info-submit-button").css("display", "inline-block");
+		}
+		
+	}
+	
+	$(function() {
+		if (login.gender == 'M') {
+			$("#genderM").prop("checked", true);
+		} else if (login.gender == 'F') {
+			$("#genderF").prop("checked", true);
+		}
+	})
+	
 </script>
 </head>
 <body>
@@ -246,6 +489,113 @@
 					</div>
 				</div>
 			</div>
+			
+			<style>
+			</style>
+			
+			<div class="inner-box basic-info">
+				<div class="info-view">
+					<div class="small-title">
+						이메일
+					</div>
+					<div class="info-content">
+						${login.email}
+					</div>
+					<div class="small-title">
+						이름
+					</div>
+					<div class="info-content">
+						${login.name}
+					</div>
+					<div class="small-title">
+						주소
+					</div>
+					<div class="info-content">
+						${login.address}<br>
+						${login.addressDetail}
+					</div>
+					<div class="small-title">
+						전화번호
+					</div>
+					<div class="info-content">
+						${login.tel}
+					</div>
+					<div class="small-title">
+						성별
+					</div>
+					<div class="info-content">
+						<c:if test="${login.gender == 'M'}">
+						남자
+						</c:if>
+						<c:if test="${login.gender == 'F'}">
+						여자
+						</c:if>
+					</div>
+				</div>
+				
+				<div class="info-modify">
+					<div class="small-title">
+						이메일
+					</div>
+					<div class="info-content" style="margin-bottom: 30px;">
+						${login.email}
+					</div>
+					<div class="join-row join-row-title">이름</div>
+					<div class="join-row join-row-content">
+						<input type="text" name="name" value="${login.name}" required>
+					</div>
+					<div class="join-row join-row-title">주소</div>
+					<div class="join-row join-row-content address-wrap">
+						<input type="hidden" name="addr1" value="${login.addr1}">
+						<input type="hidden" name="addr2" value="${login.addr2}">
+						<input type="text" name="address" readonly onclick="searchAddr()"
+							placeholder="주소 검색" value="${login.address}" required><br>
+						<input type="text" name="addressDetail" value="${login.addressDetail}" placeholder="상세 주소">
+					</div>
+					<div class="join-row join-row-title">휴대폰 번호</div>
+					<div class="join-row join-row-content with-button" style="margin: 0px;">
+						<input type="text" class="narrow" name="tel"
+							id="tel-input" value="${login.tel}" autocomplete="off"
+							oninput="maxLengthCheck(this)"
+							onchange="checkTelAlert(this)"
+							onfocus="chkPhoneType('focus', this)"
+							onblur="chkPhoneType('blur', this)" min="0" placeholder="숫자만 입력"
+							required>
+						<button type="button" class="normal-button join-button tel-button"
+							onclick="checkPhone(this)">휴대폰 인증</button>
+					</div>
+					<div class="join-row join-row-content with-button tel-field">
+						<input class="narrow" id="tel-key" type="text" placeholder="5분 안에 입력해주세요.">
+						<button type="button"
+							class="normal-button join-button tel-button accent-button"
+							onclick="checkTelKey()">인증키 입력</button>
+					</div>
+
+					<div class="join-row join-row-title" style="margin-top: 30px">성별</div>
+					<div class="join-row join-row-content gender-radioes" style="margin-bottom: 0px;">
+						<div class="form-check">
+						  <input class="form-check-input" type="radio" name="gender" value="M" id="genderM" required>
+						  <label class="form-check-label" for="genderM">
+						    남자
+						  </label>
+						</div>
+						<div class="form-check" style="margin-left: 20px;">
+						  <input class="form-check-input" type="radio" name="gender" value="F" id="genderF" required>
+						  <label class="form-check-label" for="genderF">
+						    여자
+						  </label>
+						</div>
+					</div>
+				
+				</div>
+			</div>
+			
+			<div class="button-wrap">
+				<button class="normal-button" onclick="showInfoModify(this)">정보 수정</button>
+				<button id="info-submit-button" class="normal-button accent-button">정보 수정</button>			
+			</div>
+			
+			
 		</div>
 		
 		<!-- 여기까지 틀이고 밑에는 요소 공통사항
