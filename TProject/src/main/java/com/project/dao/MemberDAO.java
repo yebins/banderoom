@@ -158,4 +158,8 @@ public class MemberDAO {
 	public String selectCurrPw(Map<String, Object> params) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.selectCurrPw", params);
 	}
+	
+	public GeneralMembersVO selectGmemberByEmail(GeneralMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.selectGmemberByEmail", vo);
+	}
 }

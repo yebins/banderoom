@@ -353,4 +353,8 @@
 		where midx = #{mIdx}
 	</select>
 	<!-- 내 정보 업데이트 부분 -->
+	
+	<select id="selectGmemberByEmail" parameterType="generalMembersVO" resultType="generalMembersVO">
+		select * from general_members where email = #{email}
+	</select>
 </mapper>

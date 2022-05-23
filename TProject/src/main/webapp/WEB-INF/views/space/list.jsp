@@ -246,9 +246,14 @@
 		}
 		select, input {
 			margin-top: 15px;
+			width: 100% !important;
 		}
 		.filters {
 			margin-bottom: 0px;
+			align-items: stretch;
+		}
+		.filter-select-wrap {
+			width: 100%;
 		}
 		
 		.liked-button {
@@ -257,6 +262,8 @@
 		.accent-button {
 			margin-top: 15px;
 		}
+		
+	
 	}
 </style>
 

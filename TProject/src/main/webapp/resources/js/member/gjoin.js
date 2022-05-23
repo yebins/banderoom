@@ -296,6 +296,10 @@
 			alert('휴대폰 인증이 필요합니다.');
 			return;
 		}
+		if (!$("#term-1").is(":checked") || !$("#term-2").is(":checked")) {
+			alert('약관에 동의가 필요합니다.');
+			return;
+		}
 		
 		if (
 				$('input[name=name]').val() == '' ||
@@ -332,4 +336,8 @@
 			}
 		})
 		
+	}
+	
+	function viewTerms(idx) {
+		$("#term-wrap-" + idx).css("display", "flex");
 	}

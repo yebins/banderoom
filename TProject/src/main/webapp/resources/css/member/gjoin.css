@@ -179,3 +179,68 @@
 	.form-check-input:focus {
 		box-shadow: none;
 	}
+	
+	.check-wrap {
+		display: flex;
+		align-items: center;
+		margin-top: 10px;
+	}
+	.form-check-input {
+		margin-right: 10px;
+		margin-bottom: 3px;
+	}
+	.form-check {
+		display: flex;
+		align-items: center;
+	}
+	.terms-link {
+		color: #fb6544;
+		font-weight: bold;
+	}
+	.terms-link:hover {
+		cursor: pointer;
+	}
+	
+	.terms-wrap {
+		display: none;
+		align-items: center;
+		justify-content: center;
+		background-color: rgba(0,0,0,0.5);
+		width: 100%;
+		height: 100vh;
+		position: fixed;
+		z-index: 99999;
+		top: 0px;
+		left: 0px;
+	}
+	
+	.term-background {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+	
+	.terms-box {
+		width: 50%;
+		height: 80vh !important;
+		z-index: 999999;
+		display: flex;
+		flex-direction: column;
+		padding: 20px !important;
+	}
+	
+	.terms-title {
+		font-size: 28px;
+		font-weight: bold;
+		margin-bottom: 15px;
+	}
+	
+	.terms-content {
+		flex: 1;
+		overflow: auto;
+	}
+	
+	.terms-button {
+		margin-top: 15px;
+		text-align: right;
+	}

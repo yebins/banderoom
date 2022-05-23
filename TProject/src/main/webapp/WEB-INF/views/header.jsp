@@ -319,7 +319,7 @@ header {
 		<c:if test="${sessionScope.login != null}">
 		<div id="sm-buttons">
 			<div class="sm-button-wrap" onclick="location.href='/space/list.do'">
-				연습실 대여
+				공간 대여
 			</div>
 			<div class="sm-button-wrap" onclick="location.href='/teams/main.do'">
 				팀원 모집

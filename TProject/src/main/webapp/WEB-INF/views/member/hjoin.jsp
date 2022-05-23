@@ -346,6 +346,10 @@ function submitAllForms(obj) {
 		alert('휴대폰 인증이 필요합니다.');
 		return;
 	}
+	if (!$("#term-1").is(":checked") || !$("#term-2").is(":checked")) {
+		alert('약관에 동의가 필요합니다.');
+		return;
+	}
 	
 	if (
 			$('input[name=name]').val() == '' ||
@@ -382,6 +386,10 @@ function submitAllForms(obj) {
 		}
 	})
 	
+}
+
+function viewTerms(idx) {
+	$("#term-wrap-" + idx).css("display", "flex");
 }
 </script>
 </head>
@@ -516,7 +524,28 @@ function submitAllForms(obj) {
 							  </label>
 							</div>
 						</div>
-
+						<br>
+						<div class="join-row join-row-content" style="margin-bottom: 0px;">
+							<div class="check-wrap">
+								<div class="form-check">
+								  <input class="form-check-input t2" type="checkbox" value="" id="term-1">
+								  <span class="terms-link" onclick="viewTerms(1)">이용약관</span>
+								  <label class="form-check-label" for="term-1">
+								    에 동의
+								  </label>
+								</div>
+							</div>
+							<div class="check-wrap">
+								<div class="form-check">
+								  <input class="form-check-input t2" type="checkbox" value="" id="term-2">
+								  <span class="terms-link" onclick="viewTerms(2)">개인정보 처리방침</span>
+								  <label class="form-check-label" for="term-2">
+								    에 동의
+								  </label>
+								</div>
+							</div>
+						</div>
+						
 					</form>
 				</div>
 			</div>
@@ -527,6 +556,35 @@ function submitAllForms(obj) {
 				<button class="normal-button accent-button" style="margin-left: 20px;" onclick="submitAllForms(this)">회원가입</button>
 		</div>
 				
+		</div>
+	</div>
+	
+	<div id="term-wrap-1" class="terms-wrap">
+		<div class="term-background" onclick="$(this).parent().css('display', 'none');"></div>
+		<div class="inner-box terms-box">
+			<div class="terms-title">
+				${info.get("1").title}
+			</div>
+			<div class="terms-content">
+				${info.get("1").content}
+			</div>
+			<div class="terms-button">
+				<button class="normal-button accent-button" onclick="$(this).parent().parent().parent().css('display', 'none');">확인</button>
+			</div>
+		</div>
+	</div>
+	<div id="term-wrap-2" class="terms-wrap">
+		<div class="term-background" onclick="$(this).parent().css('display', 'none');"></div>
+		<div class="inner-box terms-box">
+			<div class="terms-title">
+				${info.get("2").title}
+			</div>
+			<div class="terms-content">
+				${info.get("2").content}
+			</div>
+			<div class="terms-button">
+				<button class="normal-button accent-button" onclick="$(this).parent().parent().parent().css('display', 'none');">확인</button>
+			</div>
 		</div>
 	</div>
 
