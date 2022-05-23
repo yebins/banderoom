@@ -144,6 +144,9 @@
 		display: flex;
 		align-items: center;
 	}
+	.addressDetail {
+		flex: 1;
+	}
 	
 	.map-button {
 		width: 80px;
@@ -761,6 +764,7 @@
 		}
 		.menu {
 			top: 60px;
+			z-index: 9990;
 		}
 		
 		.score-wrap {
@@ -2003,7 +2007,9 @@
 					</c:if>
 				</div>
 				<div class="address">
-					${spacesVO.getAddress()} ${spacesVO.getAddressDetail()}
+					<div class="addressDetail">
+						${spacesVO.getAddress()} ${spacesVO.getAddressDetail()}
+					</div>
 					<button class="normal-button map-button" onclick="showMap()">&nbsp;지도<img src="/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>
 				</div>
 			</div>

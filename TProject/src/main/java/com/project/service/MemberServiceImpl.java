@@ -106,18 +106,11 @@ public class MemberServiceImpl implements MemberService {
 	public int checkEmail(EmailRegVO vo) {
 		EmailRegVO check = dao.selectEmailReg(vo);
 		
-		System.out.println(vo.getRegkey());
-		
 		if (check == null) {
 			return 1; // 해당 이메일 없음
 		}
-
-		System.out.println(check.getRegkey());
 		
 		if (check.getRegkey().equals(vo.getRegkey())) {
-			
-			System.out.println(new Date());
-			System.out.println(check.getDeadLine());
 			
 			if (new Date().after(check.getDeadLine())) {
 				return 3; // 인증시간 만료

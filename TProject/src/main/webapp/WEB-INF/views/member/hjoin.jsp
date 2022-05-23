@@ -126,7 +126,7 @@ function checkEmailKey() {
 	$.ajax({
 		type : "post",
 		url : "checkEmail.do",
-		data : "email=" + email + "&key=" + key,
+		data : "email=" + email + "&regkey=" + key,
 		success : function(data) {
 			if (data == 0) {
 				emailChecked = true;

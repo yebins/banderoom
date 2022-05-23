@@ -66,7 +66,7 @@ header {
 	align-items: center;
 }
 
-.sm-close-button:hover {
+#sm-close-button:hover {
 	cursor: pointer;
 }
 
@@ -262,8 +262,8 @@ header {
 			<img src="<%=request.getContextPath() %>/images/sidemenu-open-button.png" class="sm-open-button">
 	</div>
 	<div id="sidemenu">
-		<div id="sm-close-button">
-			<img src="<%=request.getContextPath() %>/images/sidemenu-close-button.png" class="sm-close-button" onclick="closeSm()">
+		<div id="sm-close-button" onclick="closeSm()">
+			<img src="<%=request.getContextPath() %>/images/sidemenu-close-button.png" class="sm-close-button">
 		</div>
 		<div id="sm-profile">
 			<c:if test="${login == null && hlogin == null}">

@@ -143,7 +143,11 @@
 		margin-right: 10px;
 	}
 	
-	div.tel-field {
+	div.email-field {
+		margin: 0px;
+	}
+	
+	div.email-field2, div.tel-field {
 		display: none;
 		margin-top: 15px;
 	}
@@ -488,6 +492,74 @@
 		
 	}
 	
+	var emailChecked = true;
+
+	function chkEmail(obj) {
+		emailChecked = false;
+		$(obj).next().addClass("accent-button");
+	}
+
+	function sendEmail(obj) {
+		var email = $('input[name=email]').val();
+		var button = $(obj);
+		$(button).attr("disabled", true);
+		$(button).text("• • •");
+
+		if (email == null || email == '') {
+			$(button).attr("disabled", false);
+			$(button).text("이메일 인증");
+			return;
+		}
+
+		$.ajax({
+			type : "post",
+			url : "sendEmail.do",
+			data : "email=" + email + "&memberType=host", // 중복 체크를 일반과 호스트회원 각각 해야하므로 변수로 넣어줌
+			success : function(data) {
+
+				if (data == 2) {
+					alert('이미 존재하는 이메일입니다.');
+					$(button).attr("disabled", false);
+					$(button).text("이메일 인증");
+				} else if (data == 0) {
+					$(button).attr("disabled", false);
+					$(button).text("이메일 인증");
+					$(button).removeClass("accent-button");
+					$(".email-field2").css("display", "block");
+				}
+			}
+		})
+	}
+
+	function checkEmailKey() {
+		var email = $('input[name=email]').val();
+		var key = $('#email-key').val();
+
+		if (key == null || key == '') {
+			alert('값을 입력해 주세요.');
+			return;
+		}
+
+		$.ajax({
+			type : "post",
+			url : "checkEmail.do",
+			data : "email=" + email + "&regkey=" + key,
+			success : function(data) {
+				if (data == 0) {
+					emailChecked = true;
+					alert('인증이 완료되었습니다.');
+					$(".email-field2").css("display", "none");
+				} else if (data == 1) {
+					alert('해당 이메일로 보낸 인증 키가 없습니다.\n다시 보내 주세요.');
+				} else if (data == 2) {
+					alert('인증 키가 일치하지 않습니다.');
+				} else if (data == 3) {
+					alert('인증 시간이 만료되었습니다.');
+				}
+			}
+		})
+	}
+	
 </script>
 </head>
 <body>
@@ -572,13 +644,20 @@
 				
 				<div class="info-modify">
 					<form id="info-form">
-						<div class="small-title">
-							이메일
+						<div class="join-row join-row-title">이메일</div>
+						<div class="join-row join-row-content with-button email-field">
+							<input class="narrow" type="email" name="email"
+								onchange="chkEmail(this)" required>
+							<button type="button" class="normal-button join-button email-button"
+								onclick="sendEmail(this)">이메일 인증</button>
 						</div>
-						<div class="info-content" style="margin-bottom: 30px;">
-							${hlogin.email}
+						<div class="join-row join-row-content with-button email-field email-field2">
+							<input class="narrow" id="email-key" type="text" placeholder="30분 안에 입력해주세요.">
+							<button type="button"
+								class="normal-button join-button email-button accent-button"
+								onclick="checkEmailKey()">인증키 입력</button>
 						</div>
-						<div class="join-row join-row-title">이름</div>
+						<div class="join-row join-row-title" style="margin-top: 30px;">이름</div>
 						<div class="join-row join-row-content">
 							<input type="text" name="name" value="${hlogin.name}" required>
 						</div>

@@ -27,12 +27,14 @@
 	.filters {
 		width: 100%; 	
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: center;
 		margin-bottom: 20px;
 	}
 	.filter-select-wrap {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 	}
 	
@@ -56,6 +58,7 @@
 	
 	.filter-buttons {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 	}
 	.filter-buttons button {
@@ -65,6 +68,7 @@
 	.search-text {
 		width: 100%;
 		display: flex;
+		flex-wrap: wrap;
 		justify-content: space-between;
 		align-items: center;
 	}
@@ -228,6 +232,31 @@
 	
 	.liked-button img {
 		width: 18px;
+	}
+	
+	@media screen and (max-width: 576px) {
+		#wrapper {
+			padding: 60px 10px 100px;
+		}
+		.colleft, .colright {
+			padding: 10px 0px;
+		}
+		.filter-buttons {
+			margin-top: 15px;
+		}
+		select, input {
+			margin-top: 15px;
+		}
+		.filters {
+			margin-bottom: 0px;
+		}
+		
+		.liked-button {
+			margin-left: 0px !important;
+		}
+		.accent-button {
+			margin-top: 15px;
+		}
 	}
 </style>
 

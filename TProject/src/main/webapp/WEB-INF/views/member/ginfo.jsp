@@ -95,12 +95,12 @@
 		font-weight: bold;
 		height: 40px;
 	}
+	
 	.profile-buttons {
 		margin-top: 20px;
-	}
-	.profile-buttons {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 	}
 	.info-button {
 		margin-right: 20px;
