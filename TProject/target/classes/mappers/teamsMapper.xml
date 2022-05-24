@@ -105,6 +105,7 @@
 		 		 ORDER BY t.status, t.teamidx DESC
 		 	</if>
 		 </if>
+		 	LIMIT #{start}, 6
 	</select>
 	
 	<select id="selectParts" resultType="partsVO" parameterType="int">
@@ -132,18 +133,15 @@
 		 WHERE teamidx = #{teamIdx}
 	</select>
 	
-	<select id="appNum" parameterType="hashMap" resultType="">
-	SELECT p.name, count(t.teamidx)
-		  FROM teams t
-		  JOIN applications a
-		    ON t.teamidx = a.teamidx
-		  JOIN parts p
-            ON a.partidx = p.partidx 
-		   AND t.teamidx=#{teamIdx}
-		   and p.name = #{partname};
+	<select id="appNum" parameterType="int" resultType="partsVO">
+		select 
+			(select count(*) from applications a where a.partidx = p.partidx) as 'cnt', 
+			p.name,
+			p.capacity,
+			p.partidx 
+			from parts p 
+			where teamidx = #{teamIdx}; 
 	</select>
-	
-	
 	
 	<insert id="apply" parameterType="applicationsVO">
 		INSERT INTO applications(
@@ -254,7 +252,7 @@
 		 WHERE teamidx = #{teamIdx}
 	</update>
 	
-	<select id="myapp" parameterType="int" resultType="applicationsVO">
+	<select id="myapp" parameterType="hashMap" resultType="applicationsVO">
 		SELECT
 			 team.teamidx
 			,app.midx
@@ -272,7 +270,8 @@
 		    ON team.teamidx = app.teamidx
 		  JOIN parts p
             ON app.partidx = p.partidx 
-		   AND team.teamidx=#{teamIdx};
+		   AND team.teamidx=#{teamIdx}
+		 LIMIT #{start}, 5
 	</select>
 	
 	<select id="myappCount" parameterType="int" resultType="int">

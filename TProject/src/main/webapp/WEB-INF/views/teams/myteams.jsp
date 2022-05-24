@@ -240,7 +240,7 @@
 			type:"get",
 			data:"page="+page+endYN,
 			success:function(data){
-				html = '';
+				var html = '';
 				
 				var reglist = data.reglist;
 				

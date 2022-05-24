@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <title>팀원 모집 main</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
-
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
 <link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
 <!-- Air datepicker css -->
 <script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
@@ -124,7 +124,14 @@ select[name=sort]{
     border: none;
     box-shadow: 0px 0px 5px rgb(0 0 0 / 20%);
 }
-/*@font-face {
+.spinner-border {
+	width: 100px;
+	height: 100px;
+	margin: 40px;
+	border-width: 10px;
+	color: #FB6544;
+}
+/*@font-face{
     font-family: 'SuncheonB';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2202-2@1.0/SuncheonB.woff') format('woff');
     font-weight: normal;
@@ -135,8 +142,112 @@ select[name=sort]{
 }*/
 </style>
 <script type="text/javascript">
-
+	
+	var loading = false;
+	var loadingEnd = false;
+	var nowPage = 1;
+	
+	function scroll(){
+		if(loading == true || loadingEnd == true){
+			return;
+		}
+		
+		var loadingDiv = $('<div class="spinner-border" role="status"></div>');
+		$('#wrapper').append(loadingDiv);
+		
+		console.log(1);
+		loading = true;
+		nowPage ++;
+		
+		var params = $("#search-form").serialize();
+		
+		$.ajax({
+			url:"scroll.do",
+			type:"get",
+			data:params+"&page="+nowPage,
+			success:function(data){
+				var html = '';
+				var teamsList = data.teamsList;
+				
+				for(i in teamsList){
+					
+					html += '<div class="col team-col" onclick="location.href=\'details.do?teamIdx='+teamsList[i].teamIdx+'\'">';
+					html += '<input type="hidden" name="teamIdx" value="'+teamsList[i].teamIdx+'">';
+					html += '<div class="team-list"';
+					
+					if(teamsList[i].status == 2){
+						html += 'style=\'filter: brightness(50%);\'';
+					}
+					
+					html += '><div class="team-title">';
+					
+					if(teamsList[i].status == 2){
+						html += '[마감] ';
+					}
+					
+					html += '['+teamsList[i].type+'] '+teamsList[i].title+'</div>';
+					html += '<div class="team-content"><table><tr>';
+					html += '<td style="width: 75px;">지역</td><td>'+teamsList[i].addr1+' '+teamsList[i].addr2+'</td></tr><tr>';
+					html += '<td>팀 레벨</td><td>'+teamsList[i].teamLevel+'</td></tr><tr>';
+					html += '<td>장르</td><td>'+teamsList[i].genre+'</td></tr><tr>';
+					
+					if(teamsList[i].type == '밴드'){
+						html += '<td>파트</td><td>';
+						var partsMap = data.partsMap[teamsList[i].teamIdx];
+						for(j in partsMap){
+							html += partsMap[j].name+' '+partsMap[j].capacity+'명';
+							//i가 마지막일 때 빼고 , 붙이기
+							if(j != partsMap.length-1){
+								html += ', '
+							}
+						}
+						html += '</td>';
+					}
+					
+					if(teamsList[i].type == '댄스'){
+						html += '<td>인원</td><td>';
+						
+						var partsMap = data.partsMap[teamsList[i].teamIdx];
+						for(j in partsMap){
+							html += partsMap[j].capacity+'명';
+						}
+						html += '</td>';
+					}
+						
+					html += '</tr><tr><td>모집기간</td><td>';
+					
+					var endDate = moment(teamsList[i].endDate);
+					html += moment(endDate).format("YYYY년 M월 D일 마감");
+					
+					html += '</td></tr></table></div></div></div>';
+					
+					
+					
+				}
+				
+				$("#teamsList").html($("#teamsList").html() + html);
+				
+				$(loadingDiv).remove();
+				loading = false;
+				
+				if(teamsList.length < 6){
+					loadingEnd = true;
+				}
+			}
+		})
+	}
+	//로딩중, 로딩완료 시 실행안되게
+	
+	
 	$(function(){
+		
+		window.onscroll = function(e) {
+			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+				scroll();
+			}
+		}
+		
+		
 		$("#datepicker").datepicker({
 			language: 'ko'
 		});
@@ -268,62 +379,62 @@ select[name=sort]{
 						<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
 					</c:if>
 				</div>
-				<div class="row row-cols-1 row-cols-sm-3">
-					<c:if test="${teamsList.size()>0}">
-					<c:forEach var="item" items="${teamsList}">
-						<div class="col team-col" onclick="location.href='details.do?teamIdx=${item.teamIdx}'">
-							<input type="hidden" name="teamIdx" value="${item.teamIdx}">
-							<div class="team-list"<c:if test="${item.status==2}">style='filter: brightness(50%);'</c:if>>
-								<div class="team-title">
-									<c:if test="${item.status==2}">[마감]</c:if>
-									[${item.type}] ${item.title}
+				<div id="teamsList" class="row row-cols-1 row-cols-sm-3">
+						<c:if test="${teamsList.size()>0}">
+							<c:forEach var="item" items="${teamsList}">
+								<div class="col team-col" onclick="location.href='details.do?teamIdx=${item.teamIdx}'">
+									<input type="hidden" name="teamIdx" value="${item.teamIdx}">
+									<div class="team-list"<c:if test="${item.status==2}">style='filter: brightness(50%);'</c:if>>
+										<div class="team-title">
+											<c:if test="${item.status==2}">[마감]</c:if>
+											[${item.type}] ${item.title}
+										</div>
+										<div class="team-content">
+											<table>
+												<tr>
+													<td style="width: 75px;">지역</td>
+													<td>${item.addr1} ${item.addr2}</td>
+												</tr>
+												<tr>
+													<td>팀 레벨</td>
+													<td>${item.teamLevel}</td>
+												</tr>
+												<tr>
+													<td>장르</td>
+													<td>${item.genre}</td>
+												</tr>
+												<tr>
+												<c:if test="${item.type == '밴드'}">
+													<td>파트</td>
+													<td>
+														
+														<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}" varStatus="lastPart">
+															${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
+														</c:forEach>
+													</td>
+												</c:if>
+												<c:if test="${item.type == '댄스'}">
+													<td>인원</td>
+													<td>
+														<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}">
+															${parts.capacity}명
+														</c:forEach>
+													</td>
+												</c:if>
+												</tr>
+												<tr>
+													<td>모집기간</td>
+													<td>
+														<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
+														<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일 마감"/>
+													</td>
+												</tr>
+											</table>
+										</div>
+									</div>
 								</div>
-								<div class="team-content">
-									<table>
-										<tr>
-											<td style="width: 75px;">지역</td>
-											<td>${item.addr1} ${item.addr2}</td>
-										</tr>
-										<tr>
-											<td>팀 레벨</td>
-											<td>${item.teamLevel}</td>
-										</tr>
-										<tr>
-											<td>장르</td>
-											<td>${item.genre}</td>
-										</tr>
-										<tr>
-										<c:if test="${item.type == '밴드'}">
-											<td>파트</td>
-											<td>
-												
-												<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}" varStatus="lastPart">
-													${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
-												</c:forEach>
-											</td>
-										</c:if>
-										<c:if test="${item.type == '댄스'}">
-											<td>인원</td>
-											<td>
-												<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}">
-													${parts.capacity}명
-												</c:forEach>
-											</td>
-										</c:if>
-										</tr>
-										<tr>
-											<td>모집기간</td>
-											<td>
-												<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
-												<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일 마감"/>
-											</td>
-										</tr>
-									</table>
-								</div>
-							</div>
-						</div>
-						</c:forEach>
-					</c:if>
+							</c:forEach>
+						</c:if>
 					<c:if test="${teamsList.size()==0}">
 					작성된 글이 존재하지 않습니다.
 					</c:if>

@@ -13,7 +13,7 @@ public interface TeamsService {
 	List<PartsVO> selectParts(int teamIdx);
 	int register(TeamsVO vo, List<PartsVO> partsVOlist);
 	TeamsVO details(int teamIdx);
-	int appNum(Map<String, Object> appNumMap);
+	List<PartsVO> appNum(int teamIdx);
 	int apply(ApplicationsVO vo);
 	int delete(int teamIdx);
 	int update(TeamsVO vo);
@@ -22,7 +22,7 @@ public interface TeamsService {
 	List<ApplicationsVO> applist(Map<String, Integer> appMap);
 	int applistCount(int mIdx);
 	int finish(int teamIdx);
-	List<ApplicationsVO> myapp(int teamIdx);
+	List<ApplicationsVO> myapp(Map<String, Object> applistMap);
 	int myappCount(int teamIdx);
 	void updateStatus();
 	int updateApp(ApplicationsVO vo);

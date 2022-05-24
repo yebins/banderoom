@@ -45,8 +45,8 @@ public class TeamsDAO {
 		return sqlSession.selectOne("com.project.mapper.teamsMapper.details", teamIdx);
 	}
 	
-	public int appNum(Map<String, Object> appNumMap) {
-		return sqlSession.selectOne("com.project.mapper.teamsMapper.appNum", appNumMap);
+	public List<PartsVO> appNum(int teamIdx) {
+		return sqlSession.selectList("com.project.mapper.teamsMapper.appNum", teamIdx);
 	}
 	
 	public int apply(ApplicationsVO vo) {
@@ -81,8 +81,8 @@ public class TeamsDAO {
 		return sqlSession.update("com.project.mapper.teamsMapper.finish", teamIdx);
 	}
 	
-	public List<ApplicationsVO> myapp(int teamIdx) {
-		return sqlSession.selectList("com.project.mapper.teamsMapper.myapp", teamIdx);
+	public List<ApplicationsVO> myapp(Map<String, Object> applistMap) {
+		return sqlSession.selectList("com.project.mapper.teamsMapper.myapp", applistMap);
 	}
 	
 	public int myappCount(int teamIdx) {
