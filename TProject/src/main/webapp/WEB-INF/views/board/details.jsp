@@ -471,11 +471,12 @@
 								htmls+='</div>'
 								htmls+='<form id="replyfile'+rl.rIdx+'">'
 								htmls+='<input type="hidden" name="fileChange" value="0">'
+								htmls+='<input type="hidden" name="rIdx" value="'+rl.rIdx+'">'
 								htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
 								htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
 								htmls+='<label style="margin-bottom:10px">'
-								htmls+='<input type="file" id="replyfile'+rl.rIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+rl.cIdx+',this)" accept="image/*">'
-								htmls+='<label for="replyfile'+rl.rIdx+'">'
+								htmls+='<input type="file" id="reply-file'+rl.rIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+rl.rIdx+',this)" accept="image/* ">'
+								htmls+='<label for="reply-file'+rl.rIdx+'">'
 									if(rl.picSrc != null){
 								htmls+='<a> <strong>사진 변경하기</strong></a>'
 									} else{
@@ -796,6 +797,8 @@
 		//답글사진미리보기
 		function replyPreview(event,rIdx,obj){
 			var fileChange=$(obj).parent().parent().children().first();
+			fileChange.val('1');
+			
 			
 			if(rIdx != null){
 			var id="reply-uploaded-file"+rIdx;
@@ -1047,12 +1050,46 @@
 									</div>
 									<div class="comment-area-content-bottomarea">
 										<c:if test="${rList.mIdx == login.mIdx}">
-							 				<a onclick="replyModify('${rList.rIdx}','${page}','${rList.mIdx}')">수정</a>							 				
-							 				<a onclick="replyDelete('${rList.rIdx}','${page}','${rList.mIdx}')">삭제</a>							 				
+							 				<a onclick="replyModify(${rList.rIdx})">수정</a>							 				
+							 				<a onclick="replyDelete(${rList.rIdx})">삭제</a>							 				
 								 		</c:if>
 									</div>
 								</div>
 							 </li>
+							 <!-- 답글수정 --> 
+							<div id="replyModify${rList.rIdx}" class="commentHidden">
+								<div class="comment-area-write">
+									<div id="reply-uploaded-file${rList.rIdx}" class="uploaded-file">
+								 		<span><b>업로드된사진</b></span>
+										<c:if test="${rList.picSrc != null}">
+										 <img src="${rList.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
+										</c:if>
+									</div>
+								 <form id="replyfile${rList.rIdx}">
+									 <input type="hidden" name="fileChange" value="0">
+									 <input type="hidden" name="rIdx" value="${rList.rIdx}">
+									 <input type="hidden" name="mIdx" value="${login.mIdx}">
+									 <input type="hidden" name="mNickname" value="${login.nickname}">
+								 	<label style="margin-bottom:10px">
+										 <input type="file" id="reply-file${rList.rIdx}" name="commentSrc" style="display:none" onchange="replyPreview(event,${rList.rIdx},this)" accept="image/* ">
+										 <label for="reply-file${rList.rIdx}">
+									<c:choose>
+										<c:when test="${rList.picSrc != null}">
+									 	<a> <strong>사진 변경하기</strong></a>
+										</c:when>
+										<c:otherwise>
+										 <a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>						
+										</c:otherwise>
+									</c:choose>
+										 </label>
+									</label>
+									 <div class="comment-area-write-content">
+										 <textarea id="reply-write-content${rList.rIdx}" name="content" class="comment-area-write-content-area">${rList.content}</textarea>
+										 <input id="reply-write-button${rList.rIdx}" type="button" value="수정" class="comment-area-write-content-button" onclick="replyUpdate(${login.mIdx},${rList.rIdx},this)">
+											 </div>
+										 </form>
+									 </div>
+								 </div>
 							 </c:forEach>
 							 </c:if>
 							 <!-- 수정하기 박스 -->

@@ -132,7 +132,7 @@
 		 WHERE teamidx = #{teamIdx}
 	</select>
 	
-	<select id="appNum" parameterType="hashMap" resultType="">
+	<select id="appNum" parameterType="hashMap">
 	SELECT p.name, count(t.teamidx)
 		  FROM teams t
 		  JOIN applications a

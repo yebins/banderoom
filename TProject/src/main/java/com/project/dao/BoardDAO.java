@@ -189,6 +189,6 @@ public class BoardDAO {
 	
 	public int commentRepliesUpdate(CommentRepliesVO vo) {
 		
-		return sqlSession.update("com.project.mapper.boardMapper.commentRepliesUpdate",vo);
+		return sqlSession.update("com.project.mapper.boardMapper.replyUpdate",vo);
 	}
 }
