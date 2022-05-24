@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -154,7 +155,7 @@
 								</li>
 								<li>
 									<a href="">보낸쪽지함 
-										<b>#{sendCount}</b>
+										<b></b>
 									</a>
 								</li>
 							</ul>
@@ -219,11 +220,7 @@
 								</c:forEach>
 							</ul>
 						</div>
-						<div id="message-content-list-content-footer" 
-							<c:if test="${list.length>13}">
-								style='border-top:none;'
-							</c:if>
-						>
+						<div id="message-content-list-content-footer">
 							<a href=""><<</a>
 							<a href=""><</a>
 							<a href="">1</a>

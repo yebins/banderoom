@@ -434,6 +434,8 @@ public class BoardController {
 		@RequestMapping(value="/replyUpdate.do")
 		@ResponseBody
 		public int replyUpdate(CommentRepliesVO vo,@RequestParam("commentSrc") MultipartFile file,int fileChange,HttpServletRequest request) throws IllegalStateException, IOException {
+			System.out.println(vo.getContent());
+			System.out.println("rr"+vo.getrIdx());
 			CommentRepliesVO one=boardService.commentRepliesOneInfo(vo);
 			System.out.println(one.getPicSrc());
 			vo.setPicSrc(one.getPicSrc());
