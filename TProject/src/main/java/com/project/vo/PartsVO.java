@@ -6,6 +6,7 @@ public class PartsVO {
 	private int teamIdx;
 	private String name;
 	private int capacity;
+	private int cnt;
 	
 	public int getPartIdx() {
 		return partIdx;
@@ -30,5 +31,11 @@ public class PartsVO {
 	}
 	public void setCapacity(int capacity) {
 		this.capacity = capacity;
+	}
+	public int getCnt() {
+		return cnt;
+	}
+	public void setCnt(int cnt) {
+		this.cnt = cnt;
 	}
 }

@@ -6,6 +6,7 @@
 <html>
 <head>
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
+
 <style>
 .terms-list{
     padding-left: 5px;
@@ -65,9 +66,16 @@
 	width:25px;
 	margin-right:10px;
 }
+.big-title {
+	font-size: 28px;
+	font-weight: bold;
+}
+#myChart-div{
+	width:500px;
+}
 
 </style>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript">
 
 	function deleteFn(){
@@ -96,6 +104,8 @@
 	
 </script>
 
+
+
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -110,7 +120,7 @@
 		</div>
 		<div id="page-content">
 			<c:if test='${details.status!=1}'>
-				<div class="inner-box" style="height:820px; <c:if test='${details.status==2}'>filter: brightness(0.8);</c:if> ">
+				<div class="inner-box" <c:if test='${details.status==2}'>style="filter: brightness(0.8);"</c:if>>
 					<input type="hidden" name="teamIdx" id="teamIdx" value="${details.teamIdx}">
 					<c:if test='${details.status==2}'>
 						<div id="endPost">마감된 글입니다.</div>
@@ -162,17 +172,90 @@
 						</c:if>
 					</c:if>
 					</div>
+					<div id="statistics">
+						<div class="big-title">
+							지원자 현황
+						</div>
+						<c:forEach var="cntLists" items="${cntList}">
+								${cntLists.name} ${cntLists.capacity}명 중 총 ${cntLists.cnt}명 지원<br>
+						</c:forEach>
+						<div id="myChart-div">
+							<canvas id="myChart"></canvas>
+						</div>
+					</div>
 				</div>
 			</c:if>
 			<c:if test='${details.status==1}'>
 				<div id="delete">삭제된 글입니다.</div>
 			</c:if>
-			<div>
-					${appNum}명
-			</div>
+			
 		</div>
 	</div>
 	
+	
+<script>
+//차트를 그럴 영역을 dom요소로 가져온다.
+var chartArea = document.getElementById('myChart').getContext('2d');
+// 차트를 생성한다. 
+var myChart = new Chart(chartArea, {
+    // ①차트의 종류(String)
+    type: 'bar',
+    // ②차트의 데이터(Object)
+    data: {
+        // ③x축에 들어갈 이름들(Array)
+        labels: [
+        	<c:forEach var="parts" items="${cntList}" varStatus="lastPart">
+        	'${parts.name}'<c:if test="${!lastPart.last}">, </c:if>
+			</c:forEach>
+        	],
+        // ④실제 차트에 표시할 데이터들(Array), dataset객체들을 담고 있다.
+        datasets: [{
+            // ⑤dataset의 이름(String)
+            label: '지원자수',
+            // ⑥dataset값(Array)
+            data: [
+            	<c:forEach var="parts" items="${cntList}" varStatus="lastPart">
+            	'${parts.cnt}'<c:if test="${!lastPart.last}">, </c:if>
+    			</c:forEach>
+            ],
+            // ⑦dataset의 배경색(rgba값을 String으로 표현)
+            backgroundColor: ['rgba(255, 99, 132, 0.2)',
+				              'rgba(255, 159, 64, 0.2)',
+				              'rgba(255, 205, 86, 0.2)',
+				              'rgba(75, 192, 192, 0.2)',
+				              'rgba(54, 162, 235, 0.2)',
+				              'rgba(153, 102, 255, 0.2)',
+				              'rgba(201, 203, 207, 0.2)'],
+            // ⑧dataset의 선 색(rgba값을 String으로 표현)
+            borderColor: ['rgb(255, 99, 132)',
+		                  'rgb(255, 159, 64)',
+		                  'rgb(255, 205, 86)',
+		                  'rgb(75, 192, 192)',
+		                  'rgb(54, 162, 235)',
+		                  'rgb(153, 102, 255)',
+		                  'rgb(201, 203, 207)'],
+            // ⑨dataset의 선 두께(Number)
+            borderWidth: 1
+        }]
+    },
+    // ⑩차트의 설정(Object)
+    options: {
+    	indexAxis: 'y',
+    	scales: {
+            x: {
+                suggestedMin: 0,
+                suggestedMax:7
+                	
+            }
+        }
+    }
+});
+
+</script>
+
+
+
+
 	<c:import url="/footer.do" />
 </body>
 </html>

@@ -41,6 +41,7 @@ public class TeamsController {
 			searchMap.put("searchWord", searchWord);
 			searchMap.put("sort", sort);
 		}
+		searchMap.put("start", 0);
 		
 		List<TeamsVO> teamsList = teamsService.selectList(searchMap);
 		
@@ -56,6 +57,36 @@ public class TeamsController {
 		
 		return "teams/main";
 	}
+	
+	@RequestMapping(value="/scroll.do")
+	@ResponseBody
+	public Map<String, Object> scroll(TeamsVO vo, String searchWord, Integer search, String sort, int page){
+		Map<String, Object> scrollMap = new HashMap<String, Object>();
+		
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		
+		if(search != null) {
+			searchMap.put("vo", vo);
+			searchMap.put("searchWord", searchWord);
+			searchMap.put("sort", sort);
+		}
+		searchMap.put("start", (page-1)*6);
+		
+		List<TeamsVO> teamsList = teamsService.selectList(searchMap);
+		
+		Map<Integer, List<PartsVO>> partsMap = new HashMap<Integer, List<PartsVO>>();
+		
+		for (int i=0; i<teamsList.size(); i++) {
+			List<PartsVO> partsList = teamsService.selectParts(teamsList.get(i).getTeamIdx());
+			partsMap.put(teamsList.get(i).getTeamIdx(), partsList);
+		}
+		
+		scrollMap.put("teamsList", teamsList);
+		scrollMap.put("partsMap", partsMap);
+		
+		return scrollMap;
+	}
+	
 	
 	@RequestMapping(value="/register.do", method=RequestMethod.GET)
 	public String register(HttpServletRequest request) {
@@ -116,20 +147,9 @@ public class TeamsController {
 		writer = memberService.oneMemberInfo(writer);
 		model.addAttribute("profileSrc",writer.getProfileSrc());
 		
+		List<PartsVO> cntList = teamsService.appNum(teamIdx); 
 		
-		Map<String, Object> appNumMap = new HashMap<String, Object>();
-		
-		int[] appNum;
-		
-		for(int i=0; i<partsVO.size(); i++) {
-			String partname = partsVO.get(i).getName();
-			appNumMap.put("partname", partname);
-			appNumMap.put("teamIdx", teamIdx);
-			//appNum[i] = teamsService.appNum(appNumMap);
-			//model.addAttribute("appNum", appNum[i]);
-		}
-		
-		
+		model.addAttribute("cntList", cntList);
 		
 		return "teams/details";
 	}
@@ -383,7 +403,7 @@ public class TeamsController {
 	}
 	
 	@RequestMapping(value="/myapp.do")
-	public String myapp(HttpServletRequest request, Model model, int teamIdx, int mIdx) {
+	public String myapp(HttpServletRequest request, Model model, int teamIdx, int mIdx, Integer page) {
 		
 		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 		
@@ -400,14 +420,25 @@ public class TeamsController {
 			
 			return "alert";
 		}else {
+			Map<String, Object> applistMap = new HashMap<String, Object>();
 			
-			List<ApplicationsVO> vo = teamsService.myapp(teamIdx);
+			if(page == null) {
+				page = 1;
+			}
+			
+			PagingUtil PagingUtil = new PagingUtil(teamsService.myappCount(teamIdx), page, 5, 5);
+			
+			applistMap.put("teamIdx", teamIdx);
+			applistMap.put("start", PagingUtil.getStart()-1);
+			
+			List<ApplicationsVO> vo = teamsService.myapp(applistMap);
 			
 			model.addAttribute("applist", vo);
+			model.addAttribute("PagingUtil", PagingUtil);
 			
 			return "teams/myapp";
+			
 		}
-		
 	}
 	
 	@RequestMapping(value="/updateStatus.do")

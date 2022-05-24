@@ -81,6 +81,32 @@
 	.nickname:hover{
 		cursor: pointer;
 	}
+	#page-nav, #app-page-nav {
+		border-top: 1px solid lightgray;
+		width: 100%;
+		height: 80px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.page-nav-button {
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		margin: 7.5px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		background: white;
+	}
+	.page-nav-button:not(.current-page) {
+		cursor: pointer;
+	}
+	.page-nav-button.current-page {
+		background-color: #fbe6b2;
+		font-weight: bold;
+	}
 		
 </style>
 
@@ -124,6 +150,44 @@
 					</div>
 					
 				</c:forEach>
+				
+				<div id="page-nav"><!-- 페이지 시작 -->					
+						<c:if test="${PagingUtil.lastPage < 6}">
+							<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
+								<c:choose>
+									<c:when test="${i == PagingUtil.nowPage}">
+										<div class="page-nav-button current-page">${i}</div>
+									</c:when>
+									<c:otherwise>
+										<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</c:if>
+						<c:if test="${PagingUtil.lastPage > 5}">
+							<c:if test="${PagingUtil.startPage > 5}">
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=1'">1</div>
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.startPage - 1}'">◀</div>
+							</c:if>
+							
+							<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
+								<c:choose>
+									<c:when test="${i == 1}">
+										<div class="page-nav-button current-page">${i}</div>
+									</c:when>
+									<c:otherwise>
+										<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							
+							<c:if test="${PagingUtil.endPage < PagingUtil.lastPage}">
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.endPage + 1}">▶</div>
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
+							</c:if>
+						</c:if>
+					</div>
+				
 			</c:if>
 			<c:if test="${applist.size() == 0}">
 				<div class="inner-box" style="height:50px; margin-top:20px;">받은 지원서가 없습니다.</div>
