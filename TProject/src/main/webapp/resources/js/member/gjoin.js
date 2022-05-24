@@ -340,4 +340,12 @@
 	
 	function viewTerms(idx) {
 		$("#term-wrap-" + idx).css("display", "flex");
+		$("#term-wrap-" + idx).animate({opacity: "100%"}, 200);
+	}
+	
+	function closeTerms(obj) {
+		$(obj).parent().animate({opacity: "0%"}, 200);
+		setTimeout(function() {
+			$(obj).parent().css("display", "none");
+		}, 200);
 	}

@@ -332,6 +332,7 @@
 			<if test="password != null">
 				password = #{password},
 			</if>
+			email = #{email},
 			addr1 = #{addr1},
 			addr2 = #{addr2},
 			address = #{address},
@@ -356,5 +357,14 @@
 	
 	<select id="selectGmemberByEmail" parameterType="generalMembersVO" resultType="generalMembersVO">
 		select * from general_members where email = #{email}
+	</select>
+	
+	<select id="isBrnAndEmailExist" parameterType="hostMembersVO" resultType="int">
+		select count(*) from host_members
+		where brn = #{brn} and email = #{email}
+	</select>
+	
+	<select id="selectHmemberByBrn" parameterType="hostMembersVO" resultType="hostMembersVO">
+		select * from host_members where brn = #{brn}
 	</select>
 </mapper>

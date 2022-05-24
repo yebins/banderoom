@@ -103,6 +103,10 @@
 		display: flex;
 		justify-content: space-between;
 	}
+	
+	div#findpw-link:hover {
+		cursor: pointer;
+	}
 </style>
 
 <script>
@@ -138,6 +142,12 @@ function hLogin() {
 			hLogin();
 	  }
 	}
+	
+	function findPw() {
+		window.open('hfindpw.do', '_blank', 
+		        'top=140, left=200, width=550, height=500, menubar=no,toolbar=no, ' 
+		        + 'location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
+	}
 
 </script>
 </head>
@@ -155,7 +165,7 @@ function hLogin() {
 					</div>
 				</form>
 				<div id="login-link">
-					<div id="findpw-link">비밀번호를 잊으셨나요?</div>
+					<div id="findpw-link" onclick="findPw()">비밀번호를 잊으셨나요?</div>
 					<div id="separator">|</div>
 					<div id="join-link"><a href='hjoin.do'>회원가입</a></div>
 				</div>

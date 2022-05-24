@@ -98,6 +98,7 @@
 		top: 0px; 
 		left: 0px; 
 		z-index: 99999;
+		opacity: 0%;
 	}
 	
 	#mapBackground {
@@ -272,7 +273,15 @@
 		$("#map").children().remove();
 	    drawMap(address, name);
 		$("#mapBackOveray").css("visibility", "visible");
-	// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+		$("#mapBackOveray").animate({opacity: "100%"}, 200);
+	    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	}
+	
+	function closeMap() {
+		$("#mapBackOveray").animate({opacity: "0%"}, 200);
+		setTimeout(() => {
+			$("#mapBackOveray").css("visibility", "hidden");			
+		}, 200);
 	}
 	
 	$(function() {
@@ -625,7 +634,7 @@
 	
 	
 	<div id="mapBackOveray">
-		<div id="mapBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>
+		<div id="mapBackground" onclick="closeMap()"></div>
 		<div id="map"></div>
 	</div>
 	

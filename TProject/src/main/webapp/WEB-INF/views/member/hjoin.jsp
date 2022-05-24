@@ -306,7 +306,7 @@ function checkTelKey() {
 	$.ajax({
 		type : "post",
 		url : "checkTel.do",
-		data : "tel=" + tel + "&key=" + key,
+		data : "tel=" + tel + "&regkey=" + key,
 		success : function(data) {
 			if (data == 0) {
 				telChecked = true;
@@ -390,6 +390,14 @@ function submitAllForms(obj) {
 
 function viewTerms(idx) {
 	$("#term-wrap-" + idx).css("display", "flex");
+	$("#term-wrap-" + idx).animate({opacity: "100%"}, 200);
+}
+
+function closeTerms(obj) {
+	$(obj).parent().animate({opacity: "0%"}, 200);
+	setTimeout(function() {
+		$(obj).parent().css("display", "none");
+	}, 200);
 }
 </script>
 </head>
@@ -560,7 +568,7 @@ function viewTerms(idx) {
 	</div>
 	
 	<div id="term-wrap-1" class="terms-wrap">
-		<div class="term-background" onclick="$(this).parent().css('display', 'none');"></div>
+		<div class="term-background" onclick="closeTerms(this)"></div>
 		<div class="inner-box terms-box">
 			<div class="terms-title">
 				${info.get("1").title}
@@ -569,12 +577,12 @@ function viewTerms(idx) {
 				${info.get("1").content}
 			</div>
 			<div class="terms-button">
-				<button class="normal-button accent-button" onclick="$(this).parent().parent().parent().css('display', 'none');">확인</button>
+				<button class="normal-button accent-button" onclick="closeTerms($(this).parent().parent())">확인</button>
 			</div>
 		</div>
 	</div>
 	<div id="term-wrap-2" class="terms-wrap">
-		<div class="term-background" onclick="$(this).parent().css('display', 'none');"></div>
+		<div class="term-background" onclick="closeTerms(this)"></div>
 		<div class="inner-box terms-box">
 			<div class="terms-title">
 				${info.get("2").title}
@@ -583,7 +591,7 @@ function viewTerms(idx) {
 				${info.get("2").content}
 			</div>
 			<div class="terms-button">
-				<button class="normal-button accent-button" onclick="$(this).parent().parent().parent().css('display', 'none');">확인</button>
+				<button class="normal-button accent-button" onclick="closeTerms($(this).parent().parent())">확인</button>
 			</div>
 		</div>
 	</div>

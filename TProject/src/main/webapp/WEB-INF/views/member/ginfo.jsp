@@ -222,7 +222,7 @@
 			contentType: false,
 			processData: false,
 			success: function(data) {
-				$("#profile-picture-img").attr("src", data);
+				location.reload();
 			}
 		})
 	}
@@ -236,7 +236,7 @@
 			contentType: false,
 			processData: false,
 			success: function(data) {
-				$("#profile-picture-img").attr("src", data);
+				location.reload();
 			}
 		})
 	}

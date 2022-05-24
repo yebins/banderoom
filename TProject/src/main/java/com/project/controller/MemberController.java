@@ -517,29 +517,23 @@ public class MemberController {
 	
 	@RequestMapping(value = "gfindpw.do", method = RequestMethod.GET)
 	public String gfindPw(Model model) {
-		
-		model.addAttribute("memberType", "general");
-		
 		return "member/gfindpw";
 	}
 	
 	@RequestMapping(value = "hfindpw.do", method = RequestMethod.GET)
 	public String hfindPw(Model model) {
-		
-		model.addAttribute("memberType", "host");
-		
 		return "member/hfindpw";
 	}
 	
-	@RequestMapping(value = "sendemailforfindingpw.do", method = RequestMethod.POST)
+	@RequestMapping(value = "sendemailforgfindingpw.do", method = RequestMethod.POST)
 	@ResponseBody
 	public int sendEmailForFindingPw(String email, String memberType) {
 		
 		return memberService.sendEmailForFindingPw(email, memberType);
 	}
 	
-	@RequestMapping(value = "findpw.do", method = RequestMethod.POST)
-	public String findPw(HttpServletRequest request, Model model, EmailRegVO vo) {
+	@RequestMapping(value = "gfindpw.do", method = RequestMethod.POST)
+	public String gfindPw(HttpServletRequest request, Model model, EmailRegVO vo) {
 
 		int emailCheck = memberService.checkEmail(vo);
 		
@@ -566,6 +560,52 @@ public class MemberController {
 		gMember.setEmail(vo.getEmail());
 		
 		gMember = memberService.selectGmemberByEmail(gMember);
+		
+		gMember.setPassword(pw1);
+		memberService.infoUpdate(gMember);
+		
+		return "0";
+		
+	}
+	
+	@RequestMapping(value = "sendemailforhfindingpw.do", method = RequestMethod.POST)
+	@ResponseBody
+	public int sendEmailForFindingPw(HostMembersVO vo) {
+		
+		return memberService.sendEmailForFindingPw(vo);
+	}
+	
+	
+	@RequestMapping(value = "hfindpw.do", method = RequestMethod.POST)
+	public String hfindPw(HttpServletRequest request, Model model, HostMembersVO hostVO, EmailRegVO vo) {
+
+		int emailCheck = memberService.checkEmail(vo);
+		
+		if (emailCheck != 0) { // 인증 내용이 올바르지 않을 경우
+			return "member/findpwerror";
+		}
+
+		model.addAttribute("hostVO", hostVO);
+		model.addAttribute("emailRegVO", vo);
+		
+		return "member/hfindpwchange";
+	}
+
+	@RequestMapping(value = "hfindpwchange.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String hFindPwChange(HostMembersVO hostVO, EmailRegVO vo, String pw1) {
+
+		int emailCheck = memberService.checkEmail(vo);
+		
+		System.out.println(emailCheck);
+		
+		if (emailCheck != 0) { // 인증 내용이 올바르지 않을 경우
+			return "1";
+		}
+		
+		hostVO = memberService.selectHmemberByBrn(hostVO);
+		hostVO.setPassword(pw1);
+		memberService.infoUpdate(hostVO);
 		
 		return "0";
 		

@@ -212,6 +212,7 @@
 		z-index: 99999;
 		top: 0px;
 		left: 0px;
+		opacity: 0%;
 	}
 	
 	.term-background {

@@ -78,6 +78,7 @@
 		position: fixed; 
 		top: 0px; 
 		left: 0px; 
+		opacity: 0%;
 		z-index: 99999;
 	}
 	
@@ -165,6 +166,7 @@
 		top: 0px; 
 		left: 0px; 
 		z-index: 99999;
+		opacity: 0%;
 	}
 	
 	#mapBackground {
@@ -749,6 +751,12 @@
 		margin-right: 10px;
 	}
 	
+	.login-info {
+		margin-top: 20px;
+		color: #fb6544;
+		text-align: center;
+	}
+	
 	@media screen and (max-width: 576px) {
 		#wrapper {
 			padding: 60px 10px 100px;
@@ -980,7 +988,15 @@
 		$("#map").children().remove();
 	    drawMap();
 		$("#mapBackOveray").css("visibility", "visible");
-    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+		$("#mapBackOveray").animate({opacity: "100%"}, 200);
+	    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+	}
+	
+	function closeMap() {
+		$("#mapBackOveray").animate({opacity: "0%"}, 200);
+		setTimeout(() => {
+			$("#mapBackOveray").css("visibility", "hidden");			
+		}, 200);
 	}
 	
 	function deleteSpace() {
@@ -1022,9 +1038,17 @@
 			}
 
 			$("#imgBackOveray").css("visibility", "visible");
+			$("#imgBackOveray").animate({opacity: "100%"}, 200);
 		}, 200);
 
 		
+	}
+	
+	function closeImage() {
+		$("#imgBackOveray").animate({opacity: "0%"}, 200);
+		setTimeout(() => {
+			$("#imgBackOveray").css('visibility', 'hidden');			
+		}, 200);
 	}
 
 
@@ -1213,8 +1237,6 @@
 					}
 					
 					for (var j = +data[i].start; j < +data[i].end; j++) {
-						if (j)
-						console.log(j);
 						$(".timeselector[data-starttime=" + j + "]").addClass("time-disabled");
 					}
 				}
@@ -2258,11 +2280,8 @@
 								
 							</div>
 						</div>
-						
 					</div>
 					
-					<c:if test="${login != null}">
-						
 					
 					<div class="col-sm colright">
 						<div class="inner-box space-rsv">
@@ -2357,19 +2376,21 @@
 										<span>0</span>
 										 원 / 시간
 									</div>
-									
 								</div>
 								
+							<c:if test="${login != null}">
 								<div class="submit-button-wrap">
 									<button class="normal-button accent-button rsv-submit" onclick="rsvSubmit()">결제하기</button>
 								</div>
+							</c:if>
+							<c:if test="${login == null}">
+								<div class="login-info">
+									회원 로그인 후 예약이 가능합니다.
+								</div>
+							</c:if>
 							</div>
 						</div>
 					</div>
-					
-					
-					</c:if>
-				
 				</div>
 			</div>
 		</div>
@@ -2386,12 +2407,12 @@
 		
 		
 	<div id="imgBackOveray">
-		<div id="imgBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>
+		<div id="imgBackground" onclick="closeImage()"></div>
 		<div id="img"></div>
 	</div>
 	
 	<div id="mapBackOveray">
-		<div id="mapBackground" onclick="$(this).parent().css('visibility', 'hidden')"></div>
+		<div id="mapBackground" onclick="closeMap()"></div>
 		<div id="map"></div>
 	</div>
 	

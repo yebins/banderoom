@@ -82,6 +82,7 @@
 	}
 	
 	function sendEmail(obj) {
+		var brn = $('input[name=brn]').val();
 		var email = $('input[name=email]').val();
 		var button = $(obj);
 		$(button).attr("disabled", true);
@@ -95,8 +96,8 @@
 	
 		$.ajax({
 			type : "post",
-			url : "sendemailforgfindingpw.do",
-			data : "email=" + email + "&memberType=general", // 중복 체크를 일반과 호스트회원 각각 해야하므로 변수로 넣어줌
+			url : "sendemailforhfindingpw.do",
+			data : "email=" + email + "&brn=" + brn, // 중복 체크를 일반과 호스트회원 각각 해야하므로 변수로 넣어줌
 			success : function(data) {
 	
 				if (data == 2) {
@@ -154,11 +155,14 @@
 		</div>
 		<div id="content">
 			<div class="inner-box">
-				<form id="emailForm" action="gfindpw.do" method="post">
-					<div class="form-title">회원 가입시 사용한 이메일을 입력하세요.</div>
+				<form id="emailForm" action="hfindpw.do" method="post">
+					<div class="form-title">회원 가입시 사용한 사업자등록번호와 이메일을 입력하세요.</div>
+					<div class="form-row join-row-content">
+						<input class="form-input" type="text" name="brn" placeholder="사업자등록번호">
+					</div>
 					<div class="form-row join-row-content with-button email-field">
 						<input class="form-input" type="email" name="email"
-							onchange="chkEmail(this)" required>
+							onchange="chkEmail(this)" placeholder="이메일" required>
 						<button type="button" class="normal-button join-button email-button"
 							onclick="sendEmail(this)">이메일 인증</button>
 					</div>

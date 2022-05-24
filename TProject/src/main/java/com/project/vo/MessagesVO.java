@@ -5,9 +5,9 @@ import java.util.Date;
 public class MessagesVO {
 	
 	private int msgIdx;
-	private String senderType;
+	private String senderType; // "general", "host"
 	private int sender;
-	private String receiverType;
+	private String receiverType; // "general", "host"
 	private int receiver;
 	private String content;
 	private Date sentDate;

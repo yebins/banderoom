@@ -18,6 +18,7 @@ public interface MemberService {
 
 	int sendEmail(String email, String memberType);
 	int sendEmailForFindingPw(String email, String memberType);
+	int sendEmailForFindingPw(HostMembersVO vo);
 	int checkEmail(EmailRegVO vo);
 	int checkNickname(String nickname, String memberType);
 	int sendTelKey(TelRegVO vo);
@@ -38,4 +39,5 @@ public interface MemberService {
 	int infoUpdate(HostMembersVO vo);
 	String selectCurrPw(String memberType, int mIdx);
 	GeneralMembersVO selectGmemberByEmail(GeneralMembersVO vo);
+	HostMembersVO selectHmemberByBrn(HostMembersVO vo);
 }

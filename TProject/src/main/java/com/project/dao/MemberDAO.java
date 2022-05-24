@@ -162,4 +162,18 @@ public class MemberDAO {
 	public GeneralMembersVO selectGmemberByEmail(GeneralMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.selectGmemberByEmail", vo);
 	}
+	
+	public boolean isBrnAndEmailExist(HostMembersVO vo) {
+		int count = sqlSession.selectOne("com.project.mapper.memberMapper.isBrnAndEmailExist", vo);
+		
+		if (count == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public HostMembersVO selectHmemberByBrn(HostMembersVO vo) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.selectHmemberByBrn", vo);
+	}
 }

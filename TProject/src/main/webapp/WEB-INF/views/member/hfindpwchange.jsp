@@ -95,7 +95,7 @@
 		
 		$.ajax({
 			type: "post",
-			url: "gfindpwchange.do",
+			url: "hfindpwchange.do",
 			data: $("#password").serialize(),
 			success: function(result) {
 				if (result == 0) {
@@ -121,6 +121,7 @@
 		<div id="content">
 			<div class="inner-box">
 				<form id="password">
+					<input type="hidden" name="brn" value="${hostVO.brn}">
 					<input type="hidden" name="email" value="${emailRegVO.email}">
 					<input type="hidden" name="regkey" value="${emailRegVO.regkey}">
 					<div class="password-form">

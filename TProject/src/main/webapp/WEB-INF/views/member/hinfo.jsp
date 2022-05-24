@@ -452,6 +452,11 @@
 	
 	function updateInfo() {
 		
+		if (!emailChecked) {
+			alert("이메일 인증이 필요합니다.");
+			return;
+		}
+		
 		if (!telChecked) {
 			alert('휴대폰 인증이 필요합니다.');
 			return;
@@ -605,6 +610,12 @@
 			<div class="inner-box basic-info">
 				<div class="info-view">
 					<div class="small-title">
+						사업자등록번호
+					</div>
+					<div class="info-content">
+						${hlogin.brn}
+					</div>
+					<div class="small-title">
 						이메일
 					</div>
 					<div class="info-content">
@@ -644,10 +655,16 @@
 				
 				<div class="info-modify">
 					<form id="info-form">
-						<div class="join-row join-row-title">이메일</div>
+						<div class="small-title">
+							사업자등록번호
+						</div>
+						<div class="info-content">
+							${hlogin.brn}
+						</div>
+						<div class="join-row join-row-title" style="margin-top: 30px;">이메일</div>
 						<div class="join-row join-row-content with-button email-field">
 							<input class="narrow" type="email" name="email"
-								onchange="chkEmail(this)" required>
+								onchange="chkEmail(this)" value="${hlogin.email}" required>
 							<button type="button" class="normal-button join-button email-button"
 								onclick="sendEmail(this)">이메일 인증</button>
 						</div>

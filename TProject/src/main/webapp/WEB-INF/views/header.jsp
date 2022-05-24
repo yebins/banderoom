@@ -273,7 +273,7 @@ header {
 					}
 				</style>
 				<button class="normal-button accent-button notlogin" onclick="location.href='<%=request.getContextPath()%>/member/glogin.do'">일반회원 로그인</button>
-				<button class="normal-button accent-button notlogin" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">사업자 로그인 </button>
+				<button class="normal-button accent-button notlogin" onclick="location.href='<%=request.getContextPath()%>/member/hlogin.do'">호스트 로그인 </button>
 			</c:if>
 			<c:if test="${sessionScope.login != null}">
 				<div id="sm-profile-info">
@@ -451,9 +451,9 @@ header {
 	</div>
 	
 	
-	<div class="inner-box mini-profile" style="width: 300px; height: 200px; display: flex; position: fixed; visibility: hidden; top: 10px; left: 0px; background-color: rgb(245, 245, 245);">
+	<div class="inner-box mini-profile" style="width: 300px; height: 200px; display: flex; position: fixed; visibility: hidden; top: 10px; left: 0px; background-color: rgb(245, 245, 245); opacity: 0%;">
 		<div class="inner-box-content " style="padding: 15px 20px;position:relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
-	        <button type="button" class="btn-close profile-close" style="position: absolute; top: 0px; right: 0px;" onclick="$(this).parent().parent().css('visibility', 'hidden')"></button>
+	        <button type="button" class="btn-close profile-close" style="position: absolute; top: 0px; right: 0px;" onclick="profileClose()"></button>
 				<div class="mini-profile-wrap" style="width: 100%; display: flex; align-items: center; ">
 			        <div id="sm-profile-picture-wrap-modal">
 							<img src="" width="100%">
@@ -535,6 +535,7 @@ header {
 				console.log(vo);
 								
 				$('div.mini-profile').css('visibility', 'visible');
+				$('div.mini-profile').animate({opacity: "100%"}, 200);
 				$('#sm-profile-picture-wrap-modal img').attr('src', vo.profileSrc);
 				$('#sm-profile-nickname-modal').text(vo.nickname);
 				$('#sm-profile-mIdx').val(mIdx);
@@ -542,6 +543,13 @@ header {
 		})
 		
 		
+	}
+	
+	function profileClose() {
+		$('div.mini-profile').animate({opacity: "0%"}, 200);
+		setTimeout(() => {
+			$('div.mini-profile').css('visibility', 'hidden');
+		}, 200);
 	}
 	
 	function messagePopup(){

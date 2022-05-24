@@ -216,7 +216,7 @@
 	</div>
 	
 	<div id="term-wrap-1" class="terms-wrap">
-		<div class="term-background" onclick="$(this).parent().css('display', 'none');"></div>
+		<div class="term-background" onclick="closeTerms(this)"></div>
 		<div class="inner-box terms-box">
 			<div class="terms-title">
 				${info.get("1").title}
@@ -225,12 +225,12 @@
 				${info.get("1").content}
 			</div>
 			<div class="terms-button">
-				<button class="normal-button accent-button" onclick="$(this).parent().parent().parent().css('display', 'none');">확인</button>
+				<button class="normal-button accent-button" onclick="closeTerms($(this).parent().parent())">확인</button>
 			</div>
 		</div>
 	</div>
 	<div id="term-wrap-2" class="terms-wrap">
-		<div class="term-background" onclick="$(this).parent().css('display', 'none');"></div>
+		<div class="term-background" onclick="closeTerms(this)"></div>
 		<div class="inner-box terms-box">
 			<div class="terms-title">
 				${info.get("2").title}
@@ -239,7 +239,7 @@
 				${info.get("2").content}
 			</div>
 			<div class="terms-button">
-				<button class="normal-button accent-button" onclick="$(this).parent().parent().parent().css('display', 'none');">확인</button>
+				<button class="normal-button accent-button" onclick="closeTerms($(this).parent().parent())">확인</button>
 			</div>
 		</div>
 	</div>
