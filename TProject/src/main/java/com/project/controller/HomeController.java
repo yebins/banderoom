@@ -344,4 +344,38 @@ public class HomeController {
 		return "/upload/" + newFileName;
 	}
 		
+	
+	//신고
+	@RequestMapping(value="/reportPopup.do")
+	public String reportPopup(Model model, GeneralMembersVO vo) {
+		
+		GeneralMembersVO vo1 = memberService.oneMemberInfo(vo);
+		
+		model.addAttribute("vo", vo1);
+		
+		return "reportPopup";
+	}
+	
+	@RequestMapping(value="/sendReport.do")
+	@ResponseBody
+	public int sendReport(String content, int target, HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		if(session.getAttribute("login") != null) {
+			GeneralMembersVO vo = (GeneralMembersVO)session.getAttribute("login");
+			int reporter = vo.getmIdx();
+			Map<String,Object> map = new HashMap<String,Object>();
+			map.put("content", content);
+			map.put("target", target);
+			map.put("reporter", reporter);
+			
+			return memberService.sendReport(map);
+			
+		} else{
+			return -1;
+		}
+	}
+	//신고
+
 }

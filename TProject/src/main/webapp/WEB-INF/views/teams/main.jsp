@@ -230,7 +230,7 @@ select[name=sort]{
 				$(loadingDiv).remove();
 				loading = false;
 				
-				if(teamsList.length < 6){
+				if(teamsList.length < 12){
 					loadingEnd = true;
 				}
 			}

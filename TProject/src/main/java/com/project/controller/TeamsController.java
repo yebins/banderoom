@@ -70,7 +70,7 @@ public class TeamsController {
 			searchMap.put("searchWord", searchWord);
 			searchMap.put("sort", sort);
 		}
-		searchMap.put("start", (page-1)*6);
+		searchMap.put("start", (page-1)*12);
 		
 		List<TeamsVO> teamsList = teamsService.selectList(searchMap);
 		

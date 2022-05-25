@@ -124,75 +124,88 @@
 		<div id="page-title">
 			받은 지원서 목록
 		</div>
-		<div id="page-content">
-			<div class="reglist-name"><a href="details.do?teamIdx=${applist[0].teamIdx}">
-				<c:if test="${applist[0].status == 0}">[모집중]</c:if>
-				<c:if test="${applist[0].status == 2}">[마감]</c:if>
-				${applist[0].title}</a>
-			</div>
-			<c:if test="${applist.size() > 0}">	
-				<c:forEach var="applists" items="${applist}">
-					<div class="inner-box applist-box">
-						
-						<div class="reglist-info-items">
-							<div class="small-title">지원자 닉네임</div>
-							<div class="small-content nickname" onclick="profileOpen(${applists.mIdx})">${applists.mNickname}&nbsp;&nbsp;</div>
+		<c:if test="${applist[0].status != 1}">
+			<div id="page-content">
+				<div class="reglist-name"><a href="details.do?teamIdx=${applist[0].teamIdx}">
+					<c:if test="${applist[0].status == 0}">[모집중]</c:if>
+					<c:if test="${applist[0].status == 2}">[마감]</c:if>
+					${applist[0].title}</a>
+				</div>
+				<c:if test="${applist.size() > 0}">	
+					<c:forEach var="applists" items="${applist}">
+						<div class="inner-box applist-box">
+							
+							<div class="reglist-info-items d-flex justify-content-between">
+								<div>
+									<span class="small-title">닉네임</span>
+									<span class="small-content nickname" style="font-size: 18px; font-weight: bold;" onclick="profileOpen(${applists.mIdx})">${applists.mNickname}&nbsp;&nbsp;</span>
+								</div>
+								<div>
+									<span class="small-title">작성일자</span>
+									<span class="small-content">
+										<fmt:formatDate value="${applists.regdate}" pattern="yyyy년 M월 d일 H시 m분"/>
+									</span>
+								</div>
+							</div>
+							<c:if test="${applists.partname != ''}">
+								<div class="reglist-info-items" style="margin-top:10px;">
+									<span class="small-title">지원한 파트</span>
+									<span class="small-content">${applists.partname}</span>
+								</div>
+							</c:if>
+							<div class="small-title" style="margin-top:10px;">내용</div>
+							<div class="content"><pre style="font-family:'맑은 고딕';">${applists.content}</pre></div>
 						</div>
-						<c:if test="${applists.partname != ''}">
-						<div class="reglist-info-items">
-							<div class="small-title">지원한 파트</div>
-							<div class="small-content">${applists.partname}</div>
-						</div>
-						</c:if>
 						
-						<div class="small-title" style="margin-top:10px;">내용</div>
-						<div class="content"><pre style="font-family:'맑은 고딕';">${applists.content}</pre></div>
-					</div>
+					</c:forEach>
 					
-				</c:forEach>
-				
-				<div id="page-nav"><!-- 페이지 시작 -->					
-						<c:if test="${PagingUtil.lastPage < 6}">
-							<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
-								<c:choose>
-									<c:when test="${i == PagingUtil.nowPage}">
-										<div class="page-nav-button current-page">${i}</div>
-									</c:when>
-									<c:otherwise>
-										<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-						</c:if>
-						<c:if test="${PagingUtil.lastPage > 5}">
-							<c:if test="${PagingUtil.startPage > 5}">
-								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=1'">1</div>
-								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.startPage - 1}'">◀</div>
+					<div id="page-nav"><!-- 페이지 시작 -->					
+							<c:if test="${PagingUtil.lastPage < 6}">
+								<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
+									<c:choose>
+										<c:when test="${i == PagingUtil.nowPage}">
+											<div class="page-nav-button current-page">${i}</div>
+										</c:when>
+										<c:otherwise>
+											<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
 							</c:if>
-							
-							<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
-								<c:choose>
-									<c:when test="${i == 1}">
-										<div class="page-nav-button current-page">${i}</div>
-									</c:when>
-									<c:otherwise>
-										<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-							
-							<c:if test="${PagingUtil.endPage < PagingUtil.lastPage}">
-								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.endPage + 1}">▶</div>
-								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
+							<c:if test="${PagingUtil.lastPage > 5}">
+								<c:if test="${PagingUtil.startPage > 5}">
+									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=1'">1</div>
+									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.startPage - 1}'">◀</div>
+								</c:if>
+								
+								<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
+									<c:choose>
+										<c:when test="${i == 1}">
+											<div class="page-nav-button current-page">${i}</div>
+										</c:when>
+										<c:otherwise>
+											<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								
+								<c:if test="${PagingUtil.endPage < PagingUtil.lastPage}">
+									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.endPage + 1}">▶</div>
+									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
+								</c:if>
 							</c:if>
-						</c:if>
-					</div>
-				
-			</c:if>
-			<c:if test="${applist.size() == 0}">
-				<div class="inner-box" style="height:50px; margin-top:20px;">받은 지원서가 없습니다.</div>
-			</c:if>
-		</div>
+						</div>
+					
+				</c:if>
+				<c:if test="${applist.size() == 0}">
+					<div class="inner-box" style="height:50px; margin-top:20px;">받은 지원서가 없습니다.</div>
+				</c:if>
+			</div>
+		</c:if>
+		
+		<c:if test="${applist[0].status == 1}">
+			<div style="font-size: 25px;">삭제된 글의 지원서는 볼 수 없습니다.</div>
+		</c:if>
 		
 	</div>
 	

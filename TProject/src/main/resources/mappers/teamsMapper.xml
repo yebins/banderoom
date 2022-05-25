@@ -105,7 +105,7 @@
 		 		 ORDER BY t.status, t.teamidx DESC
 		 	</if>
 		 </if>
-		 	LIMIT #{start}, 6
+		 	LIMIT #{start}, 12
 	</select>
 	
 	<select id="selectParts" resultType="partsVO" parameterType="int">
@@ -224,8 +224,10 @@
 			,team.status
 			,app.partidx
 			,p.name as partname
+			,p.capacity as partcapacity
 			,app.content
 			,team.enddate
+			,app.regdate
 		  FROM teams team
 		  JOIN applications app 
 		    ON team.teamidx = app.teamidx
@@ -265,6 +267,7 @@
 			,app.content
 			,app.mnickname
 			,team.enddate
+			,app.regdate
 		  FROM teams team
 		  JOIN applications app 
 		    ON team.teamidx = app.teamidx

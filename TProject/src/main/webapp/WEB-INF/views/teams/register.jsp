@@ -101,6 +101,7 @@
 }
 .parts{
 	display:inline-block;
+	margin: 7px 0px;
 }
 .x{
 	font-size: 5px;
@@ -364,6 +365,7 @@
 	   
 	});
 	
+	
 	function uploadImage(file, el) {
 	   var formData = new FormData();
 	   formData.append("file", file);
@@ -432,6 +434,8 @@
 			}
 		}
 	}
+	
+	
 	
 	
 	function regFormCheck(){
@@ -564,11 +568,11 @@
 			
 				<div class="inner-box" style="height:700px;">
 					<div>
-						<input type="text" id="title" name="title" class="form-control list-title" placeholder="제목을 입력하세요.">
+						<input type="text" id="title" name="title" class="form-control list-title" placeholder="제목을 입력하세요." maxlength="33">
 					</div>
 					<div class="inner-box-content">
 						<form method="post">
-							<textarea name="content" class="form-control" id="summernote" style="width:100%;"></textarea>
+							<textarea name="content" class="form-control" id="summernote" style="width:100%;" maxlength="200"></textarea>
 						</form>
 					</div>
 					<div class="inner-box-button-wrap">

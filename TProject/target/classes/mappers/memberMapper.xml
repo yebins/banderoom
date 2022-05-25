@@ -367,4 +367,17 @@
 	<select id="selectHmemberByBrn" parameterType="hostMembersVO" resultType="hostMembersVO">
 		select * from host_members where brn = #{brn}
 	</select>
+	<!-- report -->
+	<insert id="sendReport" parameterType="hashMap">
+		INSERT INTO reports(
+			 reporter
+			,target
+			,content
+		)VALUES(
+			 #{reporter}
+			,#{target}
+			,#{content}
+		)
+	</insert>
+	<!-- report -->
 </mapper>

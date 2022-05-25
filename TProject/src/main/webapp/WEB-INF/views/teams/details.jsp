@@ -67,8 +67,9 @@
 	margin-right:10px;
 }
 .big-title {
-	font-size: 28px;
-	font-weight: bold;
+	font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 #myChart-div{
 	width:500px;
@@ -76,6 +77,8 @@
 
 </style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.0/dist/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 <script type="text/javascript">
 
 	function deleteFn(){
@@ -138,17 +141,19 @@
 					<hr style="margin-top: 0px; margin-bottom:25px;">
 					
 					<div class="terms-list">
-						<span class='terms'><b>지역</b> ${details.addr1} ${details.addr2}</span>
-						<span class='terms'><b>팀 레벨</b> ${details.teamLevel}</span>
-						<span class='terms'><b>장르</b> ${details.genre}</span>
+						<span class='terms'><b>지역</b> &nbsp;${details.addr1} ${details.addr2}</span>
+						<span class='terms'><b>팀 레벨</b> &nbsp;${details.teamLevel}</span>
+						<span class='terms'><b>장르</b> &nbsp;${details.genre}</span>
 					</div>
 					<div class="terms-list">
-						<span class='terms'><b>파트/인원</b> 
+						<span class='terms'><b>파트/인원</b> &nbsp;
 							<c:forEach var="parts" items="${parts}" varStatus="lastPart">
 							${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
 							</c:forEach>
 						</span>
-						<span class='terms'><b>마감날짜</b> 
+					</div>
+					<div class="terms-list">
+						<span class='terms'><b>마감날짜 </b> &nbsp;
 							<fmt:parseDate value="${details.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
 							<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일"/>
 						</span>
@@ -172,13 +177,10 @@
 						</c:if>
 					</c:if>
 					</div>
-					<div id="statistics">
+					<div id="statistics" style="margin: 30px;">
 						<div class="big-title">
 							지원자 현황
 						</div>
-						<c:forEach var="cntLists" items="${cntList}">
-								${cntLists.name} ${cntLists.capacity}명 중 총 ${cntLists.cnt}명 지원<br>
-						</c:forEach>
 						<div id="myChart-div">
 							<canvas id="myChart"></canvas>
 						</div>
@@ -200,6 +202,7 @@ var chartArea = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(chartArea, {
     // ①차트의 종류(String)
     type: 'bar',
+    plugins:[ChartDataLabels],
     // ②차트의 데이터(Object)
     data: {
         // ③x축에 들어갈 이름들(Array)
@@ -224,37 +227,44 @@ var myChart = new Chart(chartArea, {
 				              'rgba(255, 205, 86, 0.2)',
 				              'rgba(75, 192, 192, 0.2)',
 				              'rgba(54, 162, 235, 0.2)',
-				              'rgba(153, 102, 255, 0.2)',
-				              'rgba(201, 203, 207, 0.2)'],
+				              'rgba(153, 102, 255, 0.2)'],
             // ⑧dataset의 선 색(rgba값을 String으로 표현)
             borderColor: ['rgb(255, 99, 132)',
 		                  'rgb(255, 159, 64)',
 		                  'rgb(255, 205, 86)',
 		                  'rgb(75, 192, 192)',
 		                  'rgb(54, 162, 235)',
-		                  'rgb(153, 102, 255)',
-		                  'rgb(201, 203, 207)'],
+		                  'rgb(153, 102, 255)'],
             // ⑨dataset의 선 두께(Number)
             borderWidth: 1
         }]
     },
     // ⑩차트의 설정(Object)
     options: {
+    	maxBarThickness:30,
     	indexAxis: 'y',
+    	legend: {
+    	      display: false
+    	   },
     	scales: {
             x: {
-                suggestedMin: 0,
-                suggestedMax:7
-                	
+            	display:false
+                /*suggestedMax:function(){
+                	var cntList = new Array();
+                	<c:forEach var="cntList" items="${cntList}">
+                		cntList.push("${cntList.cnt}");
+        			</c:forEach>
+        			var cnt = 0;
+        			for (var i = 0; i < cntList.length; i++) {
+        			    cnt += parseInt(cntList[i]);
+        			}
+        			return cnt;
+                }*/
             }
         }
     }
 });
-
 </script>
-
-
-
 
 	<c:import url="/footer.do" />
 </body>

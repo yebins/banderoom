@@ -156,17 +156,25 @@
 	function updateApp(appIdx){
 		
 		var content = $("#textarea"+appIdx).val();
-		$.ajax({
-			url:"updateApp.do",
-			type:"post",
-			data:"content="+content+"&appIdx="+appIdx,
-			success:function(data){
-				if(data == 1){
-					alert('수정이 완료되었습니다.');
-					location.reload();
+		
+		if(content == ""){
+			alert('지원서 내용을 입력해주세요.');
+			return false;
+		}
+		
+		if(confirm('수정하시겠습니까?')){
+			$.ajax({
+				url:"updateApp.do",
+				type:"post",
+				data:"content="+content+"&appIdx="+appIdx,
+				success:function(data){
+					if(data == 1){
+						alert('수정이 완료되었습니다.');
+						location.reload();
+					}
 				}
-			}
-		})
+			})
+		}
 	}
 	
 	function cancel(appIdx){
@@ -224,10 +232,6 @@
 	});
 	
 	
-	//var currPage = 1;
-	//var startPage = 1;
-	//var endPage = ${regPageUtil.endPage};
-	//var lastPage = ${regPageUtil.lastPage};
 	var endYN = "";
 	
 	if(${param.endYN != null}){
@@ -347,7 +351,7 @@
 			type:"get",
 			data:"page="+page,
 			success:function(data){
-				console.log(data);
+
 				html = '';
 				
 				var applist = data.applist;
@@ -358,21 +362,35 @@
 						html += '<div class="inner-box applist-box"><div class="reglist-name">';
 						html += '<a href="details.do?teamIdx='+applist[i].teamIdx+'">';
 						if(applist[i].status == 0){
-							html += ' [모집중]';
+							html += ' [모집중] ';
 						}else if(applist[i].status == 2){
-							html += ' [마감]';
+							html += ' [마감] ';
 						}
 						html += applist[i].title+'</a></div>';
 						
+						html += '<div class="reglist-info-items d-flex justify-content-between" style="margin-top:10px;"><div>';
+						
 						if(applist[i].partname != ''){
-							html += '<div class="reglist-info-items" style="margin:10px 0px;"><div class="small-title">지원한 파트</div>';
-							html += '<div class="small-content">'+applist[i].partname+'</div></div>';
+							html += '<span class="small-title">지원한 파트</span>';
+							html += '<span class="small-content">'+applist[i].partname+'</span>';
+						}
+						if(applist[i].partname == ''){
+							html += '<span class="small-title">모집 인원</span>';
+							html += '<span class="small-content">'+applist[i].partcapacity+'명</span>';
 						}
 						
-						html += '<div class="small-title">내용</div>';
+						html += '</div><div><span class="small-title">작성일자</span><span class="small-content">';
+						
+						var regdate = moment(applist[i].regdate);
+						html += moment(regdate).format("YYYY년 M월 D일 H시 m분");
+						
+						html += '</span></div></div>';
+						
+						html += '<div class="small-title" style="margin:10px 0px;">내용</div>';
 						html += '<div id="update-content'+applist[i].appIdx+'">';
 						html += '<div class="content"><pre id="pre-app'+applist[i].appIdx+'" style="font-family:\'맑은 고딕\';">'+applist[i].content+'</pre></div>';
 						html += '<div class="inner-box-button-wrap">';
+						
 						if(applist[i].status == 0){
 							html += '<button class="normal-button" onclick="roadContent('+applist[i].appIdx+')">수정</button>';
 						}
@@ -560,7 +578,7 @@
 					</div>
 				</div>
 				
-			<div class="big-title" style="margin-top:60px;">
+			<div class="big-title" style="margin-top:100px;">
 				작성한 지원서 목록
 			</div>
 			<div id="applist">
@@ -570,15 +588,29 @@
 						<div class="reglist-name"><a href="details.do?teamIdx=${applists.teamIdx}">
 							<c:if test="${applists.status == 0}">[모집중]</c:if>
 							<c:if test="${applists.status == 2}">[마감]</c:if>
-							${applists.title}</a></div>
-						<c:if test="${applists.partname != ''}">
-						<div class="reglist-info-items" style="margin:10px 0px;">
-							<div class="small-title">지원한 파트</div>
-							<div class="small-content">${applists.partname}</div>
+							${applists.title}</a>
 						</div>
-						</c:if>
+						
+						<div class="reglist-info-items d-flex justify-content-between" style="margin-top:10px;">
+							<div>
+								<c:if test="${applists.partname != ''}">
+									<span class="small-title">지원한 파트</span>
+									<span class="small-content">${applists.partname}</span>
+								</c:if>
+								<c:if test="${applists.partname == ''}">
+									<span class="small-title">모집 인원</span>
+									<span class="small-content">${applists.partcapacity}명</span>
+								</c:if>
+							</div>
+							<div>
+								<span class="small-title">작성일자</span>
+								<span class="small-content">
+									<fmt:formatDate value="${applists.regdate}" pattern="yyyy년 M월 d일 H시 m분"/>
+								</span>
+							</div>
+						</div>
 					
-						<div class="small-title">내용</div>
+						<div class="small-title" style="margin:10px 0px;">내용</div>
 						<div id="update-content${applists.appIdx}">
 							<div class="content"><pre id="pre-app${applists.appIdx}" style="font-family:'맑은 고딕';">${applists.content}</pre></div>
 							

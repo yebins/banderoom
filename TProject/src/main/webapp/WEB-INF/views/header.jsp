@@ -466,7 +466,7 @@ header {
 				</div>
 			<div class="mini-profile-buttons" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
 			<button class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;" onclick="messagePopup()">쪽지보내기</button>
-	        <button class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;">신고</button>
+	        <button class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;" onclick="reportPopup()">신고</button>
 			</div>
 		</div>
 	</div>
@@ -557,6 +557,14 @@ header {
 		var mIdx=document.querySelector("#sm-profile-mIdx").value;
 		console.log(mIdx);
 		window.open("/messagePopup.do?mIdx="+mIdx,"쪽지보내기",option);
+	}
+	
+	
+	function reportPopup(){
+		var option = "width = 500, height = 400, top = 100, left = 200, location = no";
+		var mIdx = document.querySelector("#sm-profile-mIdx").value; //받는사람(target)의 midx
+		
+		window.open("/reportPopup.do?mIdx="+mIdx, "신고하기", option);
 	}
 </script>
 </header>

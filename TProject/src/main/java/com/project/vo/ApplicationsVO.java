@@ -1,5 +1,7 @@
 package com.project.vo;
 
+import java.util.Date;
+
 public class ApplicationsVO extends TeamsVO{
 
 	private int appIdx;
@@ -10,6 +12,7 @@ public class ApplicationsVO extends TeamsVO{
 	private String partname;
 	private String partcapacity;
 	private String content;
+	private Date regdate;
 	
 	public int getAppIdx() {
 		return appIdx;
@@ -58,6 +61,12 @@ public class ApplicationsVO extends TeamsVO{
 	}
 	public void setPartcapacity(String partcapacity) {
 		this.partcapacity = partcapacity;
+	}
+	public Date getRegdate() {
+		return regdate;
+	}
+	public void setRegdate(Date regdate) {
+		this.regdate = regdate;
 	}
 	
 }

@@ -176,4 +176,7 @@ public class MemberDAO {
 	public HostMembersVO selectHmemberByBrn(HostMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.selectHmemberByBrn", vo);
 	}
+	public int sendReport(Map<String, Object> map) {
+		return sqlSession.insert("com.project.mapper.memberMapper.sendReport", map);
+	}
 }
