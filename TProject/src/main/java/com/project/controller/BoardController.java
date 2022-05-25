@@ -1,20 +1,35 @@
 package com.project.controller;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.service.*;
+import com.project.service.BoardService;
+import com.project.service.MemberService;
 import com.project.util.PagingUtil;
-import com.project.vo.*;
+import com.project.vo.ArticlesVO;
+import com.project.vo.CommentRepliesVO;
+import com.project.vo.CommentsVO;
+import com.project.vo.GeneralMembersVO;
+import com.project.vo.LikedArticlesVO;
 
 
 
@@ -37,8 +52,16 @@ public class BoardController {
 	public String register(ArticlesVO vo, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
+		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
+		
 		
 		if(session.getAttribute("login") != null) {
+			if(login.getAuth()==1) {
+				request.setAttribute("msg", "글쓰기가 차단된 회원입니다.");
+				request.setAttribute("url", "/board/list.do?page=1&bIdx=" + vo.getbIdx());
+				
+				return "/alert"; 
+			}
 			boardService.insertArticlesVO(vo);
 			vo.setmIdx(((GeneralMembersVO) session.getAttribute("login")).getmIdx());
 			if(vo.getbIdx() == 2) {
@@ -130,7 +153,13 @@ public class BoardController {
 		HttpSession session = request.getSession();
 		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 		
-		if(login.getmIdx() == vo.getmIdx()) {
+		if(login.getmIdx() == vo.getmIdx() || login.getAuth() == 3) {
+			if(login.getAuth()==1) {
+				request.setAttribute("msg", "글수정이 차단된 회원입니다.");
+				request.setAttribute("url", "/board/details.do?page=1&bIdx=" + vo.getbIdx()+"&aIdx="+vo.getaIdx());
+				
+				return "/alert"; 
+			}
 			boardService.boardUpdate(vo);
 			if(vo.getbIdx() == 4) {
 				return "redirect:/board/hlist.do?page=1&bIdx=" + vo.getbIdx();				
@@ -157,7 +186,14 @@ public class BoardController {
 		
 		HttpSession session = request.getSession();
 		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
-		if(login.getmIdx() == vo.getmIdx()) {
+		
+		if(login.getmIdx() == vo.getmIdx() || login.getAuth() == 3) {
+			if(login.getAuth()==1) {
+				request.setAttribute("msg", "글삭제가 차단된 회원입니다.");
+				request.setAttribute("url", "/board/details.do?page=1&bIdx=" + vo.getbIdx()+"&aIdx="+vo.getaIdx());
+				
+				return "/alert"; 
+			}
 			boardService.listDelete(vo);
 			
 			if(vo.getbIdx() == 4) {
@@ -345,9 +381,12 @@ public class BoardController {
 		@RequestMapping(value="/commentWrite.do")
 		@ResponseBody
 		public Map<String, Object> commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
-					
-			
+			HttpSession session = request.getSession();
+			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			if(vo.getContent() != null && vo.getContent() != "") {
+				if(login.getAuth() == 1) {
+					return null;
+				}
 				
 				if(!file.isEmpty()) {
 					System.out.println(file);
@@ -382,9 +421,12 @@ public class BoardController {
 		@RequestMapping(value="/replyWrite.do")
 		@ResponseBody
 		public int replyWrite(CommentRepliesVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
-			
+			HttpSession session = request.getSession();
+			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			if(vo.getContent() != null && vo.getContent() != "") {
-				
+				if(login.getAuth() == 1) {
+					return 2;
+				}
 				if(!file.isEmpty()) {
 					System.out.println(file);
 					
@@ -419,14 +461,16 @@ public class BoardController {
 		@RequestMapping(value="/replyUpdate.do")
 		@ResponseBody
 		public int replyUpdate(CommentRepliesVO vo,@RequestParam("commentSrc") MultipartFile file,int fileChange,HttpServletRequest request) throws IllegalStateException, IOException {
-			System.out.println(vo.getContent());
-			System.out.println("rr"+vo.getrIdx());
 			CommentRepliesVO one=boardService.commentRepliesOneInfo(vo);
+			HttpSession session = request.getSession();
+			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			System.out.println(one.getPicSrc());
 			vo.setPicSrc(one.getPicSrc());
 			
 			if(vo.getContent() != null && vo.getContent() != "") {
-				
+				if(login.getAuth() == 1) {
+					return 2;
+				}
 				
 				//사진 변경 삭제
 				if(fileChange == 1) {
@@ -470,9 +514,13 @@ public class BoardController {
 			CommentsVO one=boardService.commentOneInfo(vo);
 			System.out.println(one.getPicSrc());
 			vo.setPicSrc(one.getPicSrc());
+			HttpSession session = request.getSession();
+			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			
 			if(vo.getContent() != null && vo.getContent() != "") {
-				
+				if(login.getAuth() == 1) {
+					return 2;
+				}
 				
 				//사진 변경 삭제
 				if(fileChange == 1) {
@@ -512,7 +560,13 @@ public class BoardController {
 		
 		@RequestMapping(value="/commentDelete.do")
 		@ResponseBody
-		public int commentsDelete(CommentsVO vo) {
+		public int commentsDelete(CommentsVO vo,HttpServletRequest request) {
+			HttpSession session = request.getSession();
+			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
+			
+			if(login.getAuth() == 1) {
+				return 2;
+			} else
 			
 			return boardService.commentDelete(vo);
 		}
@@ -555,6 +609,9 @@ public class BoardController {
 			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
 			
 			if(vo.getmIdx() == login.getmIdx()) {
+				if(login.getAuth() == 1) {
+					return 2;
+				}
 				return boardService.replyDelete(vo);				
 			} else {
 				return -2;

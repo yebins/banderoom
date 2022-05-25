@@ -409,7 +409,7 @@
 						htmls+='</div>'
 						htmls+='</div>'
 						htmls+='<div class="comment-area-content-contentarea">'
-						if(el.status == 0){
+						if(el.status != 1){
 						htmls+='<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >'+el.content+'<br>'							
 						if(el.picSrc != null){
 						htmls+='<img src="'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray;margin-top:10px;margin-bottom:10px"/>'	
@@ -421,12 +421,12 @@
 						htmls+='</div>'
 						htmls+='<div class="comment-area-content-bottomarea">'
 						htmls+='<a onclick="commentReply('+el.cIdx+')">답글</a>';
-						if(el.mIdx == ${login.mIdx}){
+						if(el.mIdx == mIdx || el.status == 3){
 							if(el.status != 1){
 						htmls+='<a onclick="commentModify('+el.cIdx+')"> 수정 </a>';															
 						htmls+='<a onclick="commentDelete('+el.cIdx+')"> 삭제 </a>';							
+								}
 							}
-						}
 						htmls+='</div>'
 						htmls+='</div>'
 						htmls+='</li>'
@@ -463,7 +463,7 @@
 								htmls+='</div>'
 								htmls+='</div>'
 								htmls+='<div class="comment-area-content-bottomarea">'
-									if(rl.mIdx == ${login.mIdx}){										
+									if(rl.mIdx == mIdx || rl.status == 3){										
 										htmls+='<a onclick="replyModify('+rl.rIdx+')"> 수정 </a>'						
 										htmls+='<a onclick="replyDelete('+rl.rIdx+','+list[2]+','+rl.mIdx+')"> 삭제 </a>'						
 									}
@@ -481,12 +481,11 @@
 								htmls+='</div>'
 								htmls+='<form id="replyfile'+rl.rIdx+'">'
 								htmls+='<input type="hidden" name="fileChange" value="0">'
-								htmls+='<input type="hidden" name="rIdx" value="'+rl.rIdx+'">'
 								htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
 								htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
 								htmls+='<label style="margin-bottom:10px">'
-								htmls+='<input type="file" id="reply-file'+rl.rIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+rl.rIdx+',this)" accept="image/* ">'
-								htmls+='<label for="reply-file'+rl.rIdx+'">'
+								htmls+='<input type="file" id="replyfile'+rl.rIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+rl.cIdx+',this)" accept="image/*">'
+								htmls+='<label for="replyfile'+rl.rIdx+'">'
 									if(rl.picSrc != null){
 								htmls+='<a> <strong>사진 변경하기</strong></a>'
 									} else{
@@ -635,16 +634,18 @@
 			contentType: false,
 			processData: false,
 			success:function(result){
-				if(result.result > 0){
+				if(result.result == 1){
 					alert('댓글쓰기성공');
 					$("#comment-write-content").val('');
 					$("#uploaded-file").css('display','none');
 					$("#uploaded-file>img").remove();
 					$("#file").val('');
 					commentList(result.lastPage);
-				} else {
+				} else if(result == 2){
+					alert('할수 없습니다.')
+				}else {
 					console.log(result);
-					alert('내용을 적어주세요');	
+					alert('댓글을 작성할 수 없습니다.');	
 				}
 			}
 		});
@@ -669,7 +670,7 @@
 			contentType: false,
 			processData: false,
 			success:function(result){
-				if(result>0){
+				if(result==1){
 					alert('답글쓰기성공');
 					var wc="reply-write-content"+cIdx;
 					var wuf="reply-uploaded-file"+cIdx;
@@ -683,7 +684,9 @@
 					$('#'+tg).val('');
 					$('#'+formID).addClass('commentHidden')
 					
-				} else {
+				} else if(result == 2){
+					alert('할수 없습니다.')
+				}else {
 					alert('내용을 적어주세요');	
 				}
 				console.log("page"+page);
@@ -705,8 +708,10 @@
 			type:"post",
 			data:data,
 			success:function(result){
-				if(result>0){
+				if(result==1){
 					alert('삭제되었습니다.')
+				}else if(result == 2){
+					alert('삭제할수 없습니다.')
 				}else{
 					alert('작성자가 아닙니다');
 				}
@@ -724,6 +729,7 @@
 			if(mIdx != null){
 				mIdx=mIdx;
 			}
+			
 		$.ajax({
 			url:"commentUpdate.do",
 			type:"post",
@@ -731,11 +737,14 @@
 			contentType: false,
 			processData: false,
 			success:function(result){
-				 	if(result> 0){
+				 	if(result == 1){
+				 	console.log(result);
 					alert('댓글수정성공');
 					commentList('${page}');	
-			} else {
-				 alert('수정실패');
+				} else if(result == 2){
+					alert('수정할수 없습니다.')
+				}else{
+					 alert('수정실패');
 				}
 			}
 		});
@@ -744,7 +753,7 @@
 	}
 	//답글수정하기
 	function replyUpdate(mIdx,rIdx,obj){
-		var formTG="replyfile"+rIdx;
+		var formTG="replyFile"+rIdx;
 		var formData = new FormData($('#'+formTG)[0]);
 		
 		var mIdx=0;
@@ -753,6 +762,7 @@
 				mIdx=mIdx;
 			}
 			
+			console.log(formData);
 		
 		$.ajax({
 			url:"replyUpdate.do",
@@ -761,10 +771,13 @@
 			contentType: false,
 			processData: false,
 			success:function(result){
-				 	if(result> 0){
+				console.log(result);
+				 	if(result == 1){
 					alert('댓글수정성공');
 					commentList('${page}');	
-			} else {
+			} else if(result == 2){
+				alert('할수 없습니다.')
+			}else {
 				 alert('수정실패');
 				}
 			}
@@ -807,8 +820,6 @@
 		//답글사진미리보기
 		function replyPreview(event,rIdx,obj){
 			var fileChange=$(obj).parent().parent().children().first();
-			fileChange.val('1');
-			
 			
 			if(rIdx != null){
 			var id="reply-uploaded-file"+rIdx;
@@ -904,9 +915,11 @@
 				type:"post",
 				data:{cIdx:cIdx},
 				success:function(result){
-					if(result>0){
+					if(result == 1){
 						alert("삭제되었습니다.");
 						commentList('${page}');	
+					}else if(result == 2){
+						alert('할수 없습니다.')
 					}
 				}
 			})
@@ -958,14 +971,14 @@
 						<input type="hidden" name="aIdx" value="${param.aIdx}">
 						<input type="hidden" name="bIdx" value="${param.bIdx}">
 						<input type="hidden" name="mIdx" value="${vo.mIdx}">
-						<c:if test="${login.mIdx eq vo.mIdx}">
+						<c:if test="${login.mIdx eq vo.mIdx || login.auth == 3}">
 							<button class="normal-button" id="delete" style="margin-left: 15px;" onclick="confirm('삭제하시겠습니까?')">삭제</button>
 						</c:if>	
 					</form>
 					<form action="update.do" method="get">
 						<input type="hidden" name="aIdx" value="${param.aIdx}">
 						<input type="hidden" name="bIdx" value="${param.bIdx}">
-						<c:if test="${login.mIdx eq vo.mIdx}">
+						<c:if test="${login.mIdx eq vo.mIdx || login.auth == 3}">
 							<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
 						</c:if>	
 					</form> 
@@ -1023,7 +1036,7 @@
 									</div>
 									<div class="comment-area-content-bottomarea">
 							 				<a onclick="commentReply('${item.cIdx}')">답글</a>
-										<c:if test="${item.mIdx == login.mIdx && item.status != 1}">
+										<c:if test="${(item.mIdx == login.mIdx || login.auth == 3) && item.status != 1}">
 							 				<a onclick="commentModify('${item.cIdx}')">수정</a>							 				
 							 				<a onclick="commentDelete('${item.cIdx}')">삭제</a>							 				
 								 		</c:if>
@@ -1062,47 +1075,13 @@
 										</div>
 									</div>
 									<div class="comment-area-content-bottomarea">
-										<c:if test="${rList.mIdx == login.mIdx}">
-							 				<a onclick="replyModify(${rList.rIdx})">수정</a>							 				
-							 				<a onclick="replyDelete(${rList.rIdx})">삭제</a>							 				
+										<c:if test="${rList.mIdx == login.mIdx || login.auth == 3}">
+							 				<a onclick="replyModify('${rList.rIdx}','${page}','${rList.mIdx}')">수정</a>							 				
+							 				<a onclick="replyDelete('${rList.rIdx}','${page}','${rList.mIdx}')">삭제</a>							 				
 								 		</c:if>
 									</div>
 								</div>
 							 </li>
-							 <!-- 답글수정 --> 
-							<div id="replyModify${rList.rIdx}" class="commentHidden">
-								<div class="comment-area-write">
-									<div id="reply-uploaded-file${rList.rIdx}" class="uploaded-file">
-								 		<span><b>업로드된사진</b></span>
-										<c:if test="${rList.picSrc != null}">
-										 <img src="${rList.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
-										</c:if>
-									</div>
-								 <form id="replyfile${rList.rIdx}">
-									 <input type="hidden" name="fileChange" value="0">
-									 <input type="hidden" name="rIdx" value="${rList.rIdx}">
-									 <input type="hidden" name="mIdx" value="${login.mIdx}">
-									 <input type="hidden" name="mNickname" value="${login.nickname}">
-								 	<label style="margin-bottom:10px">
-										 <input type="file" id="reply-file${rList.rIdx}" name="commentSrc" style="display:none" onchange="replyPreview(event,${rList.rIdx},this)" accept="image/* ">
-										 <label for="reply-file${rList.rIdx}">
-									<c:choose>
-										<c:when test="${rList.picSrc != null}">
-									 	<a> <strong>사진 변경하기</strong></a>
-										</c:when>
-										<c:otherwise>
-										 <a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>						
-										</c:otherwise>
-									</c:choose>
-										 </label>
-									</label>
-									 <div class="comment-area-write-content">
-										 <textarea id="reply-write-content${rList.rIdx}" name="content" class="comment-area-write-content-area">${rList.content}</textarea>
-										 <input id="reply-write-button${rList.rIdx}" type="button" value="수정" class="comment-area-write-content-button" onclick="replyUpdate(${login.mIdx},${rList.rIdx},this)">
-											 </div>
-										 </form>
-									 </div>
-								 </div>
 							 </c:forEach>
 							 </c:if>
 							 <!-- 수정하기 박스 -->
@@ -1243,8 +1222,8 @@
 					</c:if>
 					<tr>
 						<td class="title-area" style="font-weight:bold;">${vo.title}</td>
-						<td width="30%">${vo.mNickname}</td>
-						<td width="20%"><fmt:formatDate value="${vo.regDate}" pattern="yyyy-MM-dd hh:mm"/></td>
+						<td width="30%" style="font-weight:bold;">${vo.mNickname}</td>
+						<td width="20%" style="font-weight:bold;"><fmt:formatDate value="${vo.regDate}" pattern="yyyy-MM-dd hh:mm"/></td>
 					</tr>
 					<c:if test="${prev.size() != 0}">
 						<c:forEach var="i" begin="0" end="${prev.size()-1}">

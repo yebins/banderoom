@@ -16,7 +16,7 @@
 	</select>
 	
 	<update id="listDelete" parameterType="articlesVO">
-		update articles	set status = 1 where aidx=#{aIdx} and bidx=#{bIdx}
+		update articles	set status = 1 where aIdx= ${aIdx}
 	</update>
 	
 	<select id="pageCount" parameterType="map" resultType="ArticlesVO">
