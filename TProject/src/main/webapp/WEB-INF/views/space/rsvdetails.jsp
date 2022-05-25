@@ -320,15 +320,9 @@
 						예약 날짜 / 시간
 					</div>
 					<div class="content">
-						<fmt:formatDate value="${rsvVO.startDate}" pattern="yyyy년 M월 d일 H시"/>
-						~ <fmt:formatDate value="${rsvVO.endDate}" pattern="H시"/>, ${rsvVO.rsvHours}시간
+						<fmt:formatDate value="${rsvVO.startDate}" pattern="yyyy년 M월 d일 k시"/>
+						~ <fmt:formatDate value="${rsvVO.endDate}" pattern="k시"/>, ${rsvVO.rsvHours}시간
 					</div>
-					<textarea id="startDate" style="display: none" readonly>
-						<fmt:formatDate value="${rsvVO.startDate}" pattern="yyyy-MM-dd-HH"/>
-					</textarea>
-					<textarea id="endDate" style="display: none" readonly>
-						<fmt:formatDate value="${rsvVO.endDate}" pattern="yyyy-MM-dd-HH"/>
-					</textarea>
 					<div class="small-title">
 						예약 인원
 					</div>
