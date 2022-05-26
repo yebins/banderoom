@@ -258,7 +258,7 @@
 				
 				if (result == 0) {
 					alert('작성이 완료되었습니다.');
-					window.opener.reload();
+					window.opener.loadReview(opener.reviewPage, opener.orderType);
 					window.close();					
 				} else if (result == 1) {
 					alert('로그인이 필요합니다.');
