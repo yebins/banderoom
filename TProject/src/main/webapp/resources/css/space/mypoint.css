@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+	.point-title-wrap {
+		margin-top: 30px;
+		display: flex;
+		justify-content: space-between;
+	}
+	.total-point {
+		font-size: 28px;
+		font-weight: bold;
+	}
+	#point-box {
+		padding: 0px 15px;
+		margin-top: 30px;
+	}
+	.elements-wrap {
+		display: flex;
+		align-items: center;
+		padding: 15px 0px;
+		height: 80px;
+	}
+	.elements-wrap:not(.elements-wrap:first-child) {
+		border-top: 1px solid lightgray;
+	}
+	.point-content-wrap {
+		flex: 1;
+	}
+	.point-display {
+		height: 100%;
+		width: 120px;
+		border-left: 1px solid lightgray;
+		margin-left: 15px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		padding-left: 15px;
+	}
+	
+	.point-content {
+		font-size: 20px;
+		font-weight: bold;
+	}
+	.point-resDate {
+		text-align: right;
+		color: darkgray;
+	}
+	
+	.small-title {
+		font-size: 14px;
+		font-weight: bold;
+	}
+	
+	.point-amount {
+		font-size: 22px;
+		text-align: right;
+	}
+	.point-amount.acheieved {
+		color: #fb6544;
+	}
+	.point-amount.used {
+		color: #00BFFF;
+	}
+	.point-amount.balance {
+		font-weight: bold;
+	}
+	
+	.filters-wrap {
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin-top: 20px;
+	}
+	.dateInput {
+		margin-left: 10px;
+		width: 250px;
+		text-align: center;
+		border: 1px solid lightgray;
+		height: 40px;
+		border-radius: 20px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+	}
+	.dateInput-button {
+		margin-left: 10px;
+	}
+	
+	#page-nav {
+		border-top: 1px solid lightgray;
+		width: 100%;
+		height: 80px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.page-nav-button {
+		width: 40px;
+		height: 40px;
+		border-radius: 20px;
+		margin: 7.5px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.page-nav-button:not(.current-page) {
+		cursor: pointer;
+	}
+	.page-nav-button.current-page {
+		background-color: #fbe6b2;
+		font-weight: bold;
+	}

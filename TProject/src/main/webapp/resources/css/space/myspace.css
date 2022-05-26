@@ -1,0 +1,101 @@
+@charset "UTF-8";
+
+	.filter-buttons {
+		width: 100%; 	
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+		margin-bottom: 40px;
+	}
+	
+	.form-select {
+    margin-left: 20px;
+    width: 160px;
+    height: 50px;
+    border-radius: 25px;
+    padding: 0px 20px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border: none;
+	}
+	.form-select:focus {
+		outline: none;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border: none;
+		}
+	.form-select:active {
+		filter: brightness(90%);
+		}
+	.reset-filter {
+    margin-left: 20px;
+    width: 160px;
+    height: 50px;
+    border-radius: 25px;
+	}
+		
+	.inner-box-content {
+		display: flex;
+		align-items: center;
+	}
+	
+	.spacebox {
+		position: relative;
+	}
+	
+	.spacebox:hover {
+		cursor: pointer;
+		outline: 3px solid #fb6544;
+	}
+	
+	.space-thumb {
+		width: 120px;
+		height: 90px;
+		border-radius: 7px;
+		overflow: hidden;
+		background: lightgray;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 14px;
+		font-weight: bold;
+	}
+	
+	.space-info {
+		flex: 1;
+		height: 90px;
+		padding-left: 15px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	
+	.space-name {
+		font-size: 24px;
+		font-weight: bold;
+	}
+	
+	.space-type {
+		font-size: 12px;
+		padding: 0px 10px;
+	}
+	
+	.space-rest-info {
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	.status-accepted {
+		color: #14C681;
+	}
+	.status-refused {
+		color: #FB6544;
+	}
+	
+	.myspacersv-button {
+		position: absolute;
+		top: 15px;
+		right: 15px;
+		width: 80px;
+		height: 30px;
+		font-size: 14px;
+	}
+		

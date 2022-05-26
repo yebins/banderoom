@@ -1,0 +1,253 @@
+@charset "UTF-8";
+
+	.inner-box-content {
+		width: 100%;
+		padding: 10px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: flex-start;
+	}
+	
+	.filters {
+		width: 100%; 	
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+	.filter-select-wrap {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+	
+	.form-select {
+    margin-right: 20px;
+    width: 160px;
+    height: 36px;
+    border-radius: 18px;
+    padding: 0px 20px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border: none;
+	}
+	.form-select:focus {
+		outline: none;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border: none;
+	}
+	.form-select:active {
+		filter: brightness(90%);
+	}
+	
+	.filter-buttons {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+	}
+	.filter-buttons button {
+		margin-left: 20px;
+	}
+	
+	.search-text {
+		width: 100%;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.search-name-input {
+		flex: 1;	
+    margin-right: 20px;
+    width: 160px;
+    height: 36px;
+    border-radius: 18px;
+    padding: 0px 20px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		border: none;
+	}
+	
+	.search-button {
+		width: 120px;
+	}
+	
+	.map-button {
+		width: 80px;
+		margin-left: 20px;
+	}
+	
+	form#search-form {
+		margin-bottom: 40px;
+	}
+	
+	div.spacecol {
+		padding-bottom: 24px;
+	}
+	@media (max-width: 576px) {
+		div.spacecol {
+			padding: 0px 0px 24px 0px;
+		}
+	}
+	
+	div.spacebox {
+		position: relative;
+		width: 100%;
+		height: 300px;
+		display: flex;
+		flex-direction: column;
+		padding: 0px;
+		overflow: hidden;
+	}
+	div.spacebox:hover {
+		cursor: pointer;
+		outline: 3px solid #fb6544;
+	}
+	div.spacebox:active {
+		filter: brightness(90%);
+	}
+	
+	.liked-space {
+		width: 20px;
+		position: absolute;
+		top: 15px;
+		right: 15px;
+	}
+	
+	div.space-thumb {
+		height: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
+		box-shadow: 0px 2px 7px rgba(0,0,0,0.4);
+	}
+	
+	div.space-info {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		padding: 15px;
+		height: 50%;
+	}
+	
+	.space-name {
+		font-size: 20px;
+		font-weight: bold;
+	}
+	
+	.space-restinfo {
+		font-size: 13px;
+		font-weight: bold;
+	}
+	
+	.space-cost span {
+		font-size: 20px;
+	}
+	
+	.space-type-cost-wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+	}
+	
+	.space-restinfo-restinfo {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		font-size: 14px;
+		font-weight: normal;
+	}
+		
+	#mapBackOveray {
+		width: 100%; 
+		height: 100vh; 
+		display: flex; 
+		visibility: hidden;
+		justify-content: center; 
+		align-items: center; 
+		background-color: rgba(0,0,0,0.5); 
+		position: fixed; 
+		top: 0px; 
+		left: 0px; 
+		z-index: 99999;
+		opacity: 0%;
+	}
+	
+	#mapBackground {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+	
+	#map {
+		width: 80%;
+		height: 80vh;
+		padding: 50px;
+		z-index: 999999;
+		border-radius: 15px;
+		overflow: hidden;
+	}
+	
+	.map-popup {
+		width: 150px;
+		text-align: center;
+		padding: 6px; 
+		font-size: 14px;
+	}
+	.map-popup:hover {
+		cursor: pointer;
+	}
+	
+	.spinner-border {
+		width: 100px;
+		height: 100px;
+		margin: 40px;
+		border-width: 10px;
+		color: #FB6544;
+	}
+	
+	.liked-button {
+		width: 36px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0px;
+	}
+	
+	.liked-button img {
+		width: 18px;
+	}
+	
+	@media screen and (max-width: 576px) {
+		#wrapper {
+			padding: 60px 10px 100px;
+		}
+		.colleft, .colright {
+			padding: 10px 0px;
+		}
+		.filter-buttons {
+			margin-top: 15px;
+		}
+		select, input {
+			margin-top: 15px;
+			width: 100% !important;
+		}
+		.filters {
+			margin-bottom: 0px;
+			align-items: stretch;
+		}
+		.filter-select-wrap {
+			width: 100%;
+		}
+		
+		.liked-button {
+			margin-left: 0px !important;
+		}
+		.accent-button {
+			margin-top: 15px;
+		}
+		
+	
+	}

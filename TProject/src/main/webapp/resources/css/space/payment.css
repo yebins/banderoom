@@ -1,0 +1,149 @@
+@charset "UTF-8";
+
+	#page-content {
+		max-width: 700px;
+	}
+	
+	.pay-content {
+		padding: 20px;
+	}
+	
+	.rsv-info {
+		font-size: 20px;
+	}
+	
+	.big-title {
+		font-size: 28px;
+		font-weight: bold;
+		margin: 40px 0px 20px 0px;
+	}
+	
+	.small-title {
+		font-size: 14px;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+	
+	.content {
+		font-size: 20px;
+	}
+	
+	.space-thumb {
+		width: 200px;
+		height: 150px;
+		border-radius: 10px;
+		overflow: hidden;
+		box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
+	}
+	
+	.big-title-wrap {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.big-title-button {
+		margin: 40px 0px 20px 0px;
+		width: fit-content;
+		padding: 0px 20px;
+	}
+	
+	.rsv-input {
+		min-width: 80%;
+		height: 36px;
+		border: 1px solid lightgray;
+		border-radius: 18px;
+		padding: 0px 20px;
+		font-size: 18px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		margin-top: 10px;
+	}
+	
+	button.pay-method {
+		width: fit-content;
+		padding: 0px 20px;
+		font-size: 16px;
+		margin: 10px 15px 0px 0px;
+	}
+	
+	.point-wrap {
+		margin-top: 10px;
+		display: flex;
+		align-items: center;
+	}
+	
+	.rsv-input.point {
+		margin: 0px 10px 0px 0px;
+		width: 104px;
+		min-width: unset;
+		text-align: right;
+	}
+	.rsv-input.point::-webkit-outer-spin-button,
+	.rsv-input.point::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+	}
+	
+	.point-button {
+		font-size: 16px;
+		margin-left: 20px;
+	}
+	
+	.total-cost, .total-cost * {
+		font-size: 30px;
+		font-weight: bold;
+		color: #fb6544;
+	}
+	
+	.terms-wrap {
+		margin-top: 10px;
+	}
+	
+	.form-check-input:checked {
+    background-color: #fb6544;
+    border-color: #fb6544;
+	}
+	.form-check-input:focus {
+		outline: none;
+		box-shadow: none;
+		border-color: #fb6544;
+	}
+	
+	.check-wrap {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.term-button {
+		width: fit-content;
+		padding: 0px 12px;
+		height: 24px;
+		border-radius: 12px;
+		font-size: 12px;
+	}
+	
+	.terms-detail {
+		border-radius: 10px;
+		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		margin: 5px 0px;
+		font-size: 14px;
+		padding: 5px;
+		display: none;
+	}
+	
+	.terms-detail ol > li {
+		margin-top: 5px;
+	}
+	
+	.submit-button-wrap {
+		margin-top: 50px;
+	}
+	
+	.submit-button {
+		width: 250px;
+		height: 60px;
+		border-radius: 30px;
+		font-size: 28px;
+	}

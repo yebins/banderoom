@@ -11,316 +11,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
-<style>
-	#page-content {
-		max-width: 700px;
-	}
-	
-	.pay-content {
-		padding: 20px;
-	}
-	
-	.rsv-info {
-		font-size: 20px;
-	}
-	
-	.big-title {
-		font-size: 28px;
-		font-weight: bold;
-		margin: 40px 0px 20px 0px;
-	}
-	
-	.small-title {
-		font-size: 14px;
-		font-weight: bold;
-		margin-top: 20px;
-	}
-	
-	.content {
-		font-size: 20px;
-	}
-	
-	.space-thumb {
-		width: 200px;
-		height: 150px;
-		border-radius: 10px;
-		overflow: hidden;
-		box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
-	}
-	
-	.big-title-wrap {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-	
-	.big-title-button {
-		margin: 40px 0px 20px 0px;
-		width: fit-content;
-		padding: 0px 20px;
-	}
-	
-	.rsv-input {
-		min-width: 80%;
-		height: 36px;
-		border: 1px solid lightgray;
-		border-radius: 18px;
-		padding: 0px 20px;
-		font-size: 18px;
-		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-		margin-top: 10px;
-	}
-	
-	button.pay-method {
-		width: fit-content;
-		padding: 0px 20px;
-		font-size: 16px;
-		margin: 10px 15px 0px 0px;
-	}
-	
-	.point-wrap {
-		margin-top: 10px;
-		display: flex;
-		align-items: center;
-	}
-	
-	.rsv-input.point {
-		margin: 0px 10px 0px 0px;
-		width: 104px;
-		min-width: unset;
-		text-align: right;
-	}
-	.rsv-input.point::-webkit-outer-spin-button,
-	.rsv-input.point::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-	}
-	
-	.point-button {
-		font-size: 16px;
-		margin-left: 20px;
-	}
-	
-	.total-cost, .total-cost * {
-		font-size: 30px;
-		font-weight: bold;
-		color: #fb6544;
-	}
-	
-	.terms-wrap {
-		margin-top: 10px;
-	}
-	
-	.form-check-input:checked {
-    background-color: #fb6544;
-    border-color: #fb6544;
-	}
-	.form-check-input:focus {
-		outline: none;
-		box-shadow: none;
-		border-color: #fb6544;
-	}
-	
-	.check-wrap {
-		width: 100%;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-	}
-	
-	.term-button {
-		width: fit-content;
-		padding: 0px 12px;
-		height: 24px;
-		border-radius: 12px;
-		font-size: 12px;
-	}
-	
-	.terms-detail {
-		border-radius: 10px;
-		box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-		margin: 5px 0px;
-		font-size: 14px;
-		padding: 5px;
-		display: none;
-	}
-	
-	.terms-detail ol > li {
-		margin-top: 5px;
-	}
-	
-	.submit-button-wrap {
-		margin-top: 50px;
-	}
-	
-	.submit-button {
-		width: 250px;
-		height: 60px;
-		border-radius: 30px;
-		font-size: 28px;
-	}
-	
-</style>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/space/payment.css">
 
 <!-- iamport.payment.js -->
  <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.8.js"></script>
  
 <script>
 
-	// 결제 설정
-	var IMP = window.IMP;
-	IMP.init("imp34520606");
-
-	var payMethod = "";
-	var point = 0;
-	var total = ${rsvVO.cost}
-	
-	
-	function setPayMethod(button) {
-		$("button.pay-method").removeClass("accent-button");
-		payMethod = $(button).attr("data-method");
-		$(button).addClass("accent-button");
+	var login = {
+			mIdx: ${login.mIdx},
+			point: ${login.point},
+			email: '${login.email}',
+			name: '${login.name}',
+			tel: '${login.tel}'
 	}
 	
-	function checkPoint() {
-		point = $(".rsv-input.point").val();
-		
-		if (point < 0) {
-			point = 0;
-		} else if (point > ${login.point}) {
-			point = ${login.point};
-		}
-		
-		$(".rsv-input.point").val(point);
-		
-		calcTotal();
+	var rsvVO = {
+			peopleNum: ${rsvVO.peopleNum},
+			rsvHours: ${rsvVO.rsvHours},
+			cost: ${rsvVO.cost}
 	}
 	
-	function useAllPoint() {
-		point = ${login.point};
-		$(".rsv-input.point").val(point);
-		
-		calcTotal();
-	}
-	
-	function calcTotal() {
-		total = ${rsvVO.cost} - point;
-		if (total < 0) {
-			point += total;
-			total = 0;			
-
-			$(".rsv-input.point").val(point);
-		}
-				
-		$("#gettingPoint").text(Math.round(total * 0.01));
-		$(".total-cost span").text(total.toLocaleString());
-	}
-	
-	function viewTerms(button) {
-		var terms;
-		
-		if ($(button).hasClass("accent-button")) {
-			$(button).removeClass("accent-button");
-			terms = $(button).attr("data-terms");
-			$(".terms-detail[data-terms=" + terms + "]").css("display", "none");
-		}	else {
-			$(button).addClass("accent-button");
-			terms = $(button).attr("data-terms");
-			$(".terms-detail[data-terms=" + terms + "]").css("display", "block");
-		}
-	}
-	
-	function paySubmit() {
-		if (
-				!$("#term-1").is(":checked") ||
-				!$("#term-2").is(":checked") ||
-				!$("#term-3").is(":checked")
-				) {
-			
-			alert('약관에 동의해 주세요.');
-			
-			return;
-		}
-		
-		payWithCard();
+	var spacesVO = {
+			idx: ${spacesVO.idx},
+			name: '${spacesVO.name}'
 	}
 
-	function payWithCard() {
-		
-		if (total == 0) {
-
-			var rsvForm = $("<form action='paysuccess.do' method='post' display='none'>");
-
-			var mIdxInput = $("<input type='text' name='mIdx' value='${login.mIdx}'>");
-			var spaceIdxInput = $("<input type='text' name='spaceIdx' value='${spacesVO.idx}'>");
-			var peopleNumInput = $("<input type='text' name='peopleNum' value='${rsvVO.peopleNum}'>");
-			var startDateInput = $("<input type='text' name='startDate' value='" + $("textarea#startDate").val().trim() + "'>");
-			var endDateInput = $("<input type='text' name='endDate' value='" + $("textarea#endDate").val().trim() + "'>");
-			var rsvHoursInput = $("<input type='text' name='rsvHours' value='${rsvVO.rsvHours}'>");
-			var costInput = $("<input type='text' name='cost' value='${rsvVO.cost}'>");
-			var usedPointInput = $("<input type='text' name='usedPoint' value='" + point + "'>");
-			var totalCostInput = $("<input type='text' name='totalCost' value='" + total + "'>");
-			
-			$("body").append(rsvForm);
-			
-			$(rsvForm).append(mIdxInput);
-			$(rsvForm).append(spaceIdxInput);
-			$(rsvForm).append(peopleNumInput);
-			$(rsvForm).append(startDateInput);
-			$(rsvForm).append(endDateInput);
-			$(rsvForm).append(rsvHoursInput);
-			$(rsvForm).append(costInput);
-			$(rsvForm).append(usedPointInput);
-			$(rsvForm).append(totalCostInput);
-			
-			$(rsvForm).submit();
-		} else {
-			
-			IMP.request_pay({ // param
-				pg: "html5_inicis",
-				pay_method: "card",
-				name: "공간 예약_${spacesVO.name}",
-				amount: total,
-				buyer_email: "${login.email}",
-				buyer_name: "${login.name}",
-				buyer_tel: "${login.tel}"
-			}, function (rsp) { // callback
-				if (rsp.success) {
-					
-							var rsvForm = $("<form action='paysuccess.do' method='post' display='none'>");
-	
-							var mIdxInput = $("<input type='text' name='mIdx' value='${login.mIdx}'>");
-							var spaceIdxInput = $("<input type='text' name='spaceIdx' value='${spacesVO.idx}'>");
-							var peopleNumInput = $("<input type='text' name='peopleNum' value='${rsvVO.peopleNum}'>");
-							var startDateInput = $("<input type='text' name='startDate' value='" + $("textarea#startDate").val().trim() + "'>");
-							var endDateInput = $("<input type='text' name='endDate' value='" + $("textarea#endDate").val().trim() + "'>");
-							var rsvHoursInput = $("<input type='text' name='rsvHours' value='${rsvVO.rsvHours}'>");
-							var costInput = $("<input type='text' name='cost' value='${rsvVO.cost}'>");
-							var usedPointInput = $("<input type='text' name='usedPoint' value='" + point + "'>");
-							var totalCostInput = $("<input type='text' name='totalCost' value='" + total + "'>");
-							
-							$("body").append(rsvForm);
-							
-							$(rsvForm).append(mIdxInput);
-							$(rsvForm).append(spaceIdxInput);
-							$(rsvForm).append(peopleNumInput);
-							$(rsvForm).append(startDateInput);
-							$(rsvForm).append(endDateInput);
-							$(rsvForm).append(rsvHoursInput);
-							$(rsvForm).append(costInput);
-							$(rsvForm).append(usedPointInput);
-							$(rsvForm).append(totalCostInput);
-							
-							$(rsvForm).submit();
-					
-				} else {
-					alert('결제에 실패했습니다.');
-				}
-			});
-		}
-			
-	}
 </script>
+
+<script src="/js/space/payment.js"></script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
