@@ -319,46 +319,16 @@
 			data: searchData,
 			success: function(data) {
 				
-				for (var i = 0; i < Object.keys(data.spaceList).length; i++) {
-
-					var html = '<div class="col spacecol">';
-					html += '<div class="inner-box spacebox" onclick="location.href=\'details.do?idx=' + data.spaceList[i].idx + '\'">';
-					html += '<input type="hidden" name="idx" value="' + data.spaceList[i].idx + '">';
-					html += '<input type="hidden" name="address" value="' + data.spaceList[i].address + '">';
-					if (data.spaceList[i].liked == 1) {
-						html += '<img class="liked-space" src="/images/heart-filled.png">';
-					}
-					html += '<div class="space-thumb">';
-					html += '<img src="' + data.spaceList[i].thumb + '" width="100%">';
-					html += '</div>';
-					html += '<div class="space-info">';
-					html += '<div class="space-name">' + data.spaceList[i].name + '</div>';
-					html += '<div class="space-restinfo">';
-					html += '<div class="space-type-cost-wrap">';
-					html += '<div class="space-type">' + data.spaceList[i].type + '</div>';
-					html += '<div class="space-cost">';
-					html += '<span>';
-					
-					var fmt = data.spaceList[i].cost.toLocaleString('ko-KR');
-					
-					html += fmt;
-					
-					html += '</span>';
-					html += '원 / 시간';
-					html += '</div>';
-					html += '</div>';
-					html += '<div class="space-restinfo-restinfo">';
-					html += '<div class="space-addr">' + data.spaceList[i].addr1 + ' ' + data.spaceList[i].addr2 + '</div>';
-					html += '<div class="space-score">';
-					html += '⭐ ' + data.spaceList[i].reviewAvg.toFixed(1) + ' (' + data.spaceList[i].reviewCnt + ')';
-					html += '</div></div></div></div></div></div>';
-					
-					$(".spacerow").append(html);
-					
-				}
+				var html = $("<div>").html(data);
+				var spacecol = $(html).find(".spacecol");
 				
+				$(spacecol).css("opacity", "0%");
 				
-				if (Object.keys(data.spaceList).length < 12) {
+				$(".spacerow").append(spacecol);
+				
+				$(spacecol).animate({opacity: "100%"}, 200);
+				
+				if (spacecol.length < 12) {
 					
 					allLoaded = true;
 				}
@@ -656,30 +626,6 @@
 			</c:if>
 		</div>
 		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button class="normal-button">버튼</button> 
-			일반 버튼 (button class="normal-button") (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="normal-button accent-button">버튼</button> 강조 버튼 (button class="normal-button accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button class="normal-button">일반버튼</button>
-					<button class="normal-button accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
-			</div>
-			<br><br>
-		</div>
-		<!-- 여기까지 -->
-		
 	</div>
 	
 	<div id="mapBackOveray">
@@ -687,5 +633,7 @@
 		<div id="map"></div>
 	</div>
 	<c:import url="/footer.do" />
+	
+	<div id="ajax" style="display: none"></div>
 </body>
 </html>
