@@ -317,6 +317,8 @@ function spacePictureUpload() {
 		</div>
 		<div id="page-content">
 		<form id="picture-upload-form">
+			<input type="hidden" name="thumbWidth" value="200">
+			<input type="hidden" name="thumbHeight" value="150">
 			<input type="file" id="picture-upload" name="picture" style="display: none;" onchange="spacePictureUpload()">
 		</form>
 		<form action="update.do" method="post">

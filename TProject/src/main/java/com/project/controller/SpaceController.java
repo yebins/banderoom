@@ -283,8 +283,7 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value = "loadReview.do")
-	@ResponseBody
-	public List<SpaceReviewVO> loadReview(Integer reviewPage, String orderType, SpacesVO vo) {
+	public String loadReview(Model model, Integer reviewPage, String orderType, SpacesVO vo) {
 
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("spacesVO", vo);
@@ -308,8 +307,14 @@ public class SpaceController {
 			
 			reviewVO.setContent(reviewVO.getContent().replaceAll("\r\n", "<br>"));
 		}
+
+		model.addAttribute("reviewLastPage", reviewPu.getLastPage());
+		model.addAttribute("spacesVO", vo);
+		model.addAttribute("spacePicturesVOs", spaceService.spacePictureList(vo));
+		model.addAttribute("reviewList", reviewList);
+		model.addAttribute("reviewCntAvg", spaceService.spaceReviewCntAvg(vo));
 		
-		return reviewList;
+		return "space/reviewpages";
 	}
 
 	@RequestMapping(value = "/delete.do")
@@ -508,10 +513,7 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value = "addlist.do")
-	@ResponseBody
-	public Map<String, Object> addList(HttpServletRequest request, Integer page, Integer search, String orderType, Integer liked, SpacesVO vo) {
-		
-		Map<String, Object> map = new HashMap<>();
+	public String addList(Model model, HttpServletRequest request, Integer page, Integer search, String orderType, Integer liked, SpacesVO vo) {
 
 		Map<String, Object> params = new HashMap<>();
 		if (page == null) {
@@ -533,9 +535,9 @@ public class SpaceController {
 		params.put("liked", liked);
 		
 		List<SpacesVO> spaceList = spaceService.spaceList(params);
-		map.put("spaceList", spaceList);
+		model.addAttribute("spaceList", spaceList);
 		
-		return map;
+		return "space/listpages";
 	}
 	
 	@RequestMapping(value = "/payment.do", method = RequestMethod.POST)
@@ -871,11 +873,9 @@ public class SpaceController {
 	}
 	
 	@RequestMapping(value = "qnalist.do")
-	@ResponseBody
-	public Map<String, Object> qnaList(HttpServletRequest request, Integer page, SpacesVO spacesVO) {
+	public String qnaList(Model model, HttpServletRequest request, Integer page, SpacesVO spacesVO) {
 		
 		spacesVO = spaceService.details(spacesVO);
-		Map<String, Object> data = new HashMap<String, Object>();
 		Map<String, Object> params = new HashMap<String, Object>();
 
 		PagingUtil qnaPu = new PagingUtil(spaceService.countQna(spacesVO), page, 5, 5);
@@ -931,12 +931,13 @@ public class SpaceController {
 			}
 		}
 		
-		data.put("qnaList", qnaList);
-		data.put("qnaStartPage", qnaPu.getStartPage());
-		data.put("qnaEndPage", qnaPu.getEndPage());
-		data.put("qnaLastPage", qnaPu.getLastPage());
+		model.addAttribute("qnaList", qnaList);
+		model.addAttribute("qnaNowPage", qnaPu.getNowPage());
+		model.addAttribute("qnaStartPage", qnaPu.getStartPage());
+		model.addAttribute("qnaEndPage", qnaPu.getEndPage());
+		model.addAttribute("qnaLastPage", qnaPu.getLastPage());
 		
-		return data;
+		return "space/qnapages";
 	}
 	
 	@RequestMapping(value = "insertqnaanswer.do")
