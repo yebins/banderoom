@@ -435,6 +435,63 @@
 						htmls+='</div>'
 						htmls+='</div>'
 						htmls+='</li>'
+							/* 수정하기 */				
+							htmls+='<div id="commentModify'+el.cIdx+'" class="commentHidden">'
+						 	htmls+='<div class="comment-area-write">'
+						 	htmls+='<div id="uploaded-file'+el.cIdx+'" class="uploaded-file">'
+							htmls+='<span><b>업로드된사진</b></span>'
+								if(el.picSrc != null){
+								 htmls+='<img src="'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'
+									}
+							htmls+='</div>'
+							htmls+='<form id="commentfile'+el.cIdx+'">'
+							htmls+='<input type="hidden" name="fileChange" value="0">'
+							htmls+='<input type="hidden" name="aIdx" value="'+el.aIdx+'">'
+							htmls+='<input type="hidden" name="bIdx" value="'+el.bIdx+'">'
+							htmls+='<input type="hidden" name="cIdx" value="'+el.cIdx+'">'
+							htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
+							htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
+							htmls+='<input type="hidden" name="status" value="'+el.status+'">'
+							htmls+='<label style="margin-bottom:10px">'
+							htmls+='<input type="file" id="file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="preview(event,'+el.cIdx+',this)" accept="image/*">'
+							htmls+='<label for="file'+el.cIdx+'">'
+								if(el.picSrc != null){
+							htmls+='<a> <strong>사진 변경하기</strong></a>'
+								} else{
+							htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>'								
+								}
+							htmls+='</label>'
+							htmls+='</label>'
+							htmls+='<div class="comment-area-write-content">'
+							htmls+='<textarea id="comment-write-content'+el.cIdx+'" name="content" class="comment-area-write-content-area">'+el.content+'</textarea>'
+							htmls+='<input id="comment-write-button'+el.cIdx+'" type="button" value="수정" class="comment-area-write-content-button" onclick="commentUpdate(${login.mIdx},'+el.cIdx+')">'
+							htmls+='</div>'
+							htmls+='</form>'
+							htmls+='</div>'
+							htmls+='</div>'
+								/* 답글달기 */
+								htmls+='<div id="replyWrite'+el.cIdx+'" class="commentHidden">'
+								htmls+='<div class="comment-area-write comment-area-write'+el.cIdx+'" id="write-area-write_id">'
+								htmls+='<div id="reply-uploaded-file'+el.cIdx+'" class="uploaded-file">'
+								htmls+='<span><b>업로드된사진</b></span>'
+								htmls+='</div>'
+								htmls+='<form id="replyFile'+el.cIdx+'">'
+								htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
+								htmls+='<input type="hidden" name="cIdx" value="'+el.cIdx+'">'
+								htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
+								htmls+='<label style="margin-bottom:10px">'
+								htmls+='<input type="file" id="reply-file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+el.cIdx+',this)" accept="image/*">'
+								htmls+='<label for="reply-file'+el.cIdx+'">'
+								htmls+='</label>'
+								htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>'											
+								htmls+='</label>'
+								htmls+='<div class="comment-area-write-content">'
+								htmls+='<textarea id="reply-write-content'+el.cIdx+'" name="content" class="comment-area-write-content-area"></textarea>'
+								htmls+='<input id="reply-write-button'+el.cIdx+'" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},'+el.cIdx+','+list[2]+')">'
+								htmls+='</div>'
+							 	htmls+='</form>'
+								htmls+='</div>'
+								htmls+='</div>'
 						console.log('대댓글리스트'+Object.keys(list[4]).length);
 						if(Object.keys(list[4]).length > 0){
 								$.each(list[4][el.cIdx],function(index,rl){
@@ -508,64 +565,6 @@
 								htmls+='</div>'
 								})						
 						}
-						/* 수정하기 */				
-						htmls+='<div id="commentModify'+el.cIdx+'" class="commentHidden">'
-					 	htmls+='<div class="comment-area-write">'
-					 	htmls+='<div id="uploaded-file'+el.cIdx+'" class="uploaded-file">'
-						htmls+='<span><b>업로드된사진</b></span>'
-							if(el.picSrc != null){
-							 htmls+='<img src="'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'
-								}
-						htmls+='</div>'
-						htmls+='<form id="commentfile'+el.cIdx+'">'
-						htmls+='<input type="hidden" name="fileChange" value="0">'
-						htmls+='<input type="hidden" name="aIdx" value="'+el.aIdx+'">'
-						htmls+='<input type="hidden" name="bIdx" value="'+el.bIdx+'">'
-						htmls+='<input type="hidden" name="cIdx" value="'+el.cIdx+'">'
-						htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
-						htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
-						htmls+='<input type="hidden" name="status" value="'+el.status+'">'
-						htmls+='<label style="margin-bottom:10px">'
-						htmls+='<input type="file" id="file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="preview(event,'+el.cIdx+',this)" accept="image/*">'
-						htmls+='<label for="file'+el.cIdx+'">'
-							if(el.picSrc != null){
-						htmls+='<a> <strong>사진 변경하기</strong></a>'
-							} else{
-						htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>'								
-							}
-						htmls+='</label>'
-						htmls+='</label>'
-						htmls+='<div class="comment-area-write-content">'
-						htmls+='<textarea id="comment-write-content'+el.cIdx+'" name="content" class="comment-area-write-content-area">'+el.content+'</textarea>'
-						htmls+='<input id="comment-write-button'+el.cIdx+'" type="button" value="수정" class="comment-area-write-content-button" onclick="commentUpdate(${login.mIdx},'+el.cIdx+')">'
-						htmls+='</div>'
-						htmls+='</form>'
-						htmls+='</div>'
-						htmls+='</div>'
-						/* 답글달기 */
-						htmls+='<div id="replyWrite'+el.cIdx+'" class="commentHidden">'
-						htmls+='<div class="comment-area-write comment-area-write'+el.cIdx+'" id="write-area-write_id">'
-						htmls+='<div id="reply-uploaded-file'+el.cIdx+'" class="uploaded-file">'
-						htmls+='<span><b>업로드된사진</b></span>'
-						htmls+='</div>'
-						htmls+='<form id="replyFile'+el.cIdx+'">'
-						htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
-						htmls+='<input type="hidden" name="cIdx" value="'+el.cIdx+'">'
-						htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
-						htmls+='<label style="margin-bottom:10px">'
-						htmls+='<input type="file" id="reply-file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+el.cIdx+',this)" accept="image/*">'
-						htmls+='<label for="reply-file'+el.cIdx+'">'
-						htmls+='</label>'
-						htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>'											
-						htmls+='</label>'
-						htmls+='<div class="comment-area-write-content">'
-						htmls+='<textarea id="reply-write-content'+el.cIdx+'" name="content" class="comment-area-write-content-area"></textarea>'
-						htmls+='<input id="reply-write-button'+el.cIdx+'" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},'+el.cIdx+','+list[2]+')">'
-						htmls+='</div>'
-					 	htmls+='</form>'
-						htmls+='</div>'
-						htmls+='</div>'
-						
 						
 					})
 					var htmlss="";
@@ -624,11 +623,11 @@
 	function commentWrite(mIdx){
 		var formData = new FormData($('#commentfile')[0]);
 		
-		var mIdx=0;
+	/* 	var mIdx=0;
 		
 			if(mIdx != null){
 				mIdx=mIdx;
-			}
+			} */
 			
 			console.log(formData);
 			console.log(formData.content);
@@ -647,9 +646,7 @@
 					$("#uploaded-file>img").remove();
 					$("#file").val('');
 					commentList(result.lastPage);
-				} else if(result == 2){
-					alert('할수 없습니다.')
-				}else {
+				} else {
 					console.log(result);
 					alert('댓글을 작성할 수 없습니다.');	
 				}
@@ -663,11 +660,11 @@
 		var tg="replyFile"+cIdx;
 		var formData = new FormData($('#'+tg)[0]);
 		
-		var mIdx=0;
+// 		var mIdx=0;
 		
-			if(mIdx != null){
-				mIdx=mIdx;
-			}
+// 			if(mIdx != null){
+// 				mIdx=mIdx;
+// 			}
 		
 		$.ajax({
 			url:"replyWrite.do",
@@ -730,11 +727,11 @@
 		var formTG="commentfile"+cIdx;
 		var formData = new FormData($('#'+formTG)[0]);
 		
-		var mIdx=0;
+// 		var mIdx=0;
 		
-			if(mIdx != null){
-				mIdx=mIdx;
-			}
+// 			if(mIdx != null){
+// 				mIdx=mIdx;
+// 			}
 			
 		$.ajax({
 			url:"commentUpdate.do",
@@ -1051,6 +1048,45 @@
 									</div>
 								</div>
 							 </li>
+							 <!-- 수정하기 박스 -->
+							  <div id="commentModify${item.cIdx}" class="commentHidden">
+							 	<div class="comment-area-write comment-area-write${item.cIdx}" id="comment-area-write_id">
+							 		<div id="uploaded-file${item.cIdx}" class="uploaded-file">
+										<span><b>업로드된사진</b></span>
+										<c:if test="${item.picSrc ne null}">
+									 			<img src="${item.picSrc}" style="width:100px; height:100px;"/>
+										</c:if>
+									</div>
+									<form id="commentfile${item.cIdx}">
+										<input type="hidden" name="fileChange" value="0">
+										<input type="hidden" name="aIdx" value="${param.aIdx}">
+										<input type="hidden" name="bIdx" value="${param.bIdx}">
+										<input type="hidden" name="mIdx" value="${login.mIdx}">
+										<input type="hidden" name="cIdx" value="${item.cIdx}">
+										<input type="hidden" name="mNickname" value="${login.nickname}">
+										<input type="hidden" name="status" value="${item.status}">
+										<label style="margin-bottom:10px">
+											<input type="file" id="file${item.cIdx}" name="commentSrc" style='display:none' onchange="preview(event,'${item.cIdx}',this)" accept="image/*">
+											<c:choose>
+												<c:when test="${item.picSrc ne null}">
+												<label for="file${item.cIdx}">
+												</label>
+												<a><strong>사진 변경하기</strong></a>	
+												</c:when>
+												<c:otherwise>
+												<label for="file${item.cIdx}">
+												</label>
+												<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>												
+												</c:otherwise>
+											</c:choose>
+										</label>
+										<div class="comment-area-write-content">
+												<textarea id="comment-write-content${item.cIdx}" name="content" class="comment-area-write-content-area">${item.content}</textarea>
+												<input id="comment-write-button${item.cIdx}" type="button" value="수정" class="comment-area-write-content-button" onclick="commentUpdate(${login.mIdx},${item.cIdx})">
+										</div>
+									</form>
+								</div>
+							 </div>
 							 </c:if>
 							 <c:set var="key" value="${item.cIdx}"/>
 							 <c:if test="${fn:length(replyList[key]) gt 0}">
@@ -1126,45 +1162,7 @@
 								 </div>
 							 </c:forEach>
 							 </c:if>
-							 <!-- 수정하기 박스 -->
-							  <div id="commentModify${item.cIdx}" class="commentHidden">
-							 	<div class="comment-area-write comment-area-write${item.cIdx}" id="comment-area-write_id">
-							 		<div id="uploaded-file${item.cIdx}" class="uploaded-file">
-										<span><b>업로드된사진</b></span>
-										<c:if test="${item.picSrc ne null}">
-									 			<img src="${item.picSrc}" style="width:100px; height:100px;"/>
-										</c:if>
-									</div>
-									<form id="commentfile${item.cIdx}">
-										<input type="hidden" name="fileChange" value="0">
-										<input type="hidden" name="aIdx" value="${param.aIdx}">
-										<input type="hidden" name="bIdx" value="${param.bIdx}">
-										<input type="hidden" name="mIdx" value="${login.mIdx}">
-										<input type="hidden" name="cIdx" value="${item.cIdx}">
-										<input type="hidden" name="mNickname" value="${login.nickname}">
-										<input type="hidden" name="status" value="${item.status}">
-										<label style="margin-bottom:10px">
-											<input type="file" id="file${item.cIdx}" name="commentSrc" style='display:none' onchange="preview(event,'${item.cIdx}',this)" accept="image/*">
-											<c:choose>
-												<c:when test="${item.picSrc ne null}">
-												<label for="file${item.cIdx}">
-												</label>
-												<a><strong>사진 변경하기</strong></a>	
-												</c:when>
-												<c:otherwise>
-												<label for="file${item.cIdx}">
-												</label>
-												<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>												
-												</c:otherwise>
-											</c:choose>
-										</label>
-										<div class="comment-area-write-content">
-												<textarea id="comment-write-content${item.cIdx}" name="content" class="comment-area-write-content-area">${item.content}</textarea>
-												<input id="comment-write-button${item.cIdx}" type="button" value="수정" class="comment-area-write-content-button" onclick="commentUpdate(${login.mIdx},${item.cIdx})">
-										</div>
-									</form>
-								</div>
-							 </div>
+							 
 							 <!-- 답글달기 박스 -->
 							   <div id="replyWrite${item.cIdx}" class="commentHidden">
 							 	<div class="comment-area-write comment-area-write${item.cIdx}" id="write-area-write_id">
