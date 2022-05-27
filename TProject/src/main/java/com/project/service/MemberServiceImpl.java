@@ -379,9 +379,9 @@ public class MemberServiceImpl implements MemberService {
 	}
 	
 	@Override
-	public int sendMessage(Map<String, Object> map) {
+	public int sendMessage(MessagesVO vo) {
 		
-		return dao.sendMessage(map);
+		return dao.sendMessage(vo);
 	}
 
 	@Override
@@ -395,14 +395,38 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<MessagesVO> MessagesList(HttpServletRequest request, Map<String, Object> map) {
-		System.out.println(map.toString());
-		int page = map.get("page") == null ? 1 : Integer.parseInt(map.get("page").toString());
+	public List<MessagesVO> MessagesList(HttpServletRequest request, MessagesVO vo,int page) {
 		
-		int start = page+(page-1)*13;
-		int end=page*14;
+		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map2 = new HashMap<String, Object>();
+		System.out.println("받는사람"+vo.getReceiver());
+		System.out.println("받는사람권한"+vo.getReceiverType());
+		if(vo.getReceiver() != 0) {
+			
+		map2.put("receiver", vo.getReceiver());
+		map2.put("receiverType", vo.getReceiverType());
+		map2.put("sender", vo.getReceiver());
+		map2.put("senderType", vo.getReceiverType());
+		
+		} else {
+			
+			map2.put("receiver", vo.getSender());
+			map2.put("receiverType", vo.getSenderType());
+			map2.put("sender", vo.getSender());
+			map2.put("senderType", vo.getSenderType());
+			
+		}
+		
+		request.setAttribute("쪽지", dao.listCount(map2));
+		
+		page = (page == 0) ? 1 : page;
+		
+		int start = (page-1)*14;
 		map.put("start", start);
-		map.put("end", end);
+		map.put("receiver",vo.getReceiver());
+		map.put("receiverType",vo.getReceiverType());
+		map.put("sender", vo.getSender());
+		map.put("senderType", vo.getSenderType());
 		
 		return dao.listMessage(map);
 	}

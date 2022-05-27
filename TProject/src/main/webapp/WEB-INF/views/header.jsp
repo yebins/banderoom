@@ -291,7 +291,7 @@ header {
 				</div>
 				<div id="sm-profile-buttons">
 					<button class="normal-button" onclick = "location.href='/member/ginfo.do'">내 정보</button>
-					<button class="normal-button" onclick = "location.href='/member/myMessage.do'">쪽지함</button>
+					<button class="normal-button" onclick = "location.href='/member/myMessage.do?page=1'">쪽지함</button>
 					<button class="normal-button" onclick = "location.href='/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>
@@ -556,7 +556,7 @@ header {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
 		var mIdx=document.querySelector("#sm-profile-mIdx").value;
 		console.log(mIdx);
-		window.open("/messagePopup.do?mIdx="+mIdx,"쪽지보내기",option);
+		window.open("/messagePopup.do?type=general&mIdx="+mIdx,"쪽지보내기",option);
 	}
 	
 	

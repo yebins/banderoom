@@ -7,6 +7,8 @@ public class MessagesVO {
 	private int msgIdx;
 	private String senderType; // "general", "host"
 	private int sender;
+	private String senderNickname;
+	private String receiverNickname;
 	private String receiverType; // "general", "host"
 	private int receiver;
 	private String content;
@@ -60,5 +62,17 @@ public class MessagesVO {
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public String getSenderNickname() {
+		return senderNickname;
+	}
+	public void setSenderNickname(String senderNickname) {
+		this.senderNickname = senderNickname;
+	}
+	public String getReceiverNickname() {
+		return receiverNickname;
+	}
+	public void setReceiverNickname(String receiverNickname) {
+		this.receiverNickname = receiverNickname;
 	}
 }

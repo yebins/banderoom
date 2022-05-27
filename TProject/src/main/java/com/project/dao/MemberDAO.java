@@ -121,8 +121,8 @@ public class MemberDAO {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.hostMemberInfo",vo);
 	}
 	
-	public int sendMessage(Map<String,Object> map) {
-		return sqlSession.insert("com.project.mapper.memberMapper.sendMessage",map);
+	public int sendMessage(MessagesVO vo) {
+		return sqlSession.insert("com.project.mapper.memberMapper.sendMessage",vo);
 	}
 	
 	public HostMembersVO getHostMember (HostMembersVO vo) {
@@ -138,13 +138,9 @@ public class MemberDAO {
 		return sqlSession.selectList("com.project.mapper.memberMapper.listMessage", map);
 	}
 	
-	public int senderListCount(int sender) {
+	public Map<String,Object> listCount(Map<String, Object> map){
 		
-		return sqlSession.selectOne("com.project.mapper.memberMapper.listCount",sender);
-	}
-	public int receiverListCount(int receiver) {
-		
-		return sqlSession.selectOne("com.project.mapper.memberMapper.listCount",receiver);
+		return sqlSession.selectOne("com.project.mapper.memberMapper.listCount", map);
 	}
 	
 	public int infoUpdate(GeneralMembersVO vo) {
