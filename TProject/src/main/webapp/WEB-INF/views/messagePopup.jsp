@@ -53,16 +53,18 @@
 			<textarea></textarea>
 		</div>
 		<div id="messageButton">
-			<button class="normal-button" onclick="sendMessage('${vo.mIdx}')">전송</button>
+			<button class="normal-button" onclick="sendMessage('${vo.mIdx}','${type}')">전송</button>
 			<button class="normal-button" onclick="window.close()">닫기</button>
 		</div>
 	</div>
 <script>
-	function sendMessage(mIdx){
+	function sendMessage(mIdx,type){
 		var msg=document.querySelector("textarea").value;
+		console.log(type);
 		data={
 			"content":msg,
-			"receiver":mIdx
+			"receiver":mIdx,
+			"receiverType":type
 		};
 		
 		console.log(msg);

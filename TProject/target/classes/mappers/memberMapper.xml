@@ -256,37 +256,76 @@
 		where midx=#{mIdx}
 	</select>
 	
-	<insert id="sendMessage" parameterType="map">
+	<insert id="sendMessage" parameterType="messagesVO">
 		insert into messages(
 			sender
+			,senderType
 			,receiver
+			,receiverType
 			,content
 			,sentdate
+			,status
 		) values(
 			#{sender}
+			,#{senderType}
 			,#{receiver}
+			,#{receiverType}
 			,#{content}
 			,now()
+			,0
 		)
 	</insert>
 	
 	<select id="listMessage" parameterType="map" resultType="messagesVO">
-		<![CDATA[
-			select * from
-			(SELECT
-			  @rownum:=@rownum+1 as rownum, 
-			  msg.*
-			FROM messages msg,(select @rownum:=0) rn_msg ]]>
-		<if test="receiver != null and receiver != ''">
-			where msg.receiver = #{receiver}
-		</if>
-		<if test="sender != null and sender != ''">
-			where msg.sender = #{sender}
-		</if>
-			order by msgidx desc) list
-		<![CDATA[where rownum>=#{start} and rownum <=#{end}]]>
+		select m.msgidx
+			,m.sendertype
+			,m.sender
+			,
+			case 
+				when m.sendertype = 'general'
+				then (select gm.nickname from general_members gm where gm.midx = m.sender )
+				when m.sendertype = 'host'
+				then (select hm.nickname from host_members hm where hm.midx = m.sender)
+			end as senderNickname
+			,m.receivertype
+			,m.receiver
+			, 
+			case 
+				when m.receivertype = 'general'
+				then (select gm.nickname from general_members gm where gm.midx = m.receiver )
+				when m.receivertype = 'host'
+				then (select hm.nickname from host_members hm where hm.midx = m.receiver)
+			end as receiverNickname
+			,m.content
+			,m.sentdate
+			,m.status  
+			from messages m
+			<if test="receiver != null and receiver != '' and receiverType != null">
+			where m.receiver = #{receiver}
+			and m.receiverType = #{receiverType}
+			</if>
+			<if test="sender != null and sender != '' and senderType != null">
+			where m.sender = #{sender}
+			and m.senderType = #{senderType}
+			</if>
+			order by m.msgidx desc
+			limit #{start},14
 	</select>
 	
+	<select id="listCount" parameterType="map" resultType="map">
+		select 
+			pp.ct1,pp.ct2,kk.ct3 
+		from (
+			select rm.ct1 , sm.ct2 
+		from
+			(select count(m.msgidx) ct1 
+		from messages m 
+			where m.receivertype like CONCAT (#{receiverType}) and m.receiver = #{receiver}) as rm 
+		join 
+			(select count(m2.msgidx) ct2 from messages m2 where m2.sender= #{sender} and m2.sendertype like CONCAT (#{senderType})) as sm) pp
+		join 
+			(select count(m3.msgidx) ct3 from messages m3 where m3.sender = #{sender} and m3.senderType like CONCAT (#{senderType}) and receiver=#{receiver} and receiverType like CONCAT (#{receiverType})) kk;
+	</select>
 	
 	
 	<select id="getHostMember" parameterType="hostMembersVO" resultType="hostMembersVO">

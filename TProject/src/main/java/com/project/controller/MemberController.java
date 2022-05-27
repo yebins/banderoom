@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.apache.ibatis.reflection.SystemMetaObject;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -269,25 +270,90 @@ public class MemberController {
 	}
 	
 	@RequestMapping(value="myMessage.do")
-	public String myMessage(Model model,HttpServletRequest request,@RequestParam Map<String, Object> params) {
-		GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");//현재 세션 로그인정보
-		System.out.println("쪽지함 로그인정보"+login.getmIdx());
+	public String myMessage(Model model,HttpServletRequest request,MessagesVO msgVO,int page) {
+		HttpSession session=request.getSession();
+		int bp=0;
+		if ( page != 0 ) bp=page; 
 		
-		if( login != null) {
-				params.put("mIdx", login.getmIdx());
-				List<MessagesVO> vo=memberService.MessagesList(request, params);
-				
-				model.addAttribute("list",vo);
-				model.addAttribute("receiveCount",request.getAttribute("receiveCount"));
-				model.addAttribute("sendCount",request.getAttribute("sendCount"));
+		if(session.getAttribute("login") == null && session.getAttribute("hlogin") == null) {
 			
-			return "myMessage";
-		} 
-		
 			request.setAttribute("msg", "로그인하세요.");
 			request.setAttribute("url", "/member/glogin.do");
 				
 			return "alert";
+			
+		} else if(session.getAttribute("login") != null) {
+			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");
+			msgVO.setReceiver(vo.getmIdx());
+			msgVO.setReceiverType("general");
+			List<MessagesVO> list= memberService.MessagesList(request, msgVO, bp);
+			model.addAttribute("msgCount",request.getAttribute("쪽지"));
+			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			model.addAttribute("msgTotal",cmt.get("ct1"));
+			model.addAttribute("page",page);
+			model.addAttribute("list",list);
+			model.addAttribute("sign","receive");
+			
+			
+			return "myMessage";
+		} else {
+			HostMembersVO vo=(HostMembersVO)session.getAttribute("hlogin");
+			msgVO.setReceiver(vo.getmIdx());
+			msgVO.setReceiverType("host");
+			List<MessagesVO> list=memberService.MessagesList(request, msgVO, bp);
+			model.addAttribute("msgCount",request.getAttribute("쪽지"));
+			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			model.addAttribute("msgTotal",cmt.get("ct1"));
+			model.addAttribute("page",page);
+			model.addAttribute("list",list);
+			model.addAttribute("sign","receive");
+			
+			return "myMessage";
+		}
+		
+	}
+	
+	@RequestMapping(value="sentMessage.do")
+	public String sentMessage(Model model,HttpServletRequest request,MessagesVO msgVO,int page) {
+		HttpSession session=request.getSession();
+		int bp=0;
+		System.out.println(page);
+		if ( page != 0 ) bp=page; 
+		
+		if(session.getAttribute("login") == null && session.getAttribute("hlogin") == null) {
+			
+			request.setAttribute("msg", "로그인하세요.");
+			request.setAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+			
+		} else if(session.getAttribute("login") != null) {
+			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");
+			msgVO.setSender(vo.getmIdx());
+			msgVO.setSenderType("general");
+			List<MessagesVO> list= memberService.MessagesList(request, msgVO, bp);
+			model.addAttribute("msgCount",request.getAttribute("쪽지"));
+			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			model.addAttribute("msgTotal",cmt.get("ct2"));
+			model.addAttribute("list",list);
+			model.addAttribute("page",page);
+			model.addAttribute("sign","send");
+			
+			return "myMessage";
+		} else {
+			HostMembersVO vo=(HostMembersVO)session.getAttribute("hlogin");
+			msgVO.setSender(vo.getmIdx());
+			msgVO.setSenderType("host");
+			List<MessagesVO> list=memberService.MessagesList(request, msgVO, bp);
+			model.addAttribute("msgCount",request.getAttribute("쪽지"));
+			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			model.addAttribute("msgTotal",cmt.get("ct2"));
+			model.addAttribute("list",list);
+			model.addAttribute("page",page);
+			model.addAttribute("sign","send");
+			
+			return "myMessage";
+		}
 		
 	}
 	

@@ -251,7 +251,13 @@
 		padding-top:50px;
 		padding-bottom:50px;
 		display:none;
-		background: rgba(248,247,216,0.7);
+		background: rgb(0 0 0 / 80%);
+	}
+	pre{
+	    width: 100%;
+  	  font-family: system-ui;
+  	  word-break: break-all;
+ 	   white-space: pre-wrap;
 	}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
@@ -392,6 +398,7 @@
 				} else {
 					$.each(list[1],function(index,el){
 						var cIdx=el.cIdx;
+						if(list[4][el.cIdx].length > 0 || el.status != 1){
 						htmls+='<li class="comment-area-ul-li">'
 						htmls+='<div class="comment-area-content">'
 						htmls+='<div class="comment-area-content-toparea">'
@@ -413,9 +420,9 @@
 						htmls+='</div>'
 						htmls+='<div class="comment-area-content-contentarea">'
 						if(el.status != 1){
-							htmls+='<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >'+el.content+'<br>'							
-							if(el.picSrc != null){
-							htmls+='<img src="'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray;margin-top:10px;margin-bottom:10px"/>'	
+						htmls+='<div style="resize: none;border:none;width:100%;" readonly ><pre>'+el.content+'</pre><br>'							
+						if(el.picSrc != null){
+						htmls+='<img src="'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray;margin-top:10px;margin-bottom:10px"/>'	
 							}
 						} else {
 							htmls+='<div style="resize: none;border:none;width:100%;word-break:break-all; font-weight:bold;" readonly >삭제된댓글입니다.<br></div>'
@@ -518,7 +525,7 @@
 								htmls+='</div>'
 								htmls+='</div>'
 								htmls+='<div class="comment-area-content-contentarea">'
-								htmls+='<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >'+rl.content+'<br>'
+								htmls+='<div style="resize: none;border:none;width:100%;"readonly ><pre>'+rl.content+'</pre><br>'
 								if(rl.picSrc != null){
 								htmls+='<img src="'+rl.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'							
 								}
@@ -1025,7 +1032,7 @@
 							 		<div class="comment-area-content-contentarea">
 							 			<c:choose>
 							 			<c:when test="${item.status eq 0}">
-								 		<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >${item.content}<br>
+								 		<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly ><pre style="font-family:system-ui">${item.content}</pre><br>
 											<c:if test="${item.picSrc ne null}">
 									 			<img src="${item.picSrc}"/>
 											</c:if>

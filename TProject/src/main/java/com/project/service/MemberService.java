@@ -30,10 +30,10 @@ public interface MemberService {
 	HostMembersVO hLogin(HostMembersVO vo);
 	GeneralMembersVO oneMemberInfo(GeneralMembersVO vo);
 	HostMembersVO oneMemberInfo(HostMembersVO vo);
-	int sendMessage(Map<String,Object> map);
+	int sendMessage(MessagesVO vo);
 	HostMembersVO getHostMember(HostMembersVO vo);
 	int setPoint(PointsVO vo);
-	List<MessagesVO> MessagesList(HttpServletRequest request,Map<String, Object> map);
+	List<MessagesVO> MessagesList(HttpServletRequest request,MessagesVO vo,int page);
 	int infoUpdate(GeneralMembersVO vo);
 	int infoUpdate(HostMembersVO vo);
 	String selectCurrPw(String memberType, int mIdx);

@@ -3,12 +3,8 @@ package com.project.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -29,9 +25,9 @@ import com.project.service.BoardService;
 import com.project.service.MemberService;
 import com.project.service.SpaceService;
 import com.project.vo.ArticlesVO;
-import com.project.vo.CommentsVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.HostMembersVO;
+import com.project.vo.MessagesVO;
 import com.project.vo.ServiceInfoVO;
 import com.project.vo.SpacesVO;
 
@@ -288,33 +284,42 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/messagePopup.do")
-	public String messagePopup(Model model,GeneralMembersVO vo) {
+	public String messagePopup(Model model,GeneralMembersVO vo,String type) {
 		System.out.println(vo.getmIdx());
 		GeneralMembersVO vo1=memberService.oneMemberInfo(vo);
 		model.addAttribute("vo",vo1);
+		model.addAttribute("type",type);
 		
 		return "messagePopup";
 	}
 	
 	@RequestMapping(value="/messageSend.do")
 	@ResponseBody
-	public int messageSend(String content,int receiver,HttpServletRequest request) {
+	public int messageSend(MessagesVO msgVO, HttpServletRequest request) {
 		HttpSession session=request.getSession();
-		System.out.println("보낸내용"+content);
-		System.out.println("받는사람"+receiver);
+		System.out.println(msgVO.toString());
+		System.out.println("보낸내용"+msgVO.getContent());
+		System.out.println("받는사람"+msgVO.getReceiver());
+		System.out.println("받는사람의타입"+msgVO.getReceiverType());
 		
-		if(session.getAttribute("login") != null) {
+		if(session.getAttribute("login") == null && session.getAttribute("hlogin") == null) {
+				
+			
+			return -2;
+			
+		} else if(session.getAttribute("login") != null){
 			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");
-			int sender=vo.getmIdx();
-			Map<String,Object> map=new HashMap<String,Object>();
-			map.put("content", content);
-			map.put("receiver", receiver);
-			map.put("sender",sender);
+			msgVO.setSender(vo.getmIdx());
+			msgVO.setSenderType("general");
 			
-			return memberService.sendMessage(map);
 			
-		} else{
-			return -1;
+			return memberService.sendMessage(msgVO);
+		} else {
+			HostMembersVO vo=(HostMembersVO)session.getAttribute("hlogin");
+			msgVO.setSender(vo.getmIdx());
+			msgVO.setSenderType("host");
+			
+			return memberService.sendMessage(msgVO);
 		}
 		
 	}
