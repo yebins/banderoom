@@ -5,13 +5,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.springframework.ui.Model;
-
 import com.project.vo.EmailRegVO;
 import com.project.vo.GeneralMembersVO;
 import com.project.vo.HostMembersVO;
 import com.project.vo.MessagesVO;
 import com.project.vo.PointsVO;
+import com.project.vo.ReportsVO;
 import com.project.vo.TelRegVO;
 
 public interface MemberService {
@@ -40,5 +39,13 @@ public interface MemberService {
 	String selectCurrPw(String memberType, int mIdx);
 	GeneralMembersVO selectGmemberByEmail(GeneralMembersVO vo);
 	HostMembersVO selectHmemberByBrn(HostMembersVO vo);
-	int sendReport(Map<String, Object> map);
+	int sendReport(ReportsVO vo);
+	List<ReportsVO> reportedMember(Map<String, Object> searchMap);
+	int reportListNum(Map<String, Object> pagingMap);
+	ReportsVO reportedDetail(int rIdx);
+	int block(int target);
+	int withdraw(int target);
+	int deleteReport(int rIdx);
+	List<GeneralMembersVO> gMember();
+	List<HostMembersVO> hMember();
 }

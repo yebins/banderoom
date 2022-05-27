@@ -155,7 +155,6 @@ select[name=sort]{
 		var loadingDiv = $('<div class="spinner-border" role="status"></div>');
 		$('#wrapper').append(loadingDiv);
 		
-		console.log(1);
 		loading = true;
 		nowPage ++;
 		

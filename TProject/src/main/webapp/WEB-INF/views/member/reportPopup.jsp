@@ -21,6 +21,7 @@ textarea {
 	height:100%;
 	resize: none;
 	border-radius:10px;
+	padding:7px;
 }
 #receiver{
 	padding:10px;
@@ -39,28 +40,15 @@ textarea {
 	margin-right:20px;
 }
 </style>
-</head>
-<body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-	<div id="reportBox">
-		<div id="receiver">
-			<span style="font-weight:bold;">신고할 회원</span>
-			<span>${vo.nickname}</span>
-		</div>
-		<div id="reportContent">
-			<textarea></textarea>
-		</div>
-		<div id="reportButton">
-			<button class="normal-button" onclick="report'${vo.mIdx}')">신고하기</button>
-			<button class="normal-button" onclick="window.close()">닫기</button>
-		</div>
-	</div>
 <script>
 	function report(mIdx){
 		var msg = document.querySelector("textarea").value;
+		var targetname = $("#targetname").text();
+
 		data = {
 			"content" : msg,
-			"target" : mIdx
+			"target" : mIdx,
+			"targetname" : targetname
 		};
 		
 		$.ajax({
@@ -81,5 +69,22 @@ textarea {
 		});
 	}
 </script>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<div id="reportBox">
+		<div id="receiver">
+			<span style="font-weight:bold;">신고할 회원</span>
+			<span id="targetname">${vo.nickname}</span>
+		</div>
+		<div id="reportContent">
+			<textarea placeholder="url을 입력해주시면 빠른 처리에 도움이 됩니다."></textarea>
+		</div>
+		<div id="reportButton">
+			<button class="normal-button" onclick="report('${vo.mIdx}')">신고하기</button>
+			<button class="normal-button" onclick="window.close()">닫기</button>
+		</div>
+	</div>
+
 </body>
 </html>

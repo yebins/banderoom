@@ -352,8 +352,14 @@ header {
        	<div class="sm-innerlist" onclick="location.href='/space/myspace.do'">
        	공간 관리
        	</div>
-       	<div class="sm-innerlist" onclick="">
-       	신고회원 관리
+       	<div class="sm-innerlist" onclick="location.href='/member/reportedMember.do'">
+       	신고글 관리
+       	</div>
+       	<div class="sm-innerlist" onclick="location.href='/member/gAdminCheck.do'">
+       	일반회원 관리
+       	</div>
+       	<div class="sm-innerlist" onclick="location.href='/member/hAdminCheck.do'">
+       	호스트회원 관리
        	</div>
       </div>
     </div>
@@ -564,7 +570,7 @@ header {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no";
 		var mIdx = document.querySelector("#sm-profile-mIdx").value; //받는사람(target)의 midx
 		
-		window.open("/reportPopup.do?mIdx="+mIdx, "신고하기", option);
+		window.open("/member/reportPopup.do?mIdx="+mIdx, "신고하기", option);
 	}
 </script>
 </header>

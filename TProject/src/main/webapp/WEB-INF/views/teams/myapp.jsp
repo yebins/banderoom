@@ -110,12 +110,6 @@
 		
 </style>
 
-<script type="text/javascript">
-	
-	
-	
-</script>
-
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -160,43 +154,43 @@
 					</c:forEach>
 					
 					<div id="page-nav"><!-- 페이지 시작 -->					
-							<c:if test="${PagingUtil.lastPage < 6}">
-								<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
-									<c:choose>
-										<c:when test="${i == PagingUtil.nowPage}">
-											<div class="page-nav-button current-page">${i}</div>
-										</c:when>
-										<c:otherwise>
-											<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
+						<c:if test="${PagingUtil.lastPage < 6}">
+							<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
+								<c:choose>
+									<c:when test="${i == PagingUtil.nowPage}">
+										<div class="page-nav-button current-page">${i}</div>
+									</c:when>
+									<c:otherwise>
+										<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+						</c:if>
+						<c:if test="${PagingUtil.lastPage > 5}">
+							<c:if test="${PagingUtil.startPage > 5}">
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=1'">1</div>
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.startPage - 1}'">◀</div>
 							</c:if>
-							<c:if test="${PagingUtil.lastPage > 5}">
-								<c:if test="${PagingUtil.startPage > 5}">
-									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=1'">1</div>
-									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.startPage - 1}'">◀</div>
-								</c:if>
-								
-								<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
-									<c:choose>
-										<c:when test="${i == 1}">
-											<div class="page-nav-button current-page">${i}</div>
-										</c:when>
-										<c:otherwise>
-											<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
-								
-								<c:if test="${PagingUtil.endPage < PagingUtil.lastPage}">
-									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.endPage + 1}">▶</div>
-									<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
-								</c:if>
+							
+							<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
+								<c:choose>
+									<c:when test="${i == 1}">
+										<div class="page-nav-button current-page">${i}</div>
+									</c:when>
+									<c:otherwise>
+										<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${i}'">${i}</div>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							
+							<c:if test="${PagingUtil.endPage < PagingUtil.lastPage}">
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.endPage + 1}">▶</div>
+								<div class="page-nav-button" onclick="location.href='myapp.do?teamIdx=${param.teamIdx}&mIdx=${param.mIdx}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
 							</c:if>
-						</div>
-					
+						</c:if>
+					</div>
 				</c:if>
+				
 				<c:if test="${applist.size() == 0}">
 					<div class="inner-box" style="height:50px; margin-top:20px;">받은 지원서가 없습니다.</div>
 				</c:if>
