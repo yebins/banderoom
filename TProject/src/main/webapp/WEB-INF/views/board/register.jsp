@@ -107,22 +107,18 @@
 		</div>
 		<form action="register.do" method="post">
 			<input type="hidden" name="bIdx" value="${param.bIdx}"> 
-			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
-			<input type="hidden" name="mIdx" value="${login.mIdx}">
 			<div id="page-content">
 				<div class="inner-box" style="height:500px;">
 					<div class="select-board">	
-						<input type="text" name="title" class="list-title form-control me-3" placeholder="제목을 입력하세요">
+						<input type="text" name="title" class="list-title form-control me-3" placeholder="제목을 입력하세요" required>
 					</div>
 					<div class="inner-box-content">
-						<form method="post">
-							<textarea name="content" id="summernote" style="width: 100%;"></textarea>
-						</form>
+						<textarea name="content" id="summernote" style="width: 100%;"></textarea>
 					</div>
 					<div class="inner-box-button-wrap">
 						<button class="normal-button accent-button" style="margin-left: 15px;">저장</button>
-						<button class="normal-button" style="margin-left: 10px;">취소하기</button>
+						<button type="button" onclick="history.back()" class="normal-button" style="margin-left: 10px;">취소하기</button>
 					</div>
 				</div>
 			</div>
