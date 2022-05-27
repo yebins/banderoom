@@ -570,7 +570,9 @@
 								htmls+='</form>'
 								htmls+='</div>'
 								htmls+='</div>'
-								})						
+								
+								})
+						}
 						}
 						
 					})
