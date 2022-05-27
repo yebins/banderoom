@@ -56,6 +56,12 @@ public class BoardController {
 		
 		
 		if(session.getAttribute("login") != null) {
+			if(vo.getTitle()==null || vo.getTitle()=="") {
+				request.setAttribute("msg", "제목을 입력하세요");
+				request.setAttribute("url", "/board/register.do?page=1&bIdx=" + vo.getbIdx());
+				
+				return "/alert";
+			}
 			if(login.getAuth()==1) {
 				request.setAttribute("msg", "글쓰기가 차단된 회원입니다.");
 				request.setAttribute("url", "/board/list.do?page=1&bIdx=" + vo.getbIdx());
@@ -77,12 +83,6 @@ public class BoardController {
 				return "redirect:/board/jlist.do";
 			}
 			
-		}else if(session.getAttribute("login") == null){
-			
-			request.setAttribute("msg", "로그인후 이용하세요.");
-			request.setAttribute("url", "/board/list.do?page=1&bIdx=" + vo.getbIdx());
-			
-			return "/alert";
 		}else {
 			request.setAttribute("msg", "로그인후 이용하세요.");
 			request.setAttribute("url", "/board/list.do?page=1&bIdx=" + vo.getbIdx());
@@ -466,41 +466,43 @@ public class BoardController {
 			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			System.out.println(one.getPicSrc());
 			vo.setPicSrc(one.getPicSrc());
-			
-			if(vo.getContent() != null && vo.getContent() != "") {
+			if(vo.getmIdx() == login.getmIdx() || login.getAuth() == 3) {
+				
 				if(login.getAuth() == 1) {
 					return 2;
 				}
 				
-				//사진 변경 삭제
-				if(fileChange == 1) {
-					//변경
-					if (!file.isEmpty()) {
-					
-					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
-					
-					String fileName=file.getOriginalFilename();
-					
-					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
-					
-					UUID uuid = UUID.randomUUID();
-					
-					String newFileName = uuid.toString() + extension;
-					
-					File target = new File(path, newFileName);
-					
-					//System.out.println(target.toString());
-					
-					file.transferTo(target);//파일이생성됨
-					
-					vo.setPicSrc("/upload/"+newFileName);
-					} else {
-					vo.setPicSrc(null);
+				if(vo.getContent() != null && vo.getContent() != "") {
+					//사진 변경 삭제
+					if(fileChange == 1) {
+						//변경
+						if (!file.isEmpty()) {
+						
+						String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+						
+						String fileName=file.getOriginalFilename();
+						
+						String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+						
+						UUID uuid = UUID.randomUUID();
+						
+						String newFileName = uuid.toString() + extension;
+						
+						File target = new File(path, newFileName);
+						
+						//System.out.println(target.toString());
+						
+						file.transferTo(target);//파일이생성됨
+						
+						vo.setPicSrc("/upload/"+newFileName);
+						} else {
+						vo.setPicSrc(null);
+						}
 					}
 				}
 				
 				return boardService.commentRepliesUpdate(vo);
-				
+
 			} else {
 				
 				return -1;
@@ -517,45 +519,49 @@ public class BoardController {
 			HttpSession session = request.getSession();
 			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			
-			if(vo.getContent() != null && vo.getContent() != "") {
+			if(vo.getmIdx() == login.getmIdx() || login.getAuth() == 3) {
 				if(login.getAuth() == 1) {
 					return 2;
 				}
-				
-				//사진 변경 삭제
-				if(fileChange == 1) {
-					//변경
-					if (!file.isEmpty()) {
-					
-					String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
-					
-					String fileName=file.getOriginalFilename();
-					
-					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
-					
-					UUID uuid = UUID.randomUUID();
-					
-					String newFileName = uuid.toString() + extension;
-					
-					File target = new File(path, newFileName);
-					
-					//System.out.println(target.toString());
-					
-					file.transferTo(target);//파일이생성됨
-					
-					vo.setPicSrc("/upload/"+newFileName);
-					} else {
-					vo.setPicSrc(null);
+				if(vo.getContent() != null && vo.getContent() != "") {
+					//사진 변경 삭제
+					if(fileChange == 1) {
+						//변경
+						if (!file.isEmpty()) {
+						
+						String path = request.getSession().getServletContext().getRealPath("/resources/upload"); //실제경로		
+						
+						String fileName=file.getOriginalFilename();
+						
+						String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
+						
+						UUID uuid = UUID.randomUUID();
+						
+						String newFileName = uuid.toString() + extension;
+						
+						File target = new File(path, newFileName);
+						
+						//System.out.println(target.toString());
+						
+						file.transferTo(target);//파일이생성됨
+						
+						vo.setPicSrc("/upload/"+newFileName);
+						
+						} else {
+							vo.setPicSrc(null);
+						}
+						
 					}
+					
 				}
-				
 				return boardService.commentUpdate(vo);
 				
-			} else {
+			}else {
 				
 				return -1;
+				
 			}
-			
+			 
 		}
 		
 		@RequestMapping(value="/commentDelete.do")
@@ -564,11 +570,15 @@ public class BoardController {
 			HttpSession session = request.getSession();
 			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			
-			if(login.getAuth() == 1) {
-				return 2;
-			} else
-			
-			return boardService.commentDelete(vo);
+			if(vo.getmIdx() == login.getmIdx() || login.getAuth() == 3) {
+				if(login.getAuth() == 1) {
+					return 2;
+				}
+				return boardService.commentDelete(vo);
+			}
+			 else {
+				 return -2;
+			 }
 		}
 		
 		@RequestMapping(value="/commentList.do")
@@ -608,7 +618,7 @@ public class BoardController {
 			
 			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
 			
-			if(vo.getmIdx() == login.getmIdx()) {
+			if(vo.getmIdx() == login.getmIdx() || login.getAuth() == 3) {
 				if(login.getAuth() == 1) {
 					return 2;
 				}
