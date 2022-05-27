@@ -367,17 +367,139 @@
 	<select id="selectHmemberByBrn" parameterType="hostMembersVO" resultType="hostMembersVO">
 		select * from host_members where brn = #{brn}
 	</select>
+	
 	<!-- report -->
-	<insert id="sendReport" parameterType="hashMap">
+	<insert id="sendReport" parameterType="reportsVO">
 		INSERT INTO reports(
 			 reporter
+			,reportername
 			,target
+			,targetname
 			,content
 		)VALUES(
 			 #{reporter}
+			,#{reportername}
 			,#{target}
+			,#{targetname}
 			,#{content}
 		)
 	</insert>
+	
+	<select id="reportedMember" parameterType="hashMap" resultType="reportsVO">
+		SELECT r.ridx
+			 , r.target
+			 , r.targetname
+			 , r.reportername
+			 , r.repdate
+			 , r.content
+			 , b.reportcount
+		  FROM reports r
+		  left outer join 
+			(select count(ridx) as 'reportcount', target
+		   	   from reports
+		      group by target) b
+		    on r.target = b.target
+		<if test="searchField == 'target'">
+			WHERE r.targetname like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'reporter'">
+			WHERE r.reportername like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'content'">
+			WHERE r.content like concat('%',#{searchWord},'%')
+		</if>
+		<if test="sort == null">
+			ORDER BY r.ridx desc
+		</if>
+		<if test="sort != null">
+			<if test="sort == 'rIdx'">
+				ORDER BY r.ridx desc
+			</if>
+			<if test="sort == 'reportCount'">
+				ORDER BY b.reportcount desc, r.repdate desc
+			</if>
+		</if>
+		 LIMIT #{start}, 10
+	</select>
+	
+	<select id="reportListNum" parameterType="hashMap" resultType="int">
+		select count(ridx)
+		  FROM reports
+		<if test="searchField == 'target'">
+			WHERE targetname like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'reporter'">
+			WHERE reportername like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'content'">
+			WHERE content like concat('%',#{searchWord},'%')
+		</if>
+	</select>
+	
+	<select id="reportedDetail" parameterType="int" resultType="reportsVO">
+		SELECT ridx, target, targetname, reportername, repdate, content
+		  FROM reports
+		 WHERE ridx = #{rIdx}
+	</select>
+	
+	<update id="block" parameterType="int">
+		UPDATE general_members SET auth = 1
+		 WHERE midx = #{target}
+	</update>
+	
+	<update id="withdraw" parameterType="int">
+		UPDATE general_members SET auth = 2
+		 WHERE midx = #{target}
+	</update>
+	
+	<delete id="deleteReport" parameterType="int">
+		DELETE FROM reports WHERE ridx = #{rIdx}
+	</delete>
 	<!-- report -->
+	
+	<!-- 일반회원관리 -->
+	<select id="gMember" resultType="generalMembersVO">
+		select 
+			  midx
+			, email
+			, name
+			, nickname
+			, address
+			, addressdetail
+			, addr1
+			, addr2
+			, tel
+			, profilesrc
+			, gender
+			, point
+			, auth
+			, iskakao
+			, joindate
+		  FROM general_members
+		 order by midx desc
+	</select>
+	
+	<select id="hMember" resultType="hostMembersVO">
+		SELECT 
+			  midx
+			, brn
+			, email
+			, name
+			, nickname
+			, address
+			, addressdetail
+			, addr1
+			, addr2
+			, tel
+			, profilesrc
+			, gender
+			, auth
+			, joindate
+		 FROM host_members
+		order by midx desc
+	</select>
+	
+	<!-- 일반회원관리 -->
+	
+	
 </mapper>

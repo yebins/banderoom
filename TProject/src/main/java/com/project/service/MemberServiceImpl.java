@@ -432,13 +432,55 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int sendReport(Map<String, Object> map) {
-		return dao.sendReport(map);
+	public int sendReport(ReportsVO vo) {
+		return dao.sendReport(vo);
 	}
 	
 	@Override
 	public HostMembersVO selectHmemberByBrn(HostMembersVO vo) {
 		return dao.selectHmemberByBrn(vo);
 	}
+
+	@Override
+	public List<ReportsVO> reportedMember(Map<String, Object> searchMap) {
+		return dao.reportedMember(searchMap);
+	}
+
+	@Override
+	public int reportListNum(Map<String, Object> pagingMap) {
+		return dao.reportListNum(pagingMap);
+	}
+	
+	@Override
+	public ReportsVO reportedDetail(int rIdx) {
+		return dao.reportedDetail(rIdx);
+	}
+
+	@Override
+	public int block(int target) {
+		return dao.block(target);
+	}
+
+	@Override
+	public int withdraw(int target) {
+		return dao.withdraw(target);
+	}
+
+	@Override
+	public int deleteReport(int rIdx) {
+		return dao.deleteReport(rIdx);
+	}
+
+	@Override
+	public List<GeneralMembersVO> gMember() {
+		return dao.gMember();
+	}
+
+	@Override
+	public List<HostMembersVO> hMember() {
+		return dao.hMember();
+	}
+
+	
 	
 }

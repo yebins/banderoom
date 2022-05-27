@@ -12,6 +12,7 @@ import com.project.vo.GeneralMembersVO;
 import com.project.vo.HostMembersVO;
 import com.project.vo.MessagesVO;
 import com.project.vo.PointsVO;
+import com.project.vo.ReportsVO;
 import com.project.vo.TelRegVO;
 
 @Repository
@@ -176,7 +177,31 @@ public class MemberDAO {
 	public HostMembersVO selectHmemberByBrn(HostMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.selectHmemberByBrn", vo);
 	}
-	public int sendReport(Map<String, Object> map) {
-		return sqlSession.insert("com.project.mapper.memberMapper.sendReport", map);
+	public int sendReport(ReportsVO vo) {
+		return sqlSession.insert("com.project.mapper.memberMapper.sendReport", vo);
+	}
+	public List<ReportsVO> reportedMember(Map<String, Object> searchMap){
+		return sqlSession.selectList("com.project.mapper.memberMapper.reportedMember", searchMap);
+	}
+	public int reportListNum(Map<String, Object> pagingMap) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.reportListNum", pagingMap);
+	}
+	public ReportsVO reportedDetail(int rIdx) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.reportedDetail", rIdx);
+	}
+	public int block(int target) {
+		return sqlSession.update("com.project.mapper.memberMapper.block", target);
+	}
+	public int withdraw(int target) {
+		return sqlSession.update("com.project.mapper.memberMapper.withdraw", target);
+	}
+	public int deleteReport(int rIdx) {
+		return sqlSession.delete("com.project.mapper.memberMapper.deleteReport", rIdx);
+	}
+	public List<GeneralMembersVO> gMember() {
+		return sqlSession.selectList("com.project.mapper.memberMapper.gMember");
+	}
+	public List<HostMembersVO> hMember() {
+		return sqlSession.selectList("com.project.mapper.memberMapper.hMember");
 	}
 }
