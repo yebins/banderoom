@@ -263,10 +263,9 @@ public class MemberController {
 	@RequestMapping(value="miniProfile.do")
 	@ResponseBody
 	public GeneralMembersVO miniProfile(GeneralMembersVO vo) {
-		System.out.println(vo.getmIdx());
-		GeneralMembersVO vo1=(GeneralMembersVO)memberService.oneMemberInfo(vo);
+		vo = (GeneralMembersVO) memberService.oneMemberInfo(vo);
 		
-		return vo1;
+		return vo;
 	}
 	
 	@RequestMapping(value="myMessage.do")
@@ -899,4 +898,83 @@ public class MemberController {
 	}
 	//회원관리
 	
+	@RequestMapping(value = "unregister.do")
+	public String unregister(Model model, HttpServletRequest request) {
+		
+		if (request.getSession().getAttribute("login") != null) {
+
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			GeneralMembersVO unreg = new GeneralMembersVO();
+			
+			unreg.setmIdx(login.getmIdx());
+			unreg.setEmail("unreg_" + login.getmIdx());
+			unreg.setName("unreg_" + login.getmIdx());
+			unreg.setNickname("unreg_" + login.getmIdx());
+			unreg.setAddress("unreg_" + login.getmIdx());
+			unreg.setAddr1("unreg_" + login.getmIdx());
+			unreg.setAddr2("unreg_" + login.getmIdx());
+			unreg.setTel("unreg_" + login.getmIdx());
+			unreg.setProfileSrc("/images/profile_default.png");
+			unreg.setGender("U");
+			unreg.setAuth(2);
+			unreg.setIsKakao("U");
+			
+			int result = memberService.gUnregister(unreg);
+			
+			if (result > 0) {
+
+				request.getSession().invalidate();
+				model.addAttribute("msg", "정상적으로 탈퇴했습니다.");
+				model.addAttribute("url", "/");
+				
+				return "alert";
+			} else {
+
+				model.addAttribute("msg", "탈퇴에 실패했습니다.");
+				model.addAttribute("url", "history.back()");
+				
+				return "alert";
+			}
+		} else if (request.getSession().getAttribute("hlogin") != null) {
+			
+			HostMembersVO login = (HostMembersVO) request.getSession().getAttribute("hlogin");
+			HostMembersVO unreg = new HostMembersVO();
+			
+			unreg.setmIdx(login.getmIdx());
+			unreg.setBrn("unreg_" + login.getmIdx());
+			unreg.setEmail("unreg_" + login.getmIdx());
+			unreg.setName("unreg_" + login.getmIdx());
+			unreg.setNickname("unreg_" + login.getmIdx());
+			unreg.setAddress("unreg_" + login.getmIdx());
+			unreg.setAddr1("unreg_" + login.getmIdx());
+			unreg.setAddr2("unreg_" + login.getmIdx());
+			unreg.setTel("unreg_" + login.getmIdx());
+			unreg.setProfileSrc("/images/profile_default.png");
+			unreg.setGender("U");
+			unreg.setAuth(2);
+			
+			int result = memberService.hUnregister(unreg);
+
+			if (result > 0) {
+
+				request.getSession().invalidate();
+				model.addAttribute("msg", "정상적으로 탈퇴했습니다.");
+				model.addAttribute("url", "/");
+				
+				return "alert";
+			} else {
+
+				model.addAttribute("msg", "탈퇴에 실패했습니다.");
+				model.addAttribute("url", "history.back()");
+				
+				return "alert";
+			}
+		} else {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "document.referrer");
+			
+			return "alert";
+		}
+	}
 }

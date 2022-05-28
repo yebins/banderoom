@@ -505,6 +505,14 @@ public class MemberServiceImpl implements MemberService {
 		return dao.hMember();
 	}
 
+	@Override
+	public int gUnregister(GeneralMembersVO vo) {
+		return dao.gUnregister(vo);
+	}
 	
+	@Override
+	public int hUnregister(HostMembersVO vo) {
+		return dao.hUnregister(vo);
+	}
 	
 }

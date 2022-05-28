@@ -540,5 +540,41 @@
 	
 	<!-- 일반회원관리 -->
 	
+	<update id="gUnregister" parameterType="generalMembersVO">
+		update general_members set
+			email = #{email},
+			password = #{password},
+			name = #{name},
+			nickname = #{nickname},
+			address = #{address},
+			addressDetail = #{addressDetail},
+			addr1 = #{addr1},
+			addr2 = #{addr2},
+			tel = #{tel},
+			profilesrc = #{profileSrc},
+			gender = #{gender},
+			point = #{point},
+			auth = #{auth},
+			iskakao = #{isKakao}
+		where midx = #{mIdx}
+	</update>
+	
+	<update id="hUnregister" parameterType="hostMembersVO">
+		update host_members set
+			brn = #{brn},
+			email = #{email},
+			password = #{password},
+			name = #{name},
+			nickname = #{nickname},
+			address = #{address},
+			addressDetail = #{addressDetail},
+			addr1 = #{addr1},
+			addr2 = #{addr2},
+			tel = #{tel},
+			profilesrc = #{profileSrc},
+			gender = #{gender},
+			auth = #{auth}
+		where midx = #{mIdx}
+	</update>
 	
 </mapper>

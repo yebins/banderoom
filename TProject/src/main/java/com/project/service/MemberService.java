@@ -48,4 +48,6 @@ public interface MemberService {
 	int deleteReport(int rIdx);
 	List<GeneralMembersVO> gMember();
 	List<HostMembersVO> hMember();
+	int gUnregister(GeneralMembersVO vo);
+	int hUnregister(HostMembersVO vo);
 }

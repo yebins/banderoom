@@ -488,6 +488,14 @@
 		
 	}
 	
+	function unregister() {
+		if (!confirm('정말 탈퇴하시겠습니까?')) {
+			return;
+		}
+		
+		location.href='unregister.do';
+	}
+	
 </script>
 </head>
 <body>
@@ -532,9 +540,6 @@
 				</div>
 			</div>
 			
-			<style>
-			</style>
-			
 			<div class="inner-box basic-info">
 				<div class="info-view">
 					<div class="small-title">
@@ -575,6 +580,7 @@
 					</div>
 				</div>
 				
+			
 				<div class="info-modify">
 					<form id="info-form">
 						<div class="small-title">
@@ -631,13 +637,15 @@
 						</div>
 					</form>
 				</div>
+				<div class="button-wrap">
+					<button class="normal-button" onclick="showInfoModify(this)">정보 수정</button>
+					<button id="info-submit-button" class="normal-button accent-button" onclick="updateInfo()">정보 수정</button>			
+				</div>
 			</div>
 			
 			<div class="button-wrap">
-				<button class="normal-button" onclick="showInfoModify(this)">정보 수정</button>
-				<button id="info-submit-button" class="normal-button accent-button" onclick="updateInfo()">정보 수정</button>			
+				<button class="normal-button" style="margin-right: 40px;" onclick="unregister()">회원 탈퇴</button>
 			</div>
-			
 			
 		</div>
 		

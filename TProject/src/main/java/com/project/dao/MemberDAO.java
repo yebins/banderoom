@@ -200,4 +200,12 @@ public class MemberDAO {
 	public List<HostMembersVO> hMember() {
 		return sqlSession.selectList("com.project.mapper.memberMapper.hMember");
 	}
+	
+	public int gUnregister(GeneralMembersVO vo) {
+		return sqlSession.update("com.project.mapper.memberMapper.gUnregister", vo);
+	}
+	
+	public int hUnregister(HostMembersVO vo) {
+		return sqlSession.update("com.project.mapper.memberMapper.hUnregister", vo);
+	}
 }
