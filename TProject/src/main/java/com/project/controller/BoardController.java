@@ -68,8 +68,8 @@ public class BoardController {
 				
 				return "/alert"; 
 			}
-			boardService.insertArticlesVO(vo);
 			vo.setmIdx(((GeneralMembersVO) session.getAttribute("login")).getmIdx());
+			boardService.insertArticlesVO(vo);
 			if(vo.getbIdx() == 2) {
 				
 				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();		
