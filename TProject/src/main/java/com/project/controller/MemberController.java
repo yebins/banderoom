@@ -977,4 +977,10 @@ public class MemberController {
 			return "alert";
 		}
 	}
+	
+	@RequestMapping(value = "hmemberinfo.do")
+	@ResponseBody
+	public HostMembersVO hMemberInfo (HostMembersVO vo) {
+		return memberService.getHostMember(vo);
+	}
 }

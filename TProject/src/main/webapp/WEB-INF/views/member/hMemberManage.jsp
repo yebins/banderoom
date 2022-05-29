@@ -11,6 +11,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
+<script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
 <style>
 table{
 	width:100%;
@@ -80,6 +82,10 @@ select[name=searchField]{
 }
 
 </style>
+<script
+  src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
+  integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY="
+  crossorigin="anonymous"></script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -131,7 +137,7 @@ select[name=searchField]{
 								<c:if test="${hMember.auth == 1}">차단</c:if>
 							</td>
 							<td>
-								<button class="normal-button detail">상세</button>
+								<button class="normal-button detail" onclick="showDetails(${hMember.mIdx})">상세</button>
 							</td>
 						</tr>
 						</c:forEach>
@@ -204,6 +210,241 @@ select[name=searchField]{
 		</div>
 		<!-- 여기까지 -->
 		
+	</div>
+	
+	<style>
+		.details-wrap {
+			width: 100%;
+			height: 100vh;
+			position: fixed;
+			top: 30px;
+			left: 0px;
+			z-index: 999;
+			display: none;
+			justify-content: center;
+			align-items: center;
+			opacity: 0%;
+			transition: 0.2s;
+		}
+		.details-wrap.animate {
+			opacity: 100%;
+		}
+		
+		.details {
+			max-height: 75vh;
+			width: 50%;
+			padding: 10px 0px !important;
+			background: rgb(245,245,245) !important;
+			box-shadow: 0px 10px 20px rgba(0,0,0,0.2) !important;
+			position: relative;
+			transform: scale(0.95);
+			transition: 0.2s;
+		}
+		.details.animate {
+			transform: scale(1);
+		}
+		
+		.scroll-area {
+			width: 100%;
+			height: 100%;
+			padding: 30px 40px 30px 40px;
+			overflow-y: auto;
+		}
+		
+		.scroll-area::-webkit-scrollbar {
+   		width: 8px;  /* 스크롤바의 너비 */
+		}
+		
+		.scroll-area::-webkit-scrollbar-thumb {
+			background: rgb(245,245,245); /* 스크롤바의 색상 */
+			border-radius: 10px;
+		}
+		
+		.scroll-area::-webkit-scrollbar-track {
+			opacity: 0%;  /*스크롤바 뒷 배경 색상*/
+		}
+		
+		.details-big-title {
+			font-size: 24px;
+			font-weight: bold;
+		}
+		
+		.small-title {
+			font-size: 14px;
+			font-weight: bold;
+		}
+		.small-title:not(.small-title:first-child) {
+			margin-top: 20px;
+		}
+		
+		.basic-info {
+			margin-top: 20px;
+		}
+		
+		.profile-wrap {
+			display: flex;
+			align-items: center;
+		}
+		
+		.nickname {
+			margin-left: 15px;
+			font-weight: bold;
+			font-size: 20px;
+		}
+		
+		.profile-picture {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			overflow: hidden;
+			width: 40px;
+			height: 40px;
+			border-radius: 60px;
+			box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+		}
+		
+		#profile-picture-img {
+			width: 100%;
+		}
+		
+		.buttons-wrap {
+			margin-top: 20px;
+			text-align: right;
+		}
+		
+		.details-button {
+			margin-left: 10px;
+			width: 80px;
+			height: 30px;
+			font-size: 14px;
+		}
+	</style>
+	
+	<script>
+	
+	$(function() {
+		$(".details").draggable();
+	})
+	
+		function showDetails(mIdx) {
+			
+			$.ajax({
+				type: "get",
+				url: "hmemberinfo.do",
+				data: "mIdx=" + mIdx,
+				success: function(member) {
+					
+					$("#profile-picture-img").attr("src", member.profileSrc);
+					$("#details-nickname").text(member.nickname);
+					$("#details-brn").text(member.brn);
+					$("#details-email").text(member.email);
+					$("#details-name").text(member.name);
+					$("#details-address").text(member.address + " " + member.addressDetail);
+					$("#details-tel").text(member.tel);
+					
+					if (member.gender == "M") {
+						$("#details-gender").text("남자");
+					} else if (member.gender == "F") {
+						$("#details-gender").text("여자");
+					}
+					
+					$("#details-joindate").text(moment(member.joinDate).format("YYYY년 MM월 DD일"));
+					
+					$("#block-button").attr("data-mIdx", member.mIdx);
+					$("#unreg-button").attr("data-mIdx", member.mIdx);
+
+					$(".details").css("left", "0px");
+					$(".details").css("top", "0px");
+					
+					$(".details-wrap").css("display", "flex");
+					$(".scroll-area").scrollTop(0);
+
+					$(".details-wrap").addClass("animate");
+					$(".details").addClass("animate");
+				}				
+			})
+			
+		}
+		
+		function closeDetails() {
+			$(".details-wrap").removeClass("animate");
+			$(".details").removeClass("animate");
+			
+			setTimeout(() => {
+				$(".details-wrap").css("display", "none");
+			}, 200);
+		}
+		
+		function unregUser(button) {
+			
+			var mIdx = $(button).attr('data-mIdx');
+			
+			if (!confirm('이 멤버를 추방하시겠습니까?')) {
+				return;
+			}
+			
+			
+		}
+	</script>
+	
+	<div class="details-wrap">
+		<div class="inner-box details">
+			<button type="button" class="btn-close profile-close" style="position: absolute; top: 15px; right: 15px;" onclick="closeDetails()"></button>
+			<div class="scroll-area">
+				<div class="profile-wrap">
+					<div class="profile-picture">
+						<img id="profile-picture-img" src="">
+					</div>
+					<div id="details-nickname" class="nickname">
+					</div>
+				</div>				
+				
+				<div class="inner-box basic-info">
+					<div class="info-view">
+						<div class="small-title">
+							사업자등록번호
+						</div>
+						<div id="details-brn" class="info-content">
+						</div>
+						<div class="small-title">
+							이메일
+						</div>
+						<div id="details-email" class="info-content">
+						</div>
+						<div class="small-title">
+							이름
+						</div>
+						<div id="details-name" class="info-content">
+						</div>
+						<div class="small-title">
+							주소
+						</div>
+						<div id="details-address" class="info-content">
+						</div>
+						<div class="small-title">
+							전화번호
+						</div>
+						<div id="details-tel" class="info-content">
+						</div>
+						<div class="small-title">
+							성별
+						</div>
+						<div id="details-gender" class="info-content">
+						</div>
+						<div class="small-title">
+							가입일
+						</div>
+						<div id="details-joindate" class="info-content">
+						</div>
+					</div>
+				</div>
+				
+				<div class="buttons-wrap">
+					<button id="unreg-button" class="normal-button details-button" onclick="unregUser(this)">추방</button>
+				</div>
+				
+			</div>
+		</div>
 	</div>
 	
 	<c:import url="/footer.do" />
