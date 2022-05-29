@@ -11,6 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
 <style>
 table{
@@ -81,6 +82,10 @@ select[name=searchField]{
 }
 
 </style>
+<script
+  src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
+  integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY="
+  crossorigin="anonymous"></script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -226,7 +231,7 @@ select[name=searchField]{
 		}
 		
 		.details {
-			height: 75vh;
+			max-height: 75vh;
 			width: 50%;
 			padding: 10px 0px !important;
 			background: rgb(245,245,245) !important;
@@ -314,8 +319,11 @@ select[name=searchField]{
 			font-size: 14px;
 		}
 	</style>
-	
 	<script>
+		$(function() {
+		 $(".details").draggable();
+		});
+		
 		function showDetails(mIdx) {
 			
 			$.ajax({
@@ -349,11 +357,15 @@ select[name=searchField]{
 						$("#block-button").addClass("blocked");
 					}
 					
+					$(".details").css("left", "0px");
+					$(".details").css("top", "0px");
+					
 					$(".details-wrap").css("display", "flex");
 					$(".scroll-area").scrollTop(0);
 
 					$(".details-wrap").addClass("animate");
 					$(".details").addClass("animate");
+					
 				}				
 			})
 			
