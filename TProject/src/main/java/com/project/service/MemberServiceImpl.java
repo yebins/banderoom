@@ -507,12 +507,46 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public int gUnregister(GeneralMembersVO vo) {
-		return dao.gUnregister(vo);
+		
+		GeneralMembersVO unreg = new GeneralMembersVO();
+
+		unreg.setmIdx(vo.getmIdx());
+		unreg.setEmail("unreg_" + vo.getmIdx());
+		unreg.setName("unreg_" + vo.getmIdx());
+		unreg.setNickname("unreg_" + vo.getmIdx());
+		unreg.setAddress("unreg_" + vo.getmIdx());
+		unreg.setAddr1("unreg_" + vo.getmIdx());
+		unreg.setAddr2("unreg_" + vo.getmIdx());
+		unreg.setTel("unreg_" + vo.getmIdx());
+		unreg.setProfileSrc("/images/profile_default.png");
+		unreg.setGender("U");
+		unreg.setAuth(2);
+		unreg.setIsKakao("U");
+		
+		return dao.gUnregister(unreg);
 	}
 	
 	@Override
 	public int hUnregister(HostMembersVO vo) {
-		return dao.hUnregister(vo);
+
+		HostMembersVO unreg = new HostMembersVO();
+		
+		unreg.setmIdx(vo.getmIdx());
+		unreg.setBrn("unreg_" + vo.getmIdx());
+		unreg.setEmail("unreg_" + vo.getmIdx());
+		unreg.setName("unreg_" + vo.getmIdx());
+		unreg.setNickname("unreg_" + vo.getmIdx());
+		unreg.setAddress("unreg_" + vo.getmIdx());
+		unreg.setAddr1("unreg_" + vo.getmIdx());
+		unreg.setAddr2("unreg_" + vo.getmIdx());
+		unreg.setTel("unreg_" + vo.getmIdx());
+		unreg.setProfileSrc("/images/profile_default.png");
+		unreg.setGender("U");
+		unreg.setAuth(2);
+		
+		unregisterSpaces(vo);
+		
+		return dao.hUnregister(unreg);
 	}
 
 	@Override
@@ -522,6 +556,11 @@ public class MemberServiceImpl implements MemberService {
 		map.put("msgIdx", msgIdx);
 		
 		return dao.deleteMsg(map);
+	}
+
+	@Override
+	public int unregisterSpaces(HostMembersVO vo) {
+		return dao.unregisterSpaces(vo);
 	}
 	
 }

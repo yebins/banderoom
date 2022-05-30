@@ -51,4 +51,5 @@ public interface MemberService {
 	List<HostMembersVO> hMember();
 	int gUnregister(GeneralMembersVO vo);
 	int hUnregister(HostMembersVO vo);
+	int unregisterSpaces(HostMembersVO vo);
 }

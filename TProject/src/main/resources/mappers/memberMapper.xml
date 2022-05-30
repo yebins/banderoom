@@ -523,6 +523,7 @@
 			, iskakao
 			, joindate
 		  FROM general_members
+		  where auth != 2
 		 order by midx desc
 	</select>
 	
@@ -543,6 +544,7 @@
 			, auth
 			, joindate
 		 FROM host_members
+		 where auth != 2
 		order by midx desc
 	</select>
 	
@@ -583,6 +585,12 @@
 			gender = #{gender},
 			auth = #{auth}
 		where midx = #{mIdx}
+	</update>
+	
+	<update id="unregisterSpaces" parameterType="hostMembersVO">
+		update spaces set
+			status = 3
+		where hostidx = #{mIdx}
 	</update>
 	
 </mapper>

@@ -212,4 +212,8 @@ public class MemberDAO {
 	public int hUnregister(HostMembersVO vo) {
 		return sqlSession.update("com.project.mapper.memberMapper.hUnregister", vo);
 	}
+	
+	public int unregisterSpaces(HostMembersVO vo) {
+		return sqlSession.update("com.project.mapper.memberMapper.unregisterSpaces", vo);
+	}
 }
