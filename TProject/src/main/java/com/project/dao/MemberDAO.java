@@ -130,6 +130,14 @@ public class MemberDAO {
 		return sqlSession.delete("com.project.mapper.memberMapper.deleteMsg",map);
 	}
 	
+	public int readMsg(MessagesVO vo) {
+		return sqlSession.update("com.project.mapper.memberMapper.readMsg",vo);
+	}
+	
+	public Map<String,Object> noReadMsg(Map<String, Object> map) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.noReadCount",map);
+	}
+	
 	public HostMembersVO getHostMember (HostMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.getHostMember", vo);
 	}

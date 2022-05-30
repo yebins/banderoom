@@ -948,6 +948,21 @@
 				<div class="inner-box-content">
 					<div class="board-area">
 						<div class="board-area-toparea">
+								<c:if test="${vo.bIdx == 3}">
+									<c:choose>
+										<c:when test="${vo.status == 97}">
+											<span>[판매]</span>
+										</c:when>
+										<c:when test="${vo.status == 98 }">
+											<span>[구매]</span>
+										</c:when>
+										<c:when test="${vo.status == 99 }">
+											<span>[거래완료]</span>
+										</c:when>
+										<c:otherwise>
+										</c:otherwise>
+									</c:choose>
+								</c:if>
 							<h4>
 								<span>${vo.title}</span>
 		  						<span class="top-reg-date"><fmt:formatDate value="${vo.regDate}" pattern="yyyy-MM-dd hh:mm"/></span>

@@ -288,6 +288,8 @@ public class MemberController {
 			List<MessagesVO> list= memberService.MessagesList(request, msgVO, bp);
 			model.addAttribute("msgCount",request.getAttribute("쪽지"));
 			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			Map<String, Object> noReadMsg=(Map<String, Object>)request.getAttribute("안읽은쪽지");
+			model.addAttribute("noReadMsg",noReadMsg);
 			model.addAttribute("msgTotal",cmt.get("ct1"));
 			model.addAttribute("page",page);
 			model.addAttribute("list",list);
@@ -302,6 +304,8 @@ public class MemberController {
 			List<MessagesVO> list=memberService.MessagesList(request, msgVO, bp);
 			model.addAttribute("msgCount",request.getAttribute("쪽지"));
 			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			Map<String, Object> noReadMsg=(Map<String, Object>)request.getAttribute("안읽은쪽지");
+			model.addAttribute("noReadMsg",noReadMsg);
 			model.addAttribute("msgTotal",cmt.get("ct1"));
 			model.addAttribute("page",page);
 			model.addAttribute("list",list);
@@ -333,6 +337,8 @@ public class MemberController {
 			List<MessagesVO> list= memberService.MessagesList(request, msgVO, bp);
 			model.addAttribute("msgCount",request.getAttribute("쪽지"));
 			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			Map<String, Object> noReadMsg=(Map<String, Object>)request.getAttribute("안읽은쪽지");
+			model.addAttribute("noReadMsg",noReadMsg);
 			model.addAttribute("msgTotal",cmt.get("ct2"));
 			model.addAttribute("list",list);
 			model.addAttribute("page",page);
@@ -346,6 +352,8 @@ public class MemberController {
 			List<MessagesVO> list=memberService.MessagesList(request, msgVO, bp);
 			model.addAttribute("msgCount",request.getAttribute("쪽지"));
 			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			Map<String, Object> noReadMsg=(Map<String, Object>)request.getAttribute("안읽은쪽지");
+			model.addAttribute("noReadMsg",noReadMsg);
 			model.addAttribute("msgTotal",cmt.get("ct2"));
 			model.addAttribute("list",list);
 			model.addAttribute("page",page);

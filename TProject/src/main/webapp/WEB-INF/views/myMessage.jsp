@@ -214,6 +214,9 @@
 		background:#fbe6b2;
 		border:10px solid lightgray;
 	}
+	.msgDelBtn{
+		border-radius:10px;
+	}
 </style>
 </head>
 <body>
@@ -235,12 +238,14 @@
 							<ul>
 								<li>
 									<a href="myMessage.do?page=1">받은쪽지함 
-										<b>${msgCount.ct1}</b>
+										<%-- <b>${msgCount.ct1} /</b> --%>
+										<b>${noReadMsg.ct1}</b>
 									</a>
 								</li>
 								<li>
 									<a href="sentMessage.do?page=1">보낸쪽지함 
-										<b>${msgCount.ct2}</b>
+										<%-- <b>${msgCount.ct2}</b> --%>
+										<b>${noReadMsg.ct2}</b>
 									</a>
 								</li>
 								<%-- <li>
@@ -253,7 +258,17 @@
 					</div>
 					<div id="message-content-list">
 						<div id="message-content-list-header">
-							<a onclick="deleteMsg()">삭제</a>
+							<div style="padding-top	:30px;padding-left:10px;">
+								<c:choose>
+									<c:when test="${sign eq 'receive'}">
+									<h4>받은쪽지함 (${noReadMsg.ct1} / ${msgCount.ct1})</h4>
+									</c:when>
+									<c:otherwise>
+									<h4>보낸쪽지함 (${noReadMsg.ct2} / ${msgCount.ct2})</h4>									
+									</c:otherwise>
+								</c:choose>
+							<button class="msgDelBtn" onclick="deleteMsg()">삭제</button>
+							</div>
 						</div>
 						<c:if test="${sign eq 'receive'}">
 						<div id="message-content-list-content-top">
@@ -276,17 +291,17 @@
 							<ul class="message-content-list-content-ul">
 								<c:forEach var="item" items="${list}">
 									<c:choose>
-										<c:when test="${item.status eq 1}">
+										<c:when test="${item.status eq '1'}">
 											<li class="message-content-center-check">
 												<input type="checkbox" name="chk" value="${item.msgIdx}">
 											</li>
-											<li class="visitedMessage" style="width:15%;">
+											<li class="visitedMessage" style="width:15%;color:lightgray;">
 												<a >${item.senderNickname}</a>
 											</li>
-											<li class="visitedMessage" style="width:65%;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}')">${item.content}</a>
+											<li class="visitedMessage" style="width:65%;color:lightgray;">
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
 											</li>
-											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;">
+											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;color:lightgray;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
 											</li>
 										</c:when>
@@ -298,7 +313,7 @@
 												<a >${item.senderNickname}</a>
 											</li>
 											<li style="width:65%;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}')">${item.content}</a>
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
 											</li>
 											<li style="width:15%;border-right:none;padding-right:0;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
@@ -331,17 +346,17 @@
 							<ul class="message-content-list-content-ul">
 								<c:forEach var="item" items="${list}">
 									<c:choose>
-										<c:when test="${item.status eq 1}">
+										<c:when test="${item.status eq '1'}">
 											<li class="message-content-center-check ">
 												<input type="checkbox" name="chk" value="${item.msgIdx}">
 											</li>
-											<li class="visitedMessage" style="width:15%;">
+											<li class="visitedMessage" style="width:15%;color:lightgray;">
 												<a >${item.receiverNickname}</a>
 											</li>
-											<li class="visitedMessage" style="width:65%;">
+											<li class="visitedMessage" style="width:65%;color:lightgray;">
 												<a onclick="sentMessage('${item.receiverNickname}',this)">${item.content}</a>
 											</li>
-											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;">
+											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;color:lightgray;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
 											</li>
 										</c:when>
@@ -446,12 +461,23 @@
 			window.open("/messagePopup.do?type=general&mIdx="+mIdx,"쪽지보내기",option);
 		}
 		
-		function message(nickname,content,mIdx){
+		function message(nickname,content,mIdx,msgIdx,receiver){
 			$('#toIdx').val(mIdx);
 			$('#messageSender').text(nickname);
 			$('#messageContent textarea').val(content.text);
-			$('#messageBox').addClass('messageBox-Extend');				
+			$('#messageBox').addClass('messageBox-Extend');
+			
+			$.ajax({
+				url:"/readMsg.do",
+				type:"post",
+				data:{msgIdx:msgIdx
+					,receiver:receiver},
+				success:function(){
+					
+				}
+			})
 		}
+		
 		function sentMessage(nickname,content){
 			$('#messageReceiver').text(nickname);
 			$('#messageContent2 textarea').val(content.text);

@@ -32,6 +32,7 @@ public interface MemberService {
 	HostMembersVO oneMemberInfo(HostMembersVO vo);
 	int sendMessage(MessagesVO vo);
 	int deleteMsg(List<String> msgIdx);
+	int readMsg(MessagesVO vo);
 	HostMembersVO getHostMember(HostMembersVO vo);
 	int setPoint(PointsVO vo);
 	List<MessagesVO> MessagesList(HttpServletRequest request,MessagesVO vo,int page);

@@ -320,6 +320,11 @@
 		</foreach>
 	</delete>
 	
+	<update id="readMsg" parameterType="messagesVO">
+		update messages set status = 1 
+		where msgIdx=#{msgIdx}
+	</update>
+	
 	<select id="listCount" parameterType="map" resultType="map">
 		select 
 			pp.ct1,pp.ct2,kk.ct3 
@@ -333,6 +338,19 @@
 			(select count(m2.msgidx) ct2 from messages m2 where m2.sender= #{sender} and m2.sendertype like CONCAT (#{senderType})) as sm) pp
 		join 
 			(select count(m3.msgidx) ct3 from messages m3 where m3.sender = #{sender} and m3.senderType like CONCAT (#{senderType}) and receiver=#{receiver} and receiverType like CONCAT (#{receiverType})) kk;
+	</select>
+	
+	<select id="noReadCount" parameterType="map" resultType="map">
+	select 
+		pp.ct1,pp.ct2 
+	from (
+		select rm.ct1 , sm.ct2 
+	from
+		(select count(m.msgidx) ct1 
+	from messages m 
+		where m.receivertype = #{receiverType} and m.receiver = #{receiver} and m.status=0) as rm 
+	join 
+		(select count(m2.msgidx) ct2 from messages m2 where m2.sender=#{sender} and m2.sendertype =#{senderType} and m2.status=0) as sm) pp
 	</select>
 	
 	

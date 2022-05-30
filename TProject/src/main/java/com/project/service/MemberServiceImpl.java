@@ -418,6 +418,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		request.setAttribute("쪽지", dao.listCount(map2));
+		request.setAttribute("안읽은쪽지",dao.noReadMsg(map2));
 		
 		page = (page == 0) ? 1 : page;
 		
@@ -556,6 +557,13 @@ public class MemberServiceImpl implements MemberService {
 		map.put("msgIdx", msgIdx);
 		
 		return dao.deleteMsg(map);
+	}
+	
+
+	@Override
+	public int readMsg(MessagesVO vo) {
+		
+		return dao.readMsg(vo);
 	}
 
 	@Override
