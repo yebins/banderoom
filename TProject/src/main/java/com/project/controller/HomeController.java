@@ -3,7 +3,6 @@ package com.project.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -331,9 +330,38 @@ public class HomeController {
 		System.out.println(msgIdx.size());
 		System.out.println(msgIdx.toString());
 		
-		memberService.deleteMsg(msgIdx);
 		
-		return 1;
+		return memberService.deleteMsg(msgIdx);
+	}
+	
+	@RequestMapping(value="/readMsg.do")
+	@ResponseBody
+	public int readMsg(MessagesVO msgVO,HttpServletRequest request) {
+		HttpSession session=request.getSession();
+		
+		if(session.getAttribute("login") == null && session.getAttribute("hlogin") == null) {
+				
+			
+			return -2;
+			
+		} else if(session.getAttribute("login") != null){
+			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");
+			System.out.println(msgVO.getReceiver());
+			if(vo.getmIdx() == msgVO.getReceiver()) {
+				return memberService.readMsg(msgVO);				
+			}
+			
+			return -2;
+		} else {
+			HostMembersVO vo=(HostMembersVO)session.getAttribute("hlogin");
+			System.out.println(msgVO.getReceiver());
+			if(vo.getmIdx() == msgVO.getReceiver()) {
+				return memberService.readMsg(msgVO);				
+			}
+			
+			return -2;
+		}
+		
 	}
 
 	@RequestMapping(value = "/uploadPicture.do") // 스마트 에디터 이미지 업로드
