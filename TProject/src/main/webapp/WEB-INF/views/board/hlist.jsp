@@ -35,7 +35,11 @@
 	.inner-box-content-thumbnail{
 		margin:0;
 		height:80%;
-		
+		border-radius:10px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow: hidden;
 	}	
 	.inner-box-content-thumbnail>img{
 		cursor:pointer;		
@@ -79,8 +83,6 @@
 	
 	.inner-box-content-thumbnail img{
 		width:100%;
-		height:100%;
-		border-radius:10px;
 	}
 	[type="search"] + button{
 		height:50px;
@@ -170,7 +172,7 @@
 									<img src="${imgsrc.get(item)}"/>
 								</c:when>
 								<c:otherwise>
-									<img src="https://images.unsplash.com/photo-1651579293356-ec8c360a3bf8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHx0b3BpYy1mZWVkfDN8Q0R3dXdYSkFiRXd8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60">
+									<img src="/images/no_image.png">
 								</c:otherwise>
 							</c:choose>
 						</div>
