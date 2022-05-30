@@ -57,7 +57,7 @@ pre{
 			$.ajax({
 				url:"withdraw.do",
 				type:"post",
-				data:"target="+target,
+				data:"mIdx="+target + "&memberType=general",
 				success:function(data){
 					if(data == "ok"){
 						alert('추방이 완료되었습니다.');
