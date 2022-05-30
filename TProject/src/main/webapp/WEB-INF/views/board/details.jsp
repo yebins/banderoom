@@ -493,7 +493,7 @@
 								htmls+='</label>'
 								htmls+='<div class="comment-area-write-content">'
 								htmls+='<textarea id="reply-write-content'+el.cIdx+'" name="content" class="comment-area-write-content-area"></textarea>'
-								htmls+='<input id="reply-write-button'+el.cIdx+'" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},'+el.cIdx+','+list[2]+')">'
+								htmls+='<input id="reply-write-button'+el.cIdx+'" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite('+el.cIdx+','+list[2]+')">'
 								htmls+='</div>'
 							 	htmls+='</form>'
 								htmls+='</div>'
@@ -628,7 +628,7 @@
 		
 		
 	//댓글 쓰기 
-	function commentWrite(mIdx){
+	function commentWrite(aIdx){
 		var formData = new FormData($('#commentfile')[0]);
 		
 	/* 	var mIdx=0;
@@ -664,10 +664,17 @@
 		
 	}
 	//답글 쓰기 
-	function replyWrite(mIdx,cIdx,page){
+	function replyWrite(cIdx,page){
+		
+		if ($("#reply-write-content" + cIdx).val() == '') {
+			alert('내용을 입력해 주세요.')
+			return;
+		}
+		
 		var tg="replyFile"+cIdx;
 		var formData = new FormData($('#'+tg)[0]);
 		
+		console.log(tg)
 // 		var mIdx=0;
 		
 // 			if(mIdx != null){
@@ -697,7 +704,9 @@
 					
 				} else if(result == 2){
 					alert('할수 없습니다.')
-				}else {
+				}else if(result == 3){
+					alert('로그인 후 이용하세요.')
+				} else {
 					alert('내용을 적어주세요');	
 				}
 				console.log("page"+page);
@@ -924,12 +933,14 @@
 			$.ajax({
 				url:"commentDelete.do",
 				type:"post",
-				data:{cIdx:cIdx},
+				data:{cIdx:cIdx,
+					mIdx:mIdx},
 				success:function(result){
+					console.log(result)
 					if(result == 1){
 						alert("삭제되었습니다.");
 						commentList('${page}');	
-					}else if(result == 2){
+					}else {
 						alert('할수 없습니다.')
 					}
 				}
@@ -1205,7 +1216,7 @@
 										</label>
 										<div class="comment-area-write-content">
 												<textarea id="reply-write-content${item.cIdx}" name="content" class="comment-area-write-content-area"></textarea>
-												<input id="reply-write-button${item.cIdx}" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${login.mIdx},${item.cIdx},${page})">
+												<input id="reply-write-button${item.cIdx}" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${item.cIdx},${page})">
 										</div>
 									</form>
 								</div>
@@ -1261,7 +1272,7 @@
 								<c:choose>
 									<c:when test="${login.mIdx != null}">
 										<textarea id="comment-write-content" name="content" class="comment-area-write-content-area"></textarea>
-										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${login.mIdx}')">
+										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${param.aIdx}')">
 									</c:when>
 									<c:otherwise>
 										<textarea id="comment-write-content"  class="comment-area-write-content-area" placeholder="댓글은 로그인 후 작성 가능합니다" onclick="location.href='/member/glogin.do'"></textarea>

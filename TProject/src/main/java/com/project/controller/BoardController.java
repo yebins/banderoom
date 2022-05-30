@@ -383,9 +383,13 @@ public class BoardController {
 		@RequestMapping(value="/commentWrite.do")
 		@ResponseBody
 		public Map<String, Object> commentWrite(CommentsVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
-			HttpSession session = request.getSession();
-			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
-			if(vo.getContent() != null && vo.getContent() != "") {
+			GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+			System.out.println(vo.getContent());
+			vo.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+			if(vo.getContent() != null && !vo.getContent().trim().equals("")) {
+				if(login == null) {
+					return null;
+				}
 				if(login.getAuth() == 1) {
 					return null;
 				}
@@ -400,6 +404,11 @@ public class BoardController {
 					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
 					
 					UUID uuid = UUID.randomUUID();
+
+					File dir = new File(path);
+					if (!dir.exists()) {	// 해당 디렉토리가 존재하지 않는 경우
+						dir.mkdirs();				// 경로의 폴더가 없는 경우 상위 폴더에서부터 전부 생성
+					}
 					
 					String newFileName = uuid.toString() + extension;
 		
@@ -423,9 +432,11 @@ public class BoardController {
 		@RequestMapping(value="/replyWrite.do")
 		@ResponseBody
 		public int replyWrite(CommentRepliesVO vo,@RequestParam("commentSrc") MultipartFile file,HttpServletRequest request) throws IllegalStateException, IOException {
-			HttpSession session = request.getSession();
-			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
-			if(vo.getContent() != null && vo.getContent() != "") {
+			GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+			vo.setmIdx(((GeneralMembersVO) request.getSession().getAttribute("login")).getmIdx());
+				if(login == null) {
+					return 3;
+				}
 				if(login.getAuth() == 1) {
 					return 2;
 				}
@@ -439,6 +450,11 @@ public class BoardController {
 					String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
 					
 					UUID uuid = UUID.randomUUID();
+
+					File dir = new File(path);
+					if (!dir.exists()) {	// 해당 디렉토리가 존재하지 않는 경우
+						dir.mkdirs();				// 경로의 폴더가 없는 경우 상위 폴더에서부터 전부 생성
+					}
 					
 					String newFileName = uuid.toString() + extension;
 					
@@ -453,10 +469,7 @@ public class BoardController {
 				
 				return boardService.replyWrite(vo);
 				
-			} else {
 				
-				return -2;
-			}
 			
 		}
 		
@@ -464,17 +477,20 @@ public class BoardController {
 		@ResponseBody
 		public int replyUpdate(CommentRepliesVO vo,@RequestParam("commentSrc") MultipartFile file,int fileChange,HttpServletRequest request) throws IllegalStateException, IOException {
 			CommentRepliesVO one=boardService.commentRepliesOneInfo(vo);
-			HttpSession session = request.getSession();
-			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
+			GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 			System.out.println(one.getPicSrc());
 			vo.setPicSrc(one.getPicSrc());
+			if(login == null) {
+				
+				return -1;
+			}
 			if(vo.getmIdx() == login.getmIdx() || login.getAuth() == 3) {
 				
 				if(login.getAuth() == 1) {
 					return 2;
 				}
 				
-				if(vo.getContent() != null && vo.getContent() != "") {
+				if(vo.getContent() != null && !vo.getContent().trim().equals("")) {
 					//사진 변경 삭제
 					if(fileChange == 1) {
 						//변경
@@ -487,6 +503,11 @@ public class BoardController {
 						String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
 						
 						UUID uuid = UUID.randomUUID();
+
+						File dir = new File(path);
+						if (!dir.exists()) {	// 해당 디렉토리가 존재하지 않는 경우
+							dir.mkdirs();				// 경로의 폴더가 없는 경우 상위 폴더에서부터 전부 생성
+						}
 						
 						String newFileName = uuid.toString() + extension;
 						
@@ -500,11 +521,13 @@ public class BoardController {
 						} else {
 						vo.setPicSrc(null);
 						}
+						
 					}
+					return boardService.commentRepliesUpdate(vo);
+					
 				}
+				return -1;
 				
-				return boardService.commentRepliesUpdate(vo);
-
 			} else {
 				
 				return -1;
@@ -522,10 +545,10 @@ public class BoardController {
 			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			
 			if(vo.getmIdx() == login.getmIdx() || login.getAuth() == 3) {
-				if(login.getAuth() == 1) {
+				if(login.getAuth() == 1) {//차단회원
 					return 2;
 				}
-				if(vo.getContent() != null && vo.getContent() != "") {
+				if(vo.getContent() != null && !vo.getContent().trim().equals("")) {
 					//사진 변경 삭제
 					if(fileChange == 1) {
 						//변경
@@ -538,6 +561,11 @@ public class BoardController {
 						String extension = fileName.substring(fileName.lastIndexOf("."), fileName.length());
 						
 						UUID uuid = UUID.randomUUID();
+						
+						File dir = new File(path);
+						if (!dir.exists()) {	// 해당 디렉토리가 존재하지 않는 경우
+							dir.mkdirs();				// 경로의 폴더가 없는 경우 상위 폴더에서부터 전부 생성
+						}
 						
 						String newFileName = uuid.toString() + extension;
 						
@@ -554,9 +582,9 @@ public class BoardController {
 						}
 						
 					}
-					
+					return boardService.commentUpdate(vo);
 				}
-				return boardService.commentUpdate(vo);
+				return -1;
 				
 			}else {
 				
@@ -569,9 +597,8 @@ public class BoardController {
 		@RequestMapping(value="/commentDelete.do")
 		@ResponseBody
 		public int commentsDelete(CommentsVO vo,HttpServletRequest request) {
-			HttpSession session = request.getSession();
-			GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 			
+			GeneralMembersVO login=(GeneralMembersVO)request.getSession().getAttribute("login");
 			if(vo.getmIdx() == login.getmIdx() || login.getAuth() == 3) {
 				if(login.getAuth() == 1) {
 					return 2;
