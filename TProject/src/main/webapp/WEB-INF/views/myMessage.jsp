@@ -253,7 +253,7 @@
 					</div>
 					<div id="message-content-list">
 						<div id="message-content-list-header">
-							<a onclick="deleteMsg()">삭제하기</a>
+							<a onclick="deleteMsg()">삭제</a>
 						</div>
 						<c:if test="${sign eq 'receive'}">
 						<div id="message-content-list-content-top">
@@ -368,7 +368,7 @@
 						<c:set var="msgTotal" value="${msgTotal}"/>
 						<c:set var="page" value="${page}"/>
 						<c:set var="startNum" value="${page-(page-1)%5}"/>	
-						<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(msgTotal/10),'.')}"/>
+						<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(msgTotal/14),'.')}"/>
 							<c:if test="${fn:length(list) gt 0}">
 								<c:if test="${page>5}">
 									<button onclick="call('${sign}',1)" class="page-nav-button">1</button>

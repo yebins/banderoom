@@ -394,7 +394,6 @@
 				var htmls="";
 				
 				if(list[1].length <1){
-					htmls+="무플";
 				} else {
 					$.each(list[1],function(index,el){
 						var cIdx=el.cIdx;
@@ -554,8 +553,8 @@
 								htmls+='<input type="hidden" name="rIdx" value="' + rl.rIdx + '">'
 								htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
 								htmls+='<label style="margin-bottom:10px">'
-								htmls+='<input type="file" id="replyfile'+rl.rIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+rl.cIdx+',this)" accept="image/*">'
-								htmls+='<label for="replyfile'+rl.rIdx+'">'
+								htmls+='<input type="file" id="reply-file'+rl.rIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+rl.rIdx+',this)" accept="image/*">'
+								htmls+='<label for="reply-file'+rl.rIdx+'">'
 									if(rl.picSrc != null){
 								htmls+='<a> <strong>사진 변경하기</strong></a>'
 									} else{
@@ -831,6 +830,7 @@
 		//답글사진미리보기
 		function replyPreview(event,rIdx,obj){
 			var fileChange=$(obj).parent().parent().children().first();
+			fileChange.val('1');
 			
 			if(rIdx != null){
 			var id="reply-uploaded-file"+rIdx;

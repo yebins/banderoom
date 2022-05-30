@@ -35,12 +35,18 @@
 			,content
 			,midx
 			,mnickname
+			<if test="bIdx == 3">
+			,status
+			</if>
 		) values(
 			#{bIdx}
 			,#{title}
 			,#{content}
 			,#{mIdx}
 			,#{mNickname}
+			<if test="bIdx == 3">
+			,#{status}
+			</if>
 		)	
 	</insert>
 	
@@ -77,6 +83,9 @@
 	
 	<update id="boardUpdate" parameterType="ArticlesVO">
 		update articles	set title=#{title},content=#{content}
+		<if test="bIdx == 3">
+		,status=#{status}
+		</if>
 		where aidx=#{aIdx}
 		and bidx=#{bIdx}
 	</update>

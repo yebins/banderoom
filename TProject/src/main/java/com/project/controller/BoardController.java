@@ -51,6 +51,8 @@ public class BoardController {
 	@RequestMapping(value="/register.do", method=RequestMethod.POST)
 	public String register(ArticlesVO vo, HttpServletRequest request) {
 		
+		System.out.println(vo.getStatus());
+		
 		HttpSession session = request.getSession();
 		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
 		
