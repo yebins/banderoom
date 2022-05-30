@@ -109,7 +109,14 @@
 			<input type="hidden" name="bIdx" value="${param.bIdx}"> 
 			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<div id="page-content">
-				<div class="inner-box" style="height:500px;">
+				<div class="inner-box" style="height:530px;">
+					<c:if test="${param.bIdx == 3}">
+						<select name="status" style="margin-bottom:10px;">
+							<option value="97" selected>판매</option>
+							<option value="98">구매</option>
+							<option value="99">거래완료</option>
+						</select>
+					</c:if>
 					<div class="select-board">	
 						<input type="text" name="title" class="list-title form-control me-3" placeholder="제목을 입력하세요" required>
 					</div>

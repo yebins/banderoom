@@ -105,7 +105,14 @@
 			<input type="hidden" name="mIdx" value="${login.getmIdx()}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<div id="page-content">
-			<div class="inner-box" style="height:500px;">
+			<div class="inner-box" style="height:530px;">
+				<c:if test="${vo.bIdx == 3}">
+				<select name="status" style="margin-bottom:10px;">
+					<option <c:if test="${vo.status eq '97'}">selected</c:if> value="97">판매</option>
+					<option <c:if test="${vo.status eq '98'}">selected</c:if> value="98">구매</option>
+					<option <c:if test="${vo.status eq '99'}">selected</c:if> value="99">거래완료</option>
+				</select>
+				</c:if>
 				<div class="change-title">
 					<input type="text" name="title" class="list-title form-control me-3" value="${vo.title}">
 				</div>
