@@ -12,6 +12,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
+<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
+
+<script
+  src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
+  integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY="
+  crossorigin="anonymous"></script>
 <style>
 	#messageContent{
 		width:500px;
@@ -29,6 +35,9 @@
     height:100%;
     resize: none;
     border-radius:10px;
+    padding: 10px;
+    box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+    border: 1px solid lightgray;
   }
   #receiver{
   	padding:10px;
@@ -53,7 +62,7 @@
 		border-right:2px solid lightgray;
 		background:linear-gradient(to bottom,#fff 0,#f4f4f4 100%);
 	}
-	.inner-box{
+	.msgbox {
 		overflow:hidden;
 		border:2px solid lightgray;
 	}
@@ -193,9 +202,14 @@
 	}
 	
 	html body .messageBox-Extend{
+ 	   display: flex;
+ 	   
+	}
+	
+	.messageBox{
+	
 		width: 100%;
   		 z-index: 10000;
- 	   display: flex;
 	    justify-content: center;
  	   margin: auto;
 	    top: 0;
@@ -203,16 +217,19 @@
  	   position: fixed;
  	   height: 100%;
  	   align-items:center;
-	}
-	
-	.messageBox{
 		display:none;
 	}
 	.innerMessageBOX{
-		padding:10px;
-		border-radius:15px;
-		background:#fbe6b2;
-		border:10px solid lightgray;
+		box-shadow: 0px 5px 20px rgb(0 0 0 / 40%) !important;
+		padding:10px !important;
+		background:#fbe6b2 !important;
+		transform: scale(0.95);
+		opacity: 0%;
+		transition: 0.2s;
+	}
+	.innerMessageBOX.animate {
+		opacity: 100%;
+		transform: scale(1);
 	}
 	.msgDelBtn{
 		border-radius:10px;
@@ -227,7 +244,7 @@
 			쪽지함
 		</div>
 		<div id="page-content">
-			<div class="inner-box" style="padding:0">
+			<div class="inner-box msgbox" style="padding:0">
 				<div class="inner-box-content">
 					<div class="message-nav">
 						<div id="message-nav-write">
@@ -413,7 +430,7 @@
 		</div>
 	</div>
 	<div id="messageBox" class="messageBox">
-		<div class="innerMessageBOX">
+		<div class="inner-box innerMessageBOX">
 			<div>
 				<span style="font-weight:bold;">보낸사람</span>
 				<span id="messageSender"></span>
@@ -429,7 +446,7 @@
 		</div>
 	</div>
 	<div id="messageBox2" class="messageBox">
-		<div class="innerMessageBOX">
+		<div class="inner-box innerMessageBOX">
 		<div>
 			<span style="font-weight:bold;">받는사람</span>
 			<span id="messageReceiver"></span>
@@ -443,6 +460,10 @@
 		</div>
 	</div>
 	<script>
+		$(function() {
+			$('.innerMessageBOX').draggable();
+		})
+	
 		function call(sign,page){
 			console.log(sign);
 			if(sign == 'receive'){
@@ -466,6 +487,11 @@
 			$('#messageSender').text(nickname);
 			$('#messageContent textarea').val(content.text);
 			$('#messageBox').addClass('messageBox-Extend');
+			setTimeout(() => {
+				$('.innerMessageBOX').css('top', '0px');
+				$('.innerMessageBOX').css('left', '0px');
+				$('.innerMessageBOX').addClass('animate');
+			}, 10);
 			
 			$.ajax({
 				url:"/readMsg.do",
@@ -473,7 +499,7 @@
 				data:{msgIdx:msgIdx
 					,receiver:receiver},
 				success:function(){
-					
+
 				}
 			})
 		}
@@ -482,10 +508,18 @@
 			$('#messageReceiver').text(nickname);
 			$('#messageContent2 textarea').val(content.text);
 			$('#messageBox2').addClass('messageBox-Extend');		
+			setTimeout(() => {
+				$('.innerMessageBOX').css('top', '0px');
+				$('.innerMessageBOX').css('left', '0px');
+				$('.innerMessageBOX').addClass('animate');
+			}, 10);
 		}
 		
 		function closePop(obj){
-			var a=$(obj).parent().parent().parent().removeClass('messageBox-Extend');
+			setTimeout(() => {
+				var a=$(obj).parent().parent().parent().removeClass('messageBox-Extend');
+			}, 200);
+			$('.innerMessageBOX').removeClass('animate');
 		}
 		
 		$(document).ready(function() {
