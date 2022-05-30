@@ -791,7 +791,7 @@ public class MemberController {
 	
 	@RequestMapping(value="withdraw.do")
 	@ResponseBody
-	public String withdraw(Model model, HttpServletRequest request, int target) {
+	public String withdraw(Model model, HttpServletRequest request, Integer mIdx, String memberType) {
 		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 		
 		if (login.getAuth() != 3) {
@@ -801,8 +801,21 @@ public class MemberController {
 			
 			return "alert";
 			
-		}else if(memberService.withdraw(target) == 1){
-			return "ok";
+		} else if (memberType.equals("general")) {
+			GeneralMembersVO targetMember = new GeneralMembersVO();
+			targetMember.setmIdx(mIdx);
+			if(memberService.gUnregister(targetMember) == 1){
+				return "ok";
+			}
+			return "x";
+			
+		}else if (memberType.equals("host")) {
+			HostMembersVO targetMember = new HostMembersVO();
+			targetMember.setmIdx(mIdx);
+			if(memberService.hUnregister(targetMember) == 1){
+				return "ok";
+			}
+			return "x";
 		}
 		return "x";
 	}
@@ -904,22 +917,8 @@ public class MemberController {
 		if (request.getSession().getAttribute("login") != null) {
 
 			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
-			GeneralMembersVO unreg = new GeneralMembersVO();
 			
-			unreg.setmIdx(login.getmIdx());
-			unreg.setEmail("unreg_" + login.getmIdx());
-			unreg.setName("unreg_" + login.getmIdx());
-			unreg.setNickname("unreg_" + login.getmIdx());
-			unreg.setAddress("unreg_" + login.getmIdx());
-			unreg.setAddr1("unreg_" + login.getmIdx());
-			unreg.setAddr2("unreg_" + login.getmIdx());
-			unreg.setTel("unreg_" + login.getmIdx());
-			unreg.setProfileSrc("/images/profile_default.png");
-			unreg.setGender("U");
-			unreg.setAuth(2);
-			unreg.setIsKakao("U");
-			
-			int result = memberService.gUnregister(unreg);
+			int result = memberService.gUnregister(login);
 			
 			if (result > 0) {
 
@@ -938,22 +937,8 @@ public class MemberController {
 		} else if (request.getSession().getAttribute("hlogin") != null) {
 			
 			HostMembersVO login = (HostMembersVO) request.getSession().getAttribute("hlogin");
-			HostMembersVO unreg = new HostMembersVO();
 			
-			unreg.setmIdx(login.getmIdx());
-			unreg.setBrn("unreg_" + login.getmIdx());
-			unreg.setEmail("unreg_" + login.getmIdx());
-			unreg.setName("unreg_" + login.getmIdx());
-			unreg.setNickname("unreg_" + login.getmIdx());
-			unreg.setAddress("unreg_" + login.getmIdx());
-			unreg.setAddr1("unreg_" + login.getmIdx());
-			unreg.setAddr2("unreg_" + login.getmIdx());
-			unreg.setTel("unreg_" + login.getmIdx());
-			unreg.setProfileSrc("/images/profile_default.png");
-			unreg.setGender("U");
-			unreg.setAuth(2);
-			
-			int result = memberService.hUnregister(unreg);
+			int result = memberService.hUnregister(login);
 
 			if (result > 0) {
 
