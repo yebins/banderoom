@@ -209,38 +209,38 @@
 			검색된 게시물 수 : ${articlesTotal}
 			<div class="pageNum">
 						<c:if test="${page>5}">
-						<button class="page-nav-button">
-							<a href="jlist.do?page=1&status=${status}&searchtitle=${searchtitle}">1</a>
-						</button>
-						<button class="page-nav-button">
-							<a href="jlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">◀</a>
-						</button>
+						<a class="page-nav-button" href="jlist.do?page=1&status=${status}&searchtitle=${searchtitle}">
+							1
+						</a>
+						<a class="page-nav-button" href="jlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">
+							◀
+						</a>
 						</c:if>
 						<c:forEach var="i" begin="0" end="4">
 							<c:if test="${(startNum+i)<= lastNum}">
 							<c:choose>
 									<c:when test="${(startNum+i) == page }">
-									<button class="page-nav-button current-page" >
-										<a href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">${startNum+i}</a>
-									</button>
+									<a class="page-nav-button current-page" href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">
+										${startNum+i}
+									</a>
 									</c:when>
 									<c:otherwise>
-									<button class="page-nav-button" >
-										<a href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">${startNum+i}</a>
-									</button>
+									<a class="page-nav-button" href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">
+										${startNum+i}
+									</a>
 									</c:otherwise>
 								</c:choose>
 							</c:if>
 						</c:forEach>
-						<c:if test="${(startNum+5) < lastNum}">
-						<button class="page-nav-button">
-							<a href="jlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">▶</a>
-						</button>
+						<c:if test="${(startNum+5) < lastNum}" >
+						<a class="page-nav-button" href="jlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">
+							▶
+						</a>
 						</c:if>
 						<c:if test="${(startNum+5) <= lastNum}">
-						<button class="page-nav-button">
-							<a href="jlist.do?page=${lastNum}&status=${status}&searchtitle=${searchtitle}">${lastNum}</a>
-						</button>
+						<a class="page-nav-button" href="jlist.do?page=${lastNum}&status=${status}&searchtitle=${searchtitle}">
+							${lastNum}
+						</a>
 						</c:if>
 			</div>
 		</div>
