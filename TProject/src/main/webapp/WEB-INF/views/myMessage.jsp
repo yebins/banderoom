@@ -18,6 +18,11 @@
 		height:300px;
 		padding:20px;
 	}
+	#messageContent2{
+		width:500px;
+		height:300px;
+		padding:20px;
+	}
 	
 	 textarea {
 	width:100%;
@@ -91,6 +96,11 @@
 		height:100px;
 		border-bottom:2px solid lightgray;
 		background:linear-gradient(to bottom,#fff 0,#f4f4f4 100%);
+	}
+	#message-content-list-header>a{
+		font-size:12px;
+		font-weight:bold;
+		padding:10px;
 	}
 	#message-content-list-content-top li{
 		float:left;
@@ -198,6 +208,12 @@
 	.messageBox{
 		display:none;
 	}
+	.innerMessageBOX{
+		padding:10px;
+		border-radius:15px;
+		background:#fbe6b2;
+		border:10px solid lightgray;
+	}
 </style>
 </head>
 <body>
@@ -212,9 +228,10 @@
 				<div class="inner-box-content">
 					<div class="message-nav">
 						<div id="message-nav-write">
-							<a href=""><span style="color:white;">내게쓰기</span></a>
+							<input type="hidden" value="${login.mIdx}">
+							<a onclick="messagePopups(this)"><span style="color:white;">내게쓰기</span></a>
 						</div>
-						<div id="message-nav-menu-list">
+						<div id="message-nav-menu-list">	
 							<ul>
 								<li>
 									<a href="myMessage.do?page=1">받은쪽지함 
@@ -222,27 +239,27 @@
 									</a>
 								</li>
 								<li>
-									<a href="">내게쓴쪽지함 
-										<b>${msgCount.ct3}</b>
-									</a>
-								</li>
-								<li>
 									<a href="sentMessage.do?page=1">보낸쪽지함 
 										<b>${msgCount.ct2}</b>
 									</a>
 								</li>
+								<%-- <li>
+									<a href="">쪽지보관함
+										<b>${msgCount.ct3}</b>
+									</a>
+								</li> --%>
 							</ul>
 						</div>
 					</div>
 					<div id="message-content-list">
 						<div id="message-content-list-header">
-							뭔가있는공간
+							<a onclick="deleteMsg()">삭제하기</a>
 						</div>
 						<c:if test="${sign eq 'receive'}">
 						<div id="message-content-list-content-top">
 							<ul>
 								<li id="message-content-top-check">
-									<input type="checkbox">
+									<input type="checkbox" id="cbx_chkAll">
 								</li>
 								<li style="width:15%;">
 									<span>보낸사람</span>
@@ -260,8 +277,8 @@
 								<c:forEach var="item" items="${list}">
 									<c:choose>
 										<c:when test="${item.status eq 1}">
-											<li class="message-content-center-check ">
-												<input type="checkbox">
+											<li class="message-content-center-check">
+												<input type="checkbox" name="chk" value="${item.msgIdx}">
 											</li>
 											<li class="visitedMessage" style="width:15%;">
 												<a >${item.senderNickname}</a>
@@ -275,7 +292,7 @@
 										</c:when>
 										<c:otherwise>
 											<li class="message-content-center-check">
-												<input type="checkbox">
+												<input type="checkbox" name="chk" value="${item.msgIdx}">
 											</li>
 											<li style="width:15%;">
 												<a >${item.senderNickname}</a>
@@ -292,11 +309,12 @@
 							</ul>
 						</div>
 						</c:if>
+						<!-- -----------------------------------보낸쪽지함 -->
 						<c:if test="${sign eq 'send'}">
 						<div id="message-content-list-content-top">
 							<ul>
 								<li id="message-content-top-check">
-									<input type="checkbox">
+									<input type="checkbox" id="cbx_chkAll">
 								</li>
 								<li style="width:15%;">
 									<span>받는사람</span>
@@ -315,7 +333,7 @@
 									<c:choose>
 										<c:when test="${item.status eq 1}">
 											<li class="message-content-center-check ">
-												<input type="checkbox">
+												<input type="checkbox" name="chk" value="${item.msgIdx}">
 											</li>
 											<li class="visitedMessage" style="width:15%;">
 												<a >${item.receiverNickname}</a>
@@ -329,7 +347,7 @@
 										</c:when>
 										<c:otherwise>
 											<li class="message-content-center-check">
-												<input type="checkbox">
+												<input type="checkbox" name="chk" value="${item.msgIdx}">
 											</li>
 											<li style="width:15%;">
 												<a >${item.receiverNickname}</a>
@@ -380,20 +398,23 @@
 		</div>
 	</div>
 	<div id="messageBox" class="messageBox">
-		<div>
-			<span style="font-weight:bold;">보낸사람</span>
-			<span id="messageSender"></span>
-		</div>
-		<div id="messageContent">
-			<textarea style="resize:none" readonly></textarea>
-		</div>
-		<div id="messageButton">
-			<input type="hidden" id="toIdx">
-			<button class="normal-button" onclick="messagePopups(this)">답장하기</button>
-			<button class="normal-button" onclick="">닫기</button>
+		<div class="innerMessageBOX">
+			<div>
+				<span style="font-weight:bold;">보낸사람</span>
+				<span id="messageSender"></span>
+			</div>
+			<div id="messageContent">
+				<textarea style="resize:none" readonly></textarea>
+			</div>
+			<div id="messageButton">
+				<input type="hidden" id="toIdx">
+				<button class="normal-button" onclick="messagePopups(this)">답장하기</button>
+				<button class="normal-button" onclick="closePop(this)">닫기</button>
+			</div>
 		</div>
 	</div>
 	<div id="messageBox2" class="messageBox">
+		<div class="innerMessageBOX">
 		<div>
 			<span style="font-weight:bold;">받는사람</span>
 			<span id="messageReceiver"></span>
@@ -402,7 +423,8 @@
 			<textarea style="resize:none" readonly></textarea>
 		</div>
 		<div id="messageButton">
-			<button class="normal-button" onclick="">닫기</button>
+			<button class="normal-button" onclick="closePop(this)">닫기</button>
+		</div>
 		</div>
 	</div>
 	<script>
@@ -428,11 +450,51 @@
 			$('#toIdx').val(mIdx);
 			$('#messageSender').text(nickname);
 			$('#messageContent textarea').val(content.text);
-			$('#messageBox').addClass('messageBox-Extend');
+			$('#messageBox').addClass('messageBox-Extend');				
 		}
 		function sentMessage(nickname,content){
 			$('#messageReceiver').text(nickname);
 			$('#messageContent2 textarea').val(content.text);
+			$('#messageBox2').addClass('messageBox-Extend');		
+		}
+		
+		function closePop(obj){
+			var a=$(obj).parent().parent().parent().removeClass('messageBox-Extend');
+		}
+		
+		$(document).ready(function() {
+			
+			$("#cbx_chkAll").click(function() {
+				if($("#cbx_chkAll").is(":checked")) $("input[name=chk]").prop("checked", true);
+				else $("input[name=chk]").prop("checked", false);
+			});
+			
+			$("input[name=chk]").click(function() {
+				var total = $("input[name=chk]").length;
+				var checked = $("input[name=chk]:checked").length;
+				
+				if(total != checked) $("#cbx_chkAll").prop("checked", false);
+				else $("#cbx_chkAll").prop("checked", true); 
+			});
+		});
+		
+		function deleteMsg(){
+			var msgIdx=new Array();
+			console.log($("input:checkbox[name='chk']:checked").length);
+			$("input:checkbox[name='chk']:checked").each(function(){
+					msgIdx.push(this.value);
+				});
+			
+			$.ajax({
+				type:"post",
+				url:"/deleteMsg.do",
+				data:{msgIdx:msgIdx},
+				success:function(){
+					alert('삭제되었습니다.')
+					location.reload();
+				}
+			})
+			console.log(msgIdx);
 		}
 	</script>
 	<c:import url="/footer.do" />

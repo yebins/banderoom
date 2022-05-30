@@ -3,6 +3,7 @@ package com.project.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -324,6 +325,16 @@ public class HomeController {
 		
 	}
 	
+	@RequestMapping(value="/deleteMsg.do")
+	@ResponseBody
+	public int deleteMsg(@RequestParam(value="msgIdx[]")List<String> msgIdx) {
+		System.out.println(msgIdx.size());
+		System.out.println(msgIdx.toString());
+		
+		memberService.deleteMsg(msgIdx);
+		
+		return 1;
+	}
 
 	@RequestMapping(value = "/uploadPicture.do") // 스마트 에디터 이미지 업로드
 	@ResponseBody
