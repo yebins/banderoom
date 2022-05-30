@@ -81,11 +81,237 @@ select[name=searchField]{
 	width:100px;
 }
 
+.details-wrap {
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	top: 30px;
+	left: 0px;
+	z-index: 999;
+	display: none;
+	justify-content: center;
+	align-items: center;
+	opacity: 0%;
+	transition: 0.2s;
+}
+.details-wrap.animate {
+	opacity: 100%;
+}
+
+.details {
+	max-height: 75vh;
+	width: 50%;
+	padding: 10px 0px !important;
+	background: rgb(245,245,245) !important;
+	box-shadow: 0px 10px 20px rgba(0,0,0,0.2) !important;
+	position: relative;
+	transform: scale(0.95);
+	transition: 0.2s;
+}
+.details.animate {
+	transform: scale(1);
+}
+
+.scroll-area {
+	width: 100%;
+	max-height: 70vh;
+	padding: 30px 40px 30px 40px;
+	overflow: auto;
+}
+
+.scroll-area::-webkit-scrollbar {
+ 		width: 8px;  /* 스크롤바의 너비 */
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+	background: #fbe6b2; /* 스크롤바의 색상 */
+	border-radius: 10px;
+}
+
+.scroll-area::-webkit-scrollbar-track {
+	opacity: 0%;  /*스크롤바 뒷 배경 색상*/
+}
+
+.details-big-title {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.small-title {
+	font-size: 14px;
+	font-weight: bold;
+}
+.small-title:not(.small-title:first-child) {
+	margin-top: 20px;
+}
+
+.basic-info {
+	margin-top: 20px;
+}
+
+.profile-wrap {
+	display: flex;
+	align-items: center;
+}
+
+.nickname {
+	margin-left: 15px;
+	font-weight: bold;
+	font-size: 20px;
+}
+
+.profile-picture {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	overflow: hidden;
+	width: 40px;
+	height: 40px;
+	border-radius: 60px;
+	box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+}
+
+#profile-picture-img {
+	width: 100%;
+}
+
+.buttons-wrap {
+	margin-top: 20px;
+	text-align: right;
+}
+
+.details-button {
+	margin-left: 10px;
+	width: 80px;
+	height: 30px;
+	font-size: 14px;
+}
 </style>
 <script
   src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
   integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY="
   crossorigin="anonymous"></script>
+  
+	<script>
+		$(function() {
+		 $(".details").draggable();
+		});
+		
+		function showDetails(mIdx) {
+			
+			$.ajax({
+				type: "get",
+				url: "miniProfile.do",
+				data: "mIdx=" + mIdx,
+				success: function(member) {
+					
+					$("#profile-picture-img").attr("src", member.profileSrc);
+					$("#details-nickname").text(member.nickname);
+					$("#details-email").text(member.email);
+					$("#details-name").text(member.name);
+					$("#details-address").text(member.address + " " + member.addressDetail);
+					$("#details-tel").text(member.tel);
+					
+					if (member.gender == "M") {
+						$("#details-gender").text("남자");
+					} else if (member.gender == "F") {
+						$("#details-gender").text("여자");
+					}
+					
+					$("#details-joindate").text(moment(member.joinDate).format("YYYY년 MM월 DD일"));
+					
+					$("#block-button").attr("data-mIdx", member.mIdx);
+					$("#unreg-button").attr("data-mIdx", member.mIdx);
+
+					$("#block-button").text('차단');
+					$("#block-button").removeClass("blocked");
+					if (member.auth == 1) {
+						$("#block-button").text('차단 해제');
+						$("#block-button").addClass("blocked");
+					}
+					
+					$(".details").css("left", "0px");
+					$(".details").css("top", "0px");
+					
+					$(".details-wrap").css("display", "flex");
+					$(".scroll-area").scrollTop(0);
+
+					$(".details-wrap").addClass("animate");
+					$(".details").addClass("animate");
+					
+				}				
+			})
+			
+		}
+		
+		function closeDetails() {
+			$(".details-wrap").removeClass("animate");
+			$(".details").removeClass("animate");
+			
+			setTimeout(() => {
+				$(".details-wrap").css("display", "none");
+			}, 200);
+		}
+		
+		function blockUser(button) {
+			
+			var mIdx = $(button).attr('data-mIdx');
+			
+			if ($(button).hasClass("blocked")) {
+				
+				if (!confirm('이 멤버의 차단을 해제하시겠습니까?')) {
+					return;
+				}
+				
+				
+				
+				
+			} else {
+				
+				if(!confirm('이 멤버의 글쓰기 권한을 차단하시겠습니까?')) {
+					return;
+				}
+				
+				$.ajax({
+					type: "post",
+					url: "block.do",
+					data: "target=" + mIdx,
+					success: function(result) {
+						if (result == 'ok') {
+							alert('글쓰기 권한이 차단되었습니다.');
+							location.reload();
+						}
+					}
+				})
+			}
+			
+		}
+		
+		function unregUser(button) {
+			
+			var mIdx = $(button).attr('data-mIdx');
+			
+			if (!confirm('이 멤버를 추방하시겠습니까?')) {
+				return;
+			}
+
+			$.ajax({
+				url:"withdraw.do",
+				type:"post",
+				data:"mIdx="+mIdx + "&memberType=general",
+				success:function(data){
+					if(data == "ok"){
+						alert('추방이 완료되었습니다.');
+						location.reload();
+					}else{
+						alert('추방이 완료되지 않았습니다.');
+					}
+				}
+			})
+			
+		}
+	</script>
+	
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -181,248 +407,8 @@ select[name=searchField]{
 					</c:if>
 				</c:if>
 			</div>
-			
-			
-			
 		</div>
-		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 -->
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button class="normal-button">버튼</button> 
-			일반 버튼 (button class="normal-button") (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="normal-button accent-button">버튼</button> 강조 버튼 (button class="normal-button accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button class="normal-button">일반버튼</button>
-					<button class="normal-button accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
-			</div>
-			<br><br>
-		</div>
-		<!-- 여기까지 -->
-		
 	</div>
-	
-	<style>
-		.details-wrap {
-			width: 100%;
-			height: 100vh;
-			position: fixed;
-			top: 30px;
-			left: 0px;
-			z-index: 999;
-			display: none;
-			justify-content: center;
-			align-items: center;
-			opacity: 0%;
-			transition: 0.2s;
-		}
-		.details-wrap.animate {
-			opacity: 100%;
-		}
-		
-		.details {
-			max-height: 75vh;
-			width: 50%;
-			padding: 10px 0px !important;
-			background: rgb(245,245,245) !important;
-			box-shadow: 0px 10px 20px rgba(0,0,0,0.2) !important;
-			position: relative;
-			transform: scale(0.95);
-			transition: 0.2s;
-		}
-		.details.animate {
-			transform: scale(1);
-		}
-		
-		.scroll-area {
-			width: 100%;
-			height: 100%;
-			padding: 30px 40px 30px 40px;
-			overflow-y: auto;
-		}
-		
-		.scroll-area::-webkit-scrollbar {
-   		width: 8px;  /* 스크롤바의 너비 */
-		}
-		
-		.scroll-area::-webkit-scrollbar-thumb {
-			background: rgb(245,245,245); /* 스크롤바의 색상 */
-			border-radius: 10px;
-		}
-		
-		.scroll-area::-webkit-scrollbar-track {
-			opacity: 0%;  /*스크롤바 뒷 배경 색상*/
-		}
-		
-		.details-big-title {
-			font-size: 24px;
-			font-weight: bold;
-		}
-		
-		.small-title {
-			font-size: 14px;
-			font-weight: bold;
-		}
-		.small-title:not(.small-title:first-child) {
-			margin-top: 20px;
-		}
-		
-		.basic-info {
-			margin-top: 20px;
-		}
-		
-		.profile-wrap {
-			display: flex;
-			align-items: center;
-		}
-		
-		.nickname {
-			margin-left: 15px;
-			font-weight: bold;
-			font-size: 20px;
-		}
-		
-		.profile-picture {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			overflow: hidden;
-			width: 40px;
-			height: 40px;
-			border-radius: 60px;
-			box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
-		}
-		
-		#profile-picture-img {
-			width: 100%;
-		}
-		
-		.buttons-wrap {
-			margin-top: 20px;
-			text-align: right;
-		}
-		
-		.details-button {
-			margin-left: 10px;
-			width: 80px;
-			height: 30px;
-			font-size: 14px;
-		}
-	</style>
-	<script>
-		$(function() {
-		 $(".details").draggable();
-		});
-		
-		function showDetails(mIdx) {
-			
-			$.ajax({
-				type: "get",
-				url: "miniProfile.do",
-				data: "mIdx=" + mIdx,
-				success: function(member) {
-					
-					$("#profile-picture-img").attr("src", member.profileSrc);
-					$("#details-nickname").text(member.nickname);
-					$("#details-email").text(member.email);
-					$("#details-name").text(member.name);
-					$("#details-address").text(member.address + " " + member.addressDetail);
-					$("#details-tel").text(member.tel);
-					
-					if (member.gender == "M") {
-						$("#details-gender").text("남자");
-					} else if (member.gender == "F") {
-						$("#details-gender").text("여자");
-					}
-					
-					$("#details-joindate").text(moment(member.joinDate).format("YYYY년 MM월 DD일"));
-					
-					$("#block-button").attr("data-mIdx", member.mIdx);
-					$("#unreg-button").attr("data-mIdx", member.mIdx);
-
-					$("#block-button").text('차단');
-					$("#block-button").removeClass("blocked");
-					if (member.auth == 1) {
-						$("#block-button").text('차단 해제');
-						$("#block-button").addClass("blocked");
-					}
-					
-					$(".details").css("left", "0px");
-					$(".details").css("top", "0px");
-					
-					$(".details-wrap").css("display", "flex");
-					$(".scroll-area").scrollTop(0);
-
-					$(".details-wrap").addClass("animate");
-					$(".details").addClass("animate");
-					
-				}				
-			})
-			
-		}
-		
-		function closeDetails() {
-			$(".details-wrap").removeClass("animate");
-			$(".details").removeClass("animate");
-			
-			setTimeout(() => {
-				$(".details-wrap").css("display", "none");
-			}, 200);
-		}
-		
-		function blockUser(button) {
-			
-			var mIdx = $(button).attr('data-mIdx');
-			
-			if ($(button).hasClass("blocked")) {
-				
-				if (!confirm('이 멤버의 차단을 해제하시겠습니까?')) {
-					return;
-				}				
-				
-				
-			} else {
-				
-				if(!confirm('이 멤버의 글쓰기 권한을 차단하시겠습니까?')) {
-					return;
-				}
-				
-				$.ajax({
-					type: "post",
-					url: "block.do",
-					data: "target=" + mIdx,
-					success: function(result) {
-						if (result == 'ok') {
-							alert('글쓰기 권한이 차단되었습니다.');
-							location.reload();
-						}
-					}
-				})
-			}
-			
-		}
-		
-		function unregUser(button) {
-			
-			var mIdx = $(button).attr('data-mIdx');
-			
-			if (!confirm('이 멤버를 추방하시겠습니까?')) {
-				return;
-			}
-			
-			
-		}
-	</script>
 	
 	<div class="details-wrap">
 		<div class="inner-box details">

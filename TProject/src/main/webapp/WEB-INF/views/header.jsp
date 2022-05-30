@@ -458,11 +458,11 @@ header {
 	
 	
 	<div class="inner-box mini-profile" style="width: 300px; height: 200px; display: flex; position: fixed; visibility: hidden; top: 10px; left: 0px; background-color: rgb(245, 245, 245); opacity: 0%;">
-		<div class="inner-box-content " style="padding: 15px 20px;position:relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
-	        <button type="button" class="btn-close profile-close" style="position: absolute; top: 0px; right: 0px;" onclick="profileClose()"></button>
+		<div id="mini-profile-content" class="inner-box-content " style="padding: 15px 20px;position:relative; display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+			<button type="button" class="btn-close profile-close" style="position: absolute; top: 0px; right: 0px;" onclick="profileClose()"></button>
 				<div class="mini-profile-wrap" style="width: 100%; display: flex; align-items: center; ">
-			        <div id="sm-profile-picture-wrap-modal">
-							<img src="" width="100%">
+					<div id="sm-profile-picture-wrap-modal">
+						<img src="" width="100%">
 					</div>
 					<div id="sm-profile-nickname-wrap-modal">
 						<div id="sm-profile-nickname-modal">
@@ -471,10 +471,15 @@ header {
 					<input type="hidden" id="sm-profile-mIdx" value="">
 				</div>
 			<div class="mini-profile-buttons" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
-			<button class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;" onclick="messagePopup()">쪽지보내기</button>
-	        <button class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;" onclick="reportPopup()">신고</button>
+				<button id="profile-report-button" class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;" onclick="reportPopup()">신고</button>
+				<button id="profile-message-button" class="normal-button mini-profile-button" style="font-size: 12px;width: 100px;" onclick="messagePopup()">쪽지보내기</button>
 			</div>
 		</div>
+		<div id="mini-profile-unreg" class="inner-box-content" style="display: flex; flex-direction: column; justify-content: space-between; align-items: center;">
+			<div style="margin-top: 20px;">탈퇴한 회원입니다.</div>
+			<button type="button" class="btn-close profile-close" style="position: absolute; top: 15px; right: 15px;" onclick="profileClose()"></button>
+		</div>
+			
 	</div>
 <!-- Channel Plugin Scripts -->
 <script>
@@ -530,6 +535,8 @@ header {
 		var X=window.event.clientX;
 		var Y=window.event.clientY-10;
 		
+		$(".mini-profile-button").css("display", "block");
+		
 		document.querySelector('.mini-profile').style.transform='translate('+X+'px,'+Y+'px)';
 		
 		$.ajax({
@@ -539,12 +546,23 @@ header {
 			success:function(vo){
 
 				console.log(vo);
-								
+				$("#mini-profile-content").css("display", "none");
+				$("#mini-profile-unreg").css("display", "none");
 				$('div.mini-profile').css('visibility', 'visible');
-				$('div.mini-profile').animate({opacity: "100%"}, 200);
-				$('#sm-profile-picture-wrap-modal img').attr('src', vo.profileSrc);
-				$('#sm-profile-nickname-modal').text(vo.nickname);
-				$('#sm-profile-mIdx').val(mIdx);
+				
+				if (vo.auth == 2) {
+					$("#mini-profile-unreg").css("display", "flex");
+				} else {
+
+					$('#sm-profile-picture-wrap-modal img').attr('src', vo.profileSrc);
+					$('#sm-profile-nickname-modal').text(vo.nickname);
+					$('#sm-profile-mIdx').val(mIdx);
+					$("#mini-profile-content").css("display", "flex");
+				}
+					$('div.mini-profile').animate({opacity: "100%"}, 200);
+				if (vo.auth == 3) {
+					$("#profile-report-button").css("display", "none");
+				}
 			}
 		})
 		

@@ -564,6 +564,14 @@
 			}
 		})
 	}
+
+	function unregister() {
+		if (!confirm('등록된 공간이 모두 삭제됩니다.\n정말 탈퇴하시겠습니까?')) {
+			return;
+		}
+		
+		location.href='unregister.do';
+	}
 	
 </script>
 </head>
@@ -722,11 +730,14 @@
 						</div>
 					</form>
 				</div>
+				<div class="button-wrap">
+					<button class="normal-button" onclick="showInfoModify(this)">정보 수정</button>
+					<button id="info-submit-button" class="normal-button accent-button" onclick="updateInfo()">정보 수정</button>			
+				</div>
 			</div>
 			
 			<div class="button-wrap">
-				<button class="normal-button" onclick="showInfoModify(this)">정보 수정</button>
-				<button id="info-submit-button" class="normal-button accent-button" onclick="updateInfo()">정보 수정</button>			
+				<button class="normal-button" style="margin-right: 40px;" onclick="unregister()">회원 탈퇴</button>
 			</div>
 			
 			
