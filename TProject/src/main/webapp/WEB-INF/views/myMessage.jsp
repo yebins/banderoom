@@ -12,12 +12,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
-<link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
-
-<script
-  src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"
-  integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY="
-  crossorigin="anonymous"></script>
 <style>
 	#messageContent{
 		width:500px;
@@ -460,9 +454,29 @@
 		</div>
 	</div>
 	<script>
-		$(function() {
-			$('.innerMessageBOX').draggable();
-		})
+	$('.innerMessageBOX').bind('mousedown', function(e){
+        dragthis(e, $(this));
+	});
+
+	function dragthis(e, $el)
+	  {
+			if (!e) var e = window.event;
+				var parentId = $el.parent().attr('id');
+				var eY = (!e.pageY) ? e.clientY : e.pageY;
+				var eX = (!e.pageX) ? e.clientX : e.pageX;
+				Tgap = eY - $el.parent().position().top;
+				Lgap = eX - $el.parent().position().left;
+				document.onmousemove = function(e){
+				if (!e) var e = window.event;
+				var eY = (!e.pageY) ? e.clientY : e.pageY;
+				var eX = (!e.pageX) ? e.clientX : e.pageX;
+		    document.getElementById(parentId).style.top=(eY-Tgap)+'px';
+		    document.getElementById(parentId).style.left=(eX-Lgap)+'px';
+			}
+				document.getElementById(parentId).onmouseup = function(){
+				document.onmousemove = null;
+			}
+	}
 	
 		function call(sign,page){
 			console.log(sign);
