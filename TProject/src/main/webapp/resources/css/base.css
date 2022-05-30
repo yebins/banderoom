@@ -131,6 +131,8 @@ div#page-content {
 	border-radius: 18px;
 	background-color: white;
 	box-shadow: 0px 0px 5px rgba(0,0,0,0.2);
+	transform: scale(1);
+	transition: 0.1s;
 }
 
 .accent-button {
@@ -141,6 +143,8 @@ div#page-content {
 
 .normal-button:active {
 	filter: brightness(90%);
+	transition: 0.1s;
+	transform: scale(0.95);
 }
 div.inner-box {
 	background-color: white;
