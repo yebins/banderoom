@@ -47,7 +47,14 @@
 	<div id="messageBox">
 		<div id="receiver">
 			<span style="font-weight:bold;">받는사람</span>
+			<c:choose>
+			<c:when test="${vo.mIdx == login.mIdx}">
+			<span>나</span>
+			</c:when>
+			<c:otherwise>
 			<span>${vo.nickname}</span>
+			</c:otherwise>
+			</c:choose>
 		</div>
 		<div id="messageContent">
 			<textarea></textarea>

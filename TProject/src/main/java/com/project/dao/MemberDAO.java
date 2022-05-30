@@ -126,6 +126,10 @@ public class MemberDAO {
 		return sqlSession.insert("com.project.mapper.memberMapper.sendMessage",vo);
 	}
 	
+	public int deleteMsg(Map<String, List<String>> map) {
+		return sqlSession.delete("com.project.mapper.memberMapper.deleteMsg",map);
+	}
+	
 	public HostMembersVO getHostMember (HostMembersVO vo) {
 		return sqlSession.selectOne("com.project.mapper.memberMapper.getHostMember", vo);
 	}

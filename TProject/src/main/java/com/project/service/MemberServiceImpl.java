@@ -514,5 +514,14 @@ public class MemberServiceImpl implements MemberService {
 	public int hUnregister(HostMembersVO vo) {
 		return dao.hUnregister(vo);
 	}
+
+	@Override
+	public int deleteMsg(List<String> msgIdx) {
+		System.out.println(msgIdx.toString());
+		Map<String, List<String>> map= new HashMap<String, List <String>>();
+		map.put("msgIdx", msgIdx);
+		
+		return dao.deleteMsg(map);
+	}
 	
 }
