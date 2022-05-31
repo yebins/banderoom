@@ -501,9 +501,9 @@
 			$('#messageSender').text(nickname);
 			$('#messageContent textarea').val(content.text);
 			$('#messageBox').addClass('messageBox-Extend');
+			$('#messageBox').css('top', '0px');
+			$('#messageBox').css('left', '0px');
 			setTimeout(() => {
-				$('.innerMessageBOX').css('top', '0px');
-				$('.innerMessageBOX').css('left', '0px');
 				$('.innerMessageBOX').addClass('animate');
 			}, 10);
 			
@@ -522,9 +522,9 @@
 			$('#messageReceiver').text(nickname);
 			$('#messageContent2 textarea').val(content.text);
 			$('#messageBox2').addClass('messageBox-Extend');		
+			$('#messageBox2').css('top', '0px');
+			$('#messageBox2').css('left', '0px');
 			setTimeout(() => {
-				$('.innerMessageBOX').css('top', '0px');
-				$('.innerMessageBOX').css('left', '0px');
 				$('.innerMessageBOX').addClass('animate');
 			}, 10);
 		}
