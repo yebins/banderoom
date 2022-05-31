@@ -300,14 +300,16 @@
 			,m.sentdate
 			,m.status  
 			from messages m
+			<where>
 			<if test="receiver != null and receiver != '' and receiverType != null">
-			where m.receiver = #{receiver}
+			and m.receiver = #{receiver}
 			and m.receiverType = #{receiverType}
 			</if>
 			<if test="sender != null and sender != '' and senderType != null">
-			where m.sender = #{sender}
+			and m.sender = #{sender}
 			and m.senderType = #{senderType}
 			</if>
+			</where>
 			order by m.msgidx desc
 			limit #{start},14
 	</select>
@@ -342,7 +344,7 @@
 	
 	<select id="noReadCount" parameterType="map" resultType="map">
 	select 
-		pp.ct1,pp.ct2 
+		pp.ct1,pp.ct2,kk.ct3 
 	from (
 		select rm.ct1 , sm.ct2 
 	from
@@ -351,6 +353,8 @@
 		where m.receivertype = #{receiverType} and m.receiver = #{receiver} and m.status=0) as rm 
 	join 
 		(select count(m2.msgidx) ct2 from messages m2 where m2.sender=#{sender} and m2.sendertype =#{senderType} and m2.status=0) as sm) pp
+	join 
+		(select count(m3.msgidx) ct3 from messages m3 where m3.sender = #{sender} and m3.senderType =#{senderType} and receiver=#{receiver} and receiverType = #{receiverType} and m3.status=0) kk;
 	</select>
 	
 	
