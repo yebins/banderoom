@@ -718,4 +718,16 @@
 			rsvstatus = 1
 		where resIdx = #{resIdx}
 	</update>
+	
+	<select id="recentReview" resultType="spaceReviewVO">
+		select sr.*, s.name as spaceName, gm.profilesrc 
+		from space_review sr 
+		inner join spaces s 
+		on sr.spaceidx = s.idx 
+		inner join general_members gm 
+		on sr.midx = gm.midx 
+		where sr.picturesrc != '' 
+		order by sr.regdate desc 
+		limit 9;
+	</select>
 </mapper>

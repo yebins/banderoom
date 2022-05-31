@@ -770,14 +770,14 @@ public class SpaceController {
 		} else if (request.getSession().getAttribute("login") != null) {
 			
 			gMemberVO = (GeneralMembersVO) request.getSession().getAttribute("login");
-			request.getSession().setAttribute("login", gMemberVO);
+			model.addAttribute("gMemberVO", gMemberVO);
 
 		} else if (request.getSession().getAttribute("hlogin") != null) {
 			
 			hMemberVO = (HostMembersVO) request.getSession().getAttribute("hlogin");
 			gMemberVO.setmIdx(rsvVO.getmIdx());
 			gMemberVO = memberService.oneMemberInfo(gMemberVO);
-			model.addAttribute("login", gMemberVO);
+			model.addAttribute("gMemberVO", gMemberVO);
 		}
 		
 		if (gMemberVO.getmIdx() != rsvVO.getmIdx() && gMemberVO.getAuth() != 3 && hMemberVO.getmIdx() != spacesVO.getHostIdx()) {

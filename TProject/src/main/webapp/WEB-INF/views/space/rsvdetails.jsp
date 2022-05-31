@@ -15,6 +15,9 @@
 
 <script>
 
+	var hostIdx = ${hostVO.mIdx};
+	var guestIdx = ${gMemberVO.mIdx};
+
 	function cancelRsv(resIdx) {
 		
 		if (!confirm('예약을 취소하시겠습니까?')) {
@@ -38,6 +41,21 @@
 			}
 			
 		})
+	}
+	
+
+	function messageToHost() {
+		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
+		var mIdx=document.querySelector("#sm-profile-mIdx").value;
+		console.log(mIdx);
+		window.open("/messagePopup.do?type=host&mIdx="+hostIdx,"쪽지보내기",option);
+	}
+	
+	function messageToGuest() {
+		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
+		var mIdx=document.querySelector("#sm-profile-mIdx").value;
+		console.log(mIdx);
+		window.open("/messagePopup.do?type=general&mIdx="+guestIdx,"쪽지보내기",option);
 	}
 
 </script>
@@ -90,6 +108,9 @@
 			
 			<div class="big-title">
 				호스트 정보
+				<c:if test="${login != null}">
+				<button class="normal-button" onclick="messageToHost()">쪽지 보내기</button>
+				</c:if>
 			</div>
 			
 			<div class="inner-box">
@@ -121,11 +142,11 @@
 				</div>
 			</div>
 			
-			<div class="big-title-wrap">
-				<div class="big-title">
-					예약자 정보
-				</div>
-				<!-- <button class="normal-button big-title-button">내 정보에서 가져오기</button> -->
+			<div class="big-title">
+				예약자 정보
+				<c:if test="${hlogin != null}">
+				<button class="normal-button" onclick="messageToGuest()">쪽지 보내기</button>
+				</c:if>
 			</div>
 			
 			<div class="inner-box">
@@ -134,19 +155,19 @@
 						예약자 이름
 					</div>
 					<div class="content">
-						${login.name}
+						${gMemberVO.name}
 					</div>
 					<div class="small-title">
 						연락처
 					</div>
 					<div class="content">
-						${login.tel}
+						${gMemberVO.tel}
 					</div>
 					<div class="small-title">
 						이메일
 					</div>
 					<div class="content">
-						${login.email}
+						${gMemberVO.email}
 					</div>
 				</div>
 			</div>

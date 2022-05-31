@@ -1134,4 +1134,5 @@ public class MemberController {
 	public HostMembersVO hMemberInfo (HostMembersVO vo) {
 		return memberService.getHostMember(vo);
 	}
+	
 }

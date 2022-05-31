@@ -93,6 +93,9 @@
 			     or a.parts like concat('%',#{searchWord},'%')
 			   )
 			 </if>
+			 <if test="status != null and status != ''">
+			   AND t.status = 0
+			 </if>
 		 </if>
 		 <if test="sort == null">
 		 	ORDER BY t.status, t.teamidx DESC

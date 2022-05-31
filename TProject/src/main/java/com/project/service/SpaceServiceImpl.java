@@ -351,4 +351,9 @@ public class SpaceServiceImpl implements SpaceService {
 	public int cancelRsv(ReservationsVO vo) {
 		return dao.cancelRsv(vo);
 	}
+	
+	@Override
+	public List<SpaceReviewVO> recentReview() {
+		return dao.recentReview();
+	}
 }

@@ -21,15 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.service.BoardService;
-import com.project.service.MemberService;
-import com.project.service.SpaceService;
-import com.project.vo.ArticlesVO;
-import com.project.vo.GeneralMembersVO;
-import com.project.vo.HostMembersVO;
-import com.project.vo.MessagesVO;
-import com.project.vo.ServiceInfoVO;
-import com.project.vo.SpacesVO;
+import com.project.service.*;
+import com.project.vo.*;
 
 
 /**
@@ -44,6 +37,8 @@ public class HomeController {
 	private MemberService memberService;
 	@Autowired
 	private SpaceService spaceService;
+	@Autowired
+	private TeamsService teamsService;
 	
 	
 	
@@ -67,6 +62,41 @@ public class HomeController {
 		
 		List<SpacesVO> spaceList = spaceService.spaceList(params);
 		model.addAttribute("spaceList", spaceList);
+		
+		List<SpaceReviewVO> recentReview = spaceService.recentReview();
+		model.addAttribute("recentReview", recentReview);
+		
+
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		
+		searchMap.put("start", 0);
+		searchMap.put("vo", new TeamsVO());
+		searchMap.put("status", "1");
+		
+		List<TeamsVO> teamsList = teamsService.selectList(searchMap);
+		
+		Map<Integer, List<PartsVO>> partsMap = new HashMap<Integer, List<PartsVO>>();
+		
+		for (int i=0; i<teamsList.size(); i++) {
+			List<PartsVO> partsList = teamsService.selectParts(teamsList.get(i).getTeamIdx());
+			partsMap.put(teamsList.get(i).getTeamIdx(), partsList);
+		}
+		
+		model.addAttribute("teamsList", teamsList);
+		model.addAttribute("partsMap", partsMap);
+		
+		Map<String, Object> serListMap = new HashMap<String, Object>();
+		
+			serListMap.put("bIdx", 1);
+		
+		List<ArticlesVO> list1=boardService.list(serListMap, request);
+		model.addAttribute("serList1",list1);
+		
+			serListMap.put("bIdx", 6);
+
+
+		List<ArticlesVO> list2=boardService.list(serListMap, request);
+		model.addAttribute("serList2",list2);
 		
 		return "home";
 	}
@@ -131,7 +161,7 @@ public class HomeController {
 				result=boardService.updateServiceInfo(vo);
 				System.out.println(result);
 				request.setAttribute("msg", "수정완료");
-				request.setAttribute("url", "/serinfo.do");
+				request.setAttribute("url", "/serinfo.do?idx="+vo.getIdx());
 				
 				return "alert";
 			} else {
@@ -284,13 +314,33 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/messagePopup.do")
-	public String messagePopup(Model model,GeneralMembersVO vo,String type) {
-		System.out.println(vo.getmIdx());
-		GeneralMembersVO vo1=memberService.oneMemberInfo(vo);
-		model.addAttribute("vo",vo1);
-		model.addAttribute("type",type);
+	public String messagePopup(Model model,HostMembersVO vo1, GeneralMembersVO vo2,String type,HttpServletRequest request) {
+		HttpSession session=request.getSession();
 		
-		return "messagePopup";
+		if(session.getAttribute("login") == null && session.getAttribute("hlogin") == null) {
+				
+			request.setAttribute("msg", "로그인하세요");
+			request.setAttribute("url", "/member/glogin.do");
+			request.setAttribute("close", 1);
+			
+			return "alert";
+			
+		} else if(type.equals("general")){
+			GeneralMembersVO vo = memberService.oneMemberInfo(vo2);
+			
+			model.addAttribute("vo",vo);
+			model.addAttribute("type",type);
+			
+			return "messagePopup";
+		} else {
+			HostMembersVO vo = memberService.oneMemberInfo(vo1);
+			
+			model.addAttribute("vo",vo);
+			model.addAttribute("type",type);
+			
+			return "messagePopup";
+		}
+		
 	}
 	
 	@RequestMapping(value="/messageSend.do")
