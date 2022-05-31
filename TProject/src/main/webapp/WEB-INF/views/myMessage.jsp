@@ -242,7 +242,18 @@
 				<div class="inner-box-content">
 					<div class="message-nav">
 						<div id="message-nav-write">
-							<input type="hidden" value="${login.mIdx}">
+							<c:choose>
+								<c:when test="${login.mIdx ne null}">
+									<input type="hidden" value="${login.mIdx}">
+									<input type="hidden" value="general">
+								</c:when>
+								<c:when test="${hlogin.mIdx ne null}">
+									<input type="hidden" value="${hlogin.mIdx}">
+									<input type="hidden" value="host">
+								</c:when>
+								<c:otherwise>
+								</c:otherwise>
+							</c:choose>
 							<a onclick="messagePopups(this)"><span style="color:white;">내게쓰기</span></a>
 						</div>
 						<div id="message-nav-menu-list">	
@@ -313,7 +324,7 @@
 												<a >${item.senderNickname}</a>
 											</li>
 											<li class="visitedMessage" style="width:65%;color:lightgray;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}','${item.senderType}')">${item.content}</a>
 											</li>
 											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;color:lightgray;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
@@ -327,7 +338,7 @@
 												<a >${item.senderNickname}</a>
 											</li>
 											<li style="width:65%;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}','${item.senderType}')">${item.content}</a>
 											</li>
 											<li style="width:15%;border-right:none;padding-right:0;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
@@ -492,6 +503,7 @@
 			</div>
 			<div id="messageButton">
 				<input type="hidden" id="toIdx">
+				<input type="hidden" id="toType">
 				<button class="normal-button" onclick="messagePopups(this)">답장하기</button>
 				<button class="normal-button" onclick="closePop(this)">닫기</button>
 			</div>
@@ -549,13 +561,15 @@
 		
 		function messagePopups(obj){
 			var option = "width = 500, height = 400, top = 100, left = 200, location = no"
-			var mIdx=$(obj).prev().val();
+			var mIdx=$(obj).prev().prev().val();
+			var type=$(obj).prev().val();
 			console.log(mIdx);
-			window.open("/messagePopup.do?type=general&mIdx="+mIdx,"쪽지보내기",option);
+			window.open("/messagePopup.do?type="+type+"&mIdx="+mIdx,"쪽지보내기",option);
 		}
 		
-		function message(nickname,content,mIdx,msgIdx,receiver){
+		function message(nickname,content,mIdx,msgIdx,receiver,senderType){
 			$('#toIdx').val(mIdx);
+			$('#toType').val(senderType);
 			$('#messageSender').text(nickname);
 			$('#messageContent textarea').val(content.text);
 			$('#messageBox').addClass('messageBox-Extend');
