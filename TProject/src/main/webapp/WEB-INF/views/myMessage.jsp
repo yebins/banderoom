@@ -259,11 +259,11 @@
 										<b>${noReadMsg.ct2}</b>
 									</a>
 								</li>
-								<%-- <li>
-									<a href="">쪽지보관함
-										<b>${msgCount.ct3}</b>
+								<li>
+									<a href="toMeMessage.do?page=1">내게쓴쪽지함
+										<b>${noReadMsg.ct3}</b>
 									</a>
-								</li> --%>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -274,8 +274,11 @@
 									<c:when test="${sign eq 'receive'}">
 									<h4>받은쪽지함 (${noReadMsg.ct1} / ${msgCount.ct1})</h4>
 									</c:when>
+									<c:when test="${sign eq 'send'}">
+									<h4>보낸쪽지함 (${noReadMsg.ct2} / ${msgCount.ct2})</h4>
+									</c:when>
 									<c:otherwise>
-									<h4>보낸쪽지함 (${noReadMsg.ct2} / ${msgCount.ct2})</h4>									
+									<h4>내게쓴쪽지함 (${noReadMsg.ct3} / ${msgCount.ct3})</h4>									
 									</c:otherwise>
 								</c:choose>
 							<button class="msgDelBtn" onclick="deleteMsg()">삭제</button>
@@ -390,6 +393,61 @@
 							</ul>
 						</div>
 						</c:if>
+						<!-- -------------------내게쓴쪽지함 -->
+						<c:if test="${sign eq 'me'}">
+						<div id="message-content-list-content-top">
+							<ul>
+								<li id="message-content-top-check">
+									<input type="checkbox" id="cbx_chkAll">
+								</li>
+								<li style="width:15%;">
+									<span>보낸사람</span>
+								</li>
+								<li style="width:65%;">
+									내용
+								</li>
+								<li style="border-right:none;">
+									날짜
+								</li>
+							</ul>
+						</div>
+						<div id="message-content-list-content-center">
+							<ul class="message-content-list-content-ul">
+								<c:forEach var="item" items="${list}">
+									<c:choose>
+										<c:when test="${item.status eq '1'}">
+											<li class="message-content-center-check ">
+												<input type="checkbox" name="chk" value="${item.msgIdx}">
+											</li>
+											<li class="visitedMessage" style="width:15%;color:lightgray;">
+												<a >나</a>
+											</li>
+											<li class="visitedMessage" style="width:65%;color:lightgray;">
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+											</li>
+											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;color:lightgray;">
+												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
+											</li>
+										</c:when>
+										<c:otherwise>
+											<li class="message-content-center-check">
+												<input type="checkbox" name="chk" value="${item.msgIdx}">
+											</li>
+											<li style="width:15%;">
+												<a >나</a>
+											</li>
+											<li style="width:65%;">
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+											</li>
+											<li style="width:15%;border-right:none;padding-right:0;">
+												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
+											</li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+							</ul>
+						</div>
+						</c:if>
 						<div id="message-content-list-content-footer">
 						<c:set var="msgTotal" value="${msgTotal}"/>
 						<c:set var="page" value="${page}"/>
@@ -485,7 +543,7 @@
 			} else if (sign == 'send'){
 				location.href='sentMessage.do?page='+page;
 			} else{
-				
+				location.href='toMeMessage.do?page='+page;
 			}
 		}
 		

@@ -363,6 +363,57 @@ public class MemberController {
 		}
 		
 	}
+	@RequestMapping(value="toMeMessage.do")
+	public String toMeMessage(Model model,HttpServletRequest request,MessagesVO msgVO,int page) {
+		HttpSession session=request.getSession();
+		int bp=0;
+		System.out.println(page);
+		if ( page != 0 ) bp=page; 
+		
+		if(session.getAttribute("login") == null && session.getAttribute("hlogin") == null) {
+			
+			request.setAttribute("msg", "로그인하세요.");
+			request.setAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+			
+		} else if(session.getAttribute("login") != null) {
+			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");
+			msgVO.setReceiver(vo.getmIdx());
+			msgVO.setReceiverType("general");
+			msgVO.setSender(vo.getmIdx());
+			msgVO.setSenderType("general");
+			List<MessagesVO> list= memberService.MessagesList(request, msgVO, bp);
+			model.addAttribute("msgCount",request.getAttribute("쪽지"));
+			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			Map<String, Object> noReadMsg=(Map<String, Object>)request.getAttribute("안읽은쪽지");
+			model.addAttribute("noReadMsg",noReadMsg);
+			model.addAttribute("msgTotal",cmt.get("ct3"));
+			model.addAttribute("list",list);
+			model.addAttribute("page",page);
+			model.addAttribute("sign","me");
+			
+			return "myMessage";
+		} else {
+			HostMembersVO vo=(HostMembersVO)session.getAttribute("hlogin");
+			msgVO.setReceiver(vo.getmIdx());
+			msgVO.setReceiverType("host");
+			msgVO.setSender(vo.getmIdx());
+			msgVO.setSenderType("host");
+			List<MessagesVO> list=memberService.MessagesList(request, msgVO, bp);
+			model.addAttribute("msgCount",request.getAttribute("쪽지"));
+			Map<String, Object> cmt=(Map<String, Object>)request.getAttribute("쪽지");
+			Map<String, Object> noReadMsg=(Map<String, Object>)request.getAttribute("안읽은쪽지");
+			model.addAttribute("noReadMsg",noReadMsg);
+			model.addAttribute("msgTotal",cmt.get("ct3"));
+			model.addAttribute("list",list);
+			model.addAttribute("page",page);
+			model.addAttribute("sign","me");
+			
+			return "myMessage";
+		}
+		
+	}
 	
 	@RequestMapping(value = "ginfo.do", method = RequestMethod.GET)
 	public String ginfo(HttpServletRequest request) {

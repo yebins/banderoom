@@ -429,6 +429,7 @@ public class MemberServiceImpl implements MemberService {
 		map.put("sender", vo.getSender());
 		map.put("senderType", vo.getSenderType());
 		
+		System.out.println(map.toString());
 		return dao.listMessage(map);
 	}
 	
