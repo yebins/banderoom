@@ -234,6 +234,10 @@ header {
 	box-shadow: none;
 	outline: none;
 }
+#sm-profile-nickname{
+	word-break: break-all;
+    width: 120px;
+}
 
 </style>
 
@@ -349,16 +353,16 @@ header {
     </h2>
     <div id="c0" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/space/myspace.do'">
+       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=0'">
        	공간 관리
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/member/reportedMember.do'">
+       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=1'">
        	신고글 관리
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/member/gAdminCheck.do'">
+       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=2'">
        	일반회원 관리
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/member/hAdminCheck.do'">
+       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=3'">
        	호스트회원 관리
        	</div>
       </div>

@@ -193,8 +193,25 @@ select[name=searchField]{
   crossorigin="anonymous"></script>
   
 	<script>
+	
 		$(function() {
-		 $(".details").draggable();
+			$(".details").draggable();
+			 
+			 
+			var searchField = "${param.searchField}";
+			if(searchField == ""){
+				searchField = "nickname";
+			}
+			
+			var sort = "${param.sort}";
+			if(sort == ""){
+				sort = "all";
+			}
+			
+			$("select[name=searchField]").val(searchField);
+			$("select[name=sort]").val(sort);
+			$("input[name=searchWord]").val("${param.searchWord}");
+		 
 		});
 		
 		function showDetails(mIdx) {
@@ -263,6 +280,17 @@ select[name=searchField]{
 					return;
 				}
 				
+				$.ajax({
+					type: "post",
+					url: "unblock.do",
+					data: "target=" + mIdx,
+					success: function(result) {
+						if (result == 'ok') {
+							alert('차단이 해제되었습니다.');
+							location.reload();
+						}
+					}
+				})
 				
 				
 				
@@ -310,6 +338,8 @@ select[name=searchField]{
 			})
 			
 		}
+		
+	
 	</script>
 	
 </head>
@@ -322,7 +352,7 @@ select[name=searchField]{
 		</div>
 		<div id="page-content">
 			
-			<form action="reportedMember.do" id="search-form">
+			<form action="gMemberManage.do" id="search-form">
 				<input type="hidden" name="search" value="1">
 				<div class="d-flex justify-content-between">
 					<div>
@@ -336,9 +366,11 @@ select[name=searchField]{
 					<div class="d-flex">
 						<select class="form-select form-select-sm" name="searchField">
 							<option value="nickname">닉네임</option>
+							<option value="name">이름</option>
 						</select>&nbsp;
 						<input class="form-control form-control-sm" type="text" name="searchWord" placeholder="검색어를 입력해주세요.">
 						<button type="submit" class="normal-button accent-button">검색</button> &nbsp;
+						<button type="button" class="normal-button" style="width:75px;" onclick="location.href='gMemberManage.do'">초기화</button>
 					</div>
 				</div>
 			</form>
@@ -347,7 +379,8 @@ select[name=searchField]{
 					<table>
 						<tr id="title">
 							<td style="width:10%;">회원번호</td>
-							<td style="width:20%;">닉네임</td>
+							<td style="width:15%;">닉네임</td>
+							<td style="width:15%;">이름</td>
 							<td>이메일</td>
 							<td style="width:20%;">구분</td>
 							<td style="width:10%;"></td>
@@ -356,6 +389,7 @@ select[name=searchField]{
 						<tr>
 							<td>${gMember.mIdx}</td>
 							<td>${gMember.nickname}</td>
+							<td>${gMember.name}</td>
 							<td>${gMember.email}</td>
 							<td>
 								<c:if test="${gMember.auth == 0}">일반</c:if>
@@ -379,15 +413,15 @@ select[name=searchField]{
 								<div class="page-nav-button current-page">${i}</div>
 							</c:when>
 							<c:otherwise>
-								<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
+								<div class="page-nav-button" onclick="location.href='gMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
 				</c:if>
 				<c:if test="${PagingUtil.lastPage > 5}">
 					<c:if test="${PagingUtil.startPage > 5}">
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=1'">1</div>
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.startPage - 1}'">◀</div>
+						<div class="page-nav-button" onclick="location.href='gMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=1'">1</div>
+						<div class="page-nav-button" onclick="location.href='gMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.startPage - 1}'">◀</div>
 					</c:if>
 					
 					<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
@@ -396,14 +430,14 @@ select[name=searchField]{
 								<div class="page-nav-button current-page">${i}</div>
 							</c:when>
 							<c:otherwise>
-								<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
+								<div class="page-nav-button" onclick="location.href='gMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
 					
 					<c:if test="${PagingUtil.endPage < PagingUtil.lastPage}">
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.endPage + 1}">▶</div>
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
+						<div class="page-nav-button" onclick="location.href='gMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.endPage + 1}">▶</div>
+						<div class="page-nav-button" onclick="location.href='gMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
 					</c:if>
 				</c:if>
 			</div>

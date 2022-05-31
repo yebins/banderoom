@@ -46,10 +46,13 @@ public interface MemberService {
 	int reportListNum(Map<String, Object> pagingMap);
 	ReportsVO reportedDetail(int rIdx);
 	int block(int target);
+	int unblock(int target);
 	int withdraw(int target);
 	int deleteReport(int rIdx);
-	List<GeneralMembersVO> gMember();
-	List<HostMembersVO> hMember();
+	List<GeneralMembersVO> gMember(Map<String, Object> searchMap);
+	int gMemberNum(Map<String, Object> pagingMap);
+	List<HostMembersVO> hMember(Map<String, Object> searchMap);
+	int hMemberNum(Map<String, Object> pagingMap);
 	int gUnregister(GeneralMembersVO vo);
 	int hUnregister(HostMembersVO vo);
 	int unregisterSpaces(HostMembersVO vo);

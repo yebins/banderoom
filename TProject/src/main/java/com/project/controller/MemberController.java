@@ -754,7 +754,17 @@ public class MemberController {
 		
 		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 		
-		if(login != null) {
+		if(login == null) { //로그인안됨
+			return 0;
+		}
+		
+		else if(login != null && login.getmIdx() == vo.getTarget()) { //본인신고
+			return -1;
+			
+		}else if(vo.getContent() == null || vo.getContent() == "") { //빈내용
+			return -2;
+			
+		}else { //신고
 			int reporter = login.getmIdx();
 			String reportername = login.getNickname();
 			vo.setReporter(reporter);
@@ -762,8 +772,6 @@ public class MemberController {
 			
 			return memberService.sendReport(vo);
 			
-		} else{
-			return -1;
 		}
 	}
 	
@@ -848,6 +856,24 @@ public class MemberController {
 		return "x";
 	}
 	
+	@RequestMapping(value="unblock.do")
+	@ResponseBody
+	public String unblock(Model model, HttpServletRequest request, Integer target) {
+		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
+		
+		if (login.getAuth() != 3) {
+
+			model.addAttribute("msg", "권한이 없습니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+			
+		}else if(memberService.unblock(target) == 1){
+			return "ok";
+		}
+		return "x";
+	}
+	
 	@RequestMapping(value="withdraw.do")
 	@ResponseBody
 	public String withdraw(Model model, HttpServletRequest request, Integer mIdx, String memberType) {
@@ -899,14 +925,15 @@ public class MemberController {
 	//신고
 	
 	//회원관리
-	@RequestMapping(value="gAdminCheck.do", method = RequestMethod.GET)
-	public String gAdminCheck() {
+	
+	@RequestMapping(value="adminCheck.do", method = RequestMethod.GET)
+	public String adminCheck(int num) {
 		
-		return "member/gAdminCheck";
+		return "member/adminCheck";
 	}
 	
-	@RequestMapping(value="gAdminCheck.do", method = RequestMethod.POST)
-	public String gAdminCheck(Model model, HttpServletRequest request, GeneralMembersVO vo) {
+	@RequestMapping(value="adminCheck.do", method = RequestMethod.POST)
+	public String adminCheck(Model model, HttpServletRequest request, GeneralMembersVO vo, int num) {
 		
 		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 		
@@ -917,56 +944,136 @@ public class MemberController {
 			model.addAttribute("url", "/member/gAdminCheck.do");
 			
 			return "alert";
+		}else if(num == 0) {
+			return "redirect:/space/myspace.do";
+			
+		}else if(num == 1){
+			
+			return "redirect:/member/reportedMember.do";
+			
+		}else if(num == 2) {
+			
+			return "redirect:/member/gMemberManage.do";
+			
+		}else if(num == 3) {
+			
+			return "redirect:/member/hMemberManage.do";
 			
 		}else {
-		
-			return "redirect:/member/gMemberManage.do";
+			model.addAttribute("msg", "올바르지 않은 경로입니다.");
+			model.addAttribute("url", "/member/adminCheck.do");
+			
+			return "alert";
 		}
+		
 	}
 	
 	@RequestMapping(value="gMemberManage.do")
-	public String gMemberManage(Model model) {
-		
-		List<GeneralMembersVO> gMember = memberService.gMember();
-		
-		model.addAttribute("gMember", gMember);
-		
-		return "member/gMemberManage";
-	}
-	
-	@RequestMapping(value="hAdminCheck.do", method = RequestMethod.GET)
-	public String hAdminCheck() {
-		
-		return "member/hAdminCheck";
-	}
-	
-	@RequestMapping(value="hAdminCheck.do", method = RequestMethod.POST)
-	public String hAdminCheck(Model model, HttpServletRequest request, GeneralMembersVO vo) {
+	public String gMemberManage(Model model, HttpServletRequest request, Integer page,
+			 					Integer search, String sort, String searchField, String searchWord) {
 		
 		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 		
-		vo.setEmail(login.getEmail());
-		
-		if(memberService.gLogin(vo) == null) {
-			model.addAttribute("msg", "비밀번호가 틀렸습니다.");
-			model.addAttribute("url", "/member/hAdminCheck.do");
+		if (login == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+			
+		}else if (login.getAuth() != 3) {
+
+			model.addAttribute("msg", "관리자만 볼 수 있습니다.");
+			model.addAttribute("url", "/");
 			
 			return "alert";
 			
 		}else {
+			
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+			
+			if(page == null) {
+				page = 1;
+			}
+			
+			if(search != null) {
+				searchMap.put("sort", sort);
+				searchMap.put("searchField", searchField);
+				searchMap.put("searchWord", searchWord);
+			}
+			
+			Map<String, Object> pagingMap = new HashMap<String, Object>();
+			
+			if(search != null) {
+				pagingMap.put("sort", sort);
+				pagingMap.put("searchField", searchField);
+				pagingMap.put("searchWord", searchWord);
+			}
+			
+			PagingUtil PagingUtil = new PagingUtil(memberService.gMemberNum(pagingMap), page, 10, 5);
+			searchMap.put("start", PagingUtil.getStart()-1);
+			
+			List<GeneralMembersVO> gMember = memberService.gMember(searchMap);
+			
+			model.addAttribute("gMember", gMember);
+			model.addAttribute("PagingUtil", PagingUtil);
+			
+			return "member/gMemberManage";
 		
-			return "redirect:/member/hMemberManage.do";
 		}
 	}
-	
+
 	@RequestMapping(value="hMemberManage.do")
-	public String hMemberManage(Model model) {
+	public String hMemberManage(Model model, HttpServletRequest request, Integer page,
+								Integer search, String sort, String searchField, String searchWord) {
 		
-		List<HostMembersVO> hMember = memberService.hMember();
+		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 		
-		model.addAttribute("hMember", hMember);
-		
-		return "member/hMemberManage";
+		if (login == null) {
+
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/member/glogin.do");
+			
+			return "alert";
+			
+		}else if (login.getAuth() != 3) {
+
+			model.addAttribute("msg", "관리자만 볼 수 있습니다.");
+			model.addAttribute("url", "/");
+			
+			return "alert";
+			
+		}else {
+			Map<String, Object> searchMap = new HashMap<String, Object>();
+			
+			if(page == null) {
+				page = 1;
+			}
+			
+			if(search != null) {
+				searchMap.put("sort", sort);
+				searchMap.put("searchField", searchField);
+				searchMap.put("searchWord", searchWord);
+			}
+			
+			Map<String, Object> pagingMap = new HashMap<String, Object>();
+			
+			if(search != null) {
+				pagingMap.put("sort", sort);
+				pagingMap.put("searchField", searchField);
+				pagingMap.put("searchWord", searchWord);
+			}
+			
+			PagingUtil PagingUtil = new PagingUtil(memberService.hMemberNum(pagingMap), page, 10, 5);
+			searchMap.put("start", PagingUtil.getStart()-1);
+			
+			List<HostMembersVO> hMember = memberService.hMember(searchMap);
+			
+			model.addAttribute("hMember", hMember);
+			model.addAttribute("PagingUtil", PagingUtil);
+			
+			return "member/hMemberManage";
+		}
 	}
 	//회원관리
 	

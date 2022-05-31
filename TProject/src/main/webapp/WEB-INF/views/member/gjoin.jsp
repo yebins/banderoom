@@ -137,7 +137,7 @@
 
 						<div class="join-row join-row-title">이름</div>
 						<div class="join-row join-row-content">
-							<input type="text" name="name" required>
+							<input type="text" name="name" onkeyup="nameMaxLengthCheck(this)" required>
 						</div>
 						<div class="join-row join-row-title">주소</div>
 						<div class="join-row join-row-content">

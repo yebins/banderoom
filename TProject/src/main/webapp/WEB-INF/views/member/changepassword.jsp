@@ -61,7 +61,7 @@
 	var pwChecked = false;
 	
 	function chkPw() {
-		var pwReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+		var pwReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
 	
 		pwChecked = false;
 		if ($("#pw1").val() == $("#pw2").val() && pwReg.test($("#pw1").val())) {
@@ -73,7 +73,7 @@
 				if ($("#pw1").val() != $("#pw2").val()) {
 					$(".pwCheck-message").text("비밀번호가 일치하지 않습니다.");
 				} else if (!pwReg.test($("#pw1").val())) {
-					$(".pwCheck-message").text("영문, 숫자, 기호 포함 8자 이상 입력해주세요.");
+					$(".pwCheck-message").text("영문, 숫자, 기호 포함 8~20자 입력해주세요.");
 				}
 			}
 		}
