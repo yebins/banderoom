@@ -242,7 +242,18 @@
 				<div class="inner-box-content">
 					<div class="message-nav">
 						<div id="message-nav-write">
-							<input type="hidden" value="${login.mIdx}">
+							<c:choose>
+								<c:when test="${login.mIdx ne null}">
+									<input type="hidden" value="${login.mIdx}">
+									<input type="hidden" value="general">
+								</c:when>
+								<c:when test="${hlogin.mIdx ne null}">
+									<input type="hidden" value="${hlogin.mIdx}">
+									<input type="hidden" value="host">
+								</c:when>
+								<c:otherwise>
+								</c:otherwise>
+							</c:choose>
 							<a onclick="messagePopups(this)"><span style="color:white;">내게쓰기</span></a>
 						</div>
 						<div id="message-nav-menu-list">	
@@ -549,9 +560,10 @@
 		
 		function messagePopups(obj){
 			var option = "width = 500, height = 400, top = 100, left = 200, location = no"
-			var mIdx=$(obj).prev().val();
+			var mIdx=$(obj).prev().prev().val();
+			var type=$(obj).prev().val();
 			console.log(mIdx);
-			window.open("/messagePopup.do?type=general&mIdx="+mIdx,"쪽지보내기",option);
+			window.open("/messagePopup.do?type="+type+"&mIdx="+mIdx,"쪽지보내기",option);
 		}
 		
 		function message(nickname,content,mIdx,msgIdx,receiver){
