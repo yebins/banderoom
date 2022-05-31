@@ -324,7 +324,7 @@
 												<a >${item.senderNickname}</a>
 											</li>
 											<li class="visitedMessage" style="width:65%;color:lightgray;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}','${item.senderType}')">${item.content}</a>
 											</li>
 											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;color:lightgray;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
@@ -338,7 +338,7 @@
 												<a >${item.senderNickname}</a>
 											</li>
 											<li style="width:65%;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}','${item.senderType}')">${item.content}</a>
 											</li>
 											<li style="width:15%;border-right:none;padding-right:0;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
@@ -503,6 +503,7 @@
 			</div>
 			<div id="messageButton">
 				<input type="hidden" id="toIdx">
+				<input type="hidden" id="toType">
 				<button class="normal-button" onclick="messagePopups(this)">답장하기</button>
 				<button class="normal-button" onclick="closePop(this)">닫기</button>
 			</div>
@@ -566,8 +567,9 @@
 			window.open("/messagePopup.do?type="+type+"&mIdx="+mIdx,"쪽지보내기",option);
 		}
 		
-		function message(nickname,content,mIdx,msgIdx,receiver){
+		function message(nickname,content,mIdx,msgIdx,receiver,senderType){
 			$('#toIdx').val(mIdx);
+			$('#toType').val(senderType);
 			$('#messageSender').text(nickname);
 			$('#messageContent textarea').val(content.text);
 			$('#messageBox').addClass('messageBox-Extend');

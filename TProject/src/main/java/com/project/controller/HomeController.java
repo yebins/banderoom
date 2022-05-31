@@ -291,22 +291,19 @@ public class HomeController {
 				
 			request.setAttribute("msg", "로그인하세요");
 			request.setAttribute("url", "/member/glogin.do");
+			request.setAttribute("close", 1);
 			
 			return "alert";
 			
 		} else if(type.equals("general")){
-			GeneralMembersVO vo=(GeneralMembersVO)session.getAttribute("login");
-			vo = memberService.oneMemberInfo(vo2);
-			System.out.println("일반"+vo.getmIdx());
+			GeneralMembersVO vo = memberService.oneMemberInfo(vo2);
 			
 			model.addAttribute("vo",vo);
 			model.addAttribute("type",type);
 			
 			return "messagePopup";
 		} else {
-			HostMembersVO vo=(HostMembersVO)session.getAttribute("hlogin");
-			vo = memberService.oneMemberInfo(vo1);
-			System.out.println("호스트"+vo.getmIdx());
+			HostMembersVO vo = memberService.oneMemberInfo(vo1);
 			
 			model.addAttribute("vo",vo);
 			model.addAttribute("type",type);
