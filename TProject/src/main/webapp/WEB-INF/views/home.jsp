@@ -395,6 +395,22 @@
 		<div id="page-title">
 		</div>
 		<div id="page-content">
+		
+			<div class="point-banner" style="width: 100%;">
+				<div style="width: 980px; height: 160px; position: relative; border-radius: 8px; background-color: #FFCC99;">
+					<div style="position: absolute; top: 45px; left: 80px;">
+						<p style="font-style: normal; font-weight: bold; font-size: 26px; line-height: 42px; letter-spacing: -0.3px;">
+						대관비 5% 적립받자
+						</p>
+					</div>
+					<div style="position: absolute; top: 95px; left: 80px;">
+						<p onclick="location.href='/serinfo.do?idx=4'" style="font-style: normal; font-weight: 500; font-size: 17px; line-height: 20px; letter-spacing: -0.1px; cursor: pointer;">
+						자세히 보기
+						</p>
+					</div>
+				</div>
+			</div>
+			
 			<div class="section-title">
 				<div class="space-section-title">
 					요즘 핫한 공간
@@ -717,20 +733,6 @@
 				</div>
 			</div>
 			
-			<div class="point-banner" style="margin-top: 40px; width: 100%;">
-				<div style="width: 980px; height: 160px; position: relative; border-radius: 8px; background-color: #FFCC99;">
-					<div style="position: absolute; top: 45px; left: 80px;">
-						<p style="font-style: normal; font-weight: bold; font-size: 26px; line-height: 42px; letter-spacing: -0.3px;">
-						대관비 5% 적립받자
-						</p>
-					</div>
-					<div style="position: absolute; top: 95px; left: 80px;">
-						<p onclick="location.href='/serinfo.do?idx=4'" style="font-style: normal; font-weight: 500; font-size: 17px; line-height: 20px; letter-spacing: -0.1px; cursor: pointer;">
-						자세히 보기
-						</p>
-					</div>
-				</div>
-			</div>
 		</div>
 	</div>
 	
