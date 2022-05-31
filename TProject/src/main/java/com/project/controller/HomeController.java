@@ -161,7 +161,7 @@ public class HomeController {
 				result=boardService.updateServiceInfo(vo);
 				System.out.println(result);
 				request.setAttribute("msg", "수정완료");
-				request.setAttribute("url", "/serinfo.do");
+				request.setAttribute("url", "/serinfo.do?idx="+vo.getIdx());
 				
 				return "alert";
 			} else {
