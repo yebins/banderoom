@@ -78,14 +78,18 @@
 .team-title{
 	padding: 15px;
 	width:100%;
-	height:73px;
+	/*height:73px;*/
 	background:#FBE6B2;
 	color:#303030;
 	font-size: 15px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display:block;
 }
 .team-content{
 	width:100%;
-	height:220px;
+	height:240px;
 	background:white;
 	color:#303030;
 	text-align: center;
@@ -130,6 +134,9 @@ select[name=sort]{
 	margin: 40px;
 	border-width: 10px;
 	color: #FB6544;
+}
+.title{
+	
 }
 /*@font-face{
     font-family: 'SuncheonB';
