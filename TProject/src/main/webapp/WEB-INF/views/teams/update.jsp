@@ -158,7 +158,7 @@
 			
 				<div class="inner-box" style="height:700px;">
 					<div>
-						<input type="text" name="title" class="form-control list-title" value="${details.title}" maxlength="33">
+						<input type="text" name="title" class="form-control list-title" value="${details.title}">
 					</div>
 					<div class="inner-box-content">
 						<form method="post">

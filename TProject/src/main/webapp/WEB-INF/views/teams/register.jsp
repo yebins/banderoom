@@ -568,7 +568,7 @@
 			
 				<div class="inner-box" style="height:700px;">
 					<div>
-						<input type="text" id="title" name="title" class="form-control list-title" placeholder="제목을 입력하세요." maxlength="33">
+						<input type="text" id="title" name="title" class="form-control list-title" placeholder="제목을 입력하세요.">
 					</div>
 					<div class="inner-box-content">
 						<form method="post">
