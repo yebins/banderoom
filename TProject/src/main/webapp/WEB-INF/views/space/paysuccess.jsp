@@ -69,6 +69,9 @@
 			
 			<div class="big-title">
 				호스트 정보
+				<c:if test="${login != null}">
+				<button class="normal-button">쪽지 보내기</button>
+				</c:if>
 			</div>
 			
 			<div class="inner-box">
@@ -100,11 +103,11 @@
 				</div>
 			</div>
 			
-			<div class="big-title-wrap">
-				<div class="big-title">
-					예약자 정보
-				</div>
-				<!-- <button class="normal-button big-title-button">내 정보에서 가져오기</button> -->
+			<div class="big-title">
+				예약자 정보
+				<c:if test="${login != null}">
+				<button class="normal-button">쪽지 보내기</button>
+				</c:if>
 			</div>
 			
 			<div class="inner-box">
