@@ -314,13 +314,33 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value="/messagePopup.do")
-	public String messagePopup(Model model,GeneralMembersVO vo,String type) {
-		System.out.println(vo.getmIdx());
-		GeneralMembersVO vo1=memberService.oneMemberInfo(vo);
-		model.addAttribute("vo",vo1);
-		model.addAttribute("type",type);
+	public String messagePopup(Model model,HostMembersVO vo1, GeneralMembersVO vo2,String type,HttpServletRequest request) {
+		HttpSession session=request.getSession();
 		
-		return "messagePopup";
+		if(session.getAttribute("login") == null && session.getAttribute("hlogin") == null) {
+				
+			request.setAttribute("msg", "로그인하세요");
+			request.setAttribute("url", "/member/glogin.do");
+			request.setAttribute("close", 1);
+			
+			return "alert";
+			
+		} else if(type.equals("general")){
+			GeneralMembersVO vo = memberService.oneMemberInfo(vo2);
+			
+			model.addAttribute("vo",vo);
+			model.addAttribute("type",type);
+			
+			return "messagePopup";
+		} else {
+			HostMembersVO vo = memberService.oneMemberInfo(vo1);
+			
+			model.addAttribute("vo",vo);
+			model.addAttribute("type",type);
+			
+			return "messagePopup";
+		}
+		
 	}
 	
 	@RequestMapping(value="/messageSend.do")

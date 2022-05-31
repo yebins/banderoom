@@ -10,6 +10,10 @@
     var msg = "${msg}";
     var url = "${url}";
     alert(msg);
+	if(${close != null}){
+		opener.location.href=url; //opener 부모창
+		self.close();//현재 내 창
+	}
     location.href = url;
 </script>
 </head>
