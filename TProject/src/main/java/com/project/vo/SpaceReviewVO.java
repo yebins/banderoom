@@ -13,6 +13,7 @@ public class SpaceReviewVO extends GeneralMembersVO {
 	private String mNickname;
 	private String content;
 	private Date regDate;
+	private String spaceName;
 
 	public int getResIdx() {
 		return resIdx;
@@ -67,6 +68,12 @@ public class SpaceReviewVO extends GeneralMembersVO {
 	}
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
+	}
+	public String getSpaceName() {
+		return spaceName;
+	}
+	public void setSpaceName(String spaceName) {
+		this.spaceName = spaceName;
 	}
 	@Override
 	public String toString() {

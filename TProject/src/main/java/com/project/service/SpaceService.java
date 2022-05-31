@@ -49,6 +49,7 @@ public interface SpaceService {
 	List<PointsVO> pointHistory(GeneralMembersVO login, String dateRange, int start);
 	List<PointsVO> pointInfo(ReservationsVO vo);
 	int cancelRsv(ReservationsVO vo);
+	List<SpaceReviewVO> recentReview();
 
 	//테스트용
 	public List<String> getAddr1();

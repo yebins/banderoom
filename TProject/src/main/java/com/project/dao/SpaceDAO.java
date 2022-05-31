@@ -239,4 +239,8 @@ public class SpaceDAO {
 	public int cancelRsv(ReservationsVO vo) {
 		return sqlSession.update("com.project.mapper.spaceMapper.cancelRsv", vo);
 	}
+	
+	public List<SpaceReviewVO> recentReview() {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.recentReview");
+	}
 }

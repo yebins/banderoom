@@ -21,15 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.service.BoardService;
-import com.project.service.MemberService;
-import com.project.service.SpaceService;
-import com.project.vo.ArticlesVO;
-import com.project.vo.GeneralMembersVO;
-import com.project.vo.HostMembersVO;
-import com.project.vo.MessagesVO;
-import com.project.vo.ServiceInfoVO;
-import com.project.vo.SpacesVO;
+import com.project.service.*;
+import com.project.vo.*;
 
 
 /**
@@ -44,6 +37,8 @@ public class HomeController {
 	private MemberService memberService;
 	@Autowired
 	private SpaceService spaceService;
+	@Autowired
+	private TeamsService teamsService;
 	
 	
 	
@@ -67,6 +62,41 @@ public class HomeController {
 		
 		List<SpacesVO> spaceList = spaceService.spaceList(params);
 		model.addAttribute("spaceList", spaceList);
+		
+		List<SpaceReviewVO> recentReview = spaceService.recentReview();
+		model.addAttribute("recentReview", recentReview);
+		
+
+		Map<String, Object> searchMap = new HashMap<String, Object>();
+		
+		searchMap.put("start", 0);
+		searchMap.put("vo", new TeamsVO());
+		searchMap.put("status", "1");
+		
+		List<TeamsVO> teamsList = teamsService.selectList(searchMap);
+		
+		Map<Integer, List<PartsVO>> partsMap = new HashMap<Integer, List<PartsVO>>();
+		
+		for (int i=0; i<teamsList.size(); i++) {
+			List<PartsVO> partsList = teamsService.selectParts(teamsList.get(i).getTeamIdx());
+			partsMap.put(teamsList.get(i).getTeamIdx(), partsList);
+		}
+		
+		model.addAttribute("teamsList", teamsList);
+		model.addAttribute("partsMap", partsMap);
+		
+		Map<String, Object> serListMap = new HashMap<String, Object>();
+		
+			serListMap.put("bIdx", 1);
+		
+		List<ArticlesVO> list1=boardService.list(serListMap, request);
+		model.addAttribute("serList1",list1);
+		
+			serListMap.put("bIdx", 6);
+
+
+		List<ArticlesVO> list2=boardService.list(serListMap, request);
+		model.addAttribute("serList2",list2);
 		
 		return "home";
 	}
