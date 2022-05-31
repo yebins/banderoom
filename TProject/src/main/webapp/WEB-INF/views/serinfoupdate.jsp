@@ -66,6 +66,7 @@
 						  <option ${(param.bIdx == "1")?"selected":""} value="1">공지사항</option>
 						  <option ${(param.bIdx == "5")?"selected":""} value="5">자주묻는질문</option>
 						  <option ${(param.bIdx == "6")?"selected":""} value="6">이벤트</option>
+						  <option ${(param.bIdx == "7")?"selected":""} value="7">포인트 적립 안내</option>
 					</select>			
 					<input class="form-control me-3" name="title" type="text" placeholder="제목을 입력하세요">
 				</div>
