@@ -183,7 +183,7 @@
 		cursor: pointer;
 	}
 	.page-nav-button.current-page {
-		background-color: #fbe6b2;
+		background-color: #2A3F6A;
 		font-weight: bold;
 	}
 	a:hover{
@@ -216,7 +216,7 @@
 	.innerMessageBOX{
 		box-shadow: 0px 5px 20px rgb(0 0 0 / 40%) !important;
 		padding:10px !important;
-		background:#fbe6b2 !important;
+		background:#2A3F6A !important;
 		transform: scale(0.95);
 		opacity: 0%;
 		transition: 0.2s;

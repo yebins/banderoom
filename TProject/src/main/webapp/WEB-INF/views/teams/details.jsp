@@ -27,7 +27,7 @@
 #deadline{
 	color: #303030;
     /* border: 1px solid #FB6544; */
-    background: #FBE6B2;
+    background: #2A3F6A;
     border-radius: 20px;
     padding: 6px;
     font-size: 13px;

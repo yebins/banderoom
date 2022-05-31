@@ -44,7 +44,7 @@ tr{
 	cursor: pointer;
 }
 .page-nav-button.current-page {
-	background-color: #fbe6b2;
+	background-color: #2A3F6A;
 	font-weight: bold;
 }
 #title{
@@ -124,7 +124,7 @@ select[name=searchField]{
 }
 
 .scroll-area::-webkit-scrollbar-thumb {
-	background: #fbe6b2; /* 스크롤바의 색상 */
+	background: #2A3F6A; /* 스크롤바의 색상 */
 	border-radius: 10px;
 }
 

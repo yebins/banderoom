@@ -13,7 +13,7 @@
 	}
 	
 	.inner-box.current-rsv {
-		background-color: #FBE6B2;
+		background-color: #2A3F6A;
 		margin-top: 30px;
 		position: relative;
 		z-index: 8;
@@ -182,7 +182,7 @@
 		cursor: pointer;
 	}
 	.page-nav-button.current-page {
-		background-color: #fbe6b2;
+		background-color: #2A3F6A;
 		font-weight: bold;
 	}
 	.cancelled {

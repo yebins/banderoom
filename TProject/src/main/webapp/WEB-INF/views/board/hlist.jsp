@@ -137,7 +137,7 @@
 		cursor: pointer;
 	}
 	.page-nav-button.current-page {
-		background-color: #fbe6b2;
+		background-color: #2A3F6A;
 		font-weight: bold;
 	}
 </style>

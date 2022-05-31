@@ -42,7 +42,7 @@ header {
 #sidemenu {
 	display: flex;
 	position: fixed;
-	background: #FBE6B2;
+	background: #2A3F6A;
 	width: 300px;
 	height: 100vh;
 	right: -300px;

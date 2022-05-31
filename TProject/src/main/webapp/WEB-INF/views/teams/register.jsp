@@ -96,7 +96,7 @@
     border-radius: 17.5px;
     padding: 6px;
     font-size: 12px;
-    background: #FBE6B2;
+    background: #2A3F6A;
     margin-right:5px;
 }
 .parts{

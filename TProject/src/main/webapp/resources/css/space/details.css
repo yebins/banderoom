@@ -5,7 +5,7 @@
 	}
 	.space-status {
 		width: 100%;
-		background-color: #FBE6B2 !important;
+		background-color: #2A3F6A !important;
 		padding: 40px 80px !important;
 		height: unset !important;
 		margin-top: 40px;
@@ -643,7 +643,7 @@
 		cursor: pointer;
 	}
 	.qna-page-nav-button.qna-current-page {
-		background-color: #fbe6b2;
+		background-color: #2A3F6A;
 		font-weight: bold;
 	}
 	

@@ -300,7 +300,7 @@
 		padding: 15px;
 		width:100%;
 		/*height:73px;*/
-		background:#FBE6B2;
+		background:#2A3F6A;
 		color:#303030;
 		font-size: 15px;
 		overflow: hidden;
@@ -322,7 +322,7 @@
 		width:100%;
 	}
 	tr{
-		border-bottom:1px solid #FBE6B2;
+		border-bottom:1px solid #2A3F6A;
 	}
 	tr:last-of-type{
 		border:none;

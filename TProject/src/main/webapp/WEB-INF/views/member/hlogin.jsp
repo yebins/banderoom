@@ -23,7 +23,7 @@
 	div#login-wrap {
 		width: 480px;
 		height: 600px;
-		background: #fbe6b2;
+		background: #2A3F6A;
 		border-radius: 15px;
 		box-shadow: 0px 5px 10px rgba(0,0,0,0.2);
 		display: flex;
