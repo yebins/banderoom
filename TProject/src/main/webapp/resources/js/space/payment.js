@@ -87,7 +87,7 @@
 
 			var mIdxInput = $("<input type='text' name='mIdx' value='" + login.mIdx + "'>");
 			var spaceIdxInput = $("<input type='text' name='spaceIdx' value='" + spacesVO.idx + "'>");
-			var peopleNumInput = $("<input type='text' name='peopleNum' value='" + spacesVO.peopleNum + "'>");
+			var peopleNumInput = $("<input type='text' name='peopleNum' value='" + rsvVO.peopleNum + "'>");
 			var startDateInput = $("<input type='text' name='startDate' value='" + $("textarea#startDate").val().trim() + "'>");
 			var endDateInput = $("<input type='text' name='endDate' value='" + $("textarea#endDate").val().trim() + "'>");
 			var rsvHoursInput = $("<input type='text' name='rsvHours' value='" + rsvVO.rsvHours + "'>");

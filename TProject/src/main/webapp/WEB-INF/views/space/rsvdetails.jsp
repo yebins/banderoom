@@ -46,14 +46,12 @@
 
 	function messageToHost() {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
-		var mIdx=document.querySelector("#sm-profile-mIdx").value;
 		console.log(mIdx);
 		window.open("/messagePopup.do?type=host&mIdx="+hostIdx,"쪽지보내기",option);
 	}
 	
 	function messageToGuest() {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
-		var mIdx=document.querySelector("#sm-profile-mIdx").value;
 		console.log(mIdx);
 		window.open("/messagePopup.do?type=general&mIdx="+guestIdx,"쪽지보내기",option);
 	}

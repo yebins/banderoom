@@ -12,7 +12,17 @@
 <title>Insert title here</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/space/paysuccess.css">
+<script>
 
+	var hostIdx = ${hostVO.mIdx};
+	
+	function messageToHost() {
+		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
+		var mIdx=document.querySelector("#sm-profile-mIdx").value;
+		console.log(mIdx);
+		window.open("/messagePopup.do?type=host&mIdx="+hostIdx,"쪽지보내기",option);
+	}
+</script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -70,7 +80,7 @@
 			<div class="big-title">
 				호스트 정보
 				<c:if test="${login != null}">
-				<button class="normal-button">쪽지 보내기</button>
+				<button class="normal-button" onclick="messageToHost()">쪽지 보내기</button>
 				</c:if>
 			</div>
 			
@@ -105,9 +115,6 @@
 			
 			<div class="big-title">
 				예약자 정보
-				<c:if test="${login != null}">
-				<button class="normal-button">쪽지 보내기</button>
-				</c:if>
 			</div>
 			
 			<div class="inner-box">
