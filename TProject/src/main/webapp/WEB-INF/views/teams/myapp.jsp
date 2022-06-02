@@ -105,6 +105,7 @@
 	}
 	.page-nav-button.current-page {
 		background-color: #2A3F6A;
+		color:#F5F5F5;
 		font-weight: bold;
 	}
 		

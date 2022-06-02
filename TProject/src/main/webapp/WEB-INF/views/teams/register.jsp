@@ -98,6 +98,7 @@
     font-size: 12px;
     background: #2A3F6A;
     margin-right:5px;
+    color:#F5F5F5;
 }
 .parts{
 	display:inline-block;
@@ -501,7 +502,7 @@
 			return false;
 		}
 		
-		if(confirm("글을 등록하시겠습니까? \n모집 조건은 수정하실 수 없습니다.")){
+		if(confirm("글을 등록하시겠습니까? \n마감 날짜 외의 모집 조건은 수정하실 수 없습니다.")){
 			document.regForm.submit();
 		}
 		
