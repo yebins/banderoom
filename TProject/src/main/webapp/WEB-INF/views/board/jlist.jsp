@@ -6,8 +6,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -174,14 +174,14 @@
 		<div id="page-content" class="JBoard">
 			<c:if test="${fn:length(list) gt 0}">
 				<c:forEach var="item" begin="0" end="${fn:length(list) -1}" varStatus="st">
-					<div class="inner-box JArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='/board/details.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}&page=${param.page}'">
+					<div class="inner-box JArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='<%=request.getContextPath() %>/board/details.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}&page=${param.page}'">
 						<div class="inner-box-content-thumbnail ">
 							<c:choose>
 								<c:when test="${imgsrc.get(item) ne ''}">
-									<img src="${imgsrc.get(item)}"/>
+									<img src="<%=request.getContextPath() %>${imgsrc.get(item)}"/>
 								</c:when>
 								<c:otherwise>
-									<img src="/images/no_image.png">
+									<img src="<%=request.getContextPath() %>/images/no_image.png">
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -205,7 +205,7 @@
 			</c:if>
 			<div class="content-write">
 				<c:if test="${login != null}">
-				<button class="normal-button accent-button" onclick="location.href='/board/register.do?bIdx=3'">글쓰기</button>
+				<button class="normal-button accent-button" onclick="location.href='<%=request.getContextPath() %>/board/register.do?bIdx=3'">글쓰기</button>
 				</c:if>
 			</div>
 				<c:set var="articlesTotal" value="${articlesTotal}"/>

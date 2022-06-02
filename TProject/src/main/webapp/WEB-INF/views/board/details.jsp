@@ -7,8 +7,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -411,7 +411,7 @@
 						htmls+='<div class="comment-area-content-toparea">'
 						htmls+='<div class="comment-area-content-toparea-left">'
 						if(el.status != 1){							
-							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="'+el.mProfileSrc+'" class="psrc"/>'
+							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="<%=request.getContextPath() %>'+el.mProfileSrc+'" class="psrc"/>'
 							if('${vo.mNickname}' == el.mNickname){
 							htmls+='<span style="font-weight:600;color:blue;">'+el.mNickname+ "  "+'</span></a>'														
 							} else{
@@ -429,7 +429,7 @@
 						if(el.status != 1){
 						htmls+='<div style="resize: none;border:none;width:100%;" readonly ><pre>'+el.content+'</pre><br>'							
 						if(el.picSrc != null){
-						htmls+='<img src="'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray;margin-top:10px;margin-bottom:10px"/>'	
+						htmls+='<img src="<%=request.getContextPath() %>'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray;margin-top:10px;margin-bottom:10px"/>'	
 							}
 						} else {
 							htmls+='<div style="resize: none;border:none;width:100%;word-break:break-all; font-weight:bold;" readonly >삭제된댓글입니다.<br></div>'
@@ -455,7 +455,7 @@
 						 	htmls+='<div id="uploaded-file'+el.cIdx+'" class="uploaded-file">'
 							htmls+='<span><b>업로드된사진</b></span>'
 								if(el.picSrc != null){
-								 htmls+='<img src="'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'
+								 htmls+='<img src="<%=request.getContextPath() %>'+el.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'
 									}
 							htmls+='</div>'
 							htmls+='<form id="commentfile'+el.cIdx+'">'
@@ -472,7 +472,7 @@
 								if(el.picSrc != null){
 							htmls+='<a> <strong>사진 변경하기</strong></a>'
 								} else{
-							htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>'								
+							htmls+='<a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>'								
 								}
 							htmls+='</label>'
 							htmls+='</label>'
@@ -497,7 +497,7 @@
 								htmls+='<input type="file" id="reply-file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="replyPreview(event,'+el.cIdx+',this)" accept="image/*">'
 								htmls+='<label for="reply-file'+el.cIdx+'">'
 								htmls+='</label>'
-								htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>'											
+								htmls+='<a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>'											
 								htmls+='</label>'
 								htmls+='<div class="comment-area-write-content">'
 								htmls+='<textarea id="reply-write-content'+el.cIdx+'" name="content" class="comment-area-write-content-area"></textarea>'
@@ -517,7 +517,7 @@
 								if(rl.mProfileSrc != null){
 								htmls+='<img src="" class="psrc"/>'
 								} else{
-								htmls+='<img src="/images/profile_default.png" class="psrc"/>'
+								htmls+='<img src="<%=request.getContextPath() %>/images/profile_default.png" class="psrc"/>'
 								}
 								if(rl.mNickname == '${vo.mNickname}'){
 								htmls+='<span style="font-weight:600; color:blue">'+rl.mNickname+" "+'</span></a>'																		
@@ -534,7 +534,7 @@
 								htmls+='<div class="comment-area-content-contentarea">'
 								htmls+='<div style="resize: none;border:none;width:100%;"readonly ><pre>'+rl.content+'</pre><br>'
 								if(rl.picSrc != null){
-								htmls+='<img src="'+rl.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'							
+								htmls+='<img src="<%=request.getContextPath() %>'+rl.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'							
 								}
 								htmls+='</div>'
 								htmls+='</div>'
@@ -552,7 +552,7 @@
 								htmls+='<div id="reply-uploaded-file'+rl.rIdx+'" class="uploaded-file">'
 								htmls+='<span><b>업로드된사진</b></span>'
 								if(rl.picSrc != null){
-								htmls+='<img src="'+rl.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'
+								htmls+='<img src="<%=request.getContextPath() %>'+rl.picSrc+'" style="width:200px; height:100%; border:2px solid lightgray"/>'
 								}
 								htmls+='</div>'
 								htmls+='<form id="replyfile'+rl.rIdx+'">'
@@ -566,7 +566,7 @@
 									if(rl.picSrc != null){
 								htmls+='<a> <strong>사진 변경하기</strong></a>'
 									} else{
-								htmls+='<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>'								
+								htmls+='<a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>'								
 									}
 								htmls+='</label>'
 								htmls+='</label>'
@@ -990,7 +990,7 @@
 						<div class="board-area-btmarea">
 							<div class="board-area-btmarea-left">
 								<a class="miniprofile" onclick="profileOpen('${vo.mIdx}')" style="display:flex">
-									<img src="${profileSrc}" class="psrc"/>
+									<img src="<%=request.getContextPath() %>${profileSrc}" class="psrc"/>
 									<span style="font-weight:600;align-self:center;">${vo.mNickname}</span>						
 								</a>
 							</div>
@@ -1030,7 +1030,7 @@
 						</c:if>	
 					</form> 
 					<div>
-						<button class="normal-button" style="margin-left: 15px;" onclick="location.href='/board/list.do?bIdx=2&page=${param.page}'">목록</button>
+						<button class="normal-button" style="margin-left: 15px;" onclick="location.href='<%=request.getContextPath() %>/board/list.do?bIdx=2&page=${param.page}'">목록</button>
 					</div>
 				</div>
 				<!-- 댓글영역 -->
@@ -1044,16 +1044,16 @@
 						<c:set var="page" value="${page}"/>
 						<c:set var="startNum" value="${page-(page-1)%5}"/>	
 						<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(cmtTotal/10),'.')}"/>
-						<c:if test="${fn:length(cmtList) gt 0}">
+						<c:if test="${fn:length(cmtList) gt 0 }">
 							<c:forEach var="item" items="${cmtList}" varStatus="st">
 							<c:set var="key" value="${item.cIdx}"/>
-							<c:if test="${fn:length(replyList[key]) gt 0 || item.status ne 1}">
+							<c:if test="${fn:length(replyList[key]) gt 0 || item.status eq 0}">
 							<li class="comment-area-ul-li">
 								<div class="comment-area-content">
 									<div class="comment-area-content-toparea">
 							 			<div class="comment-area-content-toparea-left">
-							 				<c:if test="${item.status ne 1}">
-							 				<a class="miniprofile" onclick="profileOpen('${item.mIdx}')"><img src="${item.mProfileSrc}" style="width:25px; height:100%; margin-right:10px;" class="psrc"/>
+							 				<c:if test="${item.status eq 0}">
+							 				<a class="miniprofile" onclick="profileOpen('${item.mIdx}')"><img src="<%=request.getContextPath() %>${item.mProfileSrc}" style="width:25px; height:100%; margin-right:10px;" class="psrc"/>
 							 				<c:choose>
 							 				<c:when test="${vo.mNickname eq item.mNickname }">
 							 				<span style="font-weight: 600;color:blue">${item.mNickname}</span>
@@ -1074,7 +1074,7 @@
 							 			<c:when test="${item.status eq 0}">
 								 		<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly ><pre style="font-family:system-ui">${item.content}</pre><br>
 											<c:if test="${item.picSrc ne null}">
-									 			<img src="${item.picSrc}"/>
+									 			<img src="<%=request.getContextPath() %>${item.picSrc}"/>
 											</c:if>
 										</div>
 										</c:when>
@@ -1101,7 +1101,7 @@
 							 		<div id="uploaded-file${item.cIdx}" class="uploaded-file">
 										<span><b>업로드된사진</b></span>
 										<c:if test="${item.picSrc ne null}">
-									 			<img src="${item.picSrc}" style="width:100px; height:100px;"/>
+									 			<img src="<%=request.getContextPath() %>${item.picSrc}" style="width:100px; height:100px;"/>
 										</c:if>
 									</div>
 									<form id="commentfile${item.cIdx}">
@@ -1123,7 +1123,7 @@
 												<c:otherwise>
 												<label for="file${item.cIdx}">
 												</label>
-												<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>												
+												<a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>												
 												</c:otherwise>
 											</c:choose>
 										</label>
@@ -1143,7 +1143,7 @@
 									<div class="comment-area-content-toparea">
 							 			<div class="comment-area-content-toparea-left">
 							 				<a class="miniprofile" onclick="profileOpen('${rList.mIdx}')">
-							 				<img src="/images/profile_default.png" style="width:25px;margin-right:10px; height:100%;" class="psrc npic"/>
+							 				<img src="<%=request.getContextPath() %>/images/profile_default.png" style="width:25px;margin-right:10px; height:100%;" class="psrc npic"/>
 							 				<c:choose>
 							 				<c:when test="${vo.mNickname eq rList.mNickname}">
 							 				<span style="font-weight:600; color:blue;">${rList.mNickname}</span>
@@ -1161,7 +1161,7 @@
 							 		<div class="comment-area-content-contentarea">
 								 		<div style="resize: none;border:none;width:100%;word-break:break-all;" readonly >${rList.content}<br>
 											<c:if test="${rList.picSrc ne null}">
-									 			<img src="${rList.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
+									 			<img src="<%=request.getContextPath() %>${rList.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
 											</c:if>
 										</div>
 									</div>
@@ -1179,7 +1179,7 @@
 									<div id="reply-uploaded-file${rList.rIdx}" class="uploaded-file">
 								 		<span><b>업로드된사진</b></span>
 										<c:if test="${rList.picSrc != null}">
-										 <img src="${rList.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
+										 <img src="<%=request.getContextPath() %>${rList.picSrc}" style="width:200px; height:100%; border:2px solid lightgray"/>
 										</c:if>
 									</div>
 										 <form id="replyfile${rList.rIdx}">
@@ -1195,7 +1195,7 @@
 												 	<a> <strong>사진 변경하기</strong></a>
 													</c:when>
 													<c:otherwise>
-													 <a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>						
+													 <a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"/></a>						
 													</c:otherwise>
 												</c:choose>
 												 </label>
@@ -1224,7 +1224,7 @@
 											<input type="file" id="reply-file${item.cIdx}" name="commentSrc" style='display:none' onchange="replyPreview(event,'${item.cIdx}',this)" accept="image/*">
 												<label for="reply-file${item.cIdx}">
 												</label>
-												<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>												
+												<a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>												
 										</label>
 										<div class="comment-area-write-content">
 												<textarea id="reply-write-content${item.cIdx}" name="content" class="comment-area-write-content-area"></textarea>
@@ -1277,7 +1277,7 @@
 							<label style="margin-bottom:10px">
 								<input type="file" id="file" name="commentSrc" style="display:none" onchange="preview(event)" accept="image/*">
 								<label for="file">
-									<a><img src="/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>
+									<a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>
 								</label>
 							</label>
 							<div class="comment-area-write-content">
@@ -1287,7 +1287,7 @@
 										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" onclick="commentWrite('${param.aIdx}')">
 									</c:when>
 									<c:otherwise>
-										<textarea id="comment-write-content"  class="comment-area-write-content-area" placeholder="댓글은 로그인 후 작성 가능합니다" onclick="location.href='/member/glogin.do'"></textarea>
+										<textarea id="comment-write-content"  class="comment-area-write-content-area" placeholder="댓글은 로그인 후 작성 가능합니다" onclick="location.href='<%=request.getContextPath() %>/member/glogin.do'"></textarea>
 										<input id="comment-write-button" type="button" value="등록" class="comment-area-write-content-button" disabled>
 									</c:otherwise>
 								</c:choose>

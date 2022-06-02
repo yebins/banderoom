@@ -204,9 +204,10 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public List<CommentsVO> commentList(Map<String, Object> map,HttpServletRequest request) {
-		int TotalCount=dao.commentCount(map);
-		int onlyCommentCount=dao.onlyCommentTotal(map);
+		int TotalCount=dao.commentCount(map);//대댓포함
+		int onlyCommentCount=dao.onlyCommentTotal(map);//댓글만
 		//System.out.println("댓글개수"+TotalCount);
+		System.out.println(onlyCommentCount);
 		
 		int a=(int) Math.ceil((double)onlyCommentCount/10);
 		//System.out.println("올림페이지"+a);
