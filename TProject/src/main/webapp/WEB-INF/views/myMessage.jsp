@@ -536,6 +536,8 @@
 		</div>
 	</div>
 	<script>
+	var ContextPath='<%=request.getContextPath() %>';
+	
 	$('.innerMessageBOX').bind('mousedown', function(e){
         dragthis(e, $(this));
 	});
@@ -576,7 +578,7 @@
 			var mIdx=$(obj).prev().prev().val();
 			var type=$(obj).prev().val();
 			console.log(mIdx);
-			window.open("/messagePopup.do?type="+type+"&mIdx="+mIdx,"쪽지보내기",option);
+			window.open(ContextPath+"/messagePopup.do?type="+type+"&mIdx="+mIdx,"쪽지보내기",option);
 		}
 		
 		function message(nickname,content,mIdx,msgIdx,receiver,senderType){
@@ -592,7 +594,7 @@
 			}, 10);
 			
 			$.ajax({
-				url:"/readMsg.do",
+				url:ContextPath+"/readMsg.do",
 				type:"post",
 				data:{msgIdx:msgIdx
 					,receiver:receiver},
@@ -645,7 +647,7 @@
 			
 			$.ajax({
 				type:"post",
-				url:"/deleteMsg.do",
+				url:ContextPath+"/deleteMsg.do",
 				data:{msgIdx:msgIdx},
 				success:function(){
 					alert('삭제되었습니다.')
