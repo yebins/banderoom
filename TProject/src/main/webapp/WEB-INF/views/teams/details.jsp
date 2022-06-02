@@ -36,7 +36,7 @@
 }
 #content{
 	width:100%;
-	height:500px;
+	min-height:500px;
 	margin:30px 0px;
 }
 .inner-box{
@@ -100,10 +100,20 @@
 		}
 	}
 	
-	function loginAlert(){
-		alert('로그인해주세요.');
-		location.href = "/member/glogin.do";
+	function applyPopup(){
+		if(${login == null}){
+			alert('로그인해주세요.');
+			location.href = "/member/glogin.do";
+		}
+		else if(${login.auth == 1}){
+			alert('차단된 회원은 지원하실 수 없습니다.');
+		}
+		else{
+		window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
+        'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
+		}
 	}
+	
 	
 </script>
 
@@ -159,7 +169,7 @@
 						</span>
 					</div>
 					<div class="inner-box-content">
-						<div id="content" class="form-control" style="width:100%; height:500px;">${details.content}</div>
+						<div id="content" class="form-control">${details.content}</div>
 					</div>
 					<div class="inner-box-button-wrap">
 					<c:if test="${details.status==0}">
@@ -167,13 +177,8 @@
 							<button type="button" class="normal-button" onclick="location.href='update.do?teamIdx=${details.teamIdx}'">수정</button> 
 							<button type="button" class="normal-button" onclick="deleteFn()">삭제</button>
 						</c:if>
-						<c:if test="${login == null}">
-							<button type="button" class="normal-button accent-button" onclick="loginAlert()">지원하기</button>
-						</c:if>
-						<c:if test="${login != null && details.mIdx != login.mIdx}">
-							<button type="button" class="normal-button accent-button" 
-							onclick="window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
-	                       'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');">지원하기</button> 
+						<c:if test="${details.mIdx != login.mIdx}">
+							<button type="button" class="normal-button accent-button" onclick="applyPopup()">지원하기</button> 
 						</c:if>
 					</c:if>
 					</div>

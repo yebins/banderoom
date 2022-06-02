@@ -254,11 +254,21 @@
 		
 	}
 	
+	const getByteLengthOfString = function(s,b,i,c){
+	    for(b = i = 0; c = s.charCodeAt(i++); b += c >> 11 ? 3 : c >> 7 ? 2 : 1);
+	    return b;
+	};
+	
 	function updateNickname() {
 		var nickname = $("#nickname").val();
 		
 		if (nickname == '') {
 			alert('닉네임을 입력해 주세요.');
+			return;
+		}
+		
+		if (getByteLengthOfString(nickname) > 30) {
+			alert('닉네임은 한글 10자, 영문 30자 이내로 입력하세요.');
 			return;
 		}
 		
@@ -281,6 +291,38 @@
 			}
 		})
 	}
+	
+	function nameMaxLengthCheck(input) {
+		var name = $(input).val();
+		if (getByteLengthOfString(name) > 20) {
+			
+			$(input).val(name.getStringFromByteLength(20));
+		}
+	}
+	
+	String.prototype.getStringFromByteLength = function( length ) {
+	    const contents = this;
+	    let str_character;
+	    let int_char_count = 0;
+	    let int_contents_length = contents.length;
+
+	    let returnValue = '';
+
+	    for (k = 0; k < int_contents_length; k++) {
+	        str_character = contents.charAt(k);
+	        if (escape(str_character).length > 4)
+	            int_char_count += 2;
+	        else
+	            int_char_count++;
+
+	        if ( int_char_count > length ) {
+	            break;
+	        }
+	        returnValue += str_character;
+	    }
+	    return returnValue;
+	}
+	
 	
 	function showPasswordForm() {
 		window.open('changepassword.do', '_blank', 
@@ -591,7 +633,7 @@
 						</div>
 						<div class="join-row join-row-title">이름</div>
 						<div class="join-row join-row-content">
-							<input type="text" name="name" value="${login.name}" required>
+							<input type="text" name="name" value="${login.name}" onkeyup="nameMaxLengthCheck(this)" required>
 						</div>
 						<div class="join-row join-row-title">주소</div>
 						<div class="join-row join-row-content address-wrap">

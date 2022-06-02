@@ -379,68 +379,69 @@ select[name=sort]{
 			
 			<div class="container">
 				<div class="reg-btn">
-					
 					<c:if test="${login.mIdx ne null}">
 						<button type="button" class="normal-button" onclick="location.href='myteams.do'" style="margin-right:5px;">내가 쓴 글</button>
+						<c:if test="${login.auth == 0}">
 						<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
+						</c:if>
 					</c:if>
 				</div>
 				<div id="teamsList" class="row row-cols-1 row-cols-sm-3">
-						<c:if test="${teamsList.size()>0}">
-							<c:forEach var="item" items="${teamsList}">
-								<div class="col team-col" onclick="location.href='details.do?teamIdx=${item.teamIdx}'">
-									<input type="hidden" name="teamIdx" value="${item.teamIdx}">
-									<div class="team-list"<c:if test="${item.status==2}">style='filter: brightness(50%);'</c:if>>
-										<div class="team-title">
-											<c:if test="${item.status==2}">[마감]</c:if>
-											[${item.type}] ${item.title}
-										</div>
-										<div class="team-content">
-											<table>
-												<tr>
-													<td style="width: 75px;">지역</td>
-													<td>${item.addr1} ${item.addr2}</td>
-												</tr>
-												<tr>
-													<td>팀 레벨</td>
-													<td>${item.teamLevel}</td>
-												</tr>
-												<tr>
-													<td>장르</td>
-													<td>${item.genre}</td>
-												</tr>
-												<tr>
-												<c:if test="${item.type == '밴드'}">
-													<td>파트</td>
-													<td>
-														
-														<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}" varStatus="lastPart">
-															${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
-														</c:forEach>
-													</td>
-												</c:if>
-												<c:if test="${item.type == '댄스'}">
-													<td>인원</td>
-													<td>
-														<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}">
-															${parts.capacity}명
-														</c:forEach>
-													</td>
-												</c:if>
-												</tr>
-												<tr>
-													<td>모집기간</td>
-													<td>
-														<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
-														<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일 마감"/>
-													</td>
-												</tr>
-											</table>
-										</div>
+					<c:if test="${teamsList.size()>0}">
+						<c:forEach var="item" items="${teamsList}">
+							<div class="col team-col" onclick="location.href='details.do?teamIdx=${item.teamIdx}'">
+								<input type="hidden" name="teamIdx" value="${item.teamIdx}">
+								<div class="team-list"<c:if test="${item.status==2}">style='filter: brightness(50%);'</c:if>>
+									<div class="team-title">
+										<c:if test="${item.status==2}">[마감]</c:if>
+										[${item.type}] ${item.title}
+									</div>
+									<div class="team-content">
+										<table>
+											<tr>
+												<td style="width: 75px;">지역</td>
+												<td>${item.addr1} ${item.addr2}</td>
+											</tr>
+											<tr>
+												<td>팀 레벨</td>
+												<td>${item.teamLevel}</td>
+											</tr>
+											<tr>
+												<td>장르</td>
+												<td>${item.genre}</td>
+											</tr>
+											<tr>
+											<c:if test="${item.type == '밴드'}">
+												<td>파트</td>
+												<td>
+													
+													<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}" varStatus="lastPart">
+														${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
+													</c:forEach>
+												</td>
+											</c:if>
+											<c:if test="${item.type == '댄스'}">
+												<td>인원</td>
+												<td>
+													<c:forEach var="parts" items="${partsMap.get(item.teamIdx)}">
+														${parts.capacity}명
+													</c:forEach>
+												</td>
+											</c:if>
+											</tr>
+											<tr>
+												<td>모집기간</td>
+												<td>
+													<fmt:parseDate value="${item.endDate}" var="endDate" pattern="yyyy-MM-dd"/>
+													<fmt:formatDate value="${endDate}" pattern="yyyy년 M월 d일 마감"/>
+												</td>
+											</tr>
+										</table>
 									</div>
 								</div>
-							</c:forEach>
-						</c:if>
+							</div>
+						</c:forEach>
+					</c:if>
 					<c:if test="${teamsList.size()==0}">
 					작성된 글이 존재하지 않습니다.
 					</c:if>

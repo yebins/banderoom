@@ -71,6 +71,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		background:white;
 	}
 	.page-nav-button:not(.current-page) {
 		cursor: pointer;
@@ -462,13 +463,13 @@
 			내 팀 목록
 		</div>
 		<div id="page-content">
-		<div class="big-title">
-			작성한 글 목록
-		</div>
+			<div class="big-title">
+				작성한 글 목록
+			</div>
 			<c:if test="${reglist.size() == 0}">
-				<div class="inner-box" style="height:50px; margin-top:20px;">작성한 글이 없습니다.</div>
+			<div class="inner-box" style="height:50px; margin-top:20px;">작성한 글이 없습니다.</div>
 			</c:if>
-			
+				
 			<c:if test="${reglist.size() > 0}">
 			<form action="myteams.do" method="post" name="endYNform">
 				<div class="endYN">
@@ -481,10 +482,14 @@
 					<c:forEach var="reglists" items="${reglist}">
 						<div class="reglist-wrap">
 							<div class="reglist-info-wrap" >
-								<div class="reglist-name"><a id="teamIdx" href="details.do?teamIdx=${reglists.teamIdx}">
-								<c:if test="${reglists.status == 0}">[모집중]</c:if>
-								<c:if test="${reglists.status == 2}">[마감]</c:if>
-								${reglists.title} <span id="appCount">(${reglists.appCount})</span></a></div> 
+								<div class="reglist-name">
+									<a id="teamIdx" href="details.do?teamIdx=${reglists.teamIdx}">
+										<c:if test="${reglists.status == 0}">[모집중]</c:if>
+										<c:if test="${reglists.status == 2}">[마감]</c:if>
+										${reglists.title} 
+										<span id="appCount">(${reglists.appCount})</span>
+									</a>
+								</div> 
 								<div class="reglist-info">
 									<div class="reglist-info-items">
 										<div class="small-title">지역</div>
@@ -538,49 +543,55 @@
 							</div>
 						</div>
 					</c:forEach>
-				</div>
-				</c:if>
-					<div id="page-nav"><!-- 페이지 시작 -->					
-						<c:if test="${regPageUtil.lastPage < 6}">
-							<c:forEach var="i" begin="${regPageUtil.startPage}" end="${regPageUtil.endPage}">
-								<c:choose>
-									<c:when test="${i == 1}">
-										<div class="page-nav-button current-page">${i}</div>
-									</c:when>
-									<c:otherwise>
-										<div class="page-nav-button" onclick="reglistPaging(${i})">${i}</div>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-						</c:if>
-						<c:if test="${regPageUtil.lastPage > 5}">
-							<c:if test="${regPageUtil.startPage > 5}">
-								<div class="page-nav-button" onclick="reglistPaging(1)">1</div>
-								<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.startPage - 1})">◀</div>
-							</c:if>
-							
-							<c:forEach var="i" begin="${regPageUtil.startPage}" end="${regPageUtil.endPage}">
-								<c:choose>
-									<c:when test="${i == 1}">
-										<div class="page-nav-button current-page">${i}</div>
-									</c:when>
-									<c:otherwise>
-										<div class="page-nav-button" onclick="reglistPaging(${i})">${i}</div>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-							
-							<c:if test="${regPageUtil.endPage < regPageUtil.lastPage}">
-								<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.endPage + 1})">▶</div>
-								<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.lastPage})">${regPageUtil.lastPage}</div>
-							</c:if>
-						</c:if>
-					</div>
-				</div>
+				</div><!-- reglist -->
 				
+				<div id="page-nav"><!-- 페이징 시작 -->					
+					<c:if test="${regPageUtil.lastPage < 6}">
+						<c:forEach var="i" begin="${regPageUtil.startPage}" end="${regPageUtil.endPage}">
+							<c:choose>
+								<c:when test="${i == 1}">
+									<div class="page-nav-button current-page">${i}</div>
+								</c:when>
+								<c:otherwise>
+									<div class="page-nav-button" onclick="reglistPaging(${i})">${i}</div>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+					</c:if>
+					<c:if test="${regPageUtil.lastPage > 5}">
+						<c:if test="${regPageUtil.startPage > 5}">
+							<div class="page-nav-button" onclick="reglistPaging(1)">1</div>
+							<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.startPage - 1})">◀</div>
+						</c:if>
+						
+						<c:forEach var="i" begin="${regPageUtil.startPage}" end="${regPageUtil.endPage}">
+							<c:choose>
+								<c:when test="${i == 1}">
+									<div class="page-nav-button current-page">${i}</div>
+								</c:when>
+								<c:otherwise>
+									<div class="page-nav-button" onclick="reglistPaging(${i})">${i}</div>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						
+						<c:if test="${regPageUtil.endPage < regPageUtil.lastPage}">
+							<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.endPage + 1})">▶</div>
+							<div class="page-nav-button" onclick="reglistPaging(${regPageUtil.lastPage})">${regPageUtil.lastPage}</div>
+						</c:if>
+					</c:if>
+				</div><!-- 페이징 끝 -->
+				
+			</div><!-- inner-box reglist-box -->
+			</c:if>
+			
 			<div class="big-title" style="margin-top:100px;">
 				작성한 지원서 목록
 			</div>
+			<c:if test="${applist.size() == 0}">
+			<div class="inner-box" style="height:50px; margin-top:20px;">작성한 글이 없습니다.</div>
+			</c:if>
+			<c:if test="${applist.size() > 0}">
 			<div id="applist">
 				<c:forEach var="applists" items="${applist}">
 				<c:if test="${applists.status != 1}">
@@ -629,11 +640,11 @@
 								<button class="normal-button" onclick="cancel(${applists.appIdx})" style="margin-left: 15px;">취소</button>
 							</div>
 						</div>
-					</div>
+					</div><!-- inner-box applist-box -->
 				</c:if>
-			</c:forEach>
-			</div>
-			<div id="app-page-nav"><!-- 페이지 시작 -->					
+				</c:forEach>
+			</div><!-- applist -->
+			<div id="app-page-nav"><!-- 페이징 시작 -->					
 				<c:if test="${appPageUtil.lastPage < 6}">
 					<c:forEach var="i" begin="${appPageUtil.startPage}" end="${appPageUtil.endPage}">
 						<c:choose>
@@ -668,8 +679,9 @@
 						<div class="page-nav-button" onclick="applistPaging(${appPageUtil.lastPage})">${appPageUtil.lastPage}</div>
 					</c:if>
 				</c:if>
-			</div>
-		</div>
+			</div><!-- 페이징 끝 -->
+		</c:if>
+		</div><!-- applist -->
 		
 	</div>
 	
