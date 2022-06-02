@@ -16,6 +16,7 @@
 		font-size: 36px;
 		font-weight: bold;
 		margin: 20px;
+		color: #F5F5F5;
 	}
 	#content {
 		padding: 0px 20px;

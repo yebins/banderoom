@@ -228,6 +228,9 @@
 	.msgDelBtn{
 		border-radius:10px;
 	}
+	.message-header * {
+		color: #F5F5F5;
+	}
 </style>
 </head>
 <body>
@@ -494,7 +497,7 @@
 	</div>
 	<div id="messageBox" class="messageBox">
 		<div class="inner-box innerMessageBOX">
-			<div>
+			<div class="message-header">
 				<span style="font-weight:bold;">보낸사람</span>
 				<span id="messageSender"></span>
 			</div>
@@ -511,7 +514,7 @@
 	</div>
 	<div id="messageBox2" class="messageBox">
 		<div class="inner-box innerMessageBOX">
-		<div>
+		<div class="message-header">
 			<span style="font-weight:bold;">받는사람</span>
 			<span id="messageReceiver"></span>
 		</div>

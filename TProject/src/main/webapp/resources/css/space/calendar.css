@@ -89,7 +89,6 @@
     align-items: center;
     justify-content: center;
     text-align: left;
-    color: #999;
     font-size: 16px;
     text-align: center;
 		height: 40px;
@@ -97,7 +96,10 @@
 		border-radius: 20px;
 }
 
-.current.today {background: #2A3F6A;}
+.current.today {
+	background: #2A3F6A;
+	color: #F5F5F5;
+	}
 
 .sec_cal .cal_wrap .dates {
     display: flex;

@@ -29,6 +29,10 @@
   	border-bottom:1px solid lightgray;
   }
   
+  #receiver * {
+  	color: #F5F5F5;
+  }
+  
   #messageBox{
   	width:100%;
   }

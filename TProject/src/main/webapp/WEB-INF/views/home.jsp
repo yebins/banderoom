@@ -301,7 +301,7 @@
 		width:100%;
 		/*height:73px;*/
 		background:#2A3F6A;
-		color:#303030;
+		color:#F5F5F5;
 		font-size: 15px;
 		overflow: hidden;
 		text-overflow: ellipsis;

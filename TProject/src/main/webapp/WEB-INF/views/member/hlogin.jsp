@@ -42,6 +42,7 @@
 	div#login-host-title {
 		font-weight: bold;
 		margin: 20px auto;
+		color: #F5F5F5;
 	}
 	
 	form#login-form {
@@ -102,6 +103,9 @@
 		font-size: 14px;
 		display: flex;
 		justify-content: space-between;
+	}
+	div#login-link * {
+		color: #F5F5F5;
 	}
 	
 	div#findpw-link:hover {
