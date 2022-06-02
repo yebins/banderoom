@@ -132,9 +132,7 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-		<c:if test="${param.bIdx==2}">
-			자유게시판
-		</c:if>
+			<a href="list.do?bIdx=2&page=1">자유게시판</a>
 		</div>
 		<div>
 			<form action="list.do" class="d-flex notice-page" method="get">

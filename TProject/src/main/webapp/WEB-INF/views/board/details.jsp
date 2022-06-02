@@ -411,7 +411,7 @@
 						htmls+='<div class="comment-area-content-toparea">'
 						htmls+='<div class="comment-area-content-toparea-left">'
 						if(el.status != 1){							
-							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="'+el.mProfileSrc+'" class="psrc"/>'
+							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="<%=request.getContextPath() %>'+el.mProfileSrc+'" class="psrc"/>'
 							if('${vo.mNickname}' == el.mNickname){
 							htmls+='<span style="font-weight:600;color:blue;">'+el.mNickname+ "  "+'</span></a>'														
 							} else{
@@ -1061,7 +1061,7 @@
 									<div class="comment-area-content-toparea">
 							 			<div class="comment-area-content-toparea-left">
 							 				<c:if test="${item.status eq 0}">
-							 				<a class="miniprofile" onclick="profileOpen('${item.mIdx}')"><img src="<%=request.getContextPath() %>${item.mProfileSrc}" style="width:25px; height:100%; margin-right:10px;" class="psrc"/>
+							 				<a class="miniprofile" onclick="profileOpen('${item.mIdx}')"><img src="${item.mProfileSrc}" style="width:25px; height:100%; margin-right:10px;" class="psrc"/>
 							 				<c:choose>
 							 				<c:when test="${vo.mNickname eq item.mNickname }">
 							 				<span style="font-weight: 600;color:blue">${item.mNickname}</span>
