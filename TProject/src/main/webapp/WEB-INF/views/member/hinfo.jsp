@@ -637,7 +637,7 @@
 								<input type="file" name="profilePicture" id="profile-picture-input" onchange="updateProfile(this)">
 							</form>
 							<div class="profile-picture">
-								<img id="profile-picture-img" src="<%=request.getContextPath() %>${hlogin.profileSrc}">
+								<img id="profile-picture-img" src="${hlogin.profileSrc}">
 							</div>
 							<label class="profile-picture-update" for="profile-picture-input">
 								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">

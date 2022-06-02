@@ -286,7 +286,7 @@ header {
 			<c:if test="${sessionScope.login != null}">
 				<div id="sm-profile-info">
 					<div id="sm-profile-picture-wrap">
-						<img src="<%=request.getContextPath() %>${login.getProfileSrc()}" width="100%">
+						<img src="${login.getProfileSrc()}" width="100%">
 					</div>
 					<div id="sm-profile-nickname-wrap">
 						<div id="sm-profile-nickname">
@@ -306,7 +306,7 @@ header {
 			<c:if test="${hlogin != null}">
 				<div id="sm-profile-info">
 					<div id="sm-profile-picture-wrap">
-						<img src="<%=request.getContextPath() %>${hlogin.getProfileSrc()}" width="100%">
+						<img src="${hlogin.getProfileSrc()}" width="100%">
 					</div>
 					<div id="sm-profile-nickname-wrap">
 						<div id="sm-profile-nickname">
@@ -568,7 +568,7 @@ header {
 					$("#mini-profile-unreg").css("display", "flex");
 				} else {
 
-					$('#sm-profile-picture-wrap-modal img').attr('src', '<%=request.getContextPath() %>' + vo.profileSrc);
+					$('#sm-profile-picture-wrap-modal img').attr('src', vo.profileSrc);
 					$('#sm-profile-nickname-modal').text(vo.nickname);
 					$('#sm-profile-mIdx').val(mIdx);
 					$("#mini-profile-content").css("display", "flex");

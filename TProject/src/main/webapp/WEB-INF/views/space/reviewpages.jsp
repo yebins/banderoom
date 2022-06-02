@@ -10,7 +10,7 @@
 										<div class="review-header">
 											<div class="review-member">
 												<div class="review-profile-img">
-													<img src="<%=request.getContextPath() %>${review.profileSrc}">
+													<img src="${review.profileSrc}">
 												</div>
 												<div class="review-nickname" onclick="profileOpen(${review.mIdx})">
 													${review.mNickname}

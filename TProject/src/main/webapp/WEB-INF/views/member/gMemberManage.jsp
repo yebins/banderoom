@@ -225,7 +225,7 @@ select[name=searchField]{
 				data: "mIdx=" + mIdx,
 				success: function(member) {
 					
-					$("#profile-picture-img").attr("src",ContextPath+member.profileSrc);
+					$("#profile-picture-img").attr("src",member.profileSrc);
 					$("#details-nickname").text(member.nickname);
 					$("#details-email").text(member.email);
 					$("#details-name").text(member.name);

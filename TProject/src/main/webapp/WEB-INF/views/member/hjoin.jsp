@@ -76,7 +76,7 @@ function profileUpload() {
 function profileReset() {
 	$('#profile')[0].reset();
 	$('div.profile-picture').html("<img src='<%=request.getContextPath() %>/images/profile_default.png' width='160px'>");
-	$('input[name=profileSrc]').val('/images/profile_default.png');
+	$('input[name=profileSrc]').val('<%=request.getContextPath() %>/images/profile_default.png');
 }
 
 function chkEmail(obj) {

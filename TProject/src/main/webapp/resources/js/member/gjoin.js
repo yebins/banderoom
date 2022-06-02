@@ -23,8 +23,8 @@
 	
 	function profileReset() {
 		$('#profile')[0].reset();
-		$('div.profile-picture').html("<img src='/images/profile_default.png' width='160px'>");
-		$('input[name=profileSrc]').val('/images/profile_default.png');
+		$('div.profile-picture').html("<img src='/banderoom/images/profile_default.png' width='160px'>");
+		$('input[name=profileSrc]').val('/banderoom/images/profile_default.png');
 	}
 
 	function chkEmail(obj) {
