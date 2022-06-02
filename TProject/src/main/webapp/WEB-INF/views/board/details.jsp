@@ -1024,6 +1024,9 @@
 							<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
 						</c:if>	
 					</form> 
+					<div>
+						<button class="normal-button" style="margin-left: 15px;" onclick="location.href='/board/list.do?bIdx=2&page=${param.page}'">목록</button>
+					</div>
 				</div>
 				<!-- 댓글영역 -->
 				<div class="comment-area">

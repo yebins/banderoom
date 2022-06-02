@@ -171,7 +171,7 @@
 					<c:forEach var="i" begin="0" end="${list.size()-1}">
 						<tr>
 							<td>${list.get(i).aIdx }</td>
-							<td class="title-area"><a href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}">
+							<td class="title-area"><a href="details.do?bIdx=${param.bIdx}&aIdx=${list.get(i).aIdx}&page=${param.page}">
 								&nbsp;&nbsp;&nbsp;${list.get(i).title}</a>
 								<c:if  test="${cSize.get(list.get(i).aIdx) != 0 }">
 									<span style="color:red;">&nbsp;[${cSize.get(list.get(i).aIdx)}]</span>

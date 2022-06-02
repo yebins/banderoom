@@ -14,9 +14,10 @@
 <style>
 	.notice-page{
 		width:600px;
-		height:50px;
+		height:36px;
 	}
 	.HlistSearch{
+		height:36px;
 		border-radius:25px;
 	}
 	div.HArticle{
@@ -112,7 +113,7 @@
     .Hlist-status{
 		border-radius:25px;
 		border: 1px solid #ced4da;
-		height:50px;
+		height:36px;
 		text-align:center;
 		margin-right:10px;
 		font-size:1rem;
