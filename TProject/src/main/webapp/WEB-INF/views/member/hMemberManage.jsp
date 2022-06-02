@@ -196,6 +196,7 @@ select[name=searchField]{
   crossorigin="anonymous"></script>
  
 <script>
+var ContextPath='<%=request.getContextPath() %>';
 
 $(function() {
 	$(".details").draggable();
@@ -224,7 +225,7 @@ $(function() {
 			data: "mIdx=" + mIdx,
 			success: function(member) {
 				
-				$("#profile-picture-img").attr("src", member.profileSrc);
+				$("#profile-picture-img").attr("src", ContextPath+member.profileSrc);
 				$("#details-nickname").text(member.nickname);
 				$("#details-brn").text(member.brn);
 				$("#details-email").text(member.email);
