@@ -162,11 +162,11 @@
 		width:100%;
 		justify-content:center;
 		align-items:center;
-		
 	}
 	.pageNum button{
 		margin:5px;
 	}
+	
 	.jListPageButton{
     	width:70px;
     	background-color:#f5f5f5;
@@ -258,6 +258,9 @@
   	  font-family: system-ui;
   	  word-break: break-all;
  	   white-space: pre-wrap;
+	}
+	.page-nav-button.current-page{
+		background-color: #F5F5F5;
 	}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
