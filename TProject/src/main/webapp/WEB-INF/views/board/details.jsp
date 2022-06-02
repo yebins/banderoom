@@ -260,7 +260,8 @@
  	   white-space: pre-wrap;
 	}
 	.page-nav-button.current-page{
-		background-color: #F5F5F5;
+		background-color: #2A3F6A;
+		color: #F5F5F5;
 	}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
