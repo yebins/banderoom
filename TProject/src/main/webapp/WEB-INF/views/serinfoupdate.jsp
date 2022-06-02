@@ -137,9 +137,9 @@
 		      data: formData,
 		      contentType: false,
 		      processData: false,
-		      url: "/uploadPicture.do",
+		      url: "<%=request.getContextPath() %>/uploadPicture.do",
 		      success: function(data) {
-		         $(el).summernote('editor.insertImage', data.trim());
+		         $(el).summernote('editor.insertImage', '<%=request.getContextPath() %>'+data.trim());
 		      }
 		   })
 		}
