@@ -110,7 +110,7 @@ public class BoardController {
 			likeList.put(list.get(i).getaIdx(), Integer.parseInt(String.valueOf(boardService.twoinone(list.get(i).getaIdx()).get("likeCount"))));
 			
 			if(co.indexOf("<img") != -1) {
-				list.get(i).setTitle(list.get(i).getTitle()+"<img src='/images/picture-button.png' height='11px'>");
+				list.get(i).setTitle(list.get(i).getTitle()+"<img src='" + request.getContextPath() + "/images/picture-button.png' height='11px'>");
 			}
 		}
 		

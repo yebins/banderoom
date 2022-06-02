@@ -1096,7 +1096,7 @@ public class MemberController {
 			} else {
 
 				model.addAttribute("msg", "탈퇴에 실패했습니다.");
-				model.addAttribute("url", "history.back()");
+				model.addAttribute("url", "/member/ginfo.do");
 				
 				return "alert";
 			}
@@ -1116,14 +1116,14 @@ public class MemberController {
 			} else {
 
 				model.addAttribute("msg", "탈퇴에 실패했습니다.");
-				model.addAttribute("url", "history.back()");
+				model.addAttribute("url", "member/hinfo.do");
 				
 				return "alert";
 			}
 		} else {
 
 			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "document.referrer");
+			model.addAttribute("url", "/");
 			
 			return "alert";
 		}

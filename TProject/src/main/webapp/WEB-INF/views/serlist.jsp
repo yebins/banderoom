@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -153,13 +153,13 @@
 	<div id="wrapper">
 		<div id="page-title">
 		<c:if test="${bIdx==1}">
-			<a href="/serlist.do?bIdx=1">공지사항</a>
+			<a href="<%=request.getContextPath() %>/serlist.do?bIdx=1">공지사항</a>
 		</c:if>
 		<c:if test="${bIdx==5}">
-			<a href="/serlist.do?bIdx=5">자주 묻는 질문</a>
+			<a href="<%=request.getContextPath() %>/serlist.do?bIdx=5">자주 묻는 질문</a>
 		</c:if>
 		<c:if test="${bIdx==6}">
-			<a href="/serlist.do?bIdx=6">이벤트</a>
+			<a href="<%=request.getContextPath() %>/serlist.do?bIdx=6">이벤트</a>
 		</c:if>
 		</div>
 		<div>
@@ -261,7 +261,7 @@
 							location.href='serlist.do?bIdx='+bIdx;
 						} else{
 							alert('로그인하세요');
-							location.href='/member/glogin.do?';
+							location.href='<%=request.getContextPath() %>/member/glogin.do?';
 						} 
 					}
 					

@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 <script>
     var msg = "${msg}";
-    var url = "${url}";
+    var url = "<%=request.getContextPath()%>{url}";
     alert(msg);
 	if(${close != null}){
 		opener.location.href=url; //opener 부모창
