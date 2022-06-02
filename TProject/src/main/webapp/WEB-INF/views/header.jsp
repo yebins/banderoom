@@ -548,6 +548,11 @@ header {
 			type:'post',
 			data:{mIdx:mIdx},
 			success:function(vo){
+				
+				var gmIdx = 0;
+				<c:if test="${login != null}">
+					gmIdx = ${login.mIdx};
+				</c:if>
 
 				console.log(vo);
 				$("#mini-profile-content").css("display", "none");
@@ -564,7 +569,7 @@ header {
 					$("#mini-profile-content").css("display", "flex");
 				}
 					$('div.mini-profile').animate({opacity: "100%"}, 200);
-				if (vo.auth == 3) {
+				if (vo.auth == 3 || vo.mIdx == gmIdx) {
 					$("#profile-report-button").css("display", "none");
 				}
 			}
