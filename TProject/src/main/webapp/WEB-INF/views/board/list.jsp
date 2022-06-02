@@ -163,7 +163,7 @@
 					<c:forEach var="i" begin="0" end="${bestArticles.size()-1}">
 						<tr class="bestArticles-tr">
 							<td class="bestArticles">추천</td>
-							<td class="title-area"><a style="color: #FB6544; font-weight:bold;" href="details.do?bIdx=${param.bIdx}&aIdx=${bestArticles.get(i).aIdx}">
+							<td class="title-area"><a style="color: #FB6544; font-weight:bold;" href="details.do?bIdx=${param.bIdx}&aIdx=${bestArticles.get(i).aIdx}&page=${param.page}">
 							&nbsp;&nbsp;&nbsp;${bestArticles.get(i).title }</a>
 								<c:if test="${cSize.get(bestArticles.get(i).aIdx) != 0}">
 									<span style="color:red;">&nbsp;[${cSize.get(bestArticles.get(i).aIdx)}]</span>

@@ -1030,7 +1030,15 @@
 						</c:if>	
 					</form> 
 					<div>
-						<button class="normal-button" style="margin-left: 15px;" onclick="location.href='<%=request.getContextPath() %>/board/list.do?bIdx=2&page=${param.page}'">목록</button>
+						<c:if test="${param.bIdx==2 }">
+							<button class="normal-button" style="margin-left: 15px;" onclick="location.href='<%=request.getContextPath() %>/board/list.do?bIdx=${param.bIdx }&page=${param.page}'">목록</button>
+						</c:if>
+						<c:if test="${param.bIdx==3 }">
+							<button class="normal-button" style="margin-left: 15px;" onclick="location.href='<%=request.getContextPath() %>/board/jlist.do?bIdx=${param.bIdx }&page=${param.page}'">목록</button>
+						</c:if>
+						<c:if test="${param.bIdx==4 }">
+							<button class="normal-button" style="margin-left: 15px;" onclick="location.href='<%=request.getContextPath() %>/board/hlist.do?bIdx=${param.bIdx }&page=${param.page}'">목록</button>
+						</c:if>
 					</div>
 				</div>
 				<!-- 댓글영역 -->
