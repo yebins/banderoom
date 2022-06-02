@@ -286,7 +286,7 @@ header {
 			<c:if test="${sessionScope.login != null}">
 				<div id="sm-profile-info">
 					<div id="sm-profile-picture-wrap">
-						<img src="${login.getProfileSrc()}" width="100%">
+						<img src="<%=request.getContextPath() %>${login.getProfileSrc()}" width="100%">
 					</div>
 					<div id="sm-profile-nickname-wrap">
 						<div id="sm-profile-nickname">
@@ -298,15 +298,15 @@ header {
 					</div>
 				</div>
 				<div id="sm-profile-buttons">
-					<button class="normal-button" onclick = "location.href='/member/ginfo.do'">내 정보</button>
-					<button class="normal-button" onclick = "location.href='/member/myMessage.do?page=1'">쪽지함</button>
-					<button class="normal-button" onclick = "location.href='/member/logout.do'">로그아웃</button>
+					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/ginfo.do'">내 정보</button>
+					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>
 			<c:if test="${hlogin != null}">
 				<div id="sm-profile-info">
 					<div id="sm-profile-picture-wrap">
-						<img src="${hlogin.getProfileSrc()}" width="100%">
+						<img src="<%=request.getContextPath() %>${hlogin.getProfileSrc()}" width="100%">
 					</div>
 					<div id="sm-profile-nickname-wrap">
 						<div id="sm-profile-nickname">
@@ -318,28 +318,28 @@ header {
 					</div>
 				</div>
 				<div id="sm-profile-buttons">
-					<button class="normal-button" onclick = "location.href='/member/hinfo.do'">내 정보</button>
-					<button class="normal-button" onclick = "location.href='/member/myMessage.do?page=1'">쪽지함</button>
-					<button class="normal-button" onclick = "location.href='/member/logout.do'">로그아웃</button>
+					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/hinfo.do'">내 정보</button>
+					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>
 		</div>
 		<c:if test="${sessionScope.login != null}">
 		<div id="sm-buttons">
-			<div class="sm-button-wrap" onclick="location.href='/space/list.do'">
+			<div class="sm-button-wrap" onclick="location.href='<%=request.getContextPath() %>/space/list.do'">
 				공간 대여
 			</div>
-			<div class="sm-button-wrap" onclick="location.href='/teams/main.do'">
+			<div class="sm-button-wrap" onclick="location.href='<%=request.getContextPath() %>/teams/main.do'">
 				팀원 모집
 			</div>
 		</div>
 		</c:if>
 		<c:if test="${hlogin != null}">
 		<div id="sm-buttons">
-			<div class="sm-button-wrap" onclick="location.href='/space/myspace.do'">
+			<div class="sm-button-wrap" onclick="location.href='<%=request.getContextPath() %>/space/myspace.do'">
 				내 공간 관리
 			</div>
-			<div class="sm-button-wrap" onclick="location.href='/space/register.do'">
+			<div class="sm-button-wrap" onclick="location.href='<%=request.getContextPath() %>/space/register.do'">
 				공간 등록하기
 			</div>
 		</div>
@@ -357,16 +357,16 @@ header {
     </h2>
     <div id="c0" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=0'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/member/adminCheck.do?num=0'">
        	공간 관리
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/member/adminCheck.do?num=1'">
        	신고글 관리
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=2'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/member/adminCheck.do?num=2'">
        	일반회원 관리
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/member/adminCheck.do?num=3'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/member/adminCheck.do?num=3'">
        	호스트회원 관리
        	</div>
       </div>
@@ -383,10 +383,10 @@ header {
     </h2>
     <div id="c1" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/space/myrsv.do'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/space/myrsv.do'">
        	공간 예약 내역
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/space/mypoint.do'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/space/mypoint.do'">
        	포인트 획득 / 사용 내역
        	</div>
       </div>
@@ -402,10 +402,10 @@ header {
     </h2>
     <div id="c2" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=1&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/serlist.do?bIdx=1&page=1'">
        	공지사항
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=6&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/serlist.do?bIdx=6&page=1'">
        	이벤트
        	</div>
       </div>
@@ -423,13 +423,13 @@ header {
     </h2>
     <div id="c3" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/board/list.do?bIdx=2&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/board/list.do?bIdx=2&page=1'">
        	자유게시판
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/board/hlist.do?page=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/board/hlist.do?page=1'">
        	홍보게시판
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/board/jlist.do?page=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/board/jlist.do?page=1'">
        	중고거래
        	</div>
       </div>
@@ -446,16 +446,16 @@ header {
     </h2>
     <div id="c4" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
       <div class="accordion-body">
-       	<div class="sm-innerlist" onclick="location.href='/serlist.do?bIdx=5&page=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/serlist.do?bIdx=5&page=1'">
        	자주 묻는 질문
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serinfo.do?idx=1'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/serinfo.do?idx=1'">
        	이용약관
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serinfo.do?idx=2'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/serinfo.do?idx=2'">
        	개인정보처리방침
        	</div>
-       	<div class="sm-innerlist" onclick="location.href='/serinfo.do?idx=3'">
+       	<div class="sm-innerlist" onclick="location.href='<%=request.getContextPath() %>/serinfo.do?idx=3'">
        	운영정책
        	</div>
       </div>
@@ -549,7 +549,7 @@ header {
 		document.querySelector('.mini-profile').style.transform='translate('+X+'px,'+Y+'px)';
 		
 		$.ajax({
-			url:'/member/miniProfile.do',
+			url:'<%=request.getContextPath() %>/member/miniProfile.do',
 			type:'post',
 			data:{mIdx:mIdx},
 			success:function(vo){
@@ -568,7 +568,7 @@ header {
 					$("#mini-profile-unreg").css("display", "flex");
 				} else {
 
-					$('#sm-profile-picture-wrap-modal img').attr('src', vo.profileSrc);
+					$('#sm-profile-picture-wrap-modal img').attr('src', '<%=request.getContextPath() %>' + vo.profileSrc);
 					$('#sm-profile-nickname-modal').text(vo.nickname);
 					$('#sm-profile-mIdx').val(mIdx);
 					$("#mini-profile-content").css("display", "flex");
@@ -595,7 +595,7 @@ header {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
 		var mIdx=document.querySelector("#sm-profile-mIdx").value;
 		console.log(mIdx);
-		window.open("/messagePopup.do?type=general&mIdx="+mIdx,"쪽지보내기",option);
+		window.open("<%=request.getContextPath() %>/messagePopup.do?type=general&mIdx="+mIdx,"쪽지보내기",option);
 	}
 	
 	
@@ -603,7 +603,7 @@ header {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no";
 		var mIdx = document.querySelector("#sm-profile-mIdx").value; //받는사람(target)의 midx
 		
-		window.open("/member/reportPopup.do?mIdx="+mIdx, "신고하기", option);
+		window.open("<%=request.getContextPath() %>/member/reportPopup.do?mIdx="+mIdx, "신고하기", option);
 	}
 </script>
 </header>
