@@ -5,6 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
 
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 
