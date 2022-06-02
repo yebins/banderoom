@@ -17,16 +17,16 @@
             <p style="font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;">
                 사업자정보확인
             </p>
-            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='/serinfo.do?idx=3'">
+            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='<%=request.getContextPath() %>/serinfo.do?idx=3'">
                 운영정잭
             </p>
-            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='/serinfo.do?idx=2'">
+            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='<%=request.getContextPath() %>/serinfo.do?idx=2'">
                 개인정보처리방침
             </p>
-            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='/serinfo.do?idx=1'">
+            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='<%=request.getContextPath() %>/serinfo.do?idx=1'">
                 이용약관
             </p>
-            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='/serlist.do?bIdx=5&page=1'">
+            <p style="margin-top: 12px; font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;cursor: pointer;" onclick="location.href='<%=request.getContextPath() %>/serlist.do?bIdx=5&page=1'">
                 자주묻는질문
             </p>
             <div style="position:absolute; bottom: 50px;">
