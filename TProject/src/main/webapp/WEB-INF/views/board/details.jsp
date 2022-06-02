@@ -1024,10 +1024,14 @@
 					<form action="update.do" method="get">
 						<input type="hidden" name="aIdx" value="${param.aIdx}">
 						<input type="hidden" name="bIdx" value="${param.bIdx}">
+						<input type="hidden" name="page" value="${param.page}">
 						<c:if test="${login.mIdx eq vo.mIdx || login.auth == 3}">
 							<button class="normal-button accent-button" id="update" style="margin-left: 15px;">수정</button>
 						</c:if>	
 					</form> 
+					<div>
+						<button class="normal-button" style="margin-left: 15px;" onclick="location.href='/board/list.do?bIdx=2&page=${param.page}'">목록</button>
+					</div>
 				</div>
 				<!-- 댓글영역 -->
 				<div class="comment-area">
