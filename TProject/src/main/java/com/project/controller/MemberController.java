@@ -941,7 +941,7 @@ public class MemberController {
 		
 		if(memberService.gLogin(vo) == null) {
 			model.addAttribute("msg", "비밀번호가 틀렸습니다.");
-			model.addAttribute("url", "/member/gAdminCheck.do");
+			model.addAttribute("url", "/member/adminCheck.do?num="+num);
 			
 			return "alert";
 		}else if(num == 0) {
@@ -961,7 +961,7 @@ public class MemberController {
 			
 		}else {
 			model.addAttribute("msg", "올바르지 않은 경로입니다.");
-			model.addAttribute("url", "/member/adminCheck.do");
+			model.addAttribute("url", "/");
 			
 			return "alert";
 		}

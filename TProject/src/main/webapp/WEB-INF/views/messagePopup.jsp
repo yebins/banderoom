@@ -19,31 +19,32 @@
 	}
 	
 	 textarea {
-	width:100%;
-    height:100%;
-    resize: none;
-    border-radius:10px;
-  }
-  #receiver{
-  	padding:10px;
-  	border-bottom:1px solid lightgray;
-  }
+		width:100%;
+	    height:100%;
+	    resize: none;
+	    border-radius:10px;
+	    padding:7px;
+	}
+	#receiver{
+		padding:10px;
+		border-bottom:1px solid lightgray;
+	}
   
-  #receiver * {
-  	color: #F5F5F5;
-  }
+	#receiver * {
+		color: #F5F5F5;
+	}
   
-  #messageBox{
-  	width:100%;
-  }
-  #messageButton{
-  	display:flex;
-  	justify-content:flex-end;
-  	align-items:center;
-  }
-  #messageButton button{
-  	margin-right:20px;
-  }
+	#messageBox{
+		width:100%;
+	}
+	#messageButton{
+		display:flex;
+		justify-content:flex-end;
+		align-items:center;
+	}
+	#messageButton button{
+		margin-right:20px;
+	}
 </style>
 </head>
 <body>
@@ -57,7 +58,7 @@
 			<textarea></textarea>
 		</div>
 		<div id="messageButton">
-			<button class="normal-button" onclick="sendMessage('${vo.mIdx}','${type}')">전송</button>
+			<button class="normal-button accent-button" onclick="sendMessage('${vo.mIdx}','${type}')">전송</button>
 			<button class="normal-button" onclick="window.close()">닫기</button>
 		</div>
 	</div>
