@@ -377,16 +377,16 @@
 	}
 	// 댓글리스트 불러오기
 	function commentList(obj){
-		var page = 1;
+		var cpage = 1;
 		if(obj != null && obj != ''){
-			page=obj;
-			console.log(page);
+			cpage=obj;
+			console.log(cpage);
 		}
 		
 		var data2={
 			bIdx:${param.bIdx},
 			aIdx:${vo.aIdx},
-			page:page
+			cpage:cpage
 		}
 		
 		$.ajax({
@@ -411,7 +411,7 @@
 						htmls+='<div class="comment-area-content-toparea">'
 						htmls+='<div class="comment-area-content-toparea-left">'
 						if(el.status != 1){							
-							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="el.mProfileSrc+'" class="psrc"/>'
+							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="'+el.mProfileSrc+'" class="psrc"/>'
 							if('${vo.mNickname}' == el.mNickname){
 							htmls+='<span style="font-weight:600;color:blue;">'+el.mNickname+ "  "+'</span></a>'														
 							} else{
@@ -586,14 +586,14 @@
 					var htmlss="";
 					
 					var cmtCount=list[3];
-					var page=list[2];
-					var startNum=page-(page-1)%5;
+					var cpage=list[2];
+					var startNum=cpage-(cpage-1)%5;
 					var lastNum=Math.ceil(cmtCount/10);
 					console.log(cmtCount);
 					console.log(startNum);
 					console.log(lastNum);
 					
-					if(page>5){
+					if(cpage>5){
 					htmlss+='<button onclick="commentList(1)" class="page-nav-button">1</button>'						
 					}
 					htmlss+='<button onclick="commentList('+(startNum-5)+')" class="page-nav-button"'
@@ -603,7 +603,7 @@
 					htmlss+='>◀</button>'
 					for(var i=0;i<5;i++){						
 						if((startNum+i)<= lastNum){
-							if(startNum+i == page){
+							if(startNum+i == cpage){
 							htmlss+='<button onclick="commentList('+(startNum+i)+')" class="page-nav-button current-page">'+(startNum+i)+'</button>'															
 							} else{
 							htmlss+='<button onclick="commentList('+(startNum+i)+')" class="page-nav-button">'+(startNum+i)+'</button>'															
@@ -617,7 +617,7 @@
 					htmlss+='style="display:none"'
 					}
 					htmlss+='>▶</button>'
-					if((lastNum-5)>=page){
+					if((lastNum-5)>=cpage){
 					htmlss+='<button onclick="commentList('+lastNum+')" class="page-nav-button">'+lastNum+'</button>'						
 					}
 					
@@ -672,7 +672,7 @@
 		
 	}
 	//답글 쓰기 
-	function replyWrite(cIdx,page){
+	function replyWrite(cIdx,cpage){
 		
 		if ($("#reply-write-content" + cIdx).val() == '') {
 			alert('내용을 입력해 주세요.')
@@ -717,14 +717,14 @@
 				} else {
 					alert('내용을 적어주세요');	
 				}
-				console.log("page"+page);
-			commentList(page);
+				console.log("cpage"+cpage);
+			commentList(cpage);
 			}
 		});
 		
 	}
 	
-	function replyDelete(rIdx,page,mIdx){
+	function replyDelete(rIdx,cpage,mIdx){
 		var data={
 			rIdx:rIdx,
 			mIdx:mIdx
@@ -743,7 +743,7 @@
 				}else{
 					alert('작성자가 아닙니다');
 				}
-			commentList(page);
+			commentList(cpage);
 			}
 		});
 	}
@@ -768,7 +768,7 @@
 				 	if(result == 1){
 				 	console.log(result);
 					alert('댓글수정성공');
-					commentList('${page}');	
+					commentList('${cpage}');	
 				} else if(result == 2){
 					alert('수정할수 없습니다.')
 				}else{
@@ -801,7 +801,7 @@
 				 	if(result == 1){
 				 	console.log(result);
 					alert('댓글수정성공');
-					commentList('${page}');	
+					commentList('${cpage}');	
 				} else if(result == 2){
 					alert('수정할수 없습니다.')
 				}else{
@@ -947,7 +947,7 @@
 					console.log(result)
 					if(result == 1){
 						alert("삭제되었습니다.");
-						commentList('${page}');	
+						commentList('${cpage}');	
 					}else {
 						alert('할수 없습니다.')
 					}
@@ -1049,8 +1049,8 @@
 					<!--  댓글 리스트 -->
 					<ul class="comment-area-ul" id="commentUl">
 						<c:set var="cmtTotal" value="${oCCount}"/>
-						<c:set var="page" value="${page}"/>
-						<c:set var="startNum" value="${page-(page-1)%5}"/>	
+						<c:set var="cpage" value="${cpage}"/>
+						<c:set var="startNum" value="${cpage-(cpage-1)%5}"/>	
 						<c:set var="lastNum" value="${fn:substringBefore(Math.ceil(cmtTotal/10),'.')}"/>
 						<c:if test="${fn:length(cmtList) gt 0 }">
 							<c:forEach var="item" items="${cmtList}" varStatus="st">
@@ -1061,7 +1061,7 @@
 									<div class="comment-area-content-toparea">
 							 			<div class="comment-area-content-toparea-left">
 							 				<c:if test="${item.status eq 0}">
-							 				<a class="miniprofile" onclick="profileOpen('${item.mIdx}')"><img src="${item.mProfileSrc}" style="width:25px; height:100%; margin-right:10px;" class="psrc"/>
+							 				<a class="miniprofile" onclick="profileOpen('${item.mIdx}')"><img src="<%=request.getContextPath() %>${item.mProfileSrc}" style="width:25px; height:100%; margin-right:10px;" class="psrc"/>
 							 				<c:choose>
 							 				<c:when test="${vo.mNickname eq item.mNickname }">
 							 				<span style="font-weight: 600;color:blue">${item.mNickname}</span>
@@ -1175,8 +1175,8 @@
 									</div>
 									<div class="comment-area-content-bottomarea">
 										<c:if test="${rList.mIdx == login.mIdx || login.auth == 3}">
-							 				<a onclick="replyModify('${rList.rIdx}','${page}','${rList.mIdx}')">수정</a>							 				
-							 				<a onclick="replyDelete('${rList.rIdx}','${page}','${rList.mIdx}')">삭제</a>							 				
+							 				<a onclick="replyModify('${rList.rIdx}','${cpage}','${rList.mIdx}')">수정</a>							 				
+							 				<a onclick="replyDelete('${rList.rIdx}','${cpage}','${rList.mIdx}')">삭제</a>							 				
 								 		</c:if>
 									</div>
 								</div>
@@ -1236,7 +1236,7 @@
 										</label>
 										<div class="comment-area-write-content">
 												<textarea id="reply-write-content${item.cIdx}" name="content" class="comment-area-write-content-area"></textarea>
-												<input id="reply-write-button${item.cIdx}" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${item.cIdx},${page})">
+												<input id="reply-write-button${item.cIdx}" type="button" value="등록" class="comment-area-write-content-button" onclick="replyWrite(${item.cIdx},${cpage})">
 										</div>
 									</form>
 								</div>
@@ -1247,14 +1247,14 @@
 					<!-- 댓글 페이징 -->
 					<c:if test="${fn:length(cmtList) gt 0}">
 					<div id="cmtPageNum" class="pageNum" style="padding-top:30px;">
-						<c:if test="${page>5}">
+						<c:if test="${cpage>5}">
 						<button onclick="commentList(1)" class="page-nav-button">1</button>
 						</c:if>
 						<button onclick="commentList('${startNum-5}')" class="page-nav-button" style="display:${startNum <= 1?'none':'block'}">◀</button>
 						<c:forEach var="i" begin="0" end="4">
 							<c:if test="${(startNum+i)<= lastNum}">
 								<c:choose>
-									<c:when test="${(startNum+i) == page }">
+									<c:when test="${(startNum+i) == cpage }">
 									<button onclick="commentList('${startNum+i}')" class="page-nav-button current-page" >${startNum+i}</button>
 									</c:when>
 									<c:otherwise>
@@ -1264,8 +1264,8 @@
 							</c:if>
 						</c:forEach>
 						<button onclick="commentList('${startNum+5}')" class="page-nav-button" style="display:${(startNum+5)>lastNum?'none':'block'}">▶</button>
-						<c:if test="${(lastNum-5) >= page}">
-						<button onclick="commentList('${page}')" class="page-nav-button">${lastNum}</button>
+						<c:if test="${(lastNum-5) >= cpage}">
+						<button onclick="commentList('${cpage}')" class="page-nav-button">${lastNum}</button>
 						</c:if>
 					</div>
 					</c:if>

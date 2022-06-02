@@ -247,7 +247,6 @@
 
 		<c:if test="${login != null}">
 			<form action="register.do" method="get">
-			<input type="hidden" name="page" value="${param.page}">
 			<input type="hidden" name="bIdx" value="${param.bIdx}">
 				<button class="normal-button accent-button" id="register" style="margin-left: 15px;">글쓰기</button>
 			</form>
