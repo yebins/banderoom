@@ -150,7 +150,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value="/update.do", method=RequestMethod.POST)
-	public String update(ArticlesVO vo, HttpServletRequest request) {
+	public String update(ArticlesVO vo,int page, HttpServletRequest request) {
 		
 		HttpSession session = request.getSession();
 		GeneralMembersVO login = (GeneralMembersVO)(session.getAttribute("login"));
@@ -158,19 +158,19 @@ public class BoardController {
 		if(login.getmIdx() == vo.getmIdx() || login.getAuth() == 3) {
 			if(login.getAuth()==1) {
 				request.setAttribute("msg", "글수정이 차단된 회원입니다.");
-				request.setAttribute("url", "/board/details.do?page=1&bIdx=" + vo.getbIdx()+"&aIdx="+vo.getaIdx());
+				request.setAttribute("url", "/board/details.do?page="+page+"&bIdx=" + vo.getbIdx()+"&aIdx="+vo.getaIdx());
 				
 				return "/alert"; 
 			}
 			boardService.boardUpdate(vo);
 			if(vo.getbIdx() == 4) {
-				return "redirect:/board/hlist.do?page=1&bIdx=" + vo.getbIdx();				
+				return "redirect:/board/hlist.do?page="+page+"&bIdx=" + vo.getbIdx();				
 				
 			} else if (vo.getbIdx() == 2) {
-				return "redirect:/board/list.do?page=1&bIdx=" + vo.getbIdx();				
+				return "redirect:/board/list.do?page="+page+"&bIdx=" + vo.getbIdx();				
 				
 			} else {
-				return "redirect:/board/jlist.do?page=1&bIdx=" + vo.getbIdx();				
+				return "redirect:/board/jlist.do?page="+page+"&bIdx=" + vo.getbIdx();				
 			}
 			
 		}else {

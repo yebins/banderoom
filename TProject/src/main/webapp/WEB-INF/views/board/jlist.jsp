@@ -172,7 +172,7 @@
 		<div id="page-content" class="JBoard">
 			<c:if test="${fn:length(list) gt 0}">
 				<c:forEach var="item" begin="0" end="${fn:length(list) -1}" varStatus="st">
-					<div class="inner-box JArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='/board/details.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}'">
+					<div class="inner-box JArticle ${(list.get(item).status == 99)?'sold':''}" onclick="location.href='/board/details.do?bIdx=${list.get(item).bIdx}&aIdx=${list.get(item).aIdx}&page=${param.page}'">
 						<div class="inner-box-content-thumbnail ">
 							<c:choose>
 								<c:when test="${imgsrc.get(item) ne ''}">
