@@ -13,7 +13,7 @@
 	crossorigin="anonymous">
 <script	src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>호스트 회원가입</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/member/gjoin.css">
 
