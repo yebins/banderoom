@@ -97,7 +97,7 @@ public class MemberController {
 		
 		makeThumbnail(target.getAbsolutePath(), uuid.toString(), extension.substring(1), path);
 		
-		return "/upload/THUMB_" + newFileName;
+		return request.getContextPath() + "/upload/THUMB_" + newFileName;
 	}
 	
 	private void makeThumbnail(String filePath, String fileName, String fileExt, String path) throws Exception {
@@ -433,7 +433,7 @@ public class MemberController {
 			return "1"; // 로그인 안 됨
 		}
 		
-		String src = "/images/profile_default.png";
+		String src = request.getContextPath() + "/images/profile_default.png";
 		
 		String path = request.getSession().getServletContext().getRealPath("/resources/upload");
 		String fileName = file.getOriginalFilename();
@@ -458,7 +458,7 @@ public class MemberController {
 
 			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
 			
-			src = "/upload/THUMB_" + newFileName;
+			src = request.getContextPath() + "/upload/THUMB_" + newFileName;
 			
 			login.setProfileSrc(src);
 			memberService.infoUpdate(login);
@@ -467,7 +467,7 @@ public class MemberController {
 			
 			HostMembersVO login = (HostMembersVO) request.getSession().getAttribute("hlogin");
 
-			src = "/upload/THUMB_" + newFileName;
+			src = request.getContextPath() + "/upload/THUMB_" + newFileName;
 			
 			login.setProfileSrc(src);
 			memberService.infoUpdate(login);
@@ -480,7 +480,7 @@ public class MemberController {
 	@ResponseBody
 	public String profileReset(HttpServletRequest request) {
 
-		String src = "/images/profile_default.png";
+		String src = request.getContextPath() + "/images/profile_default.png";
 		
 		if (request.getSession().getAttribute("login") == null && request.getSession().getAttribute("hlogin") == null) {
 			return "1"; // 로그인 안 됨
