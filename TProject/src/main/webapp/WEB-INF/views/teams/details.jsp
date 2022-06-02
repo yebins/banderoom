@@ -103,17 +103,31 @@
 	}
 	
 	function applyPopup(){
-		if(${login == null}){
-			alert('로그인해주세요.');
-			location.href = "/member/glogin.do";
-		}
-		else if(${login.auth == 1}){
-			alert('차단된 회원은 지원하실 수 없습니다.');
-		}
-		else{
-		window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
-        'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
-		}
+		
+		$.ajax({
+			url:"appCheck.do",
+			type:"post",
+			data:"teamIdx="+$("#teamIdx").val()+"&mIdx="+$("#mIdx").val(),
+			success:function(data){
+				if(data > 0){
+					alert("이미 작성한 지원서가 존재합니다.");
+				}else{
+					if(${login == null}){
+						alert('로그인해주세요.');
+						location.href = "/member/glogin.do";
+					}
+					else if(${login.auth == 1}){
+						alert('차단된 회원은 지원하실 수 없습니다.');
+					}
+					else{
+					window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
+			        'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
+					}
+				}
+			}
+		})
+		
+		
 	}
 	
 	
@@ -134,6 +148,7 @@
 			팀원 모집
 		</div>
 		<div id="page-content">
+		<input type="hidden" id="mIdx" name="mIdx" value="${login.mIdx}">
 			<c:if test='${details.status!=1}'>
 				<div class="inner-box" <c:if test='${details.status==2}'>style="filter: brightness(0.8);"</c:if>>
 					<input type="hidden" name="teamIdx" id="teamIdx" value="${details.teamIdx}">

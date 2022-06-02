@@ -100,4 +100,8 @@ public class TeamsDAO {
 	public int deleteApp(int appIdx) {
 		return sqlSession.delete("com.project.mapper.teamsMapper.deleteApp", appIdx);
 	}
+	
+	public int appCheck(ApplicationsVO vo) {
+		return sqlSession.selectOne("com.project.mapper.teamsMapper.appCheck", vo);
+	}
 }

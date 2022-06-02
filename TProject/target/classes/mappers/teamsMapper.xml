@@ -304,4 +304,12 @@
 		DELETE FROM applications WHERE appidx = #{appIdx}
 	</delete>
 	
+	<select id="appCheck" parameterType="applicationsVO" resultType="int">
+		select count(a.appidx) 
+		  from applications a 
+		 inner join teams t 
+		    on t.teamidx = a.teamidx  
+		 where t.teamidx = #{teamIdx} and a.midx = #{mIdx};
+	</select>
+	
 </mapper>

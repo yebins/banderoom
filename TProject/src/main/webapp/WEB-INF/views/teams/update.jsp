@@ -119,6 +119,12 @@
 .dropdown-toggle::after {
 	display:none;
 }
+#datepicker{
+	width: 150px;
+    height: 30px;
+    background: white;
+    font-size: 14px;
+}
 </style>
 <title>팀원 모집글 수정</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
@@ -137,7 +143,7 @@
 				
 				<div class="form" style="text-align: left;">
 				
-					<div class="terms-list">
+					<div class="terms-list" style="margin-bottom: 7px;">
 						<span class='terms'><b>지역</b> ${details.addr1} ${details.addr2}</span>
 						<span class='terms'><b>팀 레벨</b> ${details.teamLevel}</span>
 						<span class='terms'><b>분야</b> ${details.type}</span>
@@ -149,11 +155,11 @@
 							${parts.name} ${parts.capacity}명<c:if test="${!lastPart.last}">, </c:if>
 							</c:forEach>
 						</span>
-						<span class='terms'><b>마감날짜</b>
-						
-							<input type="text" id="datepicker" name="endDate" readonly
+					</div>
+					<div class="terms-list">
+						<span class='terms' style="display: flex;align-items: baseline;"><b>마감날짜</b> &nbsp;
+							<input type="text" class="form-control" id="datepicker" name="endDate" readonly
 							value='<fmt:parseDate value="${details.endDate}" var="endDate" pattern="yyyy-MM-dd"/><fmt:formatDate value="${endDate}" pattern="yyyy-MM-dd"/>'>
-							
 						</span>
 					</div>
 				</div>

@@ -51,22 +51,21 @@ textarea{
 			return false;
 		}
 		
-		$.ajax({
-			url:"application.do",
-			type:"post",
-			data:$("#application").serialize(),
-			success:function(data){
-				if(data == 1){
-					if(confirm('지원서를 작성하시겠습니까?')){
+		if(confirm('지원서를 작성하시겠습니까? \n지원 파트는 수정하실 수 없습니다.')){
+			$.ajax({
+				url:"application.do",
+				type:"post",
+				data:$("#application").serialize(),
+				success:function(data){
+					if(data == 1){
 						alert('지원서 작성이 완료되었습니다.');
 						window.close();
+					}else{
+						alert('지원서 작성이 완료되지 않았습니다.');
 					}
-				}else{
-					alert('지원서 작성이 완료되지 않았습니다.');
 				}
-			}
-			
-		});
+			})
+		}
 	}
 	
 </script>

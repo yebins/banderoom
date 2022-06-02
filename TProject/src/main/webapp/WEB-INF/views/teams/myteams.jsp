@@ -175,6 +175,8 @@
 					if(data == 1){
 						alert('수정이 완료되었습니다.');
 						location.reload();
+					}else{
+						alert('수정에 실패하였습니다.');
 					}
 				}
 			})
