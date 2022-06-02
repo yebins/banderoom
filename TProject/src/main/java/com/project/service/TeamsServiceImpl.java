@@ -109,8 +109,9 @@ public class TeamsServiceImpl implements TeamsService{
 		return dao.deleteApp(appIdx);
 	}
 
+	@Override
+	public int appCheck(ApplicationsVO vo) {
+		return dao.appCheck(vo);
+	}
 
-	
-
-	
 }

@@ -236,7 +236,11 @@ header {
 }
 #sm-profile-nickname{
 	word-break: break-all;
-    width: 120px;
+    width: 130px;
+}
+#sm-profile-nickname-modal{
+	word-break: break-all;
+    width: 135px;
 }
 
 </style>
@@ -540,6 +544,7 @@ header {
 		var Y=window.event.clientY-10;
 		
 		$(".mini-profile-button").css("display", "block");
+		$(".mini-profile-buttons").css("justify-content", "space-between");
 		
 		document.querySelector('.mini-profile').style.transform='translate('+X+'px,'+Y+'px)';
 		
@@ -570,7 +575,8 @@ header {
 				}
 					$('div.mini-profile').animate({opacity: "100%"}, 200);
 				if (vo.auth == 3 || vo.mIdx == gmIdx) {
-					$("#profile-report-button").css("display", "none");
+					$("#profile-report-button").css("display", "none")
+					$(".mini-profile-buttons").css("justify-content", "center");
 				}
 			}
 		})

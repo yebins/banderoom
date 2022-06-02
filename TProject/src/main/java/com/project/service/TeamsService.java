@@ -27,4 +27,5 @@ public interface TeamsService {
 	void updateStatus();
 	int updateApp(ApplicationsVO vo);
 	int deleteApp(int appIdx);
+	int appCheck(ApplicationsVO vo);
 }

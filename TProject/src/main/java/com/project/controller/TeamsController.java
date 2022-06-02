@@ -3,6 +3,7 @@ package com.project.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -464,17 +465,9 @@ public class TeamsController {
 	
 	@RequestMapping(value="/updateApp.do")
 	@ResponseBody
-	public int updateApp(String content, int appIdx) {
-		ApplicationsVO vo = new ApplicationsVO();
+	public int updateApp(ApplicationsVO vo) {
 		
-		vo.setContent(content);
-		vo.setAppIdx(appIdx);
-		
-		int result = teamsService.updateApp(vo);
-		if(result > 0) {
-			return 1;
-		}
-		return 0;
+		return teamsService.updateApp(vo);
 	}
 	
 	@RequestMapping(value="/deleteApp.do")
@@ -486,6 +479,13 @@ public class TeamsController {
 			return 1;
 		}
 		return 0;
+	}
+	
+	@RequestMapping(value="/appCheck.do")
+	@ResponseBody
+	public int appCheck(ApplicationsVO vo) {
+		
+		return teamsService.appCheck(vo);
 	}
 	
 	
