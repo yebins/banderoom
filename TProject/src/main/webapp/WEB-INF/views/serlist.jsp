@@ -163,11 +163,10 @@
 		</c:if>
 		</div>
 		<div>
-			<form action="serlist.do" class="d-flex notice-page" method="get">
-				<input type="hidden" name="bIdx" value="${bIdx}">
+			<div class="d-flex notice-page">
        	 		<input class="form-control me-3" name="searchtitle" type="search" placeholder="Search" aria-label="Search">
-        			<button class="accent-button normal-button">검색</button>
-     		 </form>
+        		<button class="accent-button normal-button">검색</button>
+     		 </div>
 		</div>
 		<br>
 		<div class="container">

@@ -233,8 +233,11 @@
 	<select id="commentCount" parameterType="map" resultType="int">
 		select (c_count + cr_count) count from 
 			(select count(cc.cidx) as c_count 
-				from comments cc where aidx = #{aIdx} and status = 0) a, 
-			(select count(cr.cidx) as cr_count from comments c right join comment_replies cr on c.cidx = cr.cidx where c.aidx = #{aIdx}) b;
+				from comments cc 
+				where aidx = #{aIdx} and status = 0) a, 
+			(select count(cr.cidx) as cr_count 
+				from comments c right join comment_replies cr on c.cidx = cr.cidx where c.aidx = #{aIdx}) b
+			;
 	</select>
 	
 	<select id="onlyCommentTotal" parameterType="map" resultType="int">
@@ -242,7 +245,9 @@
 		where 
 			aIdx=#{aIdx}
 		and
-			bIdx=#{bIdx};
+			bIdx=#{bIdx}
+		and
+			status = 0;
 	</select>
 
 	<select id="commentList" parameterType="map" resultType="commentsVO">
