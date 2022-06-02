@@ -46,6 +46,7 @@ tr{
 .page-nav-button.current-page {
 	background-color: #2A3F6A;
 	font-weight: bold;
+	color:#F3F3F3;
 }
 #title{
 	height: 50px;

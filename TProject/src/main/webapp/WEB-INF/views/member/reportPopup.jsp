@@ -77,14 +77,14 @@ textarea {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<div id="reportBox">
 		<div id="receiver">
-			<span style="font-weight:bold;">신고할 회원</span>
-			<span id="targetname">${vo.nickname}</span>
+			<span style="font-weight:bold; color:#F3F3F3;">신고할 회원</span>
+			<span style="color:#F3F3F3;" id="targetname">${vo.nickname}</span>
 		</div>
 		<div id="reportContent">
 			<textarea placeholder="url을 입력해주시면 빠른 처리에 도움이 됩니다."></textarea>
 		</div>
 		<div id="reportButton">
-			<button class="normal-button" onclick="report('${vo.mIdx}')">신고하기</button>
+			<button class="normal-button accent-button" onclick="report('${vo.mIdx}')">신고하기</button>
 			<button class="normal-button" onclick="window.close()">닫기</button>
 		</div>
 	</div>
