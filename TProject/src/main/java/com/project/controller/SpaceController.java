@@ -810,7 +810,7 @@ public class SpaceController {
 		return "space/review";
 	}
 	
-	@RequestMapping(value = "review.do", method = RequestMethod.POST)
+	@RequestMapping(value = "review.do", method = RequestMethod.POST, headers = ("content-type=multipart/*"))
 	@ResponseBody
 	public int spaceReview(SpaceReviewVO vo, @RequestParam(value = "picture") MultipartFile picture, HttpServletRequest request) throws Exception {
 		

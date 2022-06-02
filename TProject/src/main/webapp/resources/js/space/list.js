@@ -3,11 +3,11 @@
 		if (liked == 0) {
 			liked = 1;
 			$("input[name=liked]").val(1);
-			$(".liked-button img").attr("src", "/images/heart-filled.png");
+			$(".liked-button img").attr("src", "/banderoom/images/heart-filled.png");
 		} else {
 			liked = 0;
 			$("input[name=liked]").val(0);
-			$(".liked-button img").attr("src", "/images/heart-empty.png");
+			$(".liked-button img").attr("src", "/banderoom/images/heart-empty.png");
 		}
 	}
 	
@@ -98,10 +98,10 @@
 				$("select[name=orderType]").val(orderType);
 				if (liked == 1) {
 					$("input[name=liked]").val(1);
-					$(".liked-button img").attr("src", "/images/heart-filled.png");
+					$(".liked-button img").attr("src", "/banderoom/images/heart-filled.png");
 				} else {
 					$("input[name=liked]").val(0);
-					$(".liked-button img").attr("src", "/images/heart-empty.png");
+					$(".liked-button img").attr("src", "/banderoom/images/heart-empty.png");
 				}
 
 				drawMap();

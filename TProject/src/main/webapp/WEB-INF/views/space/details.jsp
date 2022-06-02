@@ -126,12 +126,12 @@
 				  	<c:forEach var="i" begin="0" end="${spacePicturesVOs.size() - 1}" varStatus="status">
 				  		<c:if test="${status.first}">
 						    <div class="carousel-item active">
-						      <img src="<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
+						      <img src="<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				  		<c:if test="${!status.first}">
 				  			<div class="carousel-item">
-						      <img src="<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
+						      <img src="<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				    </c:forEach>
@@ -246,7 +246,7 @@
 												${review.content}
 											</div>
 											<c:if test="${review.pictureSrc != null}">
-												<img class="review-thumb" src="<%=request.getContextPath() %>${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
+												<img class="review-thumb" src="<%=request.getContextPath() %>${review.thumbSrc}" onclick="drawImage('<%=request.getContextPath() %>${review.pictureSrc}')">
 											</c:if>
 										</div>
 										<c:if test="${review.mIdx == login.mIdx}">

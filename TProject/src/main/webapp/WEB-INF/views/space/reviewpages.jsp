@@ -33,7 +33,7 @@
 												${review.content}
 											</div>
 											<c:if test="${review.pictureSrc != null}">
-												<img class="review-thumb" src="<%=request.getContextPath() %>${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
+												<img class="review-thumb" src="<%=request.getContextPath() %>${review.thumbSrc}" onclick="drawImage('<%=request.getContextPath() %>${review.pictureSrc}')">
 											</c:if>
 										</div>
 										<c:if test="${review.mIdx == login.mIdx}">

@@ -5,7 +5,7 @@
 		
 		if (reviewVO.pictureSrc != "") {
 			var img = $("#uploaded-image");
-      $(img).attr('src', reviewVO.thumbSrc);
+      $(img).attr('src', '/banderoom/' + reviewVO.thumbSrc);
       $(img).parent().css("display", "flex");
       $(".review-textarea").css("padding-left", "130px");
 		}
