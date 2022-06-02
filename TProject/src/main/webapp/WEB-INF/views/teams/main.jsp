@@ -5,18 +5,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <title>팀원 모집</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
-<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<link href="<%=request.getContextPath() %>/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
 <!-- Air datepicker css -->
-<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
-<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
 
 <style>
 .form-select{
@@ -278,7 +278,7 @@ select[name=sort]{
 		
 		$.ajax({
 			type: "get",
-			url: "/space/getlocations.do",
+			url: "<%=request.getContextPath() %>/space/getlocations.do",
 			success: function(data) {
 				locations = data;
 				var addr1 = [];
@@ -385,7 +385,7 @@ select[name=sort]{
 					<c:if test="${login.mIdx ne null}">
 						<button type="button" class="normal-button" onclick="location.href='myteams.do'" style="margin-right:5px;">내가 쓴 글</button>
 						<c:if test="${login.auth == 0}">
-						<button class="normal-button team-btn" onclick="location.href='/teams/register.do'">팀원모집 글작성</button>
+						<button class="normal-button team-btn" onclick="location.href='<%=request.getContextPath() %>/teams/register.do'">팀원모집 글작성</button>
 						</c:if>
 					</c:if>
 				</div>
