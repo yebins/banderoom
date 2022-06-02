@@ -15,14 +15,13 @@
 <link rel="stylesheet" href="/css/summernote/summernote-lite.css">
 <style>
 	div.service-content {
-		overflow:scroll;
 		overflow-x:hidden;
-		height:600px;
+		height:auto;
 	}
 
 	.sendInfo{
 		display:flex;
-			justify-content:flex-end;
+		justify-content:flex-end;
 		}
 	
 	.sendInfo button{
