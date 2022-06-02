@@ -78,7 +78,7 @@ tr{
     box-shadow: 0px 0px 5px rgb(0 0 0 / 20%);
 }
 select[name=searchField]{
-	width:100px;
+	width:150px;
 }
 
 .details-wrap {
@@ -196,6 +196,21 @@ select[name=searchField]{
 
 $(function() {
 	$(".details").draggable();
+	
+	
+	var searchField = "${param.searchField}";
+	if(searchField == ""){
+		searchField = "nickname";
+	}
+	
+	var sort = "${param.sort}";
+	if(sort == ""){
+		sort = "all";
+	}
+	
+	$("select[name=searchField]").val(searchField);
+	$("select[name=sort]").val(sort);
+	$("input[name=searchWord]").val("${param.searchWord}");
 })
 
 	function showDetails(mIdx) {
@@ -270,6 +285,8 @@ $(function() {
 		})
 		
 	}
+	
+	
 </script>
 	
 </head>
@@ -278,11 +295,11 @@ $(function() {
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			일반회원 관리
+			호스트회원 관리
 		</div>
 		<div id="page-content">
 			
-			<form action="reportedMember.do" id="search-form">
+			<form action="hMemberManage.do" id="search-form">
 				<input type="hidden" name="search" value="1">
 				<div class="d-flex justify-content-between">
 					<div>
@@ -295,9 +312,12 @@ $(function() {
 					<div class="d-flex">
 						<select class="form-select form-select-sm" name="searchField">
 							<option value="nickname">닉네임</option>
+							<option value="name">이름</option>
+							<option value="brn">사업자등록번호</option>
 						</select>&nbsp;
 						<input class="form-control form-control-sm" type="text" name="searchWord" placeholder="검색어를 입력해주세요.">
 						<button type="submit" class="normal-button accent-button">검색</button> &nbsp;
+						<button type="button" class="normal-button" style="width:75px;" onclick="location.href='hMemberManage.do'">초기화</button>
 					</div>
 				</div>
 			</form>
@@ -339,15 +359,15 @@ $(function() {
 								<div class="page-nav-button current-page">${i}</div>
 							</c:when>
 							<c:otherwise>
-								<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
+								<div class="page-nav-button" onclick="location.href='hMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
 				</c:if>
 				<c:if test="${PagingUtil.lastPage > 5}">
 					<c:if test="${PagingUtil.startPage > 5}">
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=1'">1</div>
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.startPage - 1}'">◀</div>
+						<div class="page-nav-button" onclick="location.href='hMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=1'">1</div>
+						<div class="page-nav-button" onclick="location.href='hMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.startPage - 1}'">◀</div>
 					</c:if>
 					
 					<c:forEach var="i" begin="${PagingUtil.startPage}" end="${PagingUtil.endPage}">
@@ -356,14 +376,14 @@ $(function() {
 								<div class="page-nav-button current-page">${i}</div>
 							</c:when>
 							<c:otherwise>
-								<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
+								<div class="page-nav-button" onclick="location.href='hMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${i}'">${i}</div>
 							</c:otherwise>
 						</c:choose>
 					</c:forEach>
 					
 					<c:if test="${PagingUtil.endPage < PagingUtil.lastPage}">
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.endPage + 1}">▶</div>
-						<div class="page-nav-button" onclick="location.href='reportedMember.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
+						<div class="page-nav-button" onclick="location.href='hMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.endPage + 1}">▶</div>
+						<div class="page-nav-button" onclick="location.href='hMemberManage.do?search=${param.search}&sort=${param.sort}&searchField=${param.searchField}&searchWord=${param.searchWord}&page=${PagingUtil.lastPage}">${PagingUtil.lastPage}</div>
 					</c:if>
 				</c:if>
 			</div>

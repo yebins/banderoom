@@ -572,7 +572,7 @@
 					</div>
 					<div class="inner-box-content">
 						<form method="post">
-							<textarea name="content" class="form-control" id="summernote" style="width:100%;" maxlength="200"></textarea>
+							<textarea name="content" class="form-control" id="summernote" style="width:100%;"></textarea>
 						</form>
 					</div>
 					<div class="inner-box-button-wrap">

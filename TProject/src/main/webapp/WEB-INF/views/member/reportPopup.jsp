@@ -59,9 +59,12 @@ textarea {
 				if(data > 0){
 					alert('신고를 완료했습니다.');
 					window.close();
-				} else if(data == 0){					
-					alert('신고를 완료하지 못했습니다.');
-				} else {
+				} else if(data == -1){					
+					alert('본인을 신고할 수 없습니다.');
+					window.close();
+				} else if(data == -2){
+					alert('내용을 입력해주세요.');
+				} else if(data == 0){
 					alert('로그인하세요.');
 					window.close();
 				}

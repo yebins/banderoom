@@ -486,6 +486,11 @@ public class MemberServiceImpl implements MemberService {
 	public int block(int target) {
 		return dao.block(target);
 	}
+	
+	@Override
+	public int unblock(int target) {
+		return dao.unblock(target);
+	}
 
 	@Override
 	public int withdraw(int target) {
@@ -498,13 +503,23 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<GeneralMembersVO> gMember() {
-		return dao.gMember();
+	public List<GeneralMembersVO> gMember(Map<String, Object> searchMap) {
+		return dao.gMember(searchMap);
+	}
+	
+	@Override
+	public int gMemberNum(Map<String, Object> pagingMap) {
+		return dao.gMemberNum(pagingMap);
 	}
 
 	@Override
-	public List<HostMembersVO> hMember() {
-		return dao.hMember();
+	public List<HostMembersVO> hMember(Map<String, Object> searchMap) {
+		return dao.hMember(searchMap);
+	}
+	
+	@Override
+	public int hMemberNum(Map<String, Object> pagingMap) {
+		return dao.hMemberNum(pagingMap);
 	}
 
 	@Override

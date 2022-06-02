@@ -94,7 +94,7 @@
 	}
 
 	function chkPw() {
-		var pwReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
+		var pwReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,20}$/;
 
 		pwChecked = false;
 		if ($("#pw1").val() == $("#pw2").val() && pwReg.test($("#pw1").val())) {
@@ -106,7 +106,7 @@
 				if ($("#pw1").val() != $("#pw2").val()) {
 					$("span.pwCheck-message").text("비밀번호가 일치하지 않습니다.");
 				} else if (!pwReg.test($("#pw1").val())) {
-					$("span.pwCheck-message").text("영문, 숫자, 기호 포함 8자 이상 입력해주세요.");
+					$("span.pwCheck-message").text("영문, 숫자, 기호 포함 8~20자 입력해주세요.");
 				}
 			}
 		}
@@ -116,13 +116,24 @@
 		nickChecked = false;
 		$(obj).next().addClass("accent-button");
 	}
-
+	
+	const getByteLengthOfString = function(s,b,i,c){
+	    for(b = i = 0; c = s.charCodeAt(i++); b += c >> 11 ? 3 : c >> 7 ? 2 : 1);
+	    return b;
+	};
+	
 	function checkNickname(obj) {
 		var nickname = $("input[name=nickname]").val();
-
+		
 		if (nickname == null || nickname == '') {
 			return;
 		}
+				
+		if (getByteLengthOfString(nickname) > 30) {
+			alert('닉네임은 한글 10자, 영문 30자 이내로 입력하세요.');
+			return;
+		}
+		
 		$(obj).attr("disabled", true);
 		$(obj).text("• • •");
 
@@ -143,6 +154,38 @@
 			}
 		})
 	}
+	
+	function nameMaxLengthCheck(input) {
+		var name = $(input).val();
+		if (getByteLengthOfString(name) > 20) {
+			
+			$(input).val(name.getStringFromByteLength(20));
+		}
+	}
+	
+	String.prototype.getStringFromByteLength = function( length ) {
+    const contents = this;
+    let str_character;
+    let int_char_count = 0;
+    let int_contents_length = contents.length;
+
+    let returnValue = '';
+
+    for (k = 0; k < int_contents_length; k++) {
+        str_character = contents.charAt(k);
+        if (escape(str_character).length > 4)
+            int_char_count += 2;
+        else
+            int_char_count++;
+
+        if ( int_char_count > length ) {
+            break;
+        }
+        returnValue += str_character;
+    }
+    return returnValue;
+}
+	
 
 	function searchAddr() {
 		new daum.Postcode({

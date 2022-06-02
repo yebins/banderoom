@@ -516,6 +516,11 @@
 		 WHERE midx = #{target}
 	</update>
 	
+	<update id="unblock" parameterType="int">
+		UPDATE general_members SET auth = 0
+		 WHERE midx = #{target}
+	</update>
+	
 	<update id="withdraw" parameterType="int">
 		UPDATE general_members SET auth = 2
 		 WHERE midx = #{target}
@@ -527,7 +532,7 @@
 	<!-- report -->
 	
 	<!-- 일반회원관리 -->
-	<select id="gMember" resultType="generalMembersVO">
+	<select id="gMember" parameterType="hashMap" resultType="generalMembersVO">
 		select 
 			  midx
 			, email
@@ -546,10 +551,53 @@
 			, joindate
 		  FROM general_members
 		  where auth != 2
+		<if test="sort == 'all'">
+			and auth != 2
+		</if>
+		<if test="sort == 'normal'">
+			and auth = 0
+		</if>
+		<if test="sort == 'block'">
+			and auth = 1
+		</if>
+		<if test="sort == 'admin'">
+			and auth = 3
+		</if>
+		<if test="searchField == 'nickname'">
+			and nickname like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'name'">
+			and name like concat('%',#{searchWord},'%')
+		</if>
 		 order by midx desc
+		 LIMIT #{start}, 10
 	</select>
 	
-	<select id="hMember" resultType="hostMembersVO">
+	<select id="gMemberNum" parameterType="hashMap" resultType="int">
+		SELECT COUNT(midx)
+		  FROM general_members
+		 where auth != 2
+		<if test="sort == 'all'">
+			and auth != 2
+		</if>
+		<if test="sort == 'normal'">
+			and auth = 0
+		</if>
+		<if test="sort == 'block'">
+			and auth = 1
+		</if>
+		<if test="sort == 'admin'">
+			and auth = 3
+		</if>
+		<if test="searchField == 'nickname'">
+			and nickname like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'name'">
+			and name like concat('%',#{searchWord},'%')
+		</if>
+	</select>
+	
+	<select id="hMember" parameterType="hashMap" resultType="hostMembersVO">
 		SELECT 
 			  midx
 			, brn
@@ -567,7 +615,50 @@
 			, joindate
 		 FROM host_members
 		 where auth != 2
+		<if test="sort == 'all'">
+			and auth != 2
+		</if>
+		<if test="sort == 'normal'">
+			and auth = 0
+		</if>
+		<if test="sort == 'block'">
+			and auth = 1
+		</if>
+		<if test="searchField == 'nickname'">
+			and nickname like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'name'">
+			and name like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'brn'">
+			and brn like concat('%',#{searchWord},'%')
+		</if>
 		order by midx desc
+		LIMIT #{start}, 10
+	</select>
+	
+	<select id="hMemberNum" parameterType="hashMap" resultType="int">
+		SELECT COUNT(midx)
+		  FROM host_members
+		 where auth != 2
+		<if test="sort == 'all'">
+			and auth != 2
+		</if>
+		<if test="sort == 'normal'">
+			and auth = 0
+		</if>
+		<if test="sort == 'admin'">
+			and auth = 3
+		</if>
+		<if test="searchField == 'nickname'">
+			and nickname like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'name'">
+			and name like concat('%',#{searchWord},'%')
+		</if>
+		<if test="searchField == 'brn'">
+			and brn like concat('%',#{searchWord},'%')
+		</if>
 	</select>
 	
 	<!-- 일반회원관리 -->

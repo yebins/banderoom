@@ -100,13 +100,21 @@ public class TeamsController {
 	
 	@RequestMapping(value="/register.do", method=RequestMethod.POST)
 	public String register(HttpServletRequest request, Model model, TeamsVO vo, String[] name, int[] capacity) {
+		GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
 		
-		if (request.getSession().getAttribute("login") == null) {
+		if (login == null) {
 
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			model.addAttribute("url", "/member/glogin.do");
 			
 			return "alert";
+		
+		}else if(login.getAuth() == 1){
+			model.addAttribute("msg", "차단된 회원은 작성하실 수 없습니다.");
+			model.addAttribute("url", "/member/main.do");
+			
+			return "alert";
+			
 			
 		} else {
 		
@@ -174,6 +182,13 @@ public class TeamsController {
 			
 			return "alert";
 			
+		} else if(login.getAuth() == 1){
+			
+			model.addAttribute("msg", "차단된 회원은 지원하실 수 없습니다.");
+			model.addAttribute("url", "/teams/main.do");
+			
+			return "alert";
+		
 		} else {
 		
 			List<PartsVO> partsVO = teamsService.selectParts(teamIdx);

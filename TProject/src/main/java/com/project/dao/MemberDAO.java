@@ -200,19 +200,27 @@ public class MemberDAO {
 	public int block(int target) {
 		return sqlSession.update("com.project.mapper.memberMapper.block", target);
 	}
+	public int unblock(int target) {
+		return sqlSession.update("com.project.mapper.memberMapper.unblock", target);
+	}
 	public int withdraw(int target) {
 		return sqlSession.update("com.project.mapper.memberMapper.withdraw", target);
 	}
 	public int deleteReport(int rIdx) {
 		return sqlSession.delete("com.project.mapper.memberMapper.deleteReport", rIdx);
 	}
-	public List<GeneralMembersVO> gMember() {
-		return sqlSession.selectList("com.project.mapper.memberMapper.gMember");
+	public List<GeneralMembersVO> gMember(Map<String, Object> searchMap) {
+		return sqlSession.selectList("com.project.mapper.memberMapper.gMember", searchMap);
 	}
-	public List<HostMembersVO> hMember() {
-		return sqlSession.selectList("com.project.mapper.memberMapper.hMember");
+	public int gMemberNum(Map<String, Object> pagingMap) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.gMemberNum", pagingMap);
 	}
-	
+	public List<HostMembersVO> hMember(Map<String, Object> searchMap) {
+		return sqlSession.selectList("com.project.mapper.memberMapper.hMember", searchMap);
+	}
+	public int hMemberNum(Map<String, Object> pagingMap) {
+		return sqlSession.selectOne("com.project.mapper.memberMapper.hMemberNum", pagingMap);
+	}
 	public int gUnregister(GeneralMembersVO vo) {
 		return sqlSession.update("com.project.mapper.memberMapper.gUnregister", vo);
 	}

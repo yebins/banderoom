@@ -102,7 +102,7 @@
 	<div id="wrapper">
 		<div id="login-wrap">
 			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo" onclick='location.href="/"'>
-				<form id="login-form" action="hAdminCheck.do" method="post">
+				<form id="login-form" action="adminCheck.do?num=${param.num}" method="post">
 					<div id="login-form-elements">
 						<div id="title">관리자 비밀번호를 입력해주세요.</div>
 						<input class="login-input" type="password" name="password" placeholder="비밀번호" onkeyup="enterkey()" required>
