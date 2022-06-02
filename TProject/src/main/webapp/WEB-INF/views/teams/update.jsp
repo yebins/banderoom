@@ -118,7 +118,7 @@
 	display:none;
 }
 </style>
-<title>팀원구하기 글등록</title>
+<title>팀원 모집글 수정</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 </head>
 <body>

@@ -8,7 +8,13 @@
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>
+	<c:choose>
+		<c:when test="${param.bIdx == 1}">공지사항</c:when>
+		<c:when test="${param.bIdx == 5}">자주 묻는 질문</c:when>
+		<c:when test="${param.bIdx == 6}">이벤트</c:when>
+	</c:choose>
+</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <style>
 	.container {
@@ -148,7 +154,7 @@
 			<a href="/serlist.do?bIdx=1">공지사항</a>
 		</c:if>
 		<c:if test="${bIdx==5}">
-			<a href="/serlist.do?bIdx=5">자주묻는질문</a>
+			<a href="/serlist.do?bIdx=5">자주 묻는 질문</a>
 		</c:if>
 		<c:if test="${bIdx==6}">
 			<a href="/serlist.do?bIdx=6">이벤트</a>

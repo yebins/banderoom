@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Insert title here</title>
+<title>${spacesVO.name}</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
 

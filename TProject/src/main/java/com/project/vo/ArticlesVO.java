@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class ArticlesVO {
 	private int aIdx;
-	private int bIdx;
+	private int bIdx;	// 1: 공지사항 2: 자유게시판 3: 중고거래 4: 홍보게시판 5: 자주 묻는 질문 6: 이벤트 
 	private String title;
 	private String content;
 	private int mIdx;

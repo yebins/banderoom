@@ -9,7 +9,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Insert title here</title>
+<title>공간 예약 내역</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
 <!-- Air datepicker css -->
@@ -59,33 +59,6 @@
 			공간 예약 내역
 		</div>
 		<div id="page-content">
-			<c:if test="${currentRsv.size() > 0}">
-			<div class="big-title">
-				현재 예약중인 공간
-			</div>
-			
-			<c:forEach var="rsvVO" items="${currentRsv}">
-				<div class="inner-box current-rsv" onclick="location.href='rsvdetails.do?resIdx=${rsvVO.resIdx}'">
-					<div class="inner-box-content">
-						<div class="space-thumb"><img src="${rsvVO.thumb}"></div>
-						<div class="rsv-info">
-							<div class="rsv-info-wrap">
-								<div class="space-name">${rsvVO.name}</div>
-								<div class="rsv-date">
-									<fmt:formatDate value="${rsvVO.startDate}" pattern="yyyy년 MM월 dd일 H시"/>
-									~ <fmt:formatDate value="${rsvVO.endDate}" pattern="k시"/>, ${rsvVO.rsvHours}시간
-								</div>
-							</div>
-							<div class="space-address-wrap">
-								<div class="space-address">${rsvVO.address} ${rsvVO.addressDetail}</div>
-								<button class="normal-button map-button" onclick="showMap('${rsvVO.address}', '${rsvVO.name}')">&nbsp;지도<img src="/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>			
-							</div>
-							
-						</div>
-					</div>
-				</div>
-			</c:forEach>
-			</c:if>
 			<div class="big-title">
 			<div id="scroll-here"></div>
 				예약 내역
