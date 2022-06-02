@@ -104,6 +104,13 @@
 	
 	function applyPopup(){
 		
+		if(${login == null}){
+			alert('로그인해주세요.');
+			location.href = "<%=request.getContextPath() %>/member/glogin.do";
+		}else if(${login.auth == 1}){
+			alert('차단된 회원은 지원하실 수 없습니다.');
+		}
+		
 		$.ajax({
 			url:"appCheck.do",
 			type:"post",
@@ -112,17 +119,8 @@
 				if(data > 0){
 					alert("이미 작성한 지원서가 존재합니다.");
 				}else{
-					if(${login == null}){
-						alert('로그인해주세요.');
-						location.href = "<%=request.getContextPath() %>/member/glogin.do";
-					}
-					else if(${login.auth == 1}){
-						alert('차단된 회원은 지원하실 수 없습니다.');
-					}
-					else{
 					window.open('application.do?teamIdx=${details.teamIdx}', '_blank', 
 			        'top=140, left=300, width=600, height=600, menubar=no,toolbar=no, location=no, directories=no, status=no, scrollbars=no, copyhistory=no, resizable=no');
-					}
 				}
 			}
 		})
