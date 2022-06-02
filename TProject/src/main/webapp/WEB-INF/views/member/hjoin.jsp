@@ -20,7 +20,7 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/member/gjoin.css">
 
 <script>
-
+var ContextPath=<%=request.getContextPath() %>;
 var brnChecked = false;
 var emailChecked = false;
 var pwChecked = false;
@@ -75,7 +75,7 @@ function profileUpload() {
 
 function profileReset() {
 	$('#profile')[0].reset();
-	$('div.profile-picture').html("<img src='/images/profile_default.png' width='160px'>");
+	$('div.profile-picture').html("<img src='<%=request.getContextPath() %>/images/profile_default.png' width='160px'>");
 	$('input[name=profileSrc]').val('/images/profile_default.png');
 }
 

@@ -116,7 +116,7 @@
 </style>
 
 <script>
-
+var ContextPath='<%=request.getContextPath() %>';
 function hLogin() {
 
 	 var brn = $("input[name=brn]").val();
@@ -161,7 +161,7 @@ function hLogin() {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 	<div id="wrapper">
 		<div id="login-wrap">
-			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo" onclick='location.href="/"'>
+			<img src="<%=request.getContextPath() %>/images/logo.png" class="login-logo" onclick='location.href="<%=request.getContextPath()%>/"'>
 			<div id="login-host-title">호스트 로그인</div>
 				<form id="login-form">
 					<div id="login-form-elements">
