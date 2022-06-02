@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 
 <style>
@@ -114,7 +114,7 @@
 				}else{
 					if(${login == null}){
 						alert('로그인해주세요.');
-						location.href = "/member/glogin.do";
+						location.href = "<%=request.getContextPath() %>/member/glogin.do";
 					}
 					else if(${login.auth == 1}){
 						alert('차단된 회원은 지원하실 수 없습니다.');

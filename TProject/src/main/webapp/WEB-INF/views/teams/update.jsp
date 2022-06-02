@@ -5,19 +5,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 
-<script src="/js/summernote/summernote-lite.js"></script>
-<script src="/js/summernote/lang/summernote-ko-KR.js"></script>
-<link rel="stylesheet" href="/css/summernote/summernote-lite.css">
+<script src="<%=request.getContextPath() %>/js/summernote/summernote-lite.js"></script>
+<script src="<%=request.getContextPath() %>/js/summernote/lang/summernote-ko-KR.js"></script>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/css/summernote/summernote-lite.css">
 
-<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<link href="<%=request.getContextPath() %>/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
 <!-- Air datepicker css -->
-<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
-<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
 
 <script>
 
@@ -175,7 +175,7 @@
 					</div>
 					<div class="inner-box-button-wrap">
 						<button type="submit" class="normal-button accent-button" style="margin-right: 8px;">수정하기</button> 
-						<button type="button" class="normal-button" onclick="location.href='/teams/main.do'">취소하기</button>
+						<button type="button" class="normal-button" onclick="location.href='<%=request.getContextPath() %>/teams/main.do'">취소하기</button>
 					</div>
 				</div>
 			</form>
