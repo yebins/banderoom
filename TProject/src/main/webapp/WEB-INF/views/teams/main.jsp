@@ -80,12 +80,13 @@
 	width:100%;
 	/*height:73px;*/
 	background:#2A3F6A;
-	color:#303030;
+	color:rgb(245, 245, 245);
 	font-size: 15px;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	display:block;
+	background: linear-gradient(#2A3F6A 90%, rgb(245, 245, 245));
 }
 .team-content{
 	width:100%;
