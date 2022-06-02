@@ -77,6 +77,10 @@
 		background-color:#fb6544;
 		width:80%;
 		text-align:center;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 45px;
 	}
 	
 	#message-nav-menu-list{
@@ -185,6 +189,7 @@
 	.page-nav-button.current-page {
 		background-color: #2A3F6A;
 		font-weight: bold;
+		color: #F5F5F5;
 	}
 	a:hover{
 		cursor:pointer;
@@ -226,7 +231,9 @@
 		transform: scale(1);
 	}
 	.msgDelBtn{
-		border-radius:10px;
+		height: 20px;
+		font-size: 12px;
+		width: 50px;
 	}
 	.message-header * {
 		color: #F5F5F5;
@@ -257,24 +264,24 @@
 								<c:otherwise>
 								</c:otherwise>
 							</c:choose>
-							<a onclick="messagePopups(this)"><span style="color:white;">내게쓰기</span></a>
+							<a class="normal-button accent-button" onclick="messagePopups(this)"><span style="color:white;">내게쓰기</span></a>
 						</div>
 						<div id="message-nav-menu-list">	
 							<ul>
 								<li>
-									<a href="myMessage.do?page=1">받은쪽지함 
+									<a href="myMessage.do?page=1">받은 쪽지함 
 										<%-- <b>${msgCount.ct1} /</b> --%>
 										<b>${noReadMsg.ct1}</b>
 									</a>
 								</li>
 								<li>
-									<a href="sentMessage.do?page=1">보낸쪽지함 
+									<a href="sentMessage.do?page=1">보낸 쪽지함 
 										<%-- <b>${msgCount.ct2}</b> --%>
 										<b>${noReadMsg.ct2}</b>
 									</a>
 								</li>
 								<li>
-									<a href="toMeMessage.do?page=1">내게쓴쪽지함
+									<a href="toMeMessage.do?page=1">내게 쓴 쪽지함
 										<b>${noReadMsg.ct3}</b>
 									</a>
 								</li>
@@ -283,19 +290,19 @@
 					</div>
 					<div id="message-content-list">
 						<div id="message-content-list-header">
-							<div style="padding-top	:30px;padding-left:10px;">
+							<div style="padding-top	:25px;padding-left:20px;">
 								<c:choose>
 									<c:when test="${sign eq 'receive'}">
-									<h4>받은쪽지함 (${noReadMsg.ct1} / ${msgCount.ct1})</h4>
+									<h4>받은 쪽지함 (${noReadMsg.ct1} / ${msgCount.ct1})</h4>
 									</c:when>
 									<c:when test="${sign eq 'send'}">
-									<h4>보낸쪽지함 (${noReadMsg.ct2} / ${msgCount.ct2})</h4>
+									<h4>보낸 쪽지함 (${noReadMsg.ct2} / ${msgCount.ct2})</h4>
 									</c:when>
 									<c:otherwise>
-									<h4>내게쓴쪽지함 (${noReadMsg.ct3} / ${msgCount.ct3})</h4>									
+									<h4>내게 쓴 쪽지함 (${noReadMsg.ct3} / ${msgCount.ct3})</h4>									
 									</c:otherwise>
 								</c:choose>
-							<button class="msgDelBtn" onclick="deleteMsg()">삭제</button>
+							<button class="normal-button msgDelBtn" onclick="deleteMsg()">삭제</button>
 							</div>
 						</div>
 						<c:if test="${sign eq 'receive'}">
@@ -415,7 +422,7 @@
 									<input type="checkbox" id="cbx_chkAll">
 								</li>
 								<li style="width:15%;">
-									<span>보낸사람</span>
+									<span>보낸 사람</span>
 								</li>
 								<li style="width:65%;">
 									내용
@@ -498,7 +505,7 @@
 	<div id="messageBox" class="messageBox">
 		<div class="inner-box innerMessageBOX">
 			<div class="message-header">
-				<span style="font-weight:bold;">보낸사람</span>
+				<span style="font-weight:bold;">보낸 사람</span>
 				<span id="messageSender"></span>
 			</div>
 			<div id="messageContent">
@@ -515,7 +522,7 @@
 	<div id="messageBox2" class="messageBox">
 		<div class="inner-box innerMessageBOX">
 		<div class="message-header">
-			<span style="font-weight:bold;">받는사람</span>
+			<span style="font-weight:bold;">받는 사람</span>
 			<span id="messageReceiver"></span>
 		</div>
 		<div id="messageContent2">
