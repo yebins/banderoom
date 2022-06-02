@@ -10,10 +10,10 @@
 		<input type="hidden" name="idx" value="${spaceList[i].getIdx()}">
 		<input type="hidden" name="address" value="${spaceList[i].getAddress()}">
 		<c:if test="${spaceList[i].liked == 1 }">
-		<img class="liked-space" src="/images/heart-filled.png">
+		<img class="liked-space" src="<%=request.getContextPath() %>/images/heart-filled.png">
 		</c:if>
 			<div class="space-thumb">
-				<img src="${spaceList[i].thumb}" width="100%">
+				<img src="<%=request.getContextPath() %>${spaceList[i].thumb}" width="100%">
 			</div>
 			<div class="space-info">
 				<div class="space-name">${spaceList[i].getName()}</div>

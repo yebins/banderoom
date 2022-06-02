@@ -79,10 +79,10 @@
 			},
 			success: function(result) {
 				if (result == 0) {					// 찜하지 않았음
-					$(".like-space img").attr("src", "/images/heart-empty.png");
+					$(".like-space img").attr("src", "/banderoom/images/heart-empty.png");
 					liked = 0;
 				} else if (result == 1) {		// 찜했음
-					$(".like-space img").attr("src", "/images/heart-filled.png");
+					$(".like-space img").attr("src", "/banderoom/images/heart-filled.png");
 					liked = 1;
 				}
 			}
@@ -675,7 +675,7 @@
 					$("#qna-textarea").val('');
 				} else if (data == 1) {
 					alert('로그인이 필요합니다.');
-					location.href='/member/glogin.do';
+					location.href='/banderoom/member/glogin.do';
 				} else if (data == 2) {
 					alert('작성에 실패했습니다.');
 				}
@@ -751,7 +751,7 @@
 					qnaList(qnaCurrentPage);
 				} else if (result == 1) {
 					alert('호스트 로그인이 필요합니다.');
-					location.href = '/member/hlogin.do';
+					location.href = '/banderoom/member/hlogin.do';
 				} else if (result == 2) {
 					alert('등록 권한이 없습니다.');
 				} else if (result == 3) {
@@ -804,7 +804,7 @@
 					qnaList(qnaCurrentPage);
 				} else if (result == 1) {
 					alert('호스트 로그인이 필요합니다.');
-					location.href = '/member/hlogin.do';
+					location.href = '/banderoom/member/hlogin.do';
 				} else if (result == 2) {
 					alert('수정 권한이 없습니다.');
 				} else if (result == 3) {
@@ -830,7 +830,7 @@
 					qnaList(qnaCurrentPage);
 				} else if (result == 1) {
 					alert('호스트 로그인이 필요합니다.');
-					location.href = '/member/hlogin.do';
+					location.href = '/banderoom/member/hlogin.do';
 				} else if (result == 2) {
 					alert('삭제 권한이 없습니다.');
 				} else if (result == 3) {
@@ -856,7 +856,7 @@
 					qnaList(qnaCurrentPage);
 				} else if (result == 1) {
 					alert('로그인이 필요합니다.');
-					location.href = '/member/glogin.do';
+					location.href = '/banderoom/member/glogin.do';
 				} else if (result == 2) {
 					alert('삭제 권한이 없습니다.');
 				} else if (result == 3) {
@@ -885,7 +885,7 @@
 		$("#qna-update-textarea").val(
 				$(buttonObj).parent().parent().prev().find(".review-content").html().replaceAll(
 						"<br>", "\r\n").replace(
-								'<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">', '').trim());
+								'<img src="/banderoom/images/lock.png" style="margin-bottom: 4px; height: 16px;">', '').trim());
 		$("#qna-update-input-wrap").append('<div id="qna-update-input-button-wrap" class="qna-input-button-wrap">');
 		$("#qna-update-input-button-wrap").append('<div id="update-form-check" class="form-check">');
 		$("#update-form-check").append('<input class="form-check-input" name="privateChecked" type="checkbox" value="1" id="update-public-check">');
@@ -923,7 +923,7 @@
 					$("#qna-update-textarea").val('');
 				} else if (data == 1) {
 					alert('로그인이 필요합니다.');
-					location.href='/member/glogin.do';
+					location.href='/banderoom/member/glogin.do';
 				} else if (data == 2) {
 					alert('수정 권한이 없습니다.');
 				} else if (data == 3) {
@@ -959,7 +959,7 @@
 					reload();
 				} else if (data == 1) {
 					alert('로그인이 필요합니다.');
-					location.href='/member/glogin.do';
+					location.href='/banderoom/member/glogin.do';
 				} else if (data == 2) {
 					alert('삭제 권한이 없습니다.');
 				} else if (data == 3) {

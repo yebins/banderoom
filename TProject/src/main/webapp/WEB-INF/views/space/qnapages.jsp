@@ -14,7 +14,7 @@
 		<div class="review-header">
 			<div class="review-member">
 				<div class="review-profile-img">
-					<img src="${qnaVO.profileSrc}">
+					<img src="<%=request.getContextPath() %>${qnaVO.profileSrc}">
 				</div>
 				<div class="review-nickname" onclick="profileOpen(${qnaVO.mIdx})">
 					${qnaVO.mNickname}
@@ -27,7 +27,7 @@
 		<div class="review-body">
 			<div class="review-content">
 				<c:if test="${qnaVO.publicYN == 'N'}">
-				<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">
+				<img src="<%=request.getContextPath() %>/images/lock.png" style="margin-bottom: 4px; height: 16px;">
 				</c:if>${qnaVO.content}
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 			</div>
 			<div class="qna-answer-content">
 				<c:if test="${qnaVO.publicYN == 'N'}">
-				<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">
+				<img src="<%=request.getContextPath() %>/images/lock.png" style="margin-bottom: 4px; height: 16px;">
 				</c:if>${qnaVO.answer}
 			</div>
 			<c:if test="${hlogin.mIdx == spacesVO.hostIdx}">

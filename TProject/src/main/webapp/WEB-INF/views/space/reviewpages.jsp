@@ -10,7 +10,7 @@
 										<div class="review-header">
 											<div class="review-member">
 												<div class="review-profile-img">
-													<img src="${review.profileSrc}">
+													<img src="<%=request.getContextPath() %>${review.profileSrc}">
 												</div>
 												<div class="review-nickname" onclick="profileOpen(${review.mIdx})">
 													${review.mNickname}
@@ -20,11 +20,11 @@
 												<fmt:formatDate value="${review.regDate}" pattern="yyyy.MM.dd HH:mm" />
 												<div class="review-score-stars">
 													<div class="review-score-color" style="width: ${review.score * 24}px"></div>
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
 												</div>
 											</div>
 										</div>
@@ -33,7 +33,7 @@
 												${review.content}
 											</div>
 											<c:if test="${review.pictureSrc != null}">
-												<img class="review-thumb" src="${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
+												<img class="review-thumb" src="<%=request.getContextPath() %>${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
 											</c:if>
 										</div>
 										<c:if test="${review.mIdx == login.mIdx}">

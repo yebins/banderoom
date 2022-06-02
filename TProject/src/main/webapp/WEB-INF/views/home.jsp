@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -406,7 +406,7 @@
 						</p>
 					</div>
 					<div style="position: absolute; top: 95px; left: 80px;">
-						<p onclick="location.href='/serinfo.do?idx=4'" style="font-style: normal; font-weight: 500; font-size: 17px; line-height: 20px; letter-spacing: -0.1px; cursor: pointer;">
+						<p onclick="location.href='<%=request.getContextPath() %>/serinfo.do?idx=4'" style="font-style: normal; font-weight: 500; font-size: 17px; line-height: 20px; letter-spacing: -0.1px; cursor: pointer;">
 						자세히 보기
 						</p>
 					</div>
@@ -421,7 +421,7 @@
 					<span>
 					공간 더 보기
 					</span>
-					<button class="normal-button more-button" onclick="location.href='/space/list.do'">
+					<button class="normal-button more-button" onclick="location.href='<%=request.getContextPath() %>/space/list.do'">
 						<div class="button-arrow"></div>
 					</button>
 				</div>
@@ -431,14 +431,14 @@
 					<div class="content-wrap">
 							<c:forEach var="i" begin="0" end="${spaceList.size() - 1}">
 								<div class="spacecol">
-									<div class="inner-box spacebox" onclick="location.href='/space/details.do?idx=${spaceList[i].getIdx()}'">
+									<div class="inner-box spacebox" onclick="location.href='<%=request.getContextPath() %>/space/details.do?idx=${spaceList[i].getIdx()}'">
 									<input type="hidden" name="idx" value="${spaceList[i].getIdx()}">
 									<input type="hidden" name="address" value="${spaceList[i].getAddress()}">
 									<c:if test="${spaceList[i].liked == 1 }">
-									<img class="liked-space" src="/images/heart-filled.png">
+									<img class="liked-space" src="<%=request.getContextPath() %>/images/heart-filled.png">
 									</c:if>
 										<div class="space-thumb">
-											<img src="${spaceList[i].thumb}" width="100%">
+											<img src="<%=request.getContextPath() %>${spaceList[i].thumb}" width="100%">
 										</div>
 										<div class="space-info">
 											<div class="space-name">${spaceList[i].getName()}</div>
@@ -505,10 +505,10 @@
 			
 			<c:forEach var="review" items="${recentReview}">
 				<div class="review-wrap">
-					<a href="/space/details.do?idx=${review.spaceIdx}">
+					<a href="<%=request.getContextPath() %>/space/details.do?idx=${review.spaceIdx}">
 					<div class="inner-box review-box">
 						<div class="review-picture">
-							<img src="${review.pictureSrc}">
+							<img src="<%=request.getContextPath() %>${review.pictureSrc}">
 						</div>
 						<div class="review-header">
 							<div class="review-space-name">
@@ -517,11 +517,11 @@
 							<div class="review-score-wrap">
 								<div class="review-score-stars">
 									<div class="review-score-color" style="width: ${review.score * 24}px"></div>
-									<img src="/images/score-star.png">
-									<img src="/images/score-star.png">
-									<img src="/images/score-star.png">
-									<img src="/images/score-star.png">
-									<img src="/images/score-star.png">
+									<img src="<%=request.getContextPath() %>/images/score-star.png">
+									<img src="<%=request.getContextPath() %>/images/score-star.png">
+									<img src="<%=request.getContextPath() %>/images/score-star.png">
+									<img src="<%=request.getContextPath() %>/images/score-star.png">
+									<img src="<%=request.getContextPath() %>/images/score-star.png">
 								</div>
 							</div>
 						</div>
@@ -542,7 +542,7 @@
 					<span>
 					모집 더 보기
 					</span>
-					<button class="normal-button more-button" onclick="location.href='/teams/main.do'">
+					<button class="normal-button more-button" onclick="location.href='<%=request.getContextPath() %>/teams/main.do'">
 						<div class="button-arrow"></div>
 					</button>
 				</div>
@@ -555,7 +555,7 @@
 						<c:if test="${teamsList.size()>0}">
 							<c:forEach var="item" items="${teamsList}">
 								<div class="spacecol">
-								<div class="inner-box spacebox" onclick="location.href='/teams/details.do?teamIdx=${item.teamIdx}'">
+								<div class="inner-box spacebox" onclick="location.href='<%=request.getContextPath() %>/teams/details.do?teamIdx=${item.teamIdx}'">
 									<input type="hidden" name="teamIdx" value="${item.teamIdx}">
 									<div class=""<c:if test="${item.status==2}">style='filter: brightness(50%);'</c:if>>
 										<div class="team-title">
@@ -679,7 +679,7 @@
 				<div class="section-element">
 					<div class="article-title-wrap">
 						<div class="article-title">공지사항</div>
-						<button class="normal-button more-button" onclick="location.href='/serlist.do?bIdx=1&page=1'">
+						<button class="normal-button more-button" onclick="location.href='<%=request.getContextPath() %>/serlist.do?bIdx=1&page=1'">
 							<div class="button-arrow"></div>
 						</button>
 					</div>
@@ -708,7 +708,7 @@
 				<div class="section-element">
 					<div class="article-title-wrap">
 						<div class="article-title">이벤트</div>
-						<button class="normal-button more-button" onclick="location.href='/serlist.do?bIdx=6&page=1'">
+						<button class="normal-button more-button" onclick="location.href='<%=request.getContextPath() %>/serlist.do?bIdx=6&page=1'">
 							<div class="button-arrow"></div>
 						</button>		
 					</div>

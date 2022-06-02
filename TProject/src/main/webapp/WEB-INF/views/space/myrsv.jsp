@@ -5,20 +5,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>공간 예약 내역</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
-<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<link href="<%=request.getContextPath() %>/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
 <!-- Air datepicker css -->
-<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
-<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
 
-<link rel="stylesheet" type="text/css" href="/css/space/myrsv.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/space/myrsv.css">
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 <script>
 
@@ -46,7 +46,7 @@
 	
 
 </script>	
-<script src="/js/space/myrsv.js"></script>
+<script src="<%=request.getContextPath() %>/js/space/myrsv.js"></script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -64,7 +64,7 @@
 			<c:forEach var="rsvVO" items="${currentRsv}">
 				<div class="inner-box current-rsv" onclick="location.href='rsvdetails.do?resIdx=${rsvVO.resIdx}'">
 					<div class="inner-box-content">
-						<div class="space-thumb"><img src="${rsvVO.thumb}"></div>
+						<div class="space-thumb"><img src="<%=request.getContextPath() %>${rsvVO.thumb}"></div>
 						<div class="rsv-info">
 							<div class="rsv-info-wrap">
 								<div class="space-name">${rsvVO.name}</div>
@@ -75,7 +75,7 @@
 							</div>
 							<div class="space-address-wrap">
 								<div class="space-address">${rsvVO.address} ${rsvVO.addressDetail}</div>
-								<button class="normal-button map-button" onclick="showMap('${rsvVO.address}', '${rsvVO.name}')">&nbsp;지도<img src="/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>			
+								<button class="normal-button map-button" onclick="showMap('${rsvVO.address}', '${rsvVO.name}')">&nbsp;지도<img src="<%=request.getContextPath() %>/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>			
 							</div>
 							
 						</div>

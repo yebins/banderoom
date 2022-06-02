@@ -17,7 +17,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
         <property name="java-output-path" value="/TProject/target/classes"/>
-        <property name="context-root" value="/"/>
+        <property name="context-root" value="/banderoom/"/>
                         	
     
     

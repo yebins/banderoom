@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -14,10 +14,10 @@
 
 <title>${spacesVO.name}</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
-<link rel="stylesheet" type="text/css" href="/css/space/calendar.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/space/calendar.css">
 
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
-<link rel="stylesheet" type="text/css" href="/css/space/details.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/space/details.css">
 
 	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a8d83e76596a6e93d144575566c3d5ae&libraries=services"></script>
 	
@@ -67,7 +67,7 @@
 	
 	</script>
 	
-	<script src="/js/space/details.js"></script>
+	<script src="<%=request.getContextPath() %>/js/space/details.js"></script>
 	
 </head>
 
@@ -126,12 +126,12 @@
 				  	<c:forEach var="i" begin="0" end="${spacePicturesVOs.size() - 1}" varStatus="status">
 				  		<c:if test="${status.first}">
 						    <div class="carousel-item active">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
+						      <img src="<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				  		<c:if test="${!status.first}">
 				  			<div class="carousel-item">
-						      <img src="${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
+						      <img src="<%=request.getContextPath() %>${spacePicturesVOs[i].getSrc()}" class="d-block w-100" onclick="drawImage('${spacePicturesVOs[i].getSrc()}')">
 						    </div>
 				  		</c:if>
 				    </c:forEach>
@@ -156,7 +156,7 @@
 					<span>${spacesVO.getName()}</span>
 					<c:if test="${login != null}">
 					<div class="like-space" onclick="likeSpace()">
-						<img src="/images/heart-empty.png">
+						<img src="<%=request.getContextPath() %>/images/heart-empty.png">
 					</div>
 					</c:if>
 				</div>
@@ -164,7 +164,7 @@
 					<div class="addressDetail">
 						${spacesVO.getAddress()} ${spacesVO.getAddressDetail()}
 					</div>
-					<button class="normal-button map-button" onclick="showMap()">&nbsp;지도<img src="/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>
+					<button class="normal-button map-button" onclick="showMap()">&nbsp;지도<img src="<%=request.getContextPath() %>/images/map_pin.png" style="height: 20px; margin-left: 0px;"></button>
 				</div>
 			</div>
 			
@@ -204,11 +204,11 @@
 								<div class="score-wrap">
 									<div class="score-stars">
 										<div class="score-color"></div>
-										<img src="/images/score-star.png">
-										<img src="/images/score-star.png">
-										<img src="/images/score-star.png">
-										<img src="/images/score-star.png">
-										<img src="/images/score-star.png">
+										<img src="<%=request.getContextPath() %>/images/score-star.png">
+										<img src="<%=request.getContextPath() %>/images/score-star.png">
+										<img src="<%=request.getContextPath() %>/images/score-star.png">
+										<img src="<%=request.getContextPath() %>/images/score-star.png">
+										<img src="<%=request.getContextPath() %>/images/score-star.png">
 									</div>
 									<div class="score-avg"><fmt:formatNumber value="${reviewCntAvg.get('avg')}" pattern="#.0" /> </div>
 								</div>
@@ -223,7 +223,7 @@
 										<div class="review-header">
 											<div class="review-member">
 												<div class="review-profile-img">
-													<img src="${review.profileSrc}">
+													<img src="<%=request.getContextPath() %>${review.profileSrc}">
 												</div>
 												<div class="review-nickname" onclick="profileOpen(${review.mIdx})">
 													${review.mNickname}
@@ -233,11 +233,11 @@
 												<fmt:formatDate value="${review.regDate}" pattern="yyyy.MM.dd HH:mm" />
 												<div class="review-score-stars">
 													<div class="review-score-color" style="width: ${review.score * 24}px"></div>
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
-													<img src="/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
+													<img src="<%=request.getContextPath() %>/images/score-star.png">
 												</div>
 											</div>
 										</div>
@@ -246,7 +246,7 @@
 												${review.content}
 											</div>
 											<c:if test="${review.pictureSrc != null}">
-												<img class="review-thumb" src="${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
+												<img class="review-thumb" src="<%=request.getContextPath() %>${review.thumbSrc}" onclick="drawImage('${review.pictureSrc}')">
 											</c:if>
 										</div>
 										<c:if test="${review.mIdx == login.mIdx}">
@@ -261,16 +261,16 @@
 								
 								<div class="review-nav">
 									<div class="review-page-prev" onclick="loadReview(1, orderType, this)">
-										<img src="/images/page-first.png">
+										<img src="<%=request.getContextPath() %>/images/page-first.png">
 									</div>
 									<div class="review-page-prev" onclick="loadReview((reviewPage - 1), orderType, this)">
-										<img src="/images/page-prev.png">
+										<img src="<%=request.getContextPath() %>/images/page-prev.png">
 									</div>
 									<div class="review-page-next" onclick="loadReview((reviewPage + 1), orderType, this)">
-										<img src="/images/page-next.png">
+										<img src="<%=request.getContextPath() %>/images/page-next.png">
 									</div>
 									<div class="review-page-next" onclick="loadReview(reviewLastPage, orderType, this)">
-										<img src="/images/page-last.png">
+										<img src="<%=request.getContextPath() %>/images/page-last.png">
 									</div>
 								</div>
 								
@@ -294,7 +294,7 @@
 										<div class="review-header">
 											<div class="review-member">
 												<div class="review-profile-img">
-													<img src="${qnaVO.profileSrc}">
+													<img src="<%=request.getContextPath() %>${qnaVO.profileSrc}">
 												</div>
 												<div class="review-nickname" onclick="profileOpen(${qnaVO.mIdx})">
 													${qnaVO.mNickname}
@@ -307,7 +307,7 @@
 										<div class="review-body">
 											<div class="review-content">
 												<c:if test="${qnaVO.publicYN == 'N'}">
-												<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">
+												<img src="<%=request.getContextPath() %>/images/lock.png" style="margin-bottom: 4px; height: 16px;">
 												</c:if>${qnaVO.content}
 											</div>
 										</div>
@@ -336,7 +336,7 @@
 											</div>
 											<div class="qna-answer-content">
 												<c:if test="${qnaVO.publicYN == 'N'}">
-												<img src="/images/lock.png" style="margin-bottom: 4px; height: 16px;">
+												<img src="<%=request.getContextPath() %>/images/lock.png" style="margin-bottom: 4px; height: 16px;">
 												</c:if>${qnaVO.answer}
 											</div>
 											<c:if test="${hlogin.mIdx == spacesVO.hostIdx}">

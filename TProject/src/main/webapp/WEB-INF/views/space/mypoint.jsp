@@ -5,20 +5,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>포인트 내역</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
-<link href="/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
+<link href="<%=request.getContextPath() %>/css/air-datepicker/datepicker.min.css" rel="stylesheet" type="text/css" media="all">
 <!-- Air datepicker css -->
-<script src="/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
-<script src="/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.js"></script> <!-- Air datepicker js -->
+<script src="<%=request.getContextPath() %>/js/air-datepicker/datepicker.ko.js"></script> <!-- 달력 한글 추가를 위해 커스텀 -->
 
-<link rel="stylesheet" type="text/css" href="/css/space/mypoint.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/space/mypoint.css">
 
 <script src="https://cdn.jsdelivr.net/npm/moment@2.29.3/moment.min.js"></script>
 <script>
@@ -34,7 +34,7 @@
 	}
 	
 </script>
-<script src="/js/space/mypoint.js"></script>
+<script src="<%=request.getContextPath() %>/js/space/mypoint.js"></script>
 
 </head>
 <body>
@@ -137,30 +137,6 @@
 				</div>
 			</div>
 		</div>
-		
-		<!-- 여기까지 틀이고 밑에는 요소 공통사항 
-		<div>
-			위까지는 틀이고 밑에는 요소 공통사항
-			<br><br><br>
-			버튼 세로 크기 수정시 border-radius도 수정해야함<br>
-			<br>
-			<button class="normal-button">버튼</button> 
-			일반 버튼 (button class="normal-button") (버튼이 여러개 줄줄이 배치될 시 하나만 강조 컬러 넣을것)<br><br>
-			<button class="normal-button accent-button">버튼</button> 강조 버튼 (button class="normal-button accent-button")<br><br>
-			<br><br><br>
-			내부 박스 틀과 예시
-			<div class="inner-box">
-				<div class="inner-box-content">
-				박스에 들어갈 내용
-				</div>
-				<div class="inner-box-button-wrap">
-					<button class="normal-button">일반버튼</button>
-					<button class="normal-button accent-button" style="margin-left: 15px;">강조버튼</button>
-				</div>
-			</div>
-			<br><br>
-		</div>
-		<!-- 여기까지 -->
 		
 	</div>
 	

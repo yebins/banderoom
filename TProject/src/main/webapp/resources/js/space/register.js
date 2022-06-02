@@ -72,9 +72,9 @@ function uploadImage(file, el) {
 		data: formData,
 		contentType: false,
 		processData: false,
-		url: "/uploadPicture.do",
+		url: "/banderoom/uploadPicture.do",
 		success: function(data) {
-			$(el).summernote('editor.insertImage', data.trim());
+			$(el).summernote('editor.insertImage', '/banderoom' + data.trim());
 		}
 	})
 }
@@ -107,7 +107,7 @@ function spacePictureUpload() {
 			
 			var html = "";
 			html += "<div class='picture-upload uploaded'>";
-			html += "<img src='" + data.thumb + "' width='100%'>";
+			html += "<img src='/banderoom" + data.thumb + "' width='100%'>";
 			html += "<input type='hidden' name='src' value='" + data.original + "'>";
 			html += "<input type='hidden' name='thumbSrc' value='" + data.thumb + "'>";
 			html += "</div>"

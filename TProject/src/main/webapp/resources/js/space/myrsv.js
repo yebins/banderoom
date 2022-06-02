@@ -79,7 +79,7 @@
 		location.reload();
 	}
 	function gotoLogin() {
-		location.href="/member/glogin.do";
+		location.href="/banderoom/member/glogin.do";
 	}
 	
 	

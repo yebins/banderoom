@@ -5,8 +5,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
-<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
+<link rel="icon" href="<%=request.getContextPath() %>/images/favicon.ico" type="image/x-icon">
 <script src="<%=request.getContextPath() %>/js/jquery-3.6.0.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
@@ -23,7 +23,7 @@
 	}
 
 </script>
-<script src="/js/space/reviewupdate.js"></script>
+<script src="<%=request.getContextPath() %>/js/space/reviewupdate.js"></script>
 </head>
 <body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
@@ -37,7 +37,7 @@
 				<div class="rsv-info-wrap">
 					<div class="past-rsv-wrap">
 						<div class="rsv-thumb">
-							<img src="${rsvVO.thumb}">
+							<img src="<%=request.getContextPath() %>${rsvVO.thumb}">
 						</div>
 						<div class="past-rsv-info-wrap">
 							<div class="past-rsv-name">${rsvVO.name}</div>
@@ -83,14 +83,14 @@
 							<div class="score-stars">
 								<input type="hidden" name="score" value="">
 								<div class="score-color"></div>
-								<img src="/images/score-star.png" onclick="setScore(1)">
-								<img src="/images/score-star.png" onclick="setScore(2)">
-								<img src="/images/score-star.png" onclick="setScore(3)">
-								<img src="/images/score-star.png" onclick="setScore(4)">
-								<img src="/images/score-star.png" onclick="setScore(5)">
+								<img src="<%=request.getContextPath() %>/images/score-star.png" onclick="setScore(1)">
+								<img src="<%=request.getContextPath() %>/images/score-star.png" onclick="setScore(2)">
+								<img src="<%=request.getContextPath() %>/images/score-star.png" onclick="setScore(3)">
+								<img src="<%=request.getContextPath() %>/images/score-star.png" onclick="setScore(4)">
+								<img src="<%=request.getContextPath() %>/images/score-star.png" onclick="setScore(5)">
 							</div>
 							<label for="file" class="normal-button upload-pic">
-							<img src="/images/picture-button.png"></label>
+							<img src="<%=request.getContextPath() %>/images/picture-button.png"></label>
 							<input id="file" type="file" name="picture" onchange="showImg(this)" accept="image/*">
 						</div>
 						<button type="button" class="normal-button accent-button" onclick="reviewSubmit()">등록</button>
