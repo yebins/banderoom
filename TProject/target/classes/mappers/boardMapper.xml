@@ -241,13 +241,17 @@
 	</select>
 	
 	<select id="onlyCommentTotal" parameterType="map" resultType="int">
-		select count(cIdx) from comments
-		where 
-			aIdx=#{aIdx}
-		and
-			bIdx=#{bIdx}
-		and
-			status = 0;
+		select count(a.cIdx) from 
+		((select c.* from comments c 
+			where aidx = #{aIdx} and status = 0) 
+	union
+		(select distinct c.* 
+			from comments c 
+		right join comment_replies b 
+		ON c.cidx = b.cidx 
+		where c.aidx = #{aIdx} 
+		and c.status = 1)) a;
+	
 	</select>
 
 	<select id="commentList" parameterType="map" resultType="commentsVO">
@@ -374,19 +378,15 @@
 	
 	<select id="replyList" parameterType="commentRepliesVO" resultType="commentRepliesVO">
 		select 
-			rIdx
-			,cIdx
-			,mIdx
-			,mnickname
-			,content
-			,picsrc
-			,regdate
+			a.* , gm.profileSrc as mProfileSrc
 		from
-			comment_replies
+			comment_replies a
+			inner join general_members gm
+			on a.midx = gm.midx
 		where
-			cIdx=#{cIdx}
+			a.cIdx=#{cIdx}
 		order by
-			regDate
+			regDate;
 	</select>
 	
 	<select id="prevList" parameterType="ArticlesVO" resultType="ArticlesVO">
@@ -406,6 +406,23 @@
 		select aidx, count(*) likeCount from liked_articles
 		where aidx = #{aIdx}
 		) bb
+	</select>
+	
+	<select id="commentsList2" parameterType="map" resultType="commentsVO">
+	select a.*, gm.profileSrc as mProfileSrc from 
+		((select c.* from comments c 
+			where aidx = #{aIdx} and status = 0) 
+	union
+		(select distinct c.* 
+			from comments c 
+		right join comment_replies b 
+		ON c.cidx = b.cidx 
+		where c.aidx = #{aIdx} 
+		and c.status = 1)) a
+	inner join general_members gm
+	on a.midx = gm.midx
+	order by cIdx
+	limit #{start}, 10;
 	</select>
 	
 </mapper>

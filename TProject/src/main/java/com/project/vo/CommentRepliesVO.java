@@ -10,6 +10,7 @@ public class CommentRepliesVO {
 	private String content;
 	private String picSrc;
 	private Date regDate;
+	private String mProfileSrc;
 	
 	public int getrIdx() {
 		return rIdx;
@@ -52,5 +53,11 @@ public class CommentRepliesVO {
 	}
 	public void setRegDate(Date regDate) {
 		this.regDate = regDate;
+	}
+	public String getmProfileSrc() {
+		return mProfileSrc;
+	}
+	public void setmProfileSrc(String mProfileSrc) {
+		this.mProfileSrc = mProfileSrc;
 	}
 }
