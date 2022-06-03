@@ -155,7 +155,7 @@
 			<a href="jlist.do">중고거래 게시판</a>
 		</div>
 		<div>
-			<form action="/board/jlist.do" class="d-flex notice-page" method="get">
+			<form action="<%=request.getContextPath() %>/board/jlist.do" class="d-flex notice-page" method="get">
 				<select name="status" class="jlist-status">
 					<option <c:if test="${status eq '97'}">selected</c:if> value="97">판매</option>
 					<option <c:if test="${status eq '98'}">selected</c:if> value="98">구매</option>
@@ -215,10 +215,10 @@
 			검색된 게시물 수 : ${articlesTotal}
 			<div class="pageNum">
 						<c:if test="${page>5}">
-						<a class="page-nav-button" href="jlist.do?page=1&status=${status}&searchtitle=${searchtitle}">
+						<a class="page-nav-button" href="jlist.do?page=1&status=${status}&searchType=${param.searchType}&searchValue=${param.searchValue}">
 							1
 						</a>
-						<a class="page-nav-button" href="jlist.do?page=${startNum-5}&status=${status}&searchtitle=${searchtitle}">
+						<a class="page-nav-button" href="jlist.do?page=${startNum-5}&status=${status}&searchType=${param.searchType}&searchValue=${param.searchValue}">
 							◀
 						</a>
 						</c:if>
@@ -226,12 +226,12 @@
 							<c:if test="${(startNum+i)<= lastNum}">
 							<c:choose>
 									<c:when test="${(startNum+i) == page }">
-									<a class="page-nav-button current-page" href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">
+									<a class="page-nav-button current-page" href="jlist.do?page=${startNum+i}&status=${status}&searchType=${param.searchType}&searchValue=${param.searchValue}">
 										${startNum+i}
 									</a>
 									</c:when>
 									<c:otherwise>
-									<a class="page-nav-button" href="jlist.do?page=${startNum+i}&status=${status}&searchtitle=${searchtitle}">
+									<a class="page-nav-button" href="jlist.do?page=${startNum+i}&status=${status}&searchType=${param.searchType}&searchValue=${param.searchValue}">
 										${startNum+i}
 									</a>
 									</c:otherwise>
@@ -239,12 +239,12 @@
 							</c:if>
 						</c:forEach>
 						<c:if test="${(startNum+5) < lastNum}" >
-						<a class="page-nav-button" href="jlist.do?page=${startNum+5}&status=${status}&searchtitle=${searchtitle}">
+						<a class="page-nav-button" href="jlist.do?page=${startNum+5}&status=${status}&searchType=${param.searchType}&searchValue=${param.searchValue}">
 							▶
 						</a>
 						</c:if>
 						<c:if test="${(startNum+5) <= lastNum}">
-						<a class="page-nav-button" href="jlist.do?page=${lastNum}&status=${status}&searchtitle=${searchtitle}">
+						<a class="page-nav-button" href="jlist.do?page=${lastNum}&status=${status}&searchType=${param.searchType}&searchValue=${param.searchValue}">
 							${lastNum}
 						</a>
 						</c:if>
