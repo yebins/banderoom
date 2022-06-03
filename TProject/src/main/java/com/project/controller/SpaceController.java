@@ -362,7 +362,9 @@ public class SpaceController {
 				
 				// 작은따옴표가 들어가면 깨져서 이스케이프 문자로 치환
 				vo.setName(vo.getName().replaceAll("'", "\\\\'"));
-				vo.setAddressDetail(vo.getAddressDetail().replaceAll("'", "\\\\'"));
+				if (vo.getAddressDetail() != null) {
+					vo.setAddressDetail(vo.getAddressDetail().replaceAll("'", "\\\\'"));
+				}
 				vo.setInfo(vo.getInfo().replaceAll("'", "\\\\'"));
 				vo.setFacility(vo.getFacility().replaceAll("'", "\\\\'"));
 				vo.setCaution(vo.getCaution().replaceAll("'", "\\\\'"));

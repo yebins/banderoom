@@ -164,7 +164,7 @@ function spacePictureUpload() {
 			
 			var html = "";
 			html += "<div class='picture-upload uploaded'>";
-			html += "<img src='" + data.thumb + "' width='100%'>";
+			html += "<img src='<%=request.getContextPath()%>" + data.thumb + "' width='100%'>";
 			html += "<input type='hidden' name='src' value='" + data.original + "'>";
 			html += "<input type='hidden' name='thumbSrc' value='" + data.thumb + "'>";
 			html += "</div>"

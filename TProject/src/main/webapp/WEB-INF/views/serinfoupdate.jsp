@@ -50,45 +50,8 @@
    		margin-top:15px;
    	}
 </style>
-</head>
-<body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-	<c:import url="/header.do" />
-	<div id="wrapper">
-		<div id="page-title">
-			관리자용 글쓰기
-		</div>
-		<div id="page-content">
-			<form action="serinfoupdate.do" method="post">
-			<input type="hidden" name="mIdx" value="${login.mIdx}">
-			<input type="hidden" name="mNickname" value="${login.nickname}">
-			<div class="inner-box">
-				<div>
-					<select name="bIdx" class="form-select inner-box-select" aria-label="Default select example">
-						  <option ${(param.bIdx == "1")?"selected":""} value="1">공지사항</option>
-						  <option ${(param.bIdx == "5")?"selected":""} value="5">자주묻는질문</option>
-						  <option ${(param.bIdx == "6")?"selected":""} value="6">이벤트</option>
-						  <option ${(param.bIdx == "7")?"selected":""} value="7">포인트 적립 안내</option>
-					</select>			
-					<input class="form-control me-3" name="title" type="text" placeholder="제목을 입력하세요">
-				</div>
-					<div class="inner-box-content">
-						<textarea id="summernote" name="content"></textarea>
-					</div>
-					<div class="inner-box-button-wrap">
-						<button class="accent-button normal-button">저장</button>
-						<button type="button" class="normal-button" onclick="location.href='serlist.do'">취소하기</button>
-					</div>
-				</div>
-			</form>	
-		</div>
-		
-		
-		
-	</div>
 <script>
 	$(function(){
-		
 		$('#summernote').summernote({
 	         toolbar: [
 	             // [groupName, [list of button]]
@@ -103,7 +66,7 @@
 	           ],
 	         fontNames: ['맑은 고딕','궁서','굴림체','굴림','돋움체','바탕체'],
 	         fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
-	        height: 500,                 // 에디터 높이
+	        height: 300,                 // 에디터 높이
 	        minHeight: null,             // 최소 높이
 	        maxHeight: null,             // 최대 높이
 	        focus: false,                  // 에디터 로딩후 포커스를 맞출지 여부
@@ -124,10 +87,11 @@
 	                 uploadImage(files[i], this);
 	              }
 	           }
-	        }//callbacks end
+	        }
 	   });
 	   $('#summernote').summernote('fontName', '맑은 고딕');
-	})
+	
+	});
 	
 	function uploadImage(file, el) {
 		   var formData = new FormData();
@@ -144,6 +108,41 @@
 		   })
 		}
 </script>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+	<c:import url="/header.do" />
+	<div id="wrapper">
+		<div id="page-title">
+			관리자용 글쓰기
+		</div>
+		<div id="page-content">
+			<form action="serinfoupdate.do" method="post">
+			<input type="hidden" name="mIdx" value="${login.mIdx}">
+			<input type="hidden" name="mNickname" value="${login.nickname}">
+			<div class="inner-box">
+				<div>
+					<select name="bIdx" class="form-select inner-box-select" aria-label="Default select example">
+						  <option ${(param.bIdx == "1")?"selected":""} value="1">공지사항</option>
+						  <option ${(param.bIdx == "5")?"selected":""} value="5">자주묻는질문</option>
+						  <option ${(param.bIdx == "6")?"selected":""} value="6">이벤트</option>
+					</select>			
+					<input class="form-control me-3" name="title" type="text" placeholder="제목을 입력하세요">
+				</div>
+					<div class="inner-box-content">
+						<textarea id="summernote" name="content"></textarea>
+					</div>
+					<div class="inner-box-button-wrap">
+						<button class="accent-button normal-button">저장</button>
+						<button type="button" class="normal-button" onclick="location.href='serlist.do'">취소하기</button>
+					</div>
+				</div>
+			</form>	
+		</div>
+		
+		
+		
+	</div>
 <c:import url="/footer.do" />
 </body>
 </html>

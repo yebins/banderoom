@@ -136,7 +136,6 @@
 								<div>
 									<span class="small-title">닉네임</span>
 									<a class="miniprofile" onclick="profileOpen('${applists.mIdx}')">
-										<img src="${profileSrc}" class="psrc"/>
 										<span class="small-content nickname" style="font-size: 18px; font-weight: bold;">${applists.mNickname}&nbsp;&nbsp;</span>						
 									</a>
 								</div>
