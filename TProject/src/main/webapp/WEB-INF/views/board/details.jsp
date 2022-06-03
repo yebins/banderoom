@@ -411,7 +411,7 @@
 						htmls+='<div class="comment-area-content-toparea">'
 						htmls+='<div class="comment-area-content-toparea-left">'
 						if(el.status != 1){							
-							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="<%=request.getContextPath() %>'+el.mProfileSrc+'" class="psrc"/>'
+							htmls+='<a class="miniprofile" onclick="profileOpen('+el.mIdx+')"><img src="'+el.mProfileSrc+'" class="psrc"/>'
 							if('${vo.mNickname}' == el.mNickname){
 							htmls+='<span style="font-weight:600;color:blue;">'+el.mNickname+ "  "+'</span></a>'														
 							} else{
@@ -467,7 +467,7 @@
 							htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
 							htmls+='<input type="hidden" name="status" value="'+el.status+'">'
 							htmls+='<label style="margin-bottom:10px">'
-							htmls+='<input type="file" id="file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="preview(event,'+el.cIdx+',this)" accept="image/*">'
+							htmls+='<input type="file" id="file'+el.cIdx+'" name="commentSrc" style="display:none" onchange="preview(event,this,'+el.cIdx+')" accept="image/*">'
 							htmls+='<label for="file'+el.cIdx+'">'
 								if(el.picSrc != null){
 							htmls+='<a> <strong>사진 변경하기</strong></a>'
@@ -514,11 +514,9 @@
 								htmls+='<div class="comment-area-content-toparea">'
 								htmls+='<div class="comment-area-content-toparea-left">'
 								htmls+='<a class="miniprofile" onclick="profileOpen('+rl.mIdx+')">'
-								if(rl.mProfileSrc != null){
-								htmls+='<img src="" class="psrc"/>'
-								} else{
-								htmls+='<img src="<%=request.getContextPath() %>/images/profile_default.png" class="psrc"/>'
-								}
+								
+								htmls+='<img src="'+rl.mProfileSrc+'" class="psrc"/>'
+								
 								if(rl.mNickname == '${vo.mNickname}'){
 								htmls+='<span style="font-weight:600; color:blue">'+rl.mNickname+" "+'</span></a>'																		
 								} else{
@@ -813,7 +811,7 @@
 		
 	}
 		//사진미리보기
-		function preview(event,cIdx,obj){
+		function preview(event,obj,cIdx){
 			var fileChange=$(obj).parent().parent().children().first();
 			fileChange.val('1');
 			
@@ -834,6 +832,7 @@
 				img.setAttribute("src",event.target.result);//이 이벤트를 발생한 곳의 값을 따와서 설정
 				img.addEventListener("click",(e)=>{
 					$(e.target).remove();
+					$(obj).val('');
 					fileChange.val('1');
 				})
 				document.querySelector('#'+id).appendChild(img);
@@ -848,6 +847,7 @@
 		function replyPreview(event,rIdx,obj){
 			var fileChange=$(obj).parent().parent().children().first();
 			fileChange.val('1');
+			
 			
 			if(rIdx != null){
 			var id="reply-uploaded-file"+rIdx;
@@ -867,6 +867,8 @@
 				img.addEventListener("click",(e)=>{
 					$(e.target).remove();
 					fileChange.val('1');
+					$(obj).val('');
+					console.log(obj.value);
 				});
 				document.querySelector('#'+id).appendChild(img);
 				document.querySelector('#'+id).style.display='inline-flex';
@@ -1055,7 +1057,7 @@
 						<c:if test="${fn:length(cmtList) gt 0 }">
 							<c:forEach var="item" items="${cmtList}" varStatus="st">
 							<c:set var="key" value="${item.cIdx}"/>
-							<c:if test="${fn:length(replyList[key]) gt 0 || item.status eq 0}">
+							
 							<li class="comment-area-ul-li">
 								<div class="comment-area-content">
 									<div class="comment-area-content-toparea">
@@ -1121,7 +1123,7 @@
 										<input type="hidden" name="mNickname" value="${login.nickname}">
 										<input type="hidden" name="status" value="${item.status}">
 										<label style="margin-bottom:10px">
-											<input type="file" id="file${item.cIdx}" name="commentSrc" style='display:none' onchange="preview(event,'${item.cIdx}',this)" accept="image/*">
+											<input type="file" id="file${item.cIdx}" name="commentSrc" style='display:none' onchange="preview(event,this,'${item.cIdx}')" accept="image/*">
 											<c:choose>
 												<c:when test="${item.picSrc ne null}">
 												<label for="file${item.cIdx}">
@@ -1142,7 +1144,6 @@
 									</form>
 								</div>
 							 </div>
-							 </c:if>
 							 <c:set var="key" value="${item.cIdx}"/>
 							 <c:if test="${fn:length(replyList[key]) gt 0}">
 							 <c:forEach items="${replyList[key]}" varStatus="j" var="rList">
@@ -1151,7 +1152,7 @@
 									<div class="comment-area-content-toparea">
 							 			<div class="comment-area-content-toparea-left">
 							 				<a class="miniprofile" onclick="profileOpen('${rList.mIdx}')">
-							 				<img src="<%=request.getContextPath() %>/images/profile_default.png" style="width:25px;margin-right:10px; height:100%;" class="psrc npic"/>
+							 				<img src="${rList.mProfileSrc }" style="width:25px;margin-right:10px; height:100%;" class="psrc npic"/>
 							 				<c:choose>
 							 				<c:when test="${vo.mNickname eq rList.mNickname}">
 							 				<span style="font-weight:600; color:blue;">${rList.mNickname}</span>
@@ -1275,6 +1276,7 @@
 					</div>
 					<div class="comment-area-write" id="comment-area-write_id">
 						<form id="commentfile">
+							<input type="hidden">
 							<input type="hidden" name="aIdx" value="${param.aIdx}">
 							<input type="hidden" name="bIdx" value="${param.bIdx}">
 							<input type="hidden" name="mIdx" value="${login.mIdx}">
@@ -1283,7 +1285,7 @@
 								<strong style="padding-left:5px;">댓글 쓰기</strong>
 							</label>
 							<label style="margin-bottom:10px">
-								<input type="file" id="file" name="commentSrc" style="display:none" onchange="preview(event)" accept="image/*">
+								<input type="file" id="file" name="commentSrc" style="display:none" onchange="preview(event,this)" accept="image/*">
 								<label for="file">
 									<a><img src="<%=request.getContextPath() %>/images/picture-button.png" style="width:20px;margin-left:10px;padding-bottom:5px;" class="npic"></a>
 								</label>
