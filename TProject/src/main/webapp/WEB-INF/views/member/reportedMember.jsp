@@ -83,6 +83,10 @@ tr{
     margin: 30px;
     font-size: 20px;
 }
+.miniprofile{
+	cursor: pointer;
+}
+
 </style>
 <script>
 $(function(){
@@ -148,9 +152,9 @@ $(function(){
 						<c:forEach var="reportedMember" items="${reportedMember}">
 						<tr>
 							<td>${reportedMember.rIdx}</td>
-							<td>${reportedMember.targetname}</td>
+							<td><a class="miniprofile" onclick="profileOpen('${reportedMember.target}')">${reportedMember.targetname}</a></td>
 							<td>${reportedMember.reportCount}</td>
-							<td>${reportedMember.reportername}</td>
+							<td><a class="miniprofile" onclick="profileOpen('${reportedMember.reporter}')">${reportedMember.reportername}</a></td>
 							<td>
 								<fmt:formatDate value="${reportedMember.repDate}" pattern="yyyy/MM/dd HH:mm:ss"/>
 							</td>
