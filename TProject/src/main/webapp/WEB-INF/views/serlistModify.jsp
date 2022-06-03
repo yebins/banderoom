@@ -11,7 +11,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 <meta charset="UTF-8">
 <title>글 수정하기</title>
-<link rel="stylesheet" type="text/css" href="/css/base.css">
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/base.css">
 <script src="<%=request.getContextPath() %>/js/summernote/summernote-lite.js"></script>
 <script src="<%=request.getContextPath() %>/js/summernote/lang/summernote-ko-KR.js"></script>
 <link rel="stylesheet" href="<%=request.getContextPath() %>/css/summernote/summernote-lite.css">

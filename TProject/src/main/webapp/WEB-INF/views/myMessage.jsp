@@ -446,7 +446,7 @@
 												<a >나</a>
 											</li>
 											<li class="visitedMessage" style="width:65%;color:lightgray;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+												<a onclick="sentMessage('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
 											</li>
 											<li class="visitedMessage" style="width:15%;border-right:none;padding-right:0;color:lightgray;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
@@ -460,7 +460,7 @@
 												<a >나</a>
 											</li>
 											<li style="width:65%;">
-												<a onclick="message('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
+												<a onclick="sentMessage('${item.senderNickname}',this,'${item.sender}','${item.msgIdx}','${item.receiver}')">${item.content}</a>
 											</li>
 											<li style="width:15%;border-right:none;padding-right:0;">
 												<a ><fmt:formatDate value="${item.sentDate}" pattern="YY-MM-dd [hh:mm]"/></a>
