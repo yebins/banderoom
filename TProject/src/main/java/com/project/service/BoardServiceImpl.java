@@ -191,13 +191,13 @@ public class BoardServiceImpl implements BoardService {
 		
 		int count=dao.commentCount(map);
 		int onlyCommentCount=dao.onlyCommentTotal(map);
-		int page=(int) Math.ceil((double)onlyCommentCount/10);
-		System.out.println("write"+page);
+		int cpage=(int) Math.ceil((double)onlyCommentCount/10);
+		System.out.println("write"+cpage);
 		
 		Map<String, Object> map2 = new HashMap<>();
 		
 		map2.put("result",dao.commentWrite(vo));
-		map2.put("lastPage", page);
+		map2.put("lastPage", cpage);
 		
 		return map2;
 	}
@@ -212,14 +212,14 @@ public class BoardServiceImpl implements BoardService {
 		int a=(int) Math.ceil((double)onlyCommentCount/10);
 		//System.out.println("올림페이지"+a);
 		
-		int page = map.get("page") == null ? a : Integer.parseInt(map.get("page").toString());
+		int cpage = map.get("cpage") == null ? a : Integer.parseInt(map.get("cpage").toString());
 		
 		request.setAttribute("count", TotalCount);
-		request.setAttribute("page", page);
+		request.setAttribute("cpage", cpage);
 		request.setAttribute("oCCount", onlyCommentCount);
 		
-		int start = page+(page-1)*9;
-		int end=page*10;
+		int start = cpage+(cpage-1)*9;
+		int end=cpage*10;
 		
 		map.put("start", start);
 		map.put("end", end);

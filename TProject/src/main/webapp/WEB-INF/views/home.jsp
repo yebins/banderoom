@@ -399,7 +399,7 @@
 		<div id="page-content">
 		
 			<div class="point-banner" style="width: 100%;">
-				<div style="width: 980px; height: 160px; position: relative; border-radius: 8px; background-color: #FFCC99;">
+				<div style="width: 100%; height: 160px; position: relative; border-radius: 8px; background-color: #FFCC99;">
 					<div style="position: absolute; top: 45px; left: 80px;">
 						<p style="font-style: normal; font-weight: bold; font-size: 26px; line-height: 42px; letter-spacing: -0.3px;">
 						대관비 5% 적립받자

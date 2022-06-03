@@ -368,7 +368,7 @@ public class BoardController {
 		
 		//System.out.println("게시글정보"+one.toString());
 		
-		model.addAttribute("page", request.getAttribute("page"));
+		model.addAttribute("cpage", request.getAttribute("cpage"));
 		model.addAttribute("cmtList",cmtList);//댓글 리스트
 		model.addAttribute("cmtCount",request.getAttribute("cmtCount"));//댓글 총개수?
 		model.addAttribute("vo",one);//게시글정보 보내기
@@ -633,7 +633,7 @@ public class BoardController {
 			List<Object> data=new ArrayList<Object>();
 			data.add(request.getAttribute("count"));
 			data.add(list);
-			data.add(request.getAttribute("page"));
+			data.add(request.getAttribute("cpage"));
 			data.add(request.getAttribute("oCCount"));
 			data.add(replyMap);
 			

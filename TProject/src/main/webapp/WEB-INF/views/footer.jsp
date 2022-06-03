@@ -11,7 +11,7 @@
 </style>
 <footer>
 <div style="flex-direction: row;display: flex;justify-content: center;background-color: #fafbfb;">
-    <div class="h_row_center" style="width: 1000px; height: 300px; display: flex;">
+    <div class="h_row_center" style="width: 70%; height: 300px; display: flex;">
 
         <div style="position:relative; min-width: 300px; padding-top: 40px; height: 100%">
             <p style="font-size: 12px;font-weight: bold;font-stretch: normal;font-style: normal;line-height: 1.17;letter-spacing: normal;color: #454b50;">
