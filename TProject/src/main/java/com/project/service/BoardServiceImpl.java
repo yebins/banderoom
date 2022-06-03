@@ -203,7 +203,7 @@ public class BoardServiceImpl implements BoardService {
 	}
 
 	@Override
-	public List<CommentsVO> commentList(Map<String, Object> map,HttpServletRequest request) {
+	public List<CommentsVO> commentsList2(Map<String, Object> map,HttpServletRequest request) {
 		int TotalCount=dao.commentCount(map);//대댓포함
 		int onlyCommentCount=dao.onlyCommentTotal(map);//댓글만
 		//System.out.println("댓글개수"+TotalCount);
@@ -221,10 +221,10 @@ public class BoardServiceImpl implements BoardService {
 		int start = cpage+(cpage-1)*9;
 		int end=cpage*10;
 		
-		map.put("start", start);
+		map.put("start", start-1);
 		map.put("end", end);
 
-		return dao.commentList(map);
+		return dao.commentsList2(map);
 	}
 
 	@Override

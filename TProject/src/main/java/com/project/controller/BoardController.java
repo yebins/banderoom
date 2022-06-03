@@ -348,13 +348,14 @@ public class BoardController {
 		//System.out.println(params);
 		
 		Map<String, Object> one = boardService.jlistOneArticle(params,request);//게시글정보
-		List<CommentsVO> cmtList=boardService.commentList(params,request);//댓글리스트
+		List<CommentsVO> cmtList=boardService.commentsList2(params,request);//댓글리스트
 		Map<Integer, List<CommentRepliesVO>> replyMap = new HashMap<Integer, List<CommentRepliesVO>>();
 		for(int i=0;i<cmtList.size();i++) {
 				
 				replyMap.put(cmtList.get(i).getcIdx(), boardService.replylist(cmtList.get(i).getcIdx()));
 				
 		}
+		System.out.println(cmtList.size());
 		GeneralMembersVO writer=new GeneralMembersVO();
 		int a=(int) one.get("mIdx");//게시글 작성자 midx
 		writer.setmIdx(a);//게시글 작성자의 midx 삽입
@@ -615,7 +616,7 @@ public class BoardController {
 		public List<Object> commentsList(@RequestParam Map<String, Object> params,HttpServletRequest request){
 			Date nowDate = new Date();
 			
-			List<CommentsVO> list= boardService.commentList(params,request);
+			List<CommentsVO> list= boardService.commentsList2(params,request);
 			
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd a HH:mm:ss"); 
 			Map<Integer, List<CommentRepliesVO>> replyMap = new HashMap<>();

@@ -116,9 +116,9 @@ public class BoardDAO {
 		return sqlSession.insert("com.project.mapper.boardMapper.commentWrite", vo);
 	}
 	
-	public List<CommentsVO> commentList(Map<String, Object> map){
+	public List<CommentsVO> commentsList2(Map<String, Object> map){
 	
-		return sqlSession.selectList("com.project.mapper.boardMapper.commentList",map);
+		return sqlSession.selectList("com.project.mapper.boardMapper.commentsList2",map);
 	}
 	
 	public int commentCount(Map<String, Object> map) {

@@ -29,7 +29,7 @@ public interface BoardService {
 	List<ArticlesVO> Jlist(Map<String, Object> map,HttpServletRequest request);
 	Map<String,Object> jlistOneArticle(Map<String, Object> map,HttpServletRequest request);
 	Map<String, Object> commentWrite(CommentsVO vo);
-	List<CommentsVO> commentList(Map<String, Object> params,HttpServletRequest request);
+	List<CommentsVO> commentsList2(Map<String, Object> params,HttpServletRequest request);
 	List<ArticlesVO> bestArticles();
 	List<ArticlesVO> pageCount(Map<String, Object> map);
 	List<ArticlesVO> list(Map<String, Object> map, HttpServletRequest request);
