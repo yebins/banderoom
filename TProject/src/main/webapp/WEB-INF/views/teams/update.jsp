@@ -88,8 +88,30 @@
 	   
 	}
 	
-	
-
+	function updateFormCheck(){
+		var title = document.getElementById("title");
+		var endDate = document.getElementById("datepicker");
+		var content = document.getElementById("summernote");
+		
+		if(endDate.value == ""){
+			alert("마감날짜를 선택해주세요.");
+			return false;
+		}
+		
+		if(title.value == ""){
+			alert("제목을 입력해주세요.");
+			return false;
+		}
+		
+		if(content.value == ""){
+			alert("내용을 입력해주세요.");
+			return false;
+		}
+		
+		if(confirm("글을 수정하시겠습니까?")){
+			document.updateForm.submit();
+		}
+	}
 	
 </script>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -138,8 +160,8 @@
 		</div>
 		<div id="page-content">
 			<form action="update.do" method="post" name="updateForm">
-			<input type="hidden" name="mNickname" value="${login.nickname}">
-			<input type="hidden" name="teamIdx" value="${details.teamIdx}">
+				<input type="hidden" name="mNickname" value="${login.nickname}">
+				<input type="hidden" name="teamIdx" value="${details.teamIdx}">
 				
 				<div class="form" style="text-align: left;">
 				
@@ -166,7 +188,7 @@
 			
 				<div class="inner-box" style="height:700px;">
 					<div>
-						<input type="text" name="title" class="form-control list-title" value="${details.title}">
+						<input type="text" name="title" id="title" class="form-control list-title" value="${details.title}">
 					</div>
 					<div class="inner-box-content">
 						<form method="post">
@@ -174,7 +196,7 @@
 						</form>
 					</div>
 					<div class="inner-box-button-wrap">
-						<button type="submit" class="normal-button accent-button" style="margin-right: 8px;">수정하기</button> 
+						<button type="button" class="normal-button accent-button" style="margin-right: 8px;" onclick="updateFormCheck()">수정하기</button> 
 						<button type="button" class="normal-button" onclick="location.href='<%=request.getContextPath() %>/teams/main.do'">취소하기</button>
 					</div>
 				</div>

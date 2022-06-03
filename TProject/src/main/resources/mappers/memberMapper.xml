@@ -458,6 +458,7 @@
 		SELECT r.ridx
 			 , r.target
 			 , r.targetname
+			 , r.reporter
 			 , r.reportername
 			 , r.repdate
 			 , r.content
