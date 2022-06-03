@@ -12,7 +12,9 @@
 			and ${searchType} like CONCAT('%',#{searchValue},'%')
 		</if>
 		order by aIdx desc) a
+		<if test='bIdx == 2 || bIdx == 3 || bIdx == 4'>
 		<![CDATA[where rownum >= #{start} and rownum <= #{end}]]>
+		</if>
 	</select>
 	
 	<update id="listDelete" parameterType="articlesVO">
