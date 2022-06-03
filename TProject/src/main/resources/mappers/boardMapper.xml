@@ -422,7 +422,9 @@
 	inner join general_members gm
 	on a.midx = gm.midx
 	order by cIdx
+	<if test="start >= 0">
 	limit #{start}, 10;
+	</if>
 	</select>
 	
 </mapper>
