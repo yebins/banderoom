@@ -22,7 +22,7 @@
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
 		var mIdx=document.querySelector("#sm-profile-mIdx").value;
 		console.log(mIdx);
-		window.open("/messagePopup.do?type=host&mIdx="+hostIdx,"쪽지보내기",option);
+		window.open("<%=request.getContextPath()%>/messagePopup.do?type=host&mIdx="+hostIdx,"쪽지보내기",option);
 	}
 </script>
 </head>

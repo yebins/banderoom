@@ -48,12 +48,12 @@
 
 	function messageToHost() {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
-		window.open("/messagePopup.do?type=host&mIdx="+hostIdx,"쪽지 보내기",option);
+		window.open("<%=request.getContextPath()%>/messagePopup.do?type=host&mIdx="+hostIdx,"쪽지 보내기",option);
 	}
 	
 	function messageToGuest() {
 		var option = "width = 500, height = 400, top = 100, left = 200, location = no"
-		window.open("/messagePopup.do?type=general&mIdx="+guestIdx,"쪽지 보내기",option);
+		window.open("<%=request.getContextPath()%>/messagePopup.do?type=general&mIdx="+guestIdx,"쪽지 보내기",option);
 	}
 
 </script>
