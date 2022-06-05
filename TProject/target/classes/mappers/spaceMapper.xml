@@ -728,6 +728,6 @@
 		on sr.midx = gm.midx 
 		where sr.picturesrc != '' 
 		order by sr.regdate desc 
-		limit 9;
+		limit 10;
 	</select>
 </mapper>
