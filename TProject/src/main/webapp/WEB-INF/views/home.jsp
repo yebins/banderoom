@@ -223,6 +223,7 @@
 	
 	.review-wrap {
 		padding: 10px;
+		visibility: hidden;
 	}
 	
 	.review-wrap a:active {
@@ -273,6 +274,7 @@
 	.review-picture img {
 		width: 100%;
 		border-radius: 10px;
+		box-shadow: 0px 0px 5px rgb(0 0 0 / 40%);
 	}
 	
 	.review-content {
@@ -386,6 +388,8 @@
 			}
 			
 		})
+		
+			$(".review-wrap").css("visibility", "visible");
 	})
 
 </script>
@@ -399,10 +403,10 @@
 		<div id="page-content">
 		
 			<div class="point-banner" style="width: 100%;">
-				<div style="width: 100%; height: 160px; position: relative; border-radius: 8px; background-color: #FFCC99;">
+				<div style="width: 100%; height: 160px; position: relative; border-radius: 15px; background-color: #FFCC99; box-shadow: 0px 5px 10px rgba(0,0,0,0.2);">
 					<div style="position: absolute; top: 45px; left: 80px;">
 						<p style="font-style: normal; font-weight: bold; font-size: 26px; line-height: 42px; letter-spacing: -0.3px;">
-						대관비 5% 적립받자
+						대여비 10% 적립받자
 						</p>
 					</div>
 					<div style="position: absolute; top: 95px; left: 80px;">
