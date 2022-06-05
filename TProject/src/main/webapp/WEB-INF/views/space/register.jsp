@@ -96,7 +96,7 @@
 							<div>총</div> <input type="number" class="form-input inputnum input-capacity" name="capacity" min="1" value="1"> <div>명</div>
 						</div>
 						<div class="form-inputnum input-cost">
-							<input type="number" class="form-input inputnum input-cost" name="cost" min="0"> <div>원 / 시간</div>
+							<input type="number" class="form-input inputnum input-cost" name="cost" min="0" value="0"> <div>원 / 시간</div>
 						</div>
 					</div>
 				</div>
