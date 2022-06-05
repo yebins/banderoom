@@ -46,7 +46,7 @@ $(function(){
 				
 				var html = "";
 				html += "<div class='picture-upload uploaded'>";
-				html += "<img src='${spacePicturesVOs[i].getThumbSrc()}' width='100%'>";
+				html += "<img src='<%=request.getContextPath()%>${spacePicturesVOs[i].getThumbSrc()}' width='100%'>";
 				html += "<input type='hidden' name='src' value='${spacePicturesVOs[i].getSrc()}'>";
 				html += "<input type='hidden' name='thumbSrc' value='${spacePicturesVOs[i].getThumbSrc()}'>";
 				html += "</div>"
