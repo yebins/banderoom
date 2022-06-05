@@ -102,7 +102,7 @@
 		</c:if>
 		<c:if test="${spacesVO.getStatus() == 3}">
 			<div class="inner-box space-status space-status-deleted">
-				삭제된 공간입니다.
+				<span class="space-status-content" style="color: white;">삭제된 공간입니다.</span>
 			</div>
 		</c:if>
 		
