@@ -56,4 +56,5 @@ public interface MemberService {
 	int gUnregister(GeneralMembersVO vo);
 	int hUnregister(HostMembersVO vo);
 	int unregisterSpaces(HostMembersVO vo);
+	Map<String, Object> noReadMsg(MessagesVO vo);
 }

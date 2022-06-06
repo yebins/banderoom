@@ -299,7 +299,14 @@ header {
 				</div>
 				<div id="sm-profile-buttons">
 					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/ginfo.do'">내 정보</button>
-					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+					<c:choose>
+						<c:when test="${noReadMsg gt 0}">
+							<button class="normal-button accent-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+						</c:when>
+						<c:otherwise>
+							<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+						</c:otherwise>
+					</c:choose>
 					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>
@@ -319,7 +326,14 @@ header {
 				</div>
 				<div id="sm-profile-buttons">
 					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/hinfo.do'">내 정보</button>
-					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+					<c:choose>
+						<c:when test="${noReadMsg gt 0}">
+							<button class="normal-button accent-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+						</c:when>
+						<c:otherwise>
+							<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/myMessage.do?page=1'">쪽지함</button>
+						</c:otherwise>
+					</c:choose>
 					<button class="normal-button" onclick = "location.href='<%=request.getContextPath() %>/member/logout.do'">로그아웃</button>
 				</div>
 			</c:if>

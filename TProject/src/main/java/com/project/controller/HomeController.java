@@ -102,20 +102,34 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/header.do")
-	public String header (HttpServletRequest request) {
+	public String header (Model model, HttpServletRequest request) {
+		
+		MessagesVO msgVO = new MessagesVO();
 		
 		if (request.getSession().getAttribute("login") != null) {
-			request.getSession().setAttribute("login"
-					, memberService.oneMemberInfo(
-							(GeneralMembersVO) request.getSession().getAttribute("login")
-							));
+			GeneralMembersVO login = (GeneralMembersVO) request.getSession().getAttribute("login");
+			
+			request.getSession().setAttribute("login", memberService.oneMemberInfo(login));
+
+			msgVO.setReceiver(login.getmIdx());
+			msgVO.setReceiverType("general");
+			
+			model.addAttribute("noReadMsg", memberService.noReadMsg(msgVO).get("ct1"));
+			
 		}
 		if (request.getSession().getAttribute("hlogin") != null) {
-			request.getSession().setAttribute("hlogin"
-					, memberService.oneMemberInfo(
-							(HostMembersVO) request.getSession().getAttribute("hlogin")
-							));
+			HostMembersVO login = (HostMembersVO) request.getSession().getAttribute("hlogin");
+					
+			request.getSession().setAttribute("hlogin", memberService.oneMemberInfo(login));
+			
+			msgVO.setReceiver(login.getmIdx());
+			msgVO.setReceiverType("host");
+			
+			model.addAttribute("noReadMsg", memberService.noReadMsg(msgVO).get("ct1"));
+			
 		}
+		
+		
 		
 		return "header";
 	}

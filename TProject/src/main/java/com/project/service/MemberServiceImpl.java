@@ -587,4 +587,17 @@ public class MemberServiceImpl implements MemberService {
 		return dao.unregisterSpaces(vo);
 	}
 	
+	@Override
+	public Map<String, Object> noReadMsg(MessagesVO vo) {
+		
+		Map<String, Object> params = new HashMap<String, Object>();
+	
+		params.put("receiver", vo.getReceiver());
+		params.put("receiverType", vo.getReceiverType());
+		params.put("sender", vo.getReceiver());
+		params.put("senderType", vo.getReceiverType());
+	
+		return dao.noReadMsg(params);
+	}
+	
 }
