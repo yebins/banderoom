@@ -78,6 +78,12 @@
 									<span class="space-regdate">
 										등록일 <fmt:formatDate value="${vo.getRegDate()}" pattern="yyyy-MM-dd"/>
 									</span>
+									<c:if test="${login != null}">
+									|
+									<span class="space-regdate">
+										호스트 ${vo.hostNickname}
+									</span>
+									</c:if>
 								</div>
 								<div class="space-status">
 									<c:choose>

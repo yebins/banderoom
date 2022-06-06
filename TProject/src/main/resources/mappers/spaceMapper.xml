@@ -103,23 +103,26 @@
 	</select>
 	
 	<select id="getSpaceList" resultType="spacesVO" parameterType="spacesVO">
-		select idx,
-					 type,
-					 name,
-					 address,
-					 addressdetail,
-					 addr1,
-					 addr2,
-					 info,
-					 facility,
-					 caution,
-					 capacity,
-					 cost,
-					 regdate,
-					 hostidx,
-					 status,
-					 thumb
-		from spaces 
+		select s.idx,
+					 s.type,
+					 s.name,
+					 s.address,
+					 s.addressdetail,
+					 s.addr1,
+					 s.addr2,
+					 s.info,
+					 s.facility,
+					 s.caution,
+					 s.capacity,
+					 s.cost,
+					 s.regdate,
+					 s.hostidx,
+					 hm.nickname as hostnickname,
+					 s.status,
+					 s.thumb
+		from spaces s
+		inner join host_members hm
+		on s.hostidx = hm.midx
 		where status != 3
 			<if test="hostIdx != 0">
 			and hostidx = #{hostIdx}

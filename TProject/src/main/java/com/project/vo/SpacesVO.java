@@ -18,6 +18,7 @@ public class SpacesVO {
 	private int cost;
 	private Date regDate;
 	private int hostIdx;
+	private String hostNickname;
 	private int status; // 0: 등록 대기(기본값) 1: 등록 승인 2: 등록 거부 3: 삭제됨
 	private String thumb;
 	private int reviewCnt;
@@ -107,6 +108,12 @@ public class SpacesVO {
 	}
 	public void setHostIdx(int hostIdx) {
 		this.hostIdx = hostIdx;
+	}
+	public String getHostNickname() {
+		return hostNickname;
+	}
+	public void setHostNickname(String hostNickname) {
+		this.hostNickname = hostNickname;
 	}
 	public int getStatus() {
 		return status;
