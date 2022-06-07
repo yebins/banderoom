@@ -142,7 +142,7 @@ public class MemberController {
 	
 	@RequestMapping(value = "sendSms.do", method = RequestMethod.POST)
 	@ResponseBody
-	public int sendSms(TelRegVO vo) {
+	public String sendSms(TelRegVO vo) {
 		vo.setTel(vo.getTel().replaceAll("-", ""));
 		
 		return memberService.sendTelKey(vo);

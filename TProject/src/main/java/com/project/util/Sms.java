@@ -18,7 +18,7 @@ import org.json.simple.JSONObject;
 
 public class Sms {
 
-	public static void sendSms(String tel, String content) {
+	public static String sendSms(String tel, String content) {
 		String hostNameUrl = "https://sens.apigw.ntruss.com";     		// 호스트 URL
 		String requestUrl= "/sms/v2/services/";                   		// 요청 URL
 		String requestUrlType = "/messages";                      		// 요청 URL
@@ -29,6 +29,8 @@ public class Sms {
 		String timestamp = Long.toString(System.currentTimeMillis()); 	// current timestamp (epoch)
 		requestUrl += serviceId + requestUrlType;
 		String apiUrl = hostNameUrl + requestUrl;
+		
+		String rsp = "";
 		
 		// JSON 을 활용한 body data 생성
 		
@@ -91,10 +93,15 @@ public class Sms {
             br.close();
             
             System.out.println(response.toString());
+            rsp = response.toString();
 
         } catch (Exception e) {
             System.out.println(e);
         }
+        
+        return rsp;
+        
+        
     }
 	
 	public static String makeSignature(String url, String timestamp, String method, String accessKey, String secretKey) throws NoSuchAlgorithmException, InvalidKeyException {

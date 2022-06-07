@@ -293,7 +293,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int sendTelKey(TelRegVO vo) {
+	public String sendTelKey(TelRegVO vo) {
 
 		String tempKey = "";
 		char pwCollection[] = new char[] {
@@ -306,14 +306,14 @@ public class MemberServiceImpl implements MemberService {
 		vo.setRegkey(tempKey);
 		String smsContent = "banderoom 인증번호입니다.\n" + tempKey;
 		
-		Sms.sendSms(vo.getTel(), smsContent);
+		String response = Sms.sendSms(vo.getTel(), smsContent);
 
 		if (dao.isTelKeyExist(vo)) {
 			dao.updateTelKey(vo);
 		} else {
 			dao.setTelKey(vo);
 		}
-		return 0;
+		return response;
 	}
 
 	@Override
