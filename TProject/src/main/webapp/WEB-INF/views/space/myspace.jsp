@@ -20,7 +20,10 @@
 	<c:import url="/header.do" />
 	<div id="wrapper">
 		<div id="page-title">
-			공간 관리
+			<div>공간 관리</div>
+			<c:if test="${hlogin != null }">
+			<button class="normal-button accent-button settle-button" onclick="location.href='settle.do?mIdx=${hlogin.mIdx}'">정산 받기</button>
+			</c:if>
 		</div>
 		<div id="page-content">
 			<div class="filter-buttons">
