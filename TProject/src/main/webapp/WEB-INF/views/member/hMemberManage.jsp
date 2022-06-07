@@ -305,14 +305,7 @@ $(function() {
 			
 			<form action="hMemberManage.do" id="search-form">
 				<input type="hidden" name="search" value="1">
-				<div class="d-flex justify-content-between">
-					<div>
-						<select class="form-select form-select-sm" name="sort" onchange="$('#search-form').submit()">
-							<option value="all">전체</option>
-							<option value="normal">일반회원 보기</option>
-							<option value="block">차단회원 보기</option>
-						</select>
-					</div>
+				<div class="d-flex justify-content-end">
 					<div class="d-flex">
 						<select class="form-select form-select-sm" name="searchField">
 							<option value="nickname">닉네임</option>

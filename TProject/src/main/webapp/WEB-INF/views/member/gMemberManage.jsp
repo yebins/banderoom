@@ -231,6 +231,12 @@ select[name=searchField]{
 					$("#details-name").text(member.name);
 					$("#details-address").text(member.address + " " + member.addressDetail);
 					$("#details-tel").text(member.tel);
+					if(member.isKakao == "N"){
+						$("#details-kakao").text("일반 회원가입");
+					}
+					if(member.isKakao == "Y"){
+						$("#details-kakao").text("카카오 회원가입");
+					}
 					
 					if (member.gender == "M") {
 						$("#details-gender").text("남자");
@@ -487,10 +493,16 @@ select[name=searchField]{
 						<div id="details-gender" class="info-content">
 						</div>
 						<div class="small-title">
+							회원가입 경로
+						</div>
+						<div id="details-kakao" class="info-content">
+						</div>
+						<div class="small-title">
 							가입일
 						</div>
 						<div id="details-joindate" class="info-content">
 						</div>
+						
 					</div>
 				</div>
 				
