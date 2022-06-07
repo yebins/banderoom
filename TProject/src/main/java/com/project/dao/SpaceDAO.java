@@ -243,4 +243,16 @@ public class SpaceDAO {
 	public List<SpaceReviewVO> recentReview() {
 		return sqlSession.selectList("com.project.mapper.spaceMapper.recentReview");
 	}
+	
+	public List<Map<String, Object>> calculation(Map<String, Object> params) {
+		return sqlSession.selectList("com.project.mapper.spaceMapper.calculation", params);
+	}
+	
+	public int insertSettled(SettledVO vo) {
+		return sqlSession.insert("com.project.mapper.spaceMapper.insertSettled", vo);
+	}
+	
+	public int ifSettled(SettledVO vo) {
+		return sqlSession.selectOne("com.project.mapper.spaceMapper.ifSettled", vo);
+	}
 }

@@ -733,4 +733,34 @@
 		order by sr.regdate desc 
 		limit 10;
 	</select>
+	
+	<select id="calculation" resultType="hashMap">
+		select 
+			r.spaceidx,
+			s.type, 
+			s.name, 
+			s.thumb,
+			count(r.residx) as count,
+			sum(r.cost) as sum 
+		from reservations r 
+		inner join spaces s 
+		on s.idx = r.spaceidx 
+		where r.startdate like concat(#{date}, '%') 
+		and r.rsvstatus = 0 
+		and s.hostidx = #{hostIdx} 
+		group by r.spaceidx;
+	</select>
+	
+	<insert id="insertSettled" parameterType="settledVO">
+		insert into settled (
+			hostIdx, month
+		) values (
+			#{hostIdx}, #{month}
+		)
+	</insert>
+	
+	<select id="ifSettled" resultType="int" parameterType="settledVO">
+		select count(*) from settled
+		where hostIdx = #{hostIdx} and month = #{month}
+	</select>
 </mapper>
