@@ -201,14 +201,11 @@
 				$("#write-genre").prop('readonly',false);
 				$("#write-part").prop('disabled',true);
 				$("#part").prop('disabled',true);
-				$("#part").html("sdf");
-				
 			}else{
 				$("#write-genre").val("");
 				$("#write-genre").val(genreVal);
 				$("#write-genre").prop('readonly',true);
 				$("#write-part").prop('disabled',true);
-				$("#part").html("sdf");
 			}
 		}
 		
