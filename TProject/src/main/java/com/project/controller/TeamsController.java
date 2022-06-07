@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -457,8 +458,7 @@ public class TeamsController {
 		}
 	}
 	
-	@RequestMapping(value="/updateStatus.do")
-	@ResponseBody
+	@Scheduled(cron = " 0 0 0 * * *")
 	public void updateStatus() {
 		teamsService.updateStatus();
 	}
