@@ -104,7 +104,7 @@
 		<form action="update.do" method="post">
 			<input type="hidden" name="aIdx" value="${param.aIdx}">
 			<input type="hidden" name="bIdx" value="${param.bIdx}">
-			<input type="hidden" name="page" value="${param.page}">
+			<input type="hidden" name="page" value="${(param.page eq '')?1:param.page}">
 			<input type="hidden" name="mIdx" value="${login.getmIdx()}">
 			<input type="hidden" name="mNickname" value="${login.nickname}">
 			<div id="page-content">
