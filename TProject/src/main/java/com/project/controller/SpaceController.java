@@ -934,6 +934,7 @@ public class SpaceController {
 			}
 		}
 		
+		model.addAttribute("spacesVO", spacesVO);
 		model.addAttribute("qnaList", qnaList);
 		model.addAttribute("qnaNowPage", qnaPu.getNowPage());
 		model.addAttribute("qnaStartPage", qnaPu.getStartPage());
