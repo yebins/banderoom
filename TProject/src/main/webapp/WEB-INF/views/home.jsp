@@ -537,6 +537,7 @@
 				</div>
 			</c:forEach>
 			
+			<c:if test="${hlogin == null }">
 		
 			<div class="section-title" style="margin-top: 60px;">
 				<div class="space-section-title">
@@ -647,6 +648,8 @@
 				</div>
 					
 			</div>
+			
+			</c:if>
 			
 			<style>
 				#section-wrap {
