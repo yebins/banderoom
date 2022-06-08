@@ -304,7 +304,7 @@ public class MemberServiceImpl implements MemberService {
 		}
 		
 		vo.setRegkey(tempKey);
-		String smsContent = "banderoom 인증번호입니다.\n" + tempKey;
+		String smsContent = "banderoom authentication key.\n" + tempKey;
 		
 		String response = Sms.sendSms(vo.getTel(), smsContent);
 

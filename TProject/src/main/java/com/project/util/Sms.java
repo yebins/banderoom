@@ -48,7 +48,7 @@ public class Sms {
 	    bodyJson.put("countryCode","82");		// 국가 전화번호
 	    bodyJson.put("from","01096126556");				// 발신번호 * 사전에 인증/등록된 번호만 사용할 수 있습니다.		
 	    bodyJson.put("subject","");				// 메시지 제목 * LMS Type에서만 사용할 수 있습니다.
-	    bodyJson.put("content","banderoom 인증번호입니다.");				// 메시지 내용 * Type별로 최대 byte 제한이 다릅니다.* SMS: 80byte / LMS: 2000byte
+	    bodyJson.put("content","banderoom");				// 메시지 내용 * Type별로 최대 byte 제한이 다릅니다.* SMS: 80byte / LMS: 2000byte
 	    bodyJson.put("messages", toArr);		
 	    
 
