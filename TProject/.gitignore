@@ -1,3 +1,4 @@
 *.class
 pom.properties
 MANIFEST.MF
+/.idea/
