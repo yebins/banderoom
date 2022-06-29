@@ -160,8 +160,100 @@ URL: http://jjezen.cafe24.com/banderoom
 
 <br><br>
 
-## 구현 기능 상세
+## 구현 기능 상세 (본인이 구현한 기능에 ⭐ 표시)
+
+### 메인 페이지 / 로그인
 
 <br>
 
-<img src="https://user-images.githubusercontent.com/46345154/174519871-2480c729-b8a6-4e73-997f-76221955199c.png">
+![슬라이드33](https://user-images.githubusercontent.com/46345154/176344501-e4c310d9-0efe-4660-bd2f-5b2f8fae72e3.PNG)
+![슬라이드34](https://user-images.githubusercontent.com/46345154/176344506-64c01360-030f-41de-a3b9-6ffb1c6fd09c.PNG)
+![슬라이드35](https://user-images.githubusercontent.com/46345154/176344508-f943651d-4dcd-4438-9441-e7ded57e2065.PNG)
+![슬라이드36](https://user-images.githubusercontent.com/46345154/176344510-a62c1bd6-815b-42b2-8872-7e6b5e111d80.PNG)
+![슬라이드37](https://user-images.githubusercontent.com/46345154/176344513-7e2ab528-0b32-42dd-bc7d-860d260c106b.PNG)
+![슬라이드38](https://user-images.githubusercontent.com/46345154/176344514-4b1f4a2b-9b3a-4ef4-a25f-7c97b79a0d97.PNG)
+![슬라이드39](https://user-images.githubusercontent.com/46345154/176344516-4f60ad14-8437-4f57-92bb-9a213c180074.PNG)
+![슬라이드40](https://user-images.githubusercontent.com/46345154/176344518-6e0f1c38-17ff-46b2-b532-fb7a137e5a73.PNG)
+![슬라이드41](https://user-images.githubusercontent.com/46345154/176344520-5e330a9c-8334-4460-a77b-7c0180eee58f.PNG)
+![슬라이드42](https://user-images.githubusercontent.com/46345154/176344522-5152147b-2272-4cdb-8ac1-d2f91e92ac16.PNG)
+![슬라이드43](https://user-images.githubusercontent.com/46345154/176344523-33ab09c1-3111-4538-baef-fd1ebe4dab0c.PNG)
+![슬라이드44](https://user-images.githubusercontent.com/46345154/176344524-d6ac1695-c1b1-453b-a0d6-af90035d4725.PNG)
+![슬라이드45](https://user-images.githubusercontent.com/46345154/176344525-33d4b7f9-81bc-41ad-9118-51721f5c278e.PNG)
+![슬라이드46](https://user-images.githubusercontent.com/46345154/176344526-60dd9858-0bab-4fb9-8590-90a75d9409ae.PNG)
+![슬라이드47](https://user-images.githubusercontent.com/46345154/176344527-671e7094-4ea9-42dd-9264-5daf456aca1a.PNG)
+
+<br><br>
+
+### 공간 예약 시스템
+
+<br>
+
+![슬라이드49](https://user-images.githubusercontent.com/46345154/176344531-5d8b4d76-9ad5-48d5-850b-57ad7d23fd15.PNG)
+![슬라이드50](https://user-images.githubusercontent.com/46345154/176344534-856ea1b5-5b5d-4565-ad9e-69294117b018.PNG)
+![슬라이드51](https://user-images.githubusercontent.com/46345154/176344535-dbd7a5f5-30ed-4fce-8da7-c3ece473ff95.PNG)
+![슬라이드52](https://user-images.githubusercontent.com/46345154/176344541-edc0b8f7-fc29-40a8-931c-7b24addea65a.PNG)
+![슬라이드53](https://user-images.githubusercontent.com/46345154/176344543-7e83beb1-455a-4331-a3d7-3c12e3c74c00.PNG)
+![슬라이드54](https://user-images.githubusercontent.com/46345154/176344544-b83fa998-5f15-4bf4-8c10-56b0320a77d2.PNG)
+![슬라이드55](https://user-images.githubusercontent.com/46345154/176344545-793bea66-48b0-40de-bf81-6a7f56029cf5.PNG)
+![슬라이드56](https://user-images.githubusercontent.com/46345154/176344548-3e75b0cf-d47f-4f4e-97ea-cc99943f09fc.PNG)
+![슬라이드57](https://user-images.githubusercontent.com/46345154/176344549-155c8821-2c04-4116-a7f9-e955d3dd05ce.PNG)
+![슬라이드58](https://user-images.githubusercontent.com/46345154/176344550-b50bc9c8-0778-429e-9a71-7850d9361d1b.PNG)
+![슬라이드59](https://user-images.githubusercontent.com/46345154/176344551-6952b748-358f-41a7-b747-6c0a97ba6de7.PNG)
+![슬라이드60](https://user-images.githubusercontent.com/46345154/176344553-4879b183-9410-4d5d-8fd1-b5479da8416b.PNG)
+![슬라이드61](https://user-images.githubusercontent.com/46345154/176344555-7999266b-50dc-468f-9436-37a343da5e99.PNG)
+![슬라이드62](https://user-images.githubusercontent.com/46345154/176344558-d1fd4be2-2a78-4314-94d6-e6a320f4fc7d.PNG)
+![슬라이드63](https://user-images.githubusercontent.com/46345154/176344560-ac17f627-8026-4b00-9c27-5278eefa3907.PNG)
+![슬라이드64](https://user-images.githubusercontent.com/46345154/176344561-e2019402-c0bd-435a-8489-29d6ed27f2c2.PNG)
+![슬라이드65](https://user-images.githubusercontent.com/46345154/176344563-7344451b-dab4-44a4-8e80-b944a354824f.PNG)
+![슬라이드66](https://user-images.githubusercontent.com/46345154/176344565-1f2cfea8-cbd6-4746-8cab-075eaaf5d5de.PNG)
+![슬라이드67](https://user-images.githubusercontent.com/46345154/176344567-b0ba453f-348e-4a18-bbba-da692a2cb771.PNG)
+![슬라이드68](https://user-images.githubusercontent.com/46345154/176344569-d7519bfc-5176-4d8e-81a8-3c6439d4dc21.PNG)
+![슬라이드69](https://user-images.githubusercontent.com/46345154/176344571-0463adfa-793d-4189-a7c2-6d9e890d17c6.PNG)
+
+<br><br>
+
+### 커뮤니티 기능
+
+<br>
+
+![슬라이드71](https://user-images.githubusercontent.com/46345154/176344573-24c13a7f-6b73-4229-ae4f-a10d620d19ee.PNG)
+![슬라이드72](https://user-images.githubusercontent.com/46345154/176344574-c245307e-55b1-46d7-8954-52d231a9f9c2.PNG)
+![슬라이드73](https://user-images.githubusercontent.com/46345154/176344576-ef28a403-85d6-4b4b-bb5f-0c8402150858.PNG)
+![슬라이드74](https://user-images.githubusercontent.com/46345154/176344577-f91f6ae2-4133-49ab-8658-c54549f5d7a9.PNG)
+![슬라이드75](https://user-images.githubusercontent.com/46345154/176344578-4bc4a215-c4a4-418b-88b2-394da9569379.PNG)
+![슬라이드76](https://user-images.githubusercontent.com/46345154/176344580-462e1a77-1c51-47a7-b2d8-90ec10defb2f.PNG)
+![슬라이드77](https://user-images.githubusercontent.com/46345154/176344582-a26334e1-a41e-4c8d-b158-60eec7bce7dc.PNG)
+![슬라이드78](https://user-images.githubusercontent.com/46345154/176344587-7e0ddca6-3a28-473d-bee4-fda45dc63411.PNG)
+![슬라이드79](https://user-images.githubusercontent.com/46345154/176344589-b7e8ddf4-dcac-4205-bfad-6ad577cbf7f3.PNG)
+![슬라이드80](https://user-images.githubusercontent.com/46345154/176344591-529cbe78-7ce8-4cda-8ca8-67c234f20980.PNG)
+![슬라이드81](https://user-images.githubusercontent.com/46345154/176344592-a79704c4-7f4d-4c92-a1cd-d36a91639ef8.PNG)
+
+<br><br>
+
+### 팀원 모집 시스템
+
+<br>
+
+![슬라이드83](https://user-images.githubusercontent.com/46345154/176344594-aaa6e08c-ba93-43f3-8525-b61c41e64352.PNG)
+![슬라이드84](https://user-images.githubusercontent.com/46345154/176344596-6a16f5c0-7542-4edb-8662-64a4ef9d10f5.PNG)
+![슬라이드85](https://user-images.githubusercontent.com/46345154/176344597-3e3108d1-3c67-4269-8eb5-1784706e0ffc.PNG)
+![슬라이드86](https://user-images.githubusercontent.com/46345154/176344601-308ef6d6-70f6-4b0e-9a93-1b7369bbce1b.PNG)
+![슬라이드87](https://user-images.githubusercontent.com/46345154/176344602-de5ef05d-ca24-48c5-acc0-fcd1d84303d8.PNG)
+![슬라이드88](https://user-images.githubusercontent.com/46345154/176344605-42e5c0c4-16af-474d-ab50-bcedf511e594.PNG)
+![슬라이드89](https://user-images.githubusercontent.com/46345154/176344606-cd2be37b-e3cf-4949-9606-cfc2b6069fa7.PNG)
+![슬라이드90](https://user-images.githubusercontent.com/46345154/176344607-cd441824-1e04-43d4-ae46-605196a83743.PNG)
+![슬라이드91](https://user-images.githubusercontent.com/46345154/176344609-15daa478-b2a2-4eb7-b984-11cd9a533a5a.PNG)
+
+<br><br>
+
+### 회원 관리 및 관리자 기능
+
+<br>
+
+![슬라이드93](https://user-images.githubusercontent.com/46345154/176344614-e3a59381-7de6-401c-b75a-e6338fd8284f.PNG)
+![슬라이드94](https://user-images.githubusercontent.com/46345154/176344616-2f60783c-d021-49ef-a258-d165f3930ccc.PNG)
+![슬라이드95](https://user-images.githubusercontent.com/46345154/176344619-95a2960c-308e-4f94-afdd-d4d85b16c87c.PNG)
+![슬라이드96](https://user-images.githubusercontent.com/46345154/176344621-957e66ff-198a-4697-92c1-fd02b4a1c0e6.PNG)
+![슬라이드97](https://user-images.githubusercontent.com/46345154/176344624-eabeb18a-0f75-4b2c-92ce-26046751d695.PNG)
+![슬라이드98](https://user-images.githubusercontent.com/46345154/176344625-af5e8fd7-6768-4f29-9cdd-a5d0114efa24.PNG)
+![슬라이드99](https://user-images.githubusercontent.com/46345154/176344628-d9a6c6bf-a5b1-4f60-a022-55be668c3ebf.PNG)
