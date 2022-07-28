@@ -142,7 +142,7 @@ public class MemberController {
 	
 	@RequestMapping(value = "sendSms.do", method = RequestMethod.POST)
 	@ResponseBody
-	public int sendSms(TelRegVO vo) {
+	public String sendSms(TelRegVO vo) {
 		vo.setTel(vo.getTel().replaceAll("-", ""));
 		
 		return memberService.sendTelKey(vo);
@@ -1024,7 +1024,7 @@ public class MemberController {
 
 	@RequestMapping(value="hMemberManage.do")
 	public String hMemberManage(Model model, HttpServletRequest request, Integer page,
-								Integer search, String sort, String searchField, String searchWord) {
+								Integer search, String searchField, String searchWord) {
 		
 		GeneralMembersVO login = (GeneralMembersVO)request.getSession().getAttribute("login");
 		
@@ -1050,7 +1050,6 @@ public class MemberController {
 			}
 			
 			if(search != null) {
-				searchMap.put("sort", sort);
 				searchMap.put("searchField", searchField);
 				searchMap.put("searchWord", searchWord);
 			}
@@ -1058,7 +1057,6 @@ public class MemberController {
 			Map<String, Object> pagingMap = new HashMap<String, Object>();
 			
 			if(search != null) {
-				pagingMap.put("sort", sort);
 				pagingMap.put("searchField", searchField);
 				pagingMap.put("searchWord", searchWord);
 			}

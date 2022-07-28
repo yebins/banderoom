@@ -356,4 +356,19 @@ public class SpaceServiceImpl implements SpaceService {
 	public List<SpaceReviewVO> recentReview() {
 		return dao.recentReview();
 	}
+	
+	@Override
+	public List<Map<String, Object>> calculation(Map<String, Object> params) {
+		return dao.calculation(params);
+	}
+	
+	@Override
+	public int insertSettled(SettledVO vo) {
+		return dao.insertSettled(vo);
+	}
+	
+	@Override
+	public int ifSettled(SettledVO vo) {
+		return dao.ifSettled(vo);
+	}
 }

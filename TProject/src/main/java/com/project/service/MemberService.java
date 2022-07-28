@@ -20,7 +20,7 @@ public interface MemberService {
 	int sendEmailForFindingPw(HostMembersVO vo);
 	int checkEmail(EmailRegVO vo);
 	int checkNickname(String nickname, String memberType);
-	int sendTelKey(TelRegVO vo);
+	String sendTelKey(TelRegVO vo);
 	int checkTel(TelRegVO vo);
 	int gjoin(GeneralMembersVO vo);
 	GeneralMembersVO kakaoLogin(GeneralMembersVO vo);

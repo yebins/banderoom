@@ -18,7 +18,7 @@ import org.json.simple.JSONObject;
 
 public class Sms {
 
-	public static void sendSms(String tel, String content) {
+	public static String sendSms(String tel, String content) {
 		String hostNameUrl = "https://sens.apigw.ntruss.com";     		// 호스트 URL
 		String requestUrl= "/sms/v2/services/";                   		// 요청 URL
 		String requestUrlType = "/messages";                      		// 요청 URL
@@ -29,6 +29,8 @@ public class Sms {
 		String timestamp = Long.toString(System.currentTimeMillis()); 	// current timestamp (epoch)
 		requestUrl += serviceId + requestUrlType;
 		String apiUrl = hostNameUrl + requestUrl;
+		
+		String rsp = "";
 		
 		// JSON 을 활용한 body data 생성
 		
@@ -46,7 +48,7 @@ public class Sms {
 	    bodyJson.put("countryCode","82");		// 국가 전화번호
 	    bodyJson.put("from","01096126556");				// 발신번호 * 사전에 인증/등록된 번호만 사용할 수 있습니다.		
 	    bodyJson.put("subject","");				// 메시지 제목 * LMS Type에서만 사용할 수 있습니다.
-	    bodyJson.put("content","banderoom 인증번호입니다.");				// 메시지 내용 * Type별로 최대 byte 제한이 다릅니다.* SMS: 80byte / LMS: 2000byte
+	    bodyJson.put("content","banderoom");				// 메시지 내용 * Type별로 최대 byte 제한이 다릅니다.* SMS: 80byte / LMS: 2000byte
 	    bodyJson.put("messages", toArr);		
 	    
 
@@ -91,10 +93,15 @@ public class Sms {
             br.close();
             
             System.out.println(response.toString());
+            rsp = response.toString();
 
         } catch (Exception e) {
             System.out.println(e);
         }
+        
+        return rsp;
+        
+        
     }
 	
 	public static String makeSignature(String url, String timestamp, String method, String accessKey, String secretKey) throws NoSuchAlgorithmException, InvalidKeyException {

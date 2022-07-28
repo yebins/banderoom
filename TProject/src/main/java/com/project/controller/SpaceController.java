@@ -2,6 +2,7 @@ package com.project.controller;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.text.*;
 import java.util.*;
 
 import javax.imageio.ImageIO;
@@ -933,6 +934,7 @@ public class SpaceController {
 			}
 		}
 		
+		model.addAttribute("spacesVO", spacesVO);
 		model.addAttribute("qnaList", qnaList);
 		model.addAttribute("qnaNowPage", qnaPu.getNowPage());
 		model.addAttribute("qnaStartPage", qnaPu.getStartPage());
@@ -1269,14 +1271,15 @@ public class SpaceController {
 		
 	}
 	
-	public String calculation(Model model, HostMembersVO hMemberVO, HttpServletRequest request) {
+	@RequestMapping(value = "settle.do")
+	public String settle(Model model, HostMembersVO hMemberVO, HttpServletRequest request, String date) throws ParseException {
 
 		GeneralMembersVO gMemberVO = new GeneralMembersVO();
 
 		if (request.getSession().getAttribute("login") == null && request.getSession().getAttribute("hlogin") == null) {
 
 			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/member/glogin.do");
+			model.addAttribute("url", "/member/hlogin.do");
 			
 			return "alert";
 		} else if (request.getSession().getAttribute("login") != null) {
@@ -1305,7 +1308,93 @@ public class SpaceController {
 			
 		}
 		
-		return "space/calculation";
+		Calendar cal = Calendar.getInstance();
+		int month = cal.get(Calendar.MONTH);
+		cal.set(Calendar.MONTH, month - 1);
+
+		if (date == null) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+			date = sdf.format(cal.getTime());
+		}
+		
+		String[] dates = date.split("-");
+		int dateYear = Integer.parseInt(dates[0]);
+		int dateMonth = Integer.parseInt(dates[1]);
+
+		Calendar start = Calendar.getInstance();
+		start.set(dateYear, dateMonth - 1, 1);
+
+		Calendar end = Calendar.getInstance();
+		end.set(dateYear, dateMonth - 1, 1);
+		end.set(Calendar.DATE, end.getActualMaximum(Calendar.DAY_OF_MONTH));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		
+		String dateRange = sdf.format(start.getTime()) + " ~ " + sdf.format(end.getTime());
+		
+		model.addAttribute("dateRange", dateRange);
+
+
+		Calendar nextMonth = Calendar.getInstance();
+		nextMonth.set(Calendar.MONTH, nextMonth.get(Calendar.MONTH) - 1);
+		nextMonth.set(Calendar.DATE, nextMonth.getActualMaximum(Calendar.DAY_OF_MONTH));
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM");
+		
+		System.out.println(sdf1.parse(date));
+		System.out.println(nextMonth.getTime());
+		
+		if (sdf1.parse(date).before(nextMonth.getTime())) {
+			model.addAttribute("available", "1");
+		}
+		
+		
+		Map<String, Object> params = new HashMap<String, Object>();		
+		params.put("date", date);
+		params.put("hostIdx", hMemberVO.getmIdx());
+		
+		List<Map<String, Object>> calc = spaceService.calculation(params);
+		
+		model.addAttribute("date", date);
+		model.addAttribute("calc", calc);
+		
+		if (calc.size() > 0) {
+			Iterator<Map<String, Object>> calcIterator = calc.iterator();
+			int total = 0;
+			
+			while (calcIterator.hasNext()) {
+				Map<String, Object> item = calcIterator.next();
+				
+				total += Integer.parseInt(String.valueOf(item.get("sum")));
+				
+			}
+			
+			model.addAttribute("total", total);
+		}
+		
+		SettledVO settled = new SettledVO();
+		settled.setHostIdx(hMemberVO.getmIdx());
+		settled.setMonth(date);
+		
+		model.addAttribute("settled", spaceService.ifSettled(settled));
+		
+		return "space/settle";
+	}
+	
+	@RequestMapping(value = "insertsettle.do")
+	@ResponseBody
+	public String insertSettle(SettledVO vo) {
+		
+		if (spaceService.ifSettled(vo) > 0) {
+			return "1"; // 이미 정산함
+		} else {
+			int result = spaceService.insertSettled(vo);
+			
+			if (result > 0) {
+				return "0"; // 정상 정산
+			} else {
+				return "2"; // 오류
+			}
+		}
 	}
 	
 	@RequestMapping(value = "cancelRsv.do", method = RequestMethod.POST)

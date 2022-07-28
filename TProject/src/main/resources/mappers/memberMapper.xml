@@ -616,15 +616,6 @@
 			, joindate
 		 FROM host_members
 		 where auth != 2
-		<if test="sort == 'all'">
-			and auth != 2
-		</if>
-		<if test="sort == 'normal'">
-			and auth = 0
-		</if>
-		<if test="sort == 'block'">
-			and auth = 1
-		</if>
 		<if test="searchField == 'nickname'">
 			and nickname like concat('%',#{searchWord},'%')
 		</if>
@@ -642,15 +633,6 @@
 		SELECT COUNT(midx)
 		  FROM host_members
 		 where auth != 2
-		<if test="sort == 'all'">
-			and auth != 2
-		</if>
-		<if test="sort == 'normal'">
-			and auth = 0
-		</if>
-		<if test="sort == 'admin'">
-			and auth = 3
-		</if>
 		<if test="searchField == 'nickname'">
 			and nickname like concat('%',#{searchWord},'%')
 		</if>

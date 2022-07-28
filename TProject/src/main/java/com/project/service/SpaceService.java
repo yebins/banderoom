@@ -50,6 +50,9 @@ public interface SpaceService {
 	List<PointsVO> pointInfo(ReservationsVO vo);
 	int cancelRsv(ReservationsVO vo);
 	List<SpaceReviewVO> recentReview();
+	List<Map<String, Object>> calculation(Map<String, Object> params);
+	int insertSettled(SettledVO vo);
+	int ifSettled(SettledVO vo);
 
 	//테스트용
 	public List<String> getAddr1();

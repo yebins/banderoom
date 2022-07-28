@@ -20,7 +20,6 @@
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/member/gjoin.css">
 
 <script>
-var ContextPath=<%=request.getContextPath() %>;
 var brnChecked = false;
 var emailChecked = false;
 var pwChecked = false;
