@@ -1,7 +1,8 @@
 # banderoom
 
 URL: http://jjezen.cafe24.com/banderoom
-로그인시 커뮤니티 
+로그인시 커뮤니티 활성 
+
 ## 프로젝트 개요
 
 ### 기획 의도
