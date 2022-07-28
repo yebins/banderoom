@@ -191,7 +191,7 @@
 								<fmt:formatDate value="${list.get(i).regDate }" pattern="yyyy-MM-dd"/>
 							</td>
 							<td>${list.get(i).readCount }</td>
-							<td>${likeList.get(list.get(i).aIdx)}</td>
+							<td>${list.get(i).likeCount}</td>
 						</tr>
 					</c:forEach>
 					

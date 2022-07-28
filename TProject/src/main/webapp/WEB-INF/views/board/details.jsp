@@ -490,7 +490,8 @@
 								htmls+='<span><b>업로드된사진</b></span>'
 								htmls+='</div>'
 								htmls+='<form id="replyFile'+el.cIdx+'">'
-								htmls+='<input type="hidden" name="mIdx" value="${login.mIdx}">'
+								<c:set var="vall" value="${not empty login.mIdx?login.mIdx:-1}"/>
+								htmls+='<input type="hidden" name="mIdx" value="${vall}">'
 								htmls+='<input type="hidden" name="cIdx" value="'+el.cIdx+'">'
 								htmls+='<input type="hidden" name="mNickname" value="${login.nickname}">'
 								htmls+='<label style="margin-bottom:10px">'
@@ -660,11 +661,16 @@
 					$("#uploaded-file>img").remove();
 					$("#file").val('');
 					commentList(result.lastPage);
-				} else {
+				} else if(result.result == 3){
 					console.log(result);
-					alert('댓글을 작성할 수 없습니다.');	
+					alert('댓글작성 권한이 없습니다.');	
+				} else if(result.result == 2){
+					alert('로그인하세요');
+				} else
+					alert('문제있음');
+					
 				}
-			}
+			
 		});
 		
 		
@@ -679,8 +685,8 @@
 		
 		var tg="replyFile"+cIdx;
 		var formData = new FormData($('#'+tg)[0]);
+		var form=document.querySelector("#"+tg+" mIdx");
 		
-		console.log(tg)
 // 		var mIdx=0;
 		
 // 			if(mIdx != null){
@@ -1226,7 +1232,8 @@
 										<span><b>업로드된사진</b></span>
 									</div>
 									<form id="replyFile${item.cIdx}">
-										<input type="hidden" name="mIdx" value="${login.mIdx}">
+										<c:set var="vall" value="${not empty login.mIdx?login.mIdx:-1}"/>
+										<input type="hidden" name="mIdx" value="${vall}">
 										<input type="hidden" name="cIdx" value="${item.cIdx}">
 										<input type="hidden" name="mNickname" value="${login.nickname}">
 										<label style="margin-bottom:10px">

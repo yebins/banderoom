@@ -173,7 +173,7 @@
 						<div class="inner-box-content-thumbnail ">
 							<c:choose>
 								<c:when test="${imgsrc.get(item) ne ''}">
-									<img src="${imgsrc.get(item)}"/>
+									${imgsrc.get(item)}
 								</c:when>
 								<c:otherwise>
 									<img src="<%=request.getContextPath() %>/images/no_image.png">
